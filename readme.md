@@ -15,9 +15,7 @@ api - vercel serveless
 
 ## Plan
 
-- init next app
-  - setup unit tests
-  - configure deployment through vercel
-- setup auth0
+
+- configure deployment through vercel
 - build forum
 - build goal tracking
