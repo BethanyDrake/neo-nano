@@ -2,6 +2,7 @@ import { auth0 } from "@/lib/auth0";
 import './globals.css';
 import styles from './page.module.css'
 import { AnchorHTMLAttributes, CSSProperties, JSX, PropsWithChildren } from "react";
+import bg from './pexels-technobulka-2908984.jpg'
 
 const Section = ({title, body}: {title: string, body: string | JSX.Element}) => {
   return (
@@ -15,7 +16,7 @@ const Section = ({title, body}: {title: string, body: string | JSX.Element}) => 
 const BigButton = ({href, children}: PropsWithChildren & Pick<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>) => {
 return (
     <a href={href}>
-          <button className={styles['big-button']}>{children}</button></a>
+          <button className={styles['button-72']}>{children}</button></a>
 )
 }
 
@@ -41,7 +42,7 @@ const ChallengeBody = () => {
   ] 
 
   return (
-    <ul>
+    <ul style={{marginLeft: '1em'}}>
       {rules.map((rule) => <li key={rule}>{rule}</li>)}
     </ul>
   )
@@ -74,10 +75,11 @@ export default async function Home() {
         </a>
         <a href="/auth/login">
           <button>Log in</button></a></div></nav>
-      <div className={styles.background}>
+      <div className={styles.background} style={{backgroundImage: `url(${bg.src})`, backgroundSize: '1000px'}}>
       <main className={styles.main}>
+    
         <h1 className={styles.h1}>NaNoWriMo - Resurrected</h1>
-       
+           <Column gap="3em">
         <HistorySection/>
         <ChallengeSection/>
 
@@ -100,6 +102,7 @@ export default async function Home() {
           </Column>
           </section>
        
+       </Column>
       </main>
       
       </div>
