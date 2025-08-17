@@ -15,7 +15,6 @@ api - vercel serveless
 
 ## Plan
 
-
-- configure deployment through vercel
 - build forum
 - build goal tracking
+- build pipeline with gitub actions
