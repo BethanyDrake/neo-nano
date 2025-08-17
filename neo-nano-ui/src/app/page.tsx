@@ -1,8 +1,10 @@
 import { auth0 } from "@/lib/auth0";
 import './globals.css';
 import styles from './page.module.css'
-import { AnchorHTMLAttributes, CSSProperties, JSX, PropsWithChildren } from "react";
+import { AnchorHTMLAttributes, JSX, PropsWithChildren } from "react";
 import bg from './pexels-technobulka-2908984.jpg'
+import { Column, Row } from "@/lib/layout";
+import Link from "next/link";
 
 const Section = ({title, body}: {title: string, body: string | JSX.Element}) => {
   return (
@@ -19,18 +21,6 @@ return (
           <button className={styles['button-72']}>{children}</button></a>
 )
 }
-
-const Row = ({children, gap}: PropsWithChildren & Pick<CSSProperties, 'gap'>) => {
-  return (
-  <div style={{display:"flex", flexDirection:"row", justifyContent:"center", gap: gap ?? '1em'}}>{children}</div>)
-}
-
-const Column = ({children, gap}: PropsWithChildren & Pick<CSSProperties, 'gap'>) => {
-  return (
-  <div style={{display:"flex", flexDirection:"column", justifyContent:"center", gap: gap ?? '1em'}}>{children}</div>)
-}
-
-
 
 const ChallengeBody = () => {
   const rules = [
@@ -96,8 +86,8 @@ export default async function Home() {
           Log in</BigButton>
 </Row>
 <Row>
-          <a className={styles['text-link']} href="/forum">
-          Browse forums as guest</a>
+          <Link className={styles['text-link']} href="/forum">
+          Browse forums as guest</Link>
           </Row>
           </Column>
           </section>
