@@ -6,6 +6,8 @@ import bg from './pexels-technobulka-2908984.jpg'
 import { Column, Row } from "@/lib/layout";
 import Link from "next/link";
 
+
+console.log("AAAA",auth0.getSession)
 const Section = ({title, body}: {title: string, body: string | JSX.Element}) => {
   return (
   <section><h2 className={styles['section-header']}>{title}</h2>
@@ -53,6 +55,7 @@ const HistorySection = () => {
 export default async function Home() {
   // Fetch the user session
   const session = await auth0.getSession();
+  
 
   // If no session, show sign-up and login buttons
   if (!session) {

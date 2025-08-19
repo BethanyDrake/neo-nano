@@ -1,10 +1,12 @@
 
 import {render, screen} from '@testing-library/react'
-
 import Home from './page'
+import { auth0 } from '@/lib/auth0'
+jest.mock('@/lib/auth0')
+jest.mocked(auth0.getSession).mockResolvedValue(null)
 describe('Home page', () => {
-    it('does not explode', () => {
-        render(<Home />)
-        expect(screen.getByText("Deploy now")).toBeInTheDocument()
+    it('not loged in',async  () => {
+        render(await Home())
+        expect(await screen.findAllByText("Sign up")).toHaveLength(2)
     })
 })
