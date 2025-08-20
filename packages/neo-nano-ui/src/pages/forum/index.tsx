@@ -1,9 +1,10 @@
 import { Column, Row } from '@/lib/layout'
 import styles from './index.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoltLightning, faPerson, faShield } from '@fortawesome/free-solid-svg-icons'
+import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faPenFancy } from '@fortawesome/free-solid-svg-icons/faPenFancy'
+import { Category } from '@/lib/forum.types'
+import { NextPageContext } from 'next'
 
 
 const ForumItem = ({topicId, title, icon, description}: {topicId: string, title: string, icon: IconProp, description: string}) => {
@@ -23,26 +24,34 @@ return( <div className={styles['forum-item']}>
                 </Row></div>)
 }
 
-export const Forum = () => {
 
+type ForumProps = {
+ categories: Category[]
+}
+export const Forum = ({categories}: ForumProps) => {
 
+    console.log("Forum prop", categories)
 
-return (
+    return (
     <main>
-
-        <h1>Forum</h1>
-<div className={styles['forum-container']}>
-    <h2>General</h2>
-    <ForumItem topicId='generalDiscussion' title="General Discussion" description={"For anything without a dedicated topic... or when your brain is too fried to find the right place."} icon={faShield}/>
-       <ForumItem topicId='introductions' title="Introductions" description={"Introduce yourself, your project, and your cat (optional)."} icon={faBoltLightning}/>
-    
-    <h2>Craft of Writing</h2>
-        <ForumItem topicId='appelationStation' title="Appelation Station" description={"Character names, novel titles, and all other proper nouns."} icon={faPerson}/>
-       <ForumItem topicId='planning' title="Planning" description={"World building, character sheets, save-the-cat, all planning progress and problems go here."} icon={faPenFancy}/>
-
+        <div className={styles['forum-container']}>
+{
+    categories.map(({id, title, topics }) => {
+        return (    <div key={id}><h2>{title}</h2>
+            {topics.map(({id, title, description, icon})=> {
+            return <ForumItem key={id} topicId={id} title={title} description={description} icon={Icons[icon]} />
+        })}</div>)
+    })
+}
     
 </div></main>)
-
 }
 
+Forum.getInitialProps = async (ctx: NextPageContext) => {
+  const res = await fetch('http://localhost:3000/api/getTopics')
+  const {categories} = await res.json()
+  return { categories }
+}
+ 
 export default Forum
+
