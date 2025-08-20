@@ -48,7 +48,7 @@ export const Forum = ({categories}: ForumProps) => {
 }
 
 Forum.getInitialProps = async (ctx: NextPageContext) => {
-  const res = await fetch('http://localhost:3000/api/getTopics')
+  const res = await fetch(`${process.env.APP_BASE_URL}/api/getTopics`)
   const {categories} = await res.json()
   return { categories }
 }

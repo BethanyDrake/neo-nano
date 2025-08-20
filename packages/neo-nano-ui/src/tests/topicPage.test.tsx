@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import {Forum} from "."
+import {Forum} from "../pages/forum"
 
 describe('<Forum />', () => {
     it('displays categories and topics', () => {
