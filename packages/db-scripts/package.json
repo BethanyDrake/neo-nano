@@ -1,0 +1,26 @@
+{
+  "name": "db-scripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
+    "dotenv": "^17.2.1",
+    "pg-int8": "^1.0.1",
+    "pg-protocol": "^1.10.3",
+    "pg-types": "^2.2.0",
+    "postgres-array": "^2.0.0",
+    "postgres-bytea": "^1.0.0",
+    "postgres-date": "^1.0.7",
+    "postgres-interval": "^1.2.0",
+    "undici-types": "^6.21.0",
+    "xtend": "^4.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"No test specified\"",
+    "initDb": "node ./initDb"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
