@@ -9,7 +9,7 @@ export type ReturnType = {
   threads: Thread[]
 }
 
-export const POST = async function shows(req: NextRequest) {
+export const POST = async function createThread(req: NextRequest) {
   try {
     const session = await auth0.getSession()
 
@@ -31,11 +31,12 @@ export const POST = async function shows(req: NextRequest) {
 
     return NextResponse.json({})
   } catch (error) {
+    console.error(error)
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
 }
 
-export const GET = async function shows(req: NextRequest) {
+export const GET = async function getThreads(req: NextRequest) {
   try {
     const topic = req.nextUrl.searchParams.get('topic')
     const threads = await sql`

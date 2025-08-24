@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { Category } from '@/lib/forum.types'
+import axios from 'axios'
 
 const ForumItem = ({
   topicId,
@@ -58,8 +59,7 @@ export const Forum = ({ categories }: ForumProps) => {
 }
 
 Forum.getInitialProps = async () => {
-  const res = await fetch(`${process.env.APP_BASE_URL}/api/getTopics`)
-  const { categories } = await res.json()
+  const {categories} = (await axios.get<{categories: Category[]}>(`${process.env.APP_BASE_URL}/api/topics`)).data
   return { categories }
 }
 
