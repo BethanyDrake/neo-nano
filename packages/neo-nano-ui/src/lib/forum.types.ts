@@ -1,3 +1,15 @@
+export type Comment = {
+    id: string
+    title: string
+    author: string
+}
+
+export type Thread = {
+    id: string
+    title: string
+    author: string
+}
+
 export type Topic = {
     id: string
     title: string
@@ -9,6 +21,4 @@ export type Category = {
     id:string
     title: string
     topics: Topic[]
-
-
 }

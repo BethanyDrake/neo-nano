@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { Category } from '@/lib/forum.types'
-import { NextPageContext } from 'next'
-
 
 const ForumItem = ({topicId, title, icon, description}: {topicId: string, title: string, icon: IconProp, description: string}) => {
 return( <div className={styles['forum-item']}>
@@ -47,7 +45,7 @@ export const Forum = ({categories}: ForumProps) => {
 </div></main>)
 }
 
-Forum.getInitialProps = async (ctx: NextPageContext) => {
+Forum.getInitialProps = async () => {
   const res = await fetch(`${process.env.APP_BASE_URL}/api/getTopics`)
   const {categories} = await res.json()
   return { categories }

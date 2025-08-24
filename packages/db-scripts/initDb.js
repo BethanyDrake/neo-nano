@@ -12,7 +12,7 @@ const initCategories = async () => {
     console.log("initCategories start")
     await sql`drop table if exists categories cascade`;
     await sql`CREATE TABLE  categories (
-        id varchar(30) PRIMARY KEY,
+        id varchar(128) PRIMARY KEY,
         title text
     )`;
 
@@ -29,11 +29,11 @@ const initTopics = async () => {
     console.log("initTopics start")
     await sql`drop table if exists topics cascade`;
     await sql`CREATE TABLE topics (
-        id varchar(30) PRIMARY KEY,
+        id varchar(128) PRIMARY KEY,
         title text,
         description text,
         icon text,
-        category varchar(30) REFERENCES categories(id)
+        category varchar(128) REFERENCES categories(id)
     );`;
 
     await sql`insert into topics (id, title, description, icon, category) values 
@@ -55,7 +55,7 @@ const initUsers = async () => {
     console.log("initUsers start")
     await sql`drop table if exists users cascade`;
     await sql`create table users (
-        id varchar(30) PRIMARY KEY,
+        id varchar(128) PRIMARY KEY,
         display_name text
 );`;
 
@@ -65,10 +65,10 @@ const initThreads = async () => {
     console.log("initThreads start")
     await sql`drop table if exists threads cascade`;
     await sql`CREATE TABLE threads (
-  id varchar(30) PRIMARY KEY,
+  id bigint primary key GENERATED ALWAYS AS IDENTITY,
   title text,
-  author varchar(30) REFERENCES users(id),
-  topic varchar(30) REFERENCES categories(id)
+  author varchar(128) REFERENCES users(id),
+  topic varchar(128) REFERENCES topics(id)
 );`;
 
 }
