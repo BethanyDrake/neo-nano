@@ -16,10 +16,6 @@ type Topic = {
   title: string
   description: string
 }
-type ThreadSummary = {
-  id: string
-  title: string
-}
 
 const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: () => void }) => {
   const {
@@ -43,13 +39,15 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
   return (
     <form onSubmit={handleSubmit(_onSubmit)}>
       <Column>
-        <input placeholder="Thread Title" {...register('title')} required={true} />
+        <label htmlFor="title">Title</label>
+        <input id="title" placeholder="Thread Title" {...register('title')} required={true} />
 
         {errors.title && <span>This field is required</span>}
-        <input {...register('commentText', { required: true })} />
+        <label htmlFor="comment">Comment</label>
+        <input id="comment" {...register('commentText', { required: true })} />
         {errors.commentText && <span>This field is required</span>}
 
-        <input type="submit" />
+        <button type="submit">Post!</button>
       </Column>
     </form>
   )
@@ -59,10 +57,8 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
   const [threads, setThreads] = useState<Thread[]>(initialThreads)
 
-  console.log({ threads })
   const updateThreads = useCallback(async () => {
     const _threads: Thread[] = (await axios.get<ReturnType>(`/api/threads?topic=${topic.id}`)).data.threads
-    console.log({ _threads })
     setThreads(_threads)
   }, [topic])
 
@@ -70,9 +66,10 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
     <>
       <div>{topic.id}</div>
       {threads &&
-        threads.map((thread: ThreadSummary) => {
+        threads.map((thread: Thread) => {
           return <div key={thread.id}>{thread.title}</div>
         })}
+
       <button role="button" onClick={() => setCreateThreadFormIsOpen(true)}>
         Create Thread
       </button>
@@ -83,7 +80,6 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
 
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const topicId = context.query['topic-id'] as string
-  console.log('url', `/api/threads?topic=${topicId}`)
   const initialThreads = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/threads?topic=${topicId}`)).data
     .threads
 

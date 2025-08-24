@@ -39,8 +39,6 @@ type ForumProps = {
   categories: Category[]
 }
 export const Forum = ({ categories }: ForumProps) => {
-  console.log('Forum prop', categories)
-
   return (
     <main>
       <div className={styles['forum-container']}>

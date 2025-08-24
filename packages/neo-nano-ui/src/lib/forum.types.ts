@@ -5,7 +5,7 @@ export type Comment = {
 }
 
 export type Thread = {
-    id: string
+    id: number
     title: string
     author: string
 }
