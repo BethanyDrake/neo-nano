@@ -5,6 +5,8 @@ import axios from 'axios'
 import { NextPageContext } from 'next'
 import { useCallback, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import styles from './index.module.css'
+import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 
 type Inputs = {
   title: string
@@ -63,18 +65,19 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
   }, [topic])
 
   return (
-    <>
-      <div>{topic.id}</div>
+    <main>
+      <div className={styles['forum-container']}>
+      <h2>{topic.title}</h2>
       {threads &&
         threads.map((thread: Thread) => {
-          return <div key={thread.id}>{thread.title}</div>
+          return <div className={styles['forum-item']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
+            Truncated comment text...</p></div>
         })}
 
-      <button role="button" onClick={() => setCreateThreadFormIsOpen(true)}>
-        Create Thread
-      </button>
+<ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
       {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
-    </>
+      </div>
+    </main>
   )
 }
 
