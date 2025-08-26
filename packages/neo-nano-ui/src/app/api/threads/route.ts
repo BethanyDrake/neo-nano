@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth0 } from '../../../lib/auth0'
 import { neon } from '@neondatabase/serverless'
-import { Thread } from '@/lib/forum.types'
+import { Comment, Thread } from '@/lib/forum.types'
 if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
 const sql = neon(process.env.DATABASE_URL)
 
+export type ThreadSummary =  (Thread & Pick<Comment, 'text'>)
 export type ReturnType = {
-  threads: Thread[]
+  threads: ThreadSummary[]
 }
 
 export const POST = async function createThread(req: NextRequest) {
@@ -39,9 +40,17 @@ export const POST = async function createThread(req: NextRequest) {
 export const GET = async function getThreads(req: NextRequest) {
   try {
     const topic = req.nextUrl.searchParams.get('topic')
-    const threads = await sql`
-    SELECT * FROM threads
-    WHERE topic=${topic}`
+    const _threads = await sql`
+    SELECT * FROM threads, 
+      LATERAL (SELECT comment_text FROM comments WHERE comments.thread=threads.id LIMIT 1)
+    WHERE threads.topic=${topic}`
+
+     console.log({_threads})
+
+    const threads = _threads.map((_thread) => ({
+      ..._thread,
+      text: _thread.comment_text
+    }))
 
     return NextResponse.json({ threads })
   } catch (error) {

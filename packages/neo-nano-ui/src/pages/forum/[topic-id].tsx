@@ -1,5 +1,4 @@
-import { ReturnType } from '@/app/api/threads/route'
-import { Thread } from '@/lib/forum.types'
+import { ReturnType, ThreadSummary } from '@/app/api/threads/route'
 import { Column } from '@/lib/layout'
 import axios from 'axios'
 import { NextPageContext } from 'next'
@@ -55,12 +54,12 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
   )
 }
 
-const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Thread[] }) => {
+const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: ThreadSummary[] }) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
-  const [threads, setThreads] = useState<Thread[]>(initialThreads)
+  const [threads, setThreads] = useState<ThreadSummary[]>(initialThreads)
 
   const updateThreads = useCallback(async () => {
-    const _threads: Thread[] = (await axios.get<ReturnType>(`/api/threads?topic=${topic.id}`)).data.threads
+    const _threads: ThreadSummary[] = (await axios.get<ReturnType>(`/api/threads?topic=${topic.id}`)).data.threads
     setThreads(_threads)
   }, [topic])
 
@@ -68,10 +67,11 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
     <main>
       <div className={styles['forum-container']}>
       <h2>{topic.title}</h2>
+      <p>{topic.description}</p>
       {threads &&
-        threads.map((thread: Thread) => {
+        threads.map((thread: ThreadSummary) => {
           return <a href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
-            Truncated comment text...</p></a>
+            {thread.text}</p></a>
         })}
 
 <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
@@ -83,15 +83,12 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
 
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const topicId = context.query['topic-id'] as string
+  const topic = (await axios.get(`${process.env.APP_BASE_URL}/api/topic?id=${topicId}`)).data.topic
   const initialThreads = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/threads?topic=${topicId}`)).data
     .threads
 
   return {
-    topic: {
-      id: topicId,
-      title: 'Topic Title',
-      description: 'topic description',
-    },
+    topic,
     initialThreads,
   }
 }

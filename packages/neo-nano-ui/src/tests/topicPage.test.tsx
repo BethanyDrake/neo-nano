@@ -9,21 +9,28 @@ import { mockRequest } from './utils/mswHelpers'
 jest.spyOn(axios, 'post')
 
 describe('<TopicPage />', () => {
+
+  beforeEach(() => [
+     mockRequest('get', '/undefined/api/topic', {
+      topic: 'Topic name',
+    })
+  ])
   it('displays existing threads', async () => {
     mockRequest<ReturnType>('get', '/undefined/api/threads', {
-      threads: [{ id: 1, title: 'Existing Topic 1', author: 'some-author' }],
+      threads: [{ id: 1, title: 'Existing Topic 1', author: 'some-author', text: "First comment text" }],
     })
     const context: Partial<NextPageContext> = { query: { ['topic-id']: 'someTopic' } }
     const initalProps = await TopicPage.getInitialProps(context as NextPageContext)
 
     const { getByText } = render(<TopicPage {...initalProps} />)
     expect(getByText('Existing Topic 1')).toBeInTheDocument()
+    expect(getByText("First comment text")).toBeInTheDocument()
   })
 
   test('add new thread', async () => {
     mockRequest('post', '/api/threads', null)
     mockRequest<ReturnType>('get', '/api/threads', {
-      threads: [{ id: 1, title: 'New Thread Title', author: 'some-author' }],
+      threads: [{ id: 1, title: 'New Thread Title', author: 'some-author', text:"First comment text" }],
     })
 
     const { getByRole, findByLabelText, getByLabelText, findByText } = render(

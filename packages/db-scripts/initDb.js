@@ -80,7 +80,7 @@ const initComments = async () => {
   id bigint primary key GENERATED ALWAYS AS IDENTITY,
   comment_text text,
   author varchar(128) REFERENCES users(id),
-  thread bigint REFERENCES threads(id)
+  thread bigint REFERENCES threads(id),
 );`;
 
 }
