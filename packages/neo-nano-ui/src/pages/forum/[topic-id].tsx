@@ -70,8 +70,8 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
       <h2>{topic.title}</h2>
       {threads &&
         threads.map((thread: Thread) => {
-          return <div className={styles['forum-item']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
-            Truncated comment text...</p></div>
+          return <a href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
+            Truncated comment text...</p></a>
         })}
 
 <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />

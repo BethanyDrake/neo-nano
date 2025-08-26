@@ -1,6 +1,6 @@
 export type Comment = {
     id: string
-    title: string
+    text: string
     author: string
 }
 

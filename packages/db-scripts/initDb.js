@@ -73,11 +73,24 @@ const initThreads = async () => {
 
 }
 
+const initComments = async () => {
+    console.log("initComments start")
+    await sql`drop table if exists comments cascade`;
+    await sql`CREATE TABLE comments (
+  id bigint primary key GENERATED ALWAYS AS IDENTITY,
+  comment_text text,
+  author varchar(128) REFERENCES users(id),
+  thread bigint REFERENCES threads(id)
+);`;
+
+}
+
 const initDB = async () => {
     await initCategories()
     await initTopics()
     await initUsers()
     await initThreads()
+    await initComments()
 }
 
 

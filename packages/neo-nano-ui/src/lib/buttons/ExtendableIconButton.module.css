@@ -7,9 +7,12 @@
     padding: 8px 0;
     transition: max-width .5s;
     cursor: pointer;
+    background-color: #1ab394;
+    border-color: #9ac5bc;
+    color: white;
 
     &:active {
-        background-color: white;
+        background-color: #9ac5bc;
     }
     
     white-space: nowrap;
