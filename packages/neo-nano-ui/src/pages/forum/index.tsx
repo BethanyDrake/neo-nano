@@ -18,6 +18,7 @@ const ForumItem = ({
   description: string
 }) => {
   return (
+    <main>
     <div className={styles['forum-item']}>
       <Row justifyContent="left">
         <Column>
@@ -33,6 +34,7 @@ const ForumItem = ({
         </Column>
       </Row>
     </div>
+    </main>
   )
 }
 

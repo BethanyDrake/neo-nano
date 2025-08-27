@@ -1,10 +1,10 @@
 import { auth0 } from "@/lib/auth0";
-import './globals.css';
 import styles from './page.module.css'
 import { AnchorHTMLAttributes, JSX, PropsWithChildren } from "react";
 import bg from './pexels-technobulka-2908984.jpg'
 import { Column, Row } from "@/lib/layout";
 import Link from "next/link";
+import { NavBar } from "@/lib/NavBar";
 
 const Section = ({title, body}: {title: string, body: string | JSX.Element}) => {
   return (
@@ -59,13 +59,7 @@ export default async function Home() {
   if (!session) {
     return (
       <>
-      <nav className={styles.nav}><div className={styles['nav-header']}>NaNoWriMo - Resurrected</div>
-      <div className={styles['button-container']}>
-      <a href="/auth/login?screen_hint=signup">
-          <button>Sign up</button>
-        </a>
-        <a href="/auth/login">
-          <button>Log in</button></a></div></nav>
+      <NavBar />
       <div className={styles.background} style={{backgroundImage: `url(${bg.src})`, backgroundSize: '1000px'}}>
       <main className={styles.main}>
     
