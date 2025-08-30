@@ -48,27 +48,27 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
   const [comments, setComments] = useState<Comment[]>(initialComments)
 
-
   const updateComments = useCallback(async () => {
-    const _comments: Comment[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data
-    .comments
+    const _comments: Comment[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data.comments
     setComments(_comments)
   }, [thread])
-
-  console.log({comments})
 
   return (
     <main>
       <div className={styles['forum-container']}>
-      <h2>{thread.title}</h2>
-      {comments &&
-        comments.map((comment:Comment) => {
-          return <div className={styles['forum-item']} key={thread.id}><h3 className={styles['forum-item-title']} >{comment.author}</h3><p>
-            {comment.text}</p></div>
-        })}
+        <h2>{thread.title}</h2>
+        {comments &&
+          comments.map((comment: Comment) => {
+            return (
+              <div className={styles['forum-item']} key={comment.id}>
+                <h3 className={styles['forum-item-title']}>{comment.author}</h3>
+                <p>{comment.text}</p>
+              </div>
+            )
+          })}
 
-<ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
-      {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
+        <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
+        {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
       </div>
     </main>
   )
@@ -77,10 +77,9 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const threadId = context.query['thread-id'] as string
 
-
-    const initialComments = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/comments?thread=${threadId}`)).data
-    .comments
-    console.log({initialComments})
+  const initialComments = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/comments?thread=${threadId}`))
+    .data.comments
+  console.log({ initialComments })
 
   return {
     thread: {

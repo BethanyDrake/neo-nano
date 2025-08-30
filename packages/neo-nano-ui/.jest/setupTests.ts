@@ -2,10 +2,7 @@ import '@testing-library/jest-dom'
 import 'whatwg-fetch';
 import { setupServer } from 'msw/node';
 
-import { TextEncoder, TextDecoder } from 'util';
-
-Object.assign(global, { TextDecoder, TextEncoder });
-
+jest.mock('@auth0/nextjs-auth0/server')
 
 export const server = setupServer();
 
