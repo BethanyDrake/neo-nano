@@ -18,7 +18,6 @@ const ForumItem = ({
   description: string
 }) => {
   return (
-    <main>
     <div className={styles['forum-item']}>
       <Row justifyContent="left">
         <Column>
@@ -34,7 +33,6 @@ const ForumItem = ({
         </Column>
       </Row>
     </div>
-    </main>
   )
 }
 
@@ -43,25 +41,23 @@ type ForumProps = {
 }
 export const Forum = ({ categories }: ForumProps) => {
   return (
-    <main>
-      <div className={styles['forum-container']}>
-        {categories.map(({ id, title, topics }) => {
-          return (
-            <div key={id}>
-              <h2>{title}</h2>
-              {topics.map(({ id, title, description, icon }) => {
-                return <ForumItem key={id} topicId={id} title={title} description={description} icon={Icons[icon]} />
-              })}
-            </div>
-          )
-        })}
-      </div>
-    </main>
+    <div className={styles['forum-container']}>
+      {categories.map(({ id, title, topics }) => {
+        return (
+          <div key={id}>
+            <h2>{title}</h2>
+            {topics.map(({ id, title, description, icon }) => {
+              return <ForumItem key={id} topicId={id} title={title} description={description} icon={Icons[icon]} />
+            })}
+          </div>
+        )
+      })}
+    </div>
   )
 }
 
 Forum.getInitialProps = async () => {
-  const {categories} = (await axios.get<{categories: Category[]}>(`${process.env.APP_BASE_URL}/api/topics`)).data
+  const { categories } = (await axios.get<{ categories: Category[] }>(`${process.env.APP_BASE_URL}/api/topics`)).data
   return { categories }
 }
 

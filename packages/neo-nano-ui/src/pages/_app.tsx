@@ -8,7 +8,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <NavBar isLoading={isLoading} isLoggedIn={!!user} />
+      <main>
       <Component {...pageProps} />
+      </main>
     </>
   )
 }

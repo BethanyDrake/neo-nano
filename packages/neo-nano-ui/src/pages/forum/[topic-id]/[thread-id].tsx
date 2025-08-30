@@ -54,23 +54,21 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
   }, [thread])
 
   return (
-    <main>
-      <div className={styles['forum-container']}>
-        <h2>{thread.title}</h2>
-        {comments &&
-          comments.map((comment: Comment) => {
-            return (
-              <div className={styles['forum-item']} key={comment.id}>
-                <h3 className={styles['forum-item-title']}>{comment.author}</h3>
-                <p>{comment.text}</p>
-              </div>
-            )
-          })}
+    <div className={styles['forum-container']}>
+      <h2>{thread.title}</h2>
+      {comments &&
+        comments.map((comment: Comment) => {
+          return (
+            <div className={styles['forum-item']} key={comment.id}>
+              <h3 className={styles['forum-item-title']}>{comment.author}</h3>
+              <p>{comment.text}</p>
+            </div>
+          )
+        })}
 
-        <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
-        {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
-      </div>
-    </main>
+      <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
+      {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
+    </div>
   )
 }
 

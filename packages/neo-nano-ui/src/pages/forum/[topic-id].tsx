@@ -64,7 +64,6 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
   }, [topic])
 
   return (
-    <main>
       <div className={styles['forum-container']}>
       <h2>{topic.title}</h2>
       <p>{topic.description}</p>
@@ -77,7 +76,6 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
 <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
       {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
       </div>
-    </main>
   )
 }
 
