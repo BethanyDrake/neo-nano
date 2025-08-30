@@ -85,12 +85,25 @@ const initComments = async () => {
 
 }
 
+const initGoals = async () => {
+    await sql`drop table if exists goals cascade`;
+    await sql`create table goals (
+    id bigint primary key GENERATED ALWAYS AS IDENTITY,
+    title text,
+    target int,
+    start_date date,
+    length_days int,
+    records int[],
+    user_id varchar(128) REFERENCES users(id))`
+}
+
 const initDB = async () => {
     await initCategories()
     await initTopics()
     await initUsers()
     await initThreads()
     await initComments()
+    await initGoals()
 }
 
 

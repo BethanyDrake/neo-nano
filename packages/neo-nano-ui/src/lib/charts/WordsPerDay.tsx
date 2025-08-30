@@ -1,33 +1,48 @@
-import { Bar, BarChart, Label, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { Centered } from '../layout'
 
-const mockData = new Array(30).fill(0).map((_, i) => ( {
-          wordCount: Math.round(Math.random()*3000),
-          name: 'Page A',
-          day: i+1
-        }))
+type Props = {
+  title: string
+  wordCountPerDay: number[]
+}
 
+export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
+  const data = wordCountPerDay.map((wordCount, i) => ({
+    wordCount,
+    day: i + 1,
+  }))
 
-export const WordsPerDay = () =>{
   return (
-  <ResponsiveContainer
-    height={400}
-    width="100%"
-  >
-    <BarChart
-    
-      accessibilityLayer
-      data={mockData}
-      margin={{
-        bottom: 124,
-        left: 16,
-        right: 24,
-        top: 124,
-      }}
-      syncMethod="index"
-    >
-      <YAxis>      <Label value="word count" position="top" angle={0} offset={24}  /></YAxis>
-      <XAxis dataKey={'day'} domain={[1, 30]} >      <Label value="day" position="bottom" /></XAxis>
+    <>
+      <Centered>
+        <h2>{title}</h2>
+      </Centered>
+      <ResponsiveContainer height={400} width="100%">
+        <BarChart
+          title={title}
+          accessibilityLayer
+          data={data}
+          margin={{
+            bottom: 0,
+            left: 16,
+            right: 24,
+            top: 48,
+          }}
+          syncMethod="index"
+        >
+          <YAxis>
+            {' '}
+            <Label value="word count" position="top" angle={0} offset={24} />
+          </YAxis>
+          <XAxis dataKey={'day'} domain={[1, 30]}>
+            {' '}
+            <Label value="day" position="bottom" />
+          </XAxis>
 
-      <Bar dataKey="wordCount" fill="#1ab394" />
-    </BarChart>
-  </ResponsiveContainer>)}
+          <Bar dataKey="wordCount" fill="#1ab394" />
+          <ReferenceLine y={1667} stroke="#5e53a5ff" strokeDasharray="3 3" />
+        </BarChart>
+      </ResponsiveContainer>
+    </>
+  )
+}

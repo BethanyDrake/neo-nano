@@ -9,3 +9,8 @@ export const Column = ({children, gap}: PropsWithChildren & Pick<CSSProperties, 
   return (
   <div style={{display:"flex", flexDirection:"column", justifyContent:"center", gap: gap ?? '1em'}}>{children}</div>)
 }
+
+export const Centered = ({children}: PropsWithChildren) => {
+  return (
+  <div style={{display:"flex", flexDirection:"row", justifyContent: "center"}}>{children}</div>)
+}
