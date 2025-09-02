@@ -27,14 +27,13 @@ export const POST = async function createGoals() {
   }
 }
 
-
 export const GET = async function getMyGoals() {
   try {
     
     const session = await auth0.getSession()
     const user_id = session?.user.sub
     console.log("getGoals", session)
-    const goals = await sql`SELECT title, target, start_date, length_days, records
+    const goals = await sql`SELECT id, title, target, start_date, length_days, records
     FROM goals
     WHERE user_id=${user_id}`
 

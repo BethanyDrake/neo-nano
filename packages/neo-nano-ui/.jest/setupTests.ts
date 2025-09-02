@@ -3,6 +3,7 @@ import 'whatwg-fetch';
 import { setupServer } from 'msw/node';
 
 jest.mock('@auth0/nextjs-auth0/server')
+
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
     observe: jest.fn(),
     unobserve: jest.fn(),

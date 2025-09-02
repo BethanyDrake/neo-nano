@@ -99,6 +99,8 @@ const config: Config = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
    moduleNameMapper: {
         '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
+        '^react-calendar(/(.*)|$)': '<rootDir>/.jest/mockModule.js', // Ignore nanoid as it is ESM
+
     },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

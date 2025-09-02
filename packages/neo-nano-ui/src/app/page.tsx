@@ -62,7 +62,7 @@ export default async function Home() {
     <>
       <NavBar isLoggedIn={isLoggedIn} isLoading={false} />
       <div className={styles.background} style={{ backgroundImage: `url(${bg.src})`, backgroundSize: '1000px' }}>
-        <main id="AAA" className={styles.main}>
+        <main className={styles.main}>
           <h1 className={styles.h1}>NaNoWriMo - Resurrected</h1>
           <Column gap="3em">
             <HistorySection />

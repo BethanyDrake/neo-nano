@@ -1,5 +1,4 @@
 import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
-import { Centered } from '../layout'
 
 type Props = {
   title: string
@@ -13,11 +12,7 @@ export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
   }))
 
   return (
-    <>
-      <Centered>
-        <h2>{title}</h2>
-      </Centered>
-      <ResponsiveContainer height={400} width="100%">
+      <ResponsiveContainer height={400}>
         <BarChart
           title={title}
           accessibilityLayer
@@ -31,11 +26,9 @@ export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
           syncMethod="index"
         >
           <YAxis>
-            {' '}
             <Label value="word count" position="top" angle={0} offset={24} />
           </YAxis>
           <XAxis dataKey={'day'} domain={[1, 30]}>
-            {' '}
             <Label value="day" position="bottom" />
           </XAxis>
 
@@ -43,6 +36,5 @@ export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
           <ReferenceLine y={1667} stroke="#5e53a5ff" strokeDasharray="3 3" />
         </BarChart>
       </ResponsiveContainer>
-    </>
   )
 }
