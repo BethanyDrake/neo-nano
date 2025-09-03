@@ -1,10 +1,11 @@
 import { auth0 } from '@/lib/auth0'
 import styles from './page.module.css'
-import { AnchorHTMLAttributes, JSX, PropsWithChildren } from 'react'
+import { JSX } from 'react'
 import bg from './pexels-technobulka-2908984.jpg'
 import { Column, Row } from '@/lib/layout'
 import Link from 'next/link'
 import { NavBar } from '@/lib/NavBar'
+import { BasicButton } from '@/lib/buttons/BasicButton'
 
 const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
   return (
@@ -12,14 +13,6 @@ const Section = ({ title, body }: { title: string; body: string | JSX.Element })
       <h2 className={styles['section-header']}>{title}</h2>
       {body}
     </section>
-  )
-}
-
-const BigButton = ({ href, children }: PropsWithChildren & Pick<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>) => {
-  return (
-    <a href={href}>
-      <button className={styles['button-72']}>{children}</button>
-    </a>
   )
 }
 
@@ -75,14 +68,14 @@ export default async function Home() {
 
               {isLoggedIn ? (
                 <Row>
-                  <BigButton href="/forum">Browse forum</BigButton>
-                  <BigButton href="/profile">My Profile</BigButton>
+                  <Link href="/forum"><BasicButton>Browse forum</BasicButton></Link>
+                  <Link href="/profile"><BasicButton>My Profile</BasicButton></Link>
                 </Row>
               ) : (
                 <Column>
                   <Row>
-                    <BigButton href="/auth/login?screen_hint=signup">Sign up</BigButton>
-                    <BigButton href="/auth/login">Log in</BigButton>
+                    <Link href="/auth/login?screen_hint=signup"><BasicButton>Sign up</BasicButton></Link>
+                    <Link href="/auth/login"><BasicButton>Log in</BasicButton></Link>
                   </Row>
                   <Row>
                     <Link className={styles['text-link']} href="/forum">
