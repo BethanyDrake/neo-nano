@@ -9,7 +9,7 @@
 .nav {
   padding: 1em;
   display: flex;
-  z-index: 999;
+  z-index: 500;
   background-color: #526565;
   justify-content: space-between;
   align-items: center;

@@ -1,3 +1,4 @@
+import { getUserIdFromSession } from "@/lib/apiUtils/getUserIdFromSession"
 import { auth0 } from "@/lib/auth0"
 import { neon } from "@neondatabase/serverless"
 import { NextResponse } from "next/server"
@@ -7,9 +8,8 @@ const sql = neon(process.env.DATABASE_URL)
 export const POST = async function createGoals() {
   try {
     const session = await auth0.getSession()
-    console.log("createGoals", session)
     const title = "November 2025"
-    const user_id = session?.user.sub
+    const user_id = await getUserIdFromSession(session, sql)
     const target = 50000
     const length_days = 30
     const start_date = '2025-11-01'
@@ -31,8 +31,7 @@ export const GET = async function getMyGoals() {
   try {
     
     const session = await auth0.getSession()
-    const user_id = session?.user.sub
-    console.log("getGoals", session)
+    const user_id = await getUserIdFromSession(session, sql)
     const goals = await sql`SELECT id, title, target, start_date, length_days, records
     FROM goals
     WHERE user_id=${user_id}`

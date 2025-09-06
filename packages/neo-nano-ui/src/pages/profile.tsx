@@ -1,8 +1,10 @@
+import { BasicButton } from '@/lib/buttons/BasicButton'
 import { WordsPerDay } from '@/lib/charts/WordsPerDay'
+import { EditProfileModal } from '@/lib/EditProfileModal'
+import { Profile } from '@/lib/forum.types'
 import { Centered, Row } from '@/lib/layout'
 import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { User } from '@auth0/nextjs-auth0/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
@@ -34,25 +36,34 @@ const Goal = ({id, title, initialRecords}: GoalProps) => {
        <WordsPerDay  title={title} wordCountPerDay={records}/></Row></div>)
 }
 
-
-export const ProfilePage = ({ user }: { user: User }) => {
+export const ProfilePage = () => {
   const joinChallenge = async () =>  await axios.post(`/api/goals`)
   const [goals, setGoals] = useState([])
+  const [profile, setProfile] = useState<Profile>()
 
   useEffect(() => {
     axios.get(`/api/goals`).then((data) => {
       setGoals(data.data.goals)
     })
+    axios.get(`/api/profile`).then((response) => {
+      setProfile(response.data.profile)
+    })
   },[])
+
+  if (!profile) return (
+    <div>Loading...</div>
+)
 
   return (
     <>
-      <h1>My Profile</h1>
-      <p>{user.name}</p>
-      <button onClick={joinChallenge}>Join the challenge</button>
+      <Row><h1>My Profile</h1> <EditProfileModal onUpdate={(updatedProfile:Profile) => setProfile(updatedProfile)}/></Row>
+      <h2>{profile.displayName}</h2> 
+      <p>{profile.aboutMe}</p> 
+      <BasicButton buttonProps={{onClick:joinChallenge}}>Join the challenge</BasicButton>
 
       {goals.map(({id, title, records}) => <Goal id={id} key={id} title={title} initialRecords={records}/>)
       }
+      
      
     </>
   )

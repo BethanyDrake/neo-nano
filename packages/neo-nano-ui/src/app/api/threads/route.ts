@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth0 } from '../../../lib/auth0'
 import { neon } from '@neondatabase/serverless'
 import { Comment, Thread } from '@/lib/forum.types'
+import { getUserIdFromSession } from '@/lib/apiUtils/getUserIdFromSession'
 if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
 const sql = neon(process.env.DATABASE_URL)
 
@@ -17,15 +18,20 @@ export const POST = async function createThread(req: NextRequest) {
     const body = await req.json()
 
     const title = body.title
-    const author = session?.user.sub
     const topic = body.topic
+    const commentText = body.commentText
 
-    await sql`INSERT INTO users (id, display_name) 
-      VALUES (${author}, ${session?.user.nickname})
-      ON CONFLICT (id) DO NOTHING`
+    const userId = await getUserIdFromSession(session, sql)
 
     const res = await sql`INSERT INTO threads (title, author, topic) 
-      VALUES (${title}, ${author}, ${topic})
+      VALUES (${title}, ${userId}, ${topic})
+      RETURNING id`
+      console.log('thread result', res)
+
+    const createdThreadId = res[0].id
+
+    await sql`INSERT INTO comments (comment_text, author, thread) 
+      VALUES (${commentText}, ${userId}, ${createdThreadId})
       RETURNING id`
 
     console.info(`Created thread: ${res}`)

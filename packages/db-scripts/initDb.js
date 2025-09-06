@@ -55,8 +55,10 @@ const initUsers = async () => {
     console.log("initUsers start")
     await sql`drop table if exists users cascade`;
     await sql`create table users (
-        id varchar(128) PRIMARY KEY,
-        display_name text
+      id bigint primary key GENERATED ALWAYS AS IDENTITY,
+      external_id varchar(128) UNIQUE,
+      display_name text,
+      about_me text
 );`;
 
 }
@@ -67,7 +69,7 @@ const initThreads = async () => {
     await sql`CREATE TABLE threads (
   id bigint primary key GENERATED ALWAYS AS IDENTITY,
   title text,
-  author varchar(128) REFERENCES users(id),
+  author bigint REFERENCES users(id),
   topic varchar(128) REFERENCES topics(id)
 );`;
 
@@ -79,8 +81,8 @@ const initComments = async () => {
     await sql`CREATE TABLE comments (
   id bigint primary key GENERATED ALWAYS AS IDENTITY,
   comment_text text,
-  author varchar(128) REFERENCES users(id),
-  thread bigint REFERENCES threads(id),
+  author bigint REFERENCES users(id),
+  thread bigint REFERENCES threads(id)
 );`;
 
 }
@@ -94,7 +96,7 @@ const initGoals = async () => {
     start_date date,
     length_days int,
     records int[],
-    user_id varchar(128) REFERENCES users(id))`
+    user_id bigint REFERENCES users(id))`
 }
 
 const initDB = async () => {

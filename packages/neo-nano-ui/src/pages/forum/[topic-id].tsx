@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import styles from './index.module.css'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
+import {faAdd} from '@fortawesome/free-solid-svg-icons'
 
 type Inputs = {
   title: string
@@ -73,7 +74,7 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
             {thread.text}</p></a>
         })}
 
-<ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
+<ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
       {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
       </div>
   )

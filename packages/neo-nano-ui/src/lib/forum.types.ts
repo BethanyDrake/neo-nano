@@ -22,3 +22,9 @@ export type Category = {
     title: string
     topics: Topic[]
 }
+
+export type Profile = {
+    id:string
+    displayName: string
+    aboutMe?: string | null
+}

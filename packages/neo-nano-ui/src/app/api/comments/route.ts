@@ -1,3 +1,4 @@
+import { getUserIdFromSession } from '@/lib/apiUtils/getUserIdFromSession'
 import { auth0 } from '@/lib/auth0'
 import { Comment } from '@/lib/forum.types'
 import { neon } from '@neondatabase/serverless'
@@ -41,11 +42,8 @@ const session = await auth0.getSession()
     const body = await req.json()
     const thread = body.thread
     const commentText = body.commentText
-    const author = session?.user.sub
 
-    await sql`INSERT INTO users (id, display_name) 
-      VALUES (${author}, ${session?.user.nickname})
-      ON CONFLICT (id) DO NOTHING`
+    const author = await getUserIdFromSession(session, sql)
 
     const res = await sql`INSERT INTO comments (comment_text, author, thread) 
       VALUES (${commentText}, ${author}, ${thread})

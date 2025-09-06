@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import styles from '../index.module.css'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { ReturnType } from '@/app/api/comments/route'
+import { faAdd } from '@fortawesome/free-solid-svg-icons'
 
 type Inputs = {
   commentText: string
@@ -66,7 +67,7 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
           )
         })}
 
-      <ExtendableIconButton onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
+      <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
       {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
     </div>
   )
@@ -77,7 +78,6 @@ TopicPage.getInitialProps = async (context: NextPageContext) => {
 
   const initialComments = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/comments?thread=${threadId}`))
     .data.comments
-  console.log({ initialComments })
 
   return {
     thread: {
