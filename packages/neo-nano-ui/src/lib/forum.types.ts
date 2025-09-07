@@ -30,3 +30,14 @@ export type Profile = {
     displayName: string
     aboutMe?: string | null
 }
+
+export type Goal = {
+    id:string
+    title: string
+    //yyyy-MM-dd
+    startDate: string
+    lengthDays: number
+    records: number[]
+    userId: string
+    target: number
+}

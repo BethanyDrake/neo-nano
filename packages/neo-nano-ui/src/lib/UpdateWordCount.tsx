@@ -57,7 +57,6 @@ export const UpdateWordCount = ({
               autoFocus
               onBlur={onSubmit}
               onKeyDown={({ target, key }) => {
-                console.log('onkeydown', key)
                 if (key === 'Enter') {
                   ;(target as HTMLElement).blur()
                 }

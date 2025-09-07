@@ -1,11 +1,12 @@
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { WordsPerDay } from '@/lib/charts/WordsPerDay'
 import { EditProfileModal } from '@/lib/EditProfileModal'
-import { Profile } from '@/lib/forum.types'
+import { Goal, Profile } from '@/lib/forum.types'
 import { Centered, Row } from '@/lib/layout'
 import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import axios from 'axios'
+import { isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 
 type  GoalProps ={
@@ -14,7 +15,14 @@ type  GoalProps ={
   initialRecords: number[]
 }
 
-const Goal = ({id, title, initialRecords}: GoalProps) => {
+const hasJoinedCurrentChallenge = (goals: Goal[]) => {
+  return goals.some(({startDate}) => {
+   return isSameDay(startDate, '2025-11-01')
+  })
+
+}
+
+const GoalSection = ({id, title, initialRecords}: GoalProps) => {
   const [records, setRecords] = useState<number[]>(initialRecords)
 
   const onCancel = () => {
@@ -37,13 +45,15 @@ const Goal = ({id, title, initialRecords}: GoalProps) => {
 }
 
 export const ProfilePage = () => {
-  const joinChallenge = async () =>  await axios.post(`/api/goals`)
-  const [goals, setGoals] = useState([])
+  const joinChallenge = async () =>  await axios.post(`/api/goals`).then((response) => {
+    setGoals(response.data.updatedGoals)
+  })
+  const [goals, setGoals] = useState<Goal[]>([])
   const [profile, setProfile] = useState<Profile>()
 
   useEffect(() => {
-    axios.get(`/api/goals`).then((data) => {
-      setGoals(data.data.goals)
+    axios.get(`/api/goals`).then((response) => {
+      setGoals(response.data.goals)
     })
     axios.get(`/api/profile`).then((response) => {
       setProfile(response.data.profile)
@@ -55,17 +65,16 @@ export const ProfilePage = () => {
 )
 
   return (
-    <>
-      <Row><h1>My Profile</h1> <EditProfileModal onUpdate={(updatedProfile:Profile) => setProfile(updatedProfile)}/></Row>
+    <div style={{padding:'24px'}}>
+      <Row alignItems='center'><h1>My Profile</h1> <EditProfileModal onUpdate={(updatedProfile:Profile) => setProfile(updatedProfile)}/></Row>
       <h2>{profile.displayName}</h2> 
       <p>{profile.aboutMe}</p> 
-      <BasicButton buttonProps={{onClick:joinChallenge}}>Join the challenge</BasicButton>
+      {!hasJoinedCurrentChallenge(goals) &&<BasicButton buttonProps={{onClick:joinChallenge}}>Join the challenge</BasicButton>}
 
-      {goals.map(({id, title, records}) => <Goal id={id} key={id} title={title} initialRecords={records}/>)
+      {goals.map(({id, title, records}) => <GoalSection id={id} key={id} title={title} initialRecords={records}/>)
       }
       
-     
-    </>
+    </div>
   )
 }
 

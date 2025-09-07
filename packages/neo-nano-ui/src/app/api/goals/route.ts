@@ -1,9 +1,20 @@
 import { getUserIdFromSession } from "@/lib/apiUtils/getUserIdFromSession"
 import { auth0 } from "@/lib/auth0"
-import { neon } from "@neondatabase/serverless"
+import { neon, NeonQueryFunction, types } from "@neondatabase/serverless"
+import camelcaseKeys from "camelcase-keys"
 import { NextResponse } from "next/server"
 if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
 const sql = neon(process.env.DATABASE_URL)
+
+types.setTypeParser(1082, (value) => value)
+
+const _getMyGoals = async (user_id: string, sql:NeonQueryFunction<false, false>) => {
+  const goals = await sql`SELECT id, title, target, start_date, length_days, records
+    FROM goals
+    WHERE user_id=${user_id}
+    ORDER BY start_date DESC`
+  return camelcaseKeys(goals)
+}
 
 export const POST = async function createGoals() {
   try {
@@ -17,10 +28,11 @@ export const POST = async function createGoals() {
 
 
     await sql`INSERT INTO goals (title, target, start_date, length_days, records, user_id) 
-    VALUES (${title}, ${target}, ${start_date}, ${length_days}, ${records}, ${user_id}) RETURNING id`
+    VALUES (${title}, ${target}, ${start_date}, ${length_days}, ${records}, ${user_id})`
 
+    const updatedGoals = await _getMyGoals(user_id, sql)
 
-    return NextResponse.json({})
+    return NextResponse.json({updatedGoals})
   } catch (error) {
     console.error(error)
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
@@ -32,9 +44,7 @@ export const GET = async function getMyGoals() {
     
     const session = await auth0.getSession()
     const user_id = await getUserIdFromSession(session, sql)
-    const goals = await sql`SELECT id, title, target, start_date, length_days, records
-    FROM goals
-    WHERE user_id=${user_id}`
+    const goals = await _getMyGoals(user_id, sql)
 
 
     return NextResponse.json({goals})
