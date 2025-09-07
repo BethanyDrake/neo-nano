@@ -57,7 +57,7 @@ export const Forum = ({ categories }: ForumProps) => {
 }
 
 Forum.getInitialProps = async () => {
-  const { categories } = (await axios.get<{ categories: Category[] }>(`${process.env.APP_BASE_URL}/api/topics`)).data
+  const { categories } = (await axios.get<{ categories: Category[] }>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topics`)).data
   return { categories }
 }
 

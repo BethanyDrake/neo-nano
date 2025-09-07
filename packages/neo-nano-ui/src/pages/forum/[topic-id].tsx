@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import styles from './index.module.css'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import {faAdd} from '@fortawesome/free-solid-svg-icons'
+import Link from 'next/link'
 
 type Inputs = {
   title: string
@@ -68,22 +69,24 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
       <div className={styles['forum-container']}>
       <h2>{topic.title}</h2>
       <p>{topic.description}</p>
+      <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
+      {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
+      <Column>
       {threads &&
         threads.map((thread: ThreadSummary) => {
-          return <a href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
-            {thread.text}</p></a>
+          return <Link href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
+            {thread.text}</p></Link>
         })}
+      </Column> 
 
-<ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
-      {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
       </div>
   )
 }
 
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const topicId = context.query['topic-id'] as string
-  const topic = (await axios.get(`${process.env.APP_BASE_URL}/api/topic?id=${topicId}`)).data.topic
-  const initialThreads = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/threads?topic=${topicId}`)).data
+  const topic = (await axios.get(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topic?id=${topicId}`)).data.topic
+  const initialThreads = (await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/threads?topic=${topicId}`)).data
     .threads
 
   return {

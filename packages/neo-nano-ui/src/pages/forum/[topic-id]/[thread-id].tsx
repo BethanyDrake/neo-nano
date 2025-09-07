@@ -75,8 +75,7 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
 
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const threadId = context.query['thread-id'] as string
-
-  const response = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/comments?thread=${threadId}`))
+  const response = (await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/comments?thread=${threadId}`))
     .data
   const initialComments = response.comments
   const {title} = response.thread

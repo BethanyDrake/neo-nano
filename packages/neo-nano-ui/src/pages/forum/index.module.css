@@ -203,6 +203,7 @@ a.forum-item-title:hover {
   color: black;
   text-decoration: none;
   background-color: white;
+  border-bottom: 1px solid #f1f1f1;
 
   &:hover {
     color: #1ab394;
