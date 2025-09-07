@@ -81,8 +81,8 @@ const TopicPage = ({
         <div className={styles['breadcrumb-container']}>
           <Link className={styles.breadcrumb} href={'/forum'}>
             {category.title}
-          </Link>{' '}
-          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />{' '}
+          </Link>
+          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />
           <h2 className={styles.breadcrumb}>{topic.title}</h2>
         </div>
         <p>{topic.description}</p>

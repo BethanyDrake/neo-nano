@@ -1,4 +1,4 @@
-import { Comment, Thread } from '@/lib/forum.types'
+import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
 import { Column } from '@/lib/layout'
 import axios from 'axios'
 import { NextPageContext } from 'next'
@@ -7,7 +7,9 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import styles from '../index.module.css'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { ReturnType } from '@/app/api/comments/route'
-import { faAdd } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Link from 'next/link'
 
 type Inputs = {
   commentText: string
@@ -45,7 +47,17 @@ const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: ()
   )
 }
 
-const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComments: Comment[] }) => {
+const ThreadPage = ({
+  thread,
+  topic,
+  category,
+  initialComments,
+}: {
+  thread: Thread
+  topic: Topic
+  category: Category
+  initialComments: Comment[]
+}) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
   const [comments, setComments] = useState<Comment[]>(initialComments)
 
@@ -56,36 +68,50 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
 
   return (
     <div className={styles['forum-container']}>
-      <h2>{thread.title}</h2>
-      {comments &&
-        comments.map((comment: Comment) => {
-          return (
-            <div className={''} key={comment.id}>
-              <p><span style={{fontWeight: 'bold'}}>{comment.authorDisplayName}</span>: {comment.text}</p>
-            </div>
-          )
-        })}
-
-      <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
-      {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
+      <Column>
+        <div className={styles['breadcrumb-container']}>
+          <Link className={styles.breadcrumb} href={'/forum'}>
+            {category.title}
+          </Link>
+          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />
+          <Link className={styles.breadcrumb} href={`/forum/${topic.id}`}>
+            {topic.title}
+          </Link>
+          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />
+          <h2 className={styles.breadcrumb}>{thread.title}</h2>
+        </div>
+        <div>
+          {comments &&
+            comments.map((comment: Comment) => {
+              return (
+                <div className={''} key={comment.id}>
+                  <p>
+                    <span style={{ fontWeight: 'bold' }}>{comment.authorDisplayName}</span>: {comment.text}
+                  </p>
+                </div>
+              )
+            })}
+        </div>
+        <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
+        {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
+      </Column>
     </div>
   )
 }
 
-TopicPage.getInitialProps = async (context: NextPageContext) => {
+ThreadPage.getInitialProps = async (context: NextPageContext) => {
   const threadId = context.query['thread-id'] as string
-  const response = (await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/comments?thread=${threadId}`))
-    .data
-  const initialComments = response.comments
-  const {title} = response.thread
+  const response = (
+    await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/comments?thread=${threadId}`)
+  ).data
+  const { thread, category, comments, topic } = response
 
   return {
-    thread: {
-      id: threadId,
-      title,
-    },
-    initialComments,
+    thread,
+    category,
+    topic,
+    initialComments: comments,
   }
 }
 
-export default TopicPage
+export default ThreadPage

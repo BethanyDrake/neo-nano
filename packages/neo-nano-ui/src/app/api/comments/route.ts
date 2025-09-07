@@ -1,13 +1,15 @@
 import { getSingle } from '@/lib/apiUtils/getSingle'
 import { getUserIdFromSession } from '@/lib/apiUtils/getUserIdFromSession'
 import { auth0 } from '@/lib/auth0'
-import { Comment, Thread } from '@/lib/forum.types'
+import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
 import { neon } from '@neondatabase/serverless'
 import { NextRequest, NextResponse } from 'next/server'
 
 export type ReturnType = {
   comments: Comment[]
   thread: Thread
+  category: Category
+  topic: Topic
 }
 
 
@@ -21,8 +23,11 @@ export const GET = async function getThreadComments(req: NextRequest) {
     FROM comments JOIN users on comments.author=users.id
   WHERE thread=${threadId}`
 
-  const threadDetails =  await getSingle('thread', sql`SELECT title, author, id FROM threads
+  const threadDetails =  await getSingle('thread', sql`SELECT title, author, id, topic FROM threads
   WHERE id=${threadId}`)
+
+  const topic = await getSingle('topic', sql`SELECT id, title, description, icon, category FROM topics where id=${threadDetails.topic} LIMIT 1`)
+  const category = await getSingle('category', sql`SELECT id, title FROM categories where id=${topic.category} LIMIT 1`)
 
   const comments = _comments.map(({comment_text, author, id, thread, display_name }) => ({
     text: comment_text,
@@ -32,7 +37,7 @@ export const GET = async function getThreadComments(req: NextRequest) {
      authorDisplayName: display_name
   }))
 
-  const response: ReturnType = {comments, thread: threadDetails as Thread}
+  const response: ReturnType = {comments, thread: threadDetails as Thread, category: category as Category, topic: topic as Topic}
 
    return NextResponse.json(response)
 }
