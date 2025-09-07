@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { Profile } from './forum.types'
 import { ExtendableIconButton } from './buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import formClasses from './form.module.css'
 
 type Inputs = {
   displayName: string
@@ -39,15 +40,18 @@ const EditProfileForm = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(_onSubmit)}>
+    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
         <h2>Update Profile Details</h2>
-        <Row justifyContent="start">
-          <label style={{ fontWeight: 'bold' }} htmlFor="displayName">
+        <Row alignItems="center" justifyContent="start">
+          <label htmlFor="displayName">
             Display Name:
           </label>
-          <input id="displayName" placeholder="Display Name" {...register('displayName')} required={true} />
+          <input id="displayName" placeholder="Display Name" {...register('displayName', {required: true})}/>
+         
         </Row>
+         {errors.displayName && <span className={formClasses.error}>^Please tell us what to call you.</span>}
+        
 
         <label style={{ fontWeight: 'bold' }} htmlFor="aboutMe">
           About me:
@@ -56,12 +60,8 @@ const EditProfileForm = ({
           id="aboutMe"
           placeholder="Favourite genres, writing experience, etc."
           {...register('aboutMe')}
-          required={true}
         />
-
-        {errors.displayName && <span>This field is required</span>}
         <Row>
-          {' '}
           <BasicButton buttonProps={{ onClick: closeModal }}>Cancel</BasicButton>{' '}
           <BasicButton buttonProps={{ type: 'submit' }}>Save</BasicButton>
         </Row>

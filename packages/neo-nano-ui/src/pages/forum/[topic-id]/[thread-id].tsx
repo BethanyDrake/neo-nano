@@ -9,6 +9,8 @@ import { NextPageContext } from 'next'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from '../index.module.css'
+import formClasses from '@/lib/form.module.css'
+import { BasicButton } from '@/lib/buttons/BasicButton'
 
 type Inputs = {
   commentText: string
@@ -34,13 +36,13 @@ const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: ()
   }
 
   return (
-    <form onSubmit={handleSubmit(_onSubmit)}>
+    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
         <label htmlFor="comment">Comment</label>
         <input id="comment" {...register('commentText', { required: true })} />
         {errors.commentText && <span>This field is required</span>}
 
-        <button type="submit">Post!</button>
+        <BasicButton buttonProps={{type:"submit"}}>Post!</BasicButton>
       </Column>
     </form>
   )
@@ -79,7 +81,7 @@ const ThreadPage = ({
           {comments &&
             comments.map((comment: Comment) => {
               return (
-                <div className={''} key={comment.id}>
+                <div key={comment.id}>
                   <p>
                     <span style={{ fontWeight: 'bold' }}>{comment.authorDisplayName}</span>: {comment.text}
                   </p>

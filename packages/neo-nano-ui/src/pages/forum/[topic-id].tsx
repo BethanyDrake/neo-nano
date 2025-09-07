@@ -1,8 +1,10 @@
 import { ReturnType, ThreadSummary } from '@/app/api/threads/route'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
+import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
+import formClasses from '@/lib/form.module.css'
 import { Category } from '@/lib/forum.types'
-import { Column } from '@/lib/layout'
+import { Column, Row } from '@/lib/layout'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import { NextPageContext } from 'next'
@@ -10,7 +12,6 @@ import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from './index.module.css'
-
 type Inputs = {
   title: string
   commentText: string
@@ -42,17 +43,19 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
   }
 
   return (
-    <form onSubmit={handleSubmit(_onSubmit)}>
+    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
-        <label htmlFor="title">Title</label>
-        <input id="title" placeholder="Thread Title" {...register('title')} required={true} />
+      <Row alignItems='center' justifyContent='left'>
+        <label htmlFor="title">Title:</label>
+        <input id="title" placeholder="Thread Title" {...register('title', {required: true})}/>
+        </Row>
 
-        {errors.title && <span>This field is required</span>}
-        <label htmlFor="comment">Comment</label>
-        <input id="comment" {...register('commentText', { required: true })} />
-        {errors.commentText && <span>This field is required</span>}
-
-        <button type="submit">Post!</button>
+        {errors.title && <span className={formClasses.error}>^Please enter a title. This should be a short description of what you want to say.</span>}
+        <label htmlFor="comment">Comment:</label>
+        <textarea rows={5} id="comment" {...register('commentText', { required: true })} />
+        {errors.commentText && <span  className={formClasses.error}>^Please enter a comment to start the conversion.</span>}
+        
+        <BasicButton buttonProps={{type:"submit"}}>Post!</BasicButton>
       </Column>
     </form>
   )
@@ -73,6 +76,7 @@ const TopicPage = ({
   const updateThreads = useCallback(async () => {
     const _threads: ThreadSummary[] = (await axios.get<ReturnType>(`/api/threads?topic=${topic.id}`)).data.threads
     setThreads(_threads)
+    setCreateThreadFormIsOpen(false)
   }, [topic])
 
   const breadcrumbItems = [{href: '/forum', text: category.title}, {text: topic.title} ]
