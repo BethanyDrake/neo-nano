@@ -1,15 +1,14 @@
+import { ReturnType } from '@/app/api/comments/route'
+import { Breadcrumbs } from '@/lib/Breadcrumbs'
+import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
 import { Column } from '@/lib/layout'
+import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import { NextPageContext } from 'next'
 import { useCallback, useState } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from '../index.module.css'
-import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
-import { ReturnType } from '@/app/api/comments/route'
-import { faAdd, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Link from 'next/link'
 
 type Inputs = {
   commentText: string
@@ -66,20 +65,16 @@ const ThreadPage = ({
     setComments(_comments)
   }, [thread])
 
+  const breadcrumbItems = [
+    { href: '/forum', text: category.title },
+    { href: `/forum/${topic.id}`, text: topic.title },
+    { text: thread.title },
+  ]
+
   return (
     <div className={styles['forum-container']}>
       <Column>
-        <div className={styles['breadcrumb-container']}>
-          <Link className={styles.breadcrumb} href={'/forum'}>
-            {category.title}
-          </Link>
-          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />
-          <Link className={styles.breadcrumb} href={`/forum/${topic.id}`}>
-            {topic.title}
-          </Link>
-          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />
-          <h2 className={styles.breadcrumb}>{thread.title}</h2>
-        </div>
+        <Breadcrumbs breadcrumbItems={breadcrumbItems} />
         <div>
           {comments &&
             comments.map((comment: Comment) => {
