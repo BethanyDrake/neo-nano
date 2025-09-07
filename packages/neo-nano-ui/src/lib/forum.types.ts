@@ -2,6 +2,7 @@ export type Comment = {
     id: string
     text: string
     author: string
+    authorDisplayName: string
 }
 
 export type Thread = {

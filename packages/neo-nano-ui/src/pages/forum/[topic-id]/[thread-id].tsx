@@ -61,7 +61,7 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
         comments.map((comment: Comment) => {
           return (
             <div className={styles['forum-item']} key={comment.id}>
-              <h3 className={styles['forum-item-title']}>{comment.author}</h3>
+              <h3 className={styles['forum-item-title']}>{comment.authorDisplayName}</h3>
               <p>{comment.text}</p>
             </div>
           )
@@ -76,13 +76,15 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const threadId = context.query['thread-id'] as string
 
-  const initialComments = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/comments?thread=${threadId}`))
-    .data.comments
+  const response = (await axios.get<ReturnType>(`${process.env.APP_BASE_URL}/api/comments?thread=${threadId}`))
+    .data
+  const initialComments = response.comments
+  const {title} = response.thread
 
   return {
     thread: {
       id: threadId,
-      title: 'Topic Title',
+      title,
     },
     initialComments,
   }
