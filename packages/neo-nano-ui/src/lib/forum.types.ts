@@ -15,7 +15,8 @@ export type Topic = {
     id: string
     title: string
     description: string
-        icon: 'faBoltLightning'| 'faPerson' | 'faShield' | 'faPenFancy'
+    icon: 'faBoltLightning'| 'faPerson' | 'faShield' | 'faPenFancy'
+    category: string
 }
 
 export type Category = {

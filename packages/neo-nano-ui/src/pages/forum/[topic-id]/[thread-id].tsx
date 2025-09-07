@@ -60,9 +60,8 @@ const TopicPage = ({ thread, initialComments }: { thread: Thread; initialComment
       {comments &&
         comments.map((comment: Comment) => {
           return (
-            <div className={styles['forum-item']} key={comment.id}>
-              <h3 className={styles['forum-item-title']}>{comment.authorDisplayName}</h3>
-              <p>{comment.text}</p>
+            <div className={''} key={comment.id}>
+              <p><span style={{fontWeight: 'bold'}}>{comment.authorDisplayName}</span>: {comment.text}</p>
             </div>
           )
         })}

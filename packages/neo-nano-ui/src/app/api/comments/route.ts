@@ -1,3 +1,4 @@
+import { getSingle } from '@/lib/apiUtils/getSingle'
 import { getUserIdFromSession } from '@/lib/apiUtils/getUserIdFromSession'
 import { auth0 } from '@/lib/auth0'
 import { Comment, Thread } from '@/lib/forum.types'
@@ -13,15 +14,6 @@ export type ReturnType = {
 if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
 const sql = neon(process.env.DATABASE_URL)
 
-const getSingle = async <T>(name: string, sqlResponse: Promise<T[]>): Promise<T> => {
-  const rows = await sqlResponse
-  if (rows.length < 1 ) {
-    throw Error(`${name} not found`)
-  }
-  return rows[0]
-
-
-}
 
 export const GET = async function getThreadComments(req: NextRequest) {
   const threadId = req.nextUrl.searchParams.get('thread')

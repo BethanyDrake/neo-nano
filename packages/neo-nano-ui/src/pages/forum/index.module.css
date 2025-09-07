@@ -209,3 +209,19 @@ a.forum-item-title:hover {
     color: #1ab394;
   }
 }
+
+.breadcrumb {
+  color: black;
+  font-size: larger;
+
+  &a:hover {
+    color: #1ab394;
+  }
+}
+
+.breadcrumb-container {
+  display: flex;
+  font-weight: bold;
+  gap: 5px;
+
+}

@@ -6,8 +6,10 @@ import { useCallback, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import styles from './index.module.css'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
-import {faAdd} from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
+import { Category } from '@/lib/forum.types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Inputs = {
   title: string
@@ -56,7 +58,15 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
   )
 }
 
-const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: ThreadSummary[] }) => {
+const TopicPage = ({
+  topic,
+  category,
+  initialThreads,
+}: {
+  topic: Topic
+  category: Category
+  initialThreads: ThreadSummary[]
+}) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
   const [threads, setThreads] = useState<ThreadSummary[]>(initialThreads)
 
@@ -66,31 +76,46 @@ const TopicPage = ({ topic, initialThreads }: { topic: Topic; initialThreads: Th
   }, [topic])
 
   return (
-      <div className={styles['forum-container']}>
-      <h2>{topic.title}</h2>
-      <p>{topic.description}</p>
-      <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
-      {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
+    <div className={styles['forum-container']}>
       <Column>
-      {threads &&
-        threads.map((thread: ThreadSummary) => {
-          return <Link href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}><h3 className={styles['forum-item-title']} >{thread.title}</h3><p>
-            {thread.text}</p></Link>
-        })}
-      </Column> 
-
-      </div>
+        <div className={styles['breadcrumb-container']}>
+          <Link className={styles.breadcrumb} href={'/forum'}>
+            {category.title}
+          </Link>{' '}
+          <FontAwesomeIcon style={{ alignSelf: 'center' }} icon={faChevronRight} />{' '}
+          <h2 className={styles.breadcrumb}>{topic.title}</h2>
+        </div>
+        <p>{topic.description}</p>
+        <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
+        {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
+        <Column>
+          <h2>Threads:</h2>
+          {threads &&
+            threads.map((thread: ThreadSummary) => {
+              return (
+                <Link href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}>
+                  <h3 className={styles['forum-item-title']}>{thread.title}</h3>
+                  <p>{thread.text}</p>
+                </Link>
+              )
+            })}
+        </Column>
+      </Column>
+    </div>
   )
 }
 
 TopicPage.getInitialProps = async (context: NextPageContext) => {
   const topicId = context.query['topic-id'] as string
-  const topic = (await axios.get(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topic?id=${topicId}`)).data.topic
-  const initialThreads = (await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/threads?topic=${topicId}`)).data
-    .threads
+  const { topic, category } = (await axios.get(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topic?id=${topicId}`)).data
+
+  const initialThreads = (
+    await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/threads?topic=${topicId}`)
+  ).data.threads
 
   return {
     topic,
+    category,
     initialThreads,
   }
 }
