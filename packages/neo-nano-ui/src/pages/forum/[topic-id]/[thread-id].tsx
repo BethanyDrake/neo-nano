@@ -11,12 +11,14 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from '../index.module.css'
 import formClasses from '@/lib/form.module.css'
 import { BasicButton } from '@/lib/buttons/BasicButton'
+import { useRequireLogin } from '@/lib/useRequireLogin'
 
 type Inputs = {
   commentText: string
 }
 
 const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: () => void }) => {
+  useRequireLogin()
   const {
     register,
     handleSubmit,

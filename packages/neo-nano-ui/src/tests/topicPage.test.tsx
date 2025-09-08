@@ -7,6 +7,7 @@ import { NextPageContext } from 'next'
 import { mockRequest } from './utils/mswHelpers'
 
 jest.spyOn(axios, 'post')
+jest.mock('@/lib/useRequireLogin')
 
 describe('<TopicPage />', () => {
   beforeEach(() => {

@@ -12,6 +12,8 @@ import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from './index.module.css'
+import { useRequireLogin } from '@/lib/useRequireLogin'
+
 type Inputs = {
   title: string
   commentText: string
@@ -24,6 +26,7 @@ type Topic = {
 }
 
 const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: () => void }) => {
+  useRequireLogin()
   const {
     register,
     handleSubmit,

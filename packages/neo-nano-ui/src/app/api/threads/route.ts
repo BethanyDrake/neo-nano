@@ -34,8 +34,6 @@ export const POST = async function createThread(req: NextRequest) {
       VALUES (${commentText}, ${userId}, ${createdThreadId})
       RETURNING id`
 
-    console.info(`Created thread: ${res}`)
-
     return NextResponse.json({})
   } catch (error) {
     console.error(error)
