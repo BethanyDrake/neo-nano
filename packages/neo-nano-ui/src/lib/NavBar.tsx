@@ -12,6 +12,9 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
       <Link style={{color: 'white', alignSelf: 'center'}}href="/auth/logout">
         Log out
       </Link>
+      <Link href="/forum">
+        <BasicButton>Browse Forum</BasicButton>
+      </Link>
        <Link href="/profile">
         <BasicButton>Update Progess</BasicButton>
       </Link>
@@ -34,7 +37,7 @@ export const NavBar = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
   return (
     <nav className={styles.nav}>
       <Link href="/" className={styles['nav-header']}>
-        NaNoWriMo - Resurrected
+        Home
       </Link>
 
       <ClientSideOnly>

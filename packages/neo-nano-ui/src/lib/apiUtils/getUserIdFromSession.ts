@@ -15,8 +15,6 @@ export const getUserIdFromSession = async (session: SessionData | null, sql: Neo
         throw new Error(`No user found with external_id=${external_id}`)
     }
 
-    console.log('getUserIdFromSession userIds', userIds )
-
     const userId = userIds[0].id
 
     if (typeof userId !== 'string') {

@@ -68,8 +68,8 @@ export default async function Home() {
 
               {isLoggedIn ? (
                 <Row>
-                  <Link href="/forum"><BasicButton>Browse forum</BasicButton></Link>
-                  <Link href="/profile"><BasicButton>My Profile</BasicButton></Link>
+                  <Link href="/forum"><BasicButton>Browse Forum</BasicButton></Link>
+                  <Link href="/profile"><BasicButton>Update Progress</BasicButton></Link>
                 </Row>
               ) : (
                 <Column>
