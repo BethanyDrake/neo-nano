@@ -8,6 +8,7 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import axios from 'axios'
 import { isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
+import classNames from './profile.module.css'
 
 type  GoalProps ={
   id: string | number
@@ -39,9 +40,9 @@ const GoalSection = ({id, title, initialRecords}: GoalProps) => {
     <Centered>
             <h2>{title}</h2>
           </Centered>
-          <Row>
+          <div className={classNames["goal-row"]}>
         <UpdateWordCount onCancel={onCancel} onSave={onSave} records={records} setRecords={setRecords}/>
-       <WordsPerDay  title={title} wordCountPerDay={records}/></Row></div>)
+       <WordsPerDay  title={title} wordCountPerDay={records}/></div></div>)
 }
 
 export const ProfilePage = () => {
