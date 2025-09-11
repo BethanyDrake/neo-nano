@@ -1,17 +1,17 @@
+"use server"
 import { auth0 } from "@/lib/auth0"
 import { neon } from "@neondatabase/serverless"
 import { NextRequest, NextResponse } from "next/server"
 import snakecaseKeys from 'snakecase-keys'
 import camelcaseKeys from 'camelcase-keys';
+import { Profile } from "@/lib/forum.types"
 
 if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
 const sql = neon(process.env.DATABASE_URL)
 
-
-export const GET = async function getMyProfile() {
-  try {
-    
-    const session = await auth0.getSession()
+export const getMyProfile = async (): Promise<Profile> => {
+   const session = await auth0.getSession()
+    console.log("getMyProfile", session)
     const external_id = session?.user.sub
     const result = await sql`SELECT id, display_name, about_me FROM users 
     WHERE external_id=${external_id}
@@ -21,7 +21,14 @@ export const GET = async function getMyProfile() {
         throw Error("Profile not found")
 
 
-    return NextResponse.json({profile: camelcaseKeys(result[0])})
+    return camelcaseKeys(result[0]) as Profile
+}
+
+export const GET = async function getMyProfile1() {
+  try {
+
+
+    return NextResponse.json({profile: getMyProfile()})
   } catch (error) {
     console.error(error)
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })

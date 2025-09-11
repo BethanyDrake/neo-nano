@@ -18,6 +18,7 @@ const ForumItem = ({
   description: string
 }) => {
   return (
+
     <div className={styles['forum-item']}>
       <Row justifyContent="left">
         <Column>
@@ -36,10 +37,9 @@ const ForumItem = ({
   )
 }
 
-type ForumProps = {
-  categories: Category[]
-}
-export const Forum = ({ categories }: ForumProps) => {
+export const Forum = async () => {
+  const { categories } = (await axios.get<{ categories: Category[] }>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topics`)).data
+ 
   return (
     <div className={styles['forum-container']}>
       {categories.map(({ id, title, topics }) => {
@@ -54,11 +54,6 @@ export const Forum = ({ categories }: ForumProps) => {
       })}
     </div>
   )
-}
-
-Forum.getInitialProps = async () => {
-  const { categories } = (await axios.get<{ categories: Category[] }>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topics`)).data
-  return { categories }
 }
 
 export default Forum

@@ -34,6 +34,7 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
 }
 
 export const NavBar = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoading: boolean }) => {
+
   return (
     <nav className={styles.nav}>
       <Link href="/" className={styles['nav-header']}>

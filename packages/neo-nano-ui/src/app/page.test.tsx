@@ -7,6 +7,6 @@ jest.mocked(auth0.getSession).mockResolvedValue(null)
 describe('Home page', () => {
     it('not loged in',async  () => {
         render(await Home())
-        expect(await screen.findAllByText("Sign up")).toHaveLength(2)
+        expect(screen.getByText("Sign up")).toBeInTheDocument()
     })
 })

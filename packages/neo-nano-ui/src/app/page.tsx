@@ -4,7 +4,6 @@ import { JSX } from 'react'
 import bg from './pexels-technobulka-2908984.jpg'
 import { Column, Row } from '@/lib/layout'
 import Link from 'next/link'
-import { NavBar } from '@/lib/NavBar'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 
 const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
@@ -52,42 +51,47 @@ export default async function Home() {
   const isLoggedIn = !!session
 
   return (
-    <>
-      <NavBar isLoggedIn={isLoggedIn} isLoading={false} />
-      <div className={styles.background} style={{ backgroundImage: `url(${bg.src})`, backgroundSize: '1000px' }}>
-        <main className={styles.main}>
-          <h1 className={styles.h1}>NaNoWriMo - Resurrected</h1>
-          <Column gap="3em">
-            <HistorySection />
-            <ChallengeSection />
+    <div className={styles.background} style={{ backgroundImage: `url(${bg.src})`, backgroundSize: '1000px' }}>
+      <main className={styles.main}>
+        <h1 className={styles.h1}>NaNoWriMo - Resurrected</h1>
+        <Column gap="3em">
+          <HistorySection />
+          <ChallengeSection />
 
-            <section>
-              <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
-                Get Started
-              </h2>
+          <section>
+            <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
+              Get Started
+            </h2>
 
-              {isLoggedIn ? (
+            {isLoggedIn ? (
+              <Row>
+                <Link href="/forum">
+                  <BasicButton>Browse Forum</BasicButton>
+                </Link>
+                <Link href="/profile">
+                  <BasicButton>Update Progress</BasicButton>
+                </Link>
+              </Row>
+            ) : (
+              <Column>
                 <Row>
-                  <Link href="/forum"><BasicButton>Browse Forum</BasicButton></Link>
-                  <Link href="/profile"><BasicButton>Update Progress</BasicButton></Link>
+                  <Link href="/auth/login?screen_hint=signup">
+                    <BasicButton>Sign up</BasicButton>
+                  </Link>
+                  <Link href="/auth/login">
+                    <BasicButton>Log in</BasicButton>
+                  </Link>
                 </Row>
-              ) : (
-                <Column>
-                  <Row>
-                    <Link href="/auth/login?screen_hint=signup"><BasicButton>Sign up</BasicButton></Link>
-                    <Link href="/auth/login"><BasicButton>Log in</BasicButton></Link>
-                  </Row>
-                  <Row>
-                    <Link className={styles['text-link']} href="/forum">
-                      Browse forums as guest
-                    </Link>
-                  </Row>
-                </Column>
-              )}
-            </section>
-          </Column>
-        </main>
-      </div>
-    </>
+                <Row>
+                  <Link className={styles['text-link']} href="/forum">
+                    Browse forums as guest
+                  </Link>
+                </Row>
+              </Column>
+            )}
+          </section>
+        </Column>
+      </main>
+    </div>
   )
 }
