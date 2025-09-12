@@ -1,7 +1,7 @@
 
+import { getMyProfile } from "@/lib/apiUtils/getMyProfile"
 import { ProfilePageInner } from "./ProfilePage"
 import { auth0 } from "@/lib/auth0"
-import { getMyProfile } from '@/app/api/profile/route'
 import { redirect } from 'next/navigation'
 
 const ProfilePage = async () => {
@@ -12,7 +12,7 @@ const ProfilePage = async () => {
     }
     const initalProfile = await getMyProfile()
 
-  return <><div>ProfilePage</div><ProfilePageInner initalProfile={initalProfile}/></>
+  return <ProfilePageInner initalProfile={initalProfile}/>
 }
 
 

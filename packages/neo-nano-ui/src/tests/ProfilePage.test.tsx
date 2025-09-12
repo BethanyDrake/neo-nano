@@ -1,15 +1,15 @@
 import ProfilePage from '@/app/profile/page'
 import { render } from '@testing-library/react'
 import { mockRequest } from './utils/mswHelpers'
-import { getMyProfile } from '@/app/api/profile/route'
 import { auth0 } from '@/lib/auth0'
 import { redirect } from 'next/navigation'
 import { SessionData } from '@auth0/nextjs-auth0/types'
+import { getMyProfile } from '@/lib/apiUtils/getMyProfile'
 
 jest.mock('@/lib/auth0')
 jest.mock('next/navigation')
 jest.mock('@/lib/UpdateWordCount')
-jest.mock('@/app/api/profile/route')
+jest.mock('@/lib/apiUtils/getMyProfile')
 
 describe('<ProfilePage />', () => {
   it('redirects if not logged in', async () => {
