@@ -1,3 +1,4 @@
+"use client"
 import { ReturnType } from '@/app/api/comments/route'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
@@ -5,20 +6,18 @@ import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
 import { Column } from '@/lib/layout'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
-import { NextPageContext } from 'next'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from '@/lib/styles/forum.module.css'
 import formClasses from '@/lib/form.module.css'
 import { BasicButton } from '@/lib/buttons/BasicButton'
-import { useRequireLogin } from '@/lib/useRequireLogin'
+import { redirect } from 'next/navigation'
 
 type Inputs = {
   commentText: string
 }
 
 const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: () => void }) => {
-  useRequireLogin()
   const {
     register,
     handleSubmit,
@@ -50,16 +49,18 @@ const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: ()
   )
 }
 
-const ThreadPage = ({
+export const ThreadPage = ({
   thread,
   topic,
   category,
   initialComments,
+  isLoggedIn
 }: {
   thread: Thread
   topic: Topic
   category: Category
   initialComments: Comment[]
+  isLoggedIn: boolean
 }) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
   const [comments, setComments] = useState<Comment[]>(initialComments)
@@ -91,26 +92,9 @@ const ThreadPage = ({
               )
             })}
         </div>
-        <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Add Comment" />
+        <ExtendableIconButton icon={faAdd} onClick={() => isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')} text="Add Comment" />
         {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
       </Column>
     </div>
   )
 }
-
-ThreadPage.getInitialProps = async (context: NextPageContext) => {
-  const threadId = context.query['thread-id'] as string
-  const response = (
-    await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/comments?thread=${threadId}`)
-  ).data
-  const { thread, category, comments, topic } = response
-
-  return {
-    thread,
-    category,
-    topic,
-    initialComments: comments,
-  }
-}
-
-export default ThreadPage
