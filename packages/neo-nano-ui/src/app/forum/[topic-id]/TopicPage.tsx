@@ -1,4 +1,5 @@
-import { ReturnType, ThreadSummary } from '@/app/api/threads/route'
+"use client"
+
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
@@ -7,12 +8,13 @@ import { Category } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
-import { NextPageContext } from 'next'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import styles from '@/lib/styles/forum.module.css'
-import { useRequireLogin } from '@/lib/useRequireLogin'
+import { ThreadSummary } from '@/lib/apiUtils/getThreads'
+import { ReturnType } from '@/app/api/threads/route'
+import { redirect } from 'next/navigation'
 
 type Inputs = {
   title: string
@@ -26,7 +28,6 @@ type Topic = {
 }
 
 const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: () => void }) => {
-  useRequireLogin()
   const {
     register,
     handleSubmit,
@@ -68,10 +69,12 @@ const TopicPage = ({
   topic,
   category,
   initialThreads,
+  isLoggedIn
 }: {
   topic: Topic
   category: Category
   initialThreads: ThreadSummary[]
+  isLoggedIn: boolean
 }) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
   const [threads, setThreads] = useState<ThreadSummary[]>(initialThreads)
@@ -88,7 +91,9 @@ const TopicPage = ({
       <Column>
       <Breadcrumbs breadcrumbItems={breadcrumbItems} />
         <p>{topic.description}</p>
-        <ExtendableIconButton icon={faAdd} onClick={() => setCreateThreadFormIsOpen(true)} text="Create Thread" />
+        <ExtendableIconButton icon={faAdd} onClick={() => 
+          isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')
+        } text="Create Thread" />
         {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
         <Column>
           <h2>Threads:</h2>
@@ -105,21 +110,6 @@ const TopicPage = ({
       </Column>
     </div>
   )
-}
-
-TopicPage.getInitialProps = async (context: NextPageContext) => {
-  const topicId = context.query['topic-id'] as string
-  const { topic, category } = (await axios.get(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topic?id=${topicId}`)).data
-
-  const initialThreads = (
-    await axios.get<ReturnType>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/threads?topic=${topicId}`)
-  ).data.threads
-
-  return {
-    topic,
-    category,
-    initialThreads,
-  }
 }
 
 export default TopicPage
