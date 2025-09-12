@@ -1,5 +1,5 @@
 import { Column, Row } from '@/lib/layout'
-import styles from './index.module.css'
+import styles from '@/lib/styles/forum.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'

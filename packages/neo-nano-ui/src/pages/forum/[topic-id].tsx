@@ -11,7 +11,7 @@ import { NextPageContext } from 'next'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import styles from './index.module.css'
+import styles from '@/lib/styles/forum.module.css'
 import { useRequireLogin } from '@/lib/useRequireLogin'
 
 type Inputs = {
