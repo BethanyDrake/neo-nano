@@ -3,8 +3,7 @@ import styles from '@/lib/styles/forum.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { Category } from '@/lib/forum.types'
-import axios from 'axios'
+import { getForumTopics } from '@/lib/apiUtils/getForumTopics'
 
 const ForumItem = ({
   topicId,
@@ -38,7 +37,7 @@ const ForumItem = ({
 }
 
 const Forum = async () => {
-  const { categories } = (await axios.get<{ categories: Category[] }>(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/topics`)).data
+  const categories = await getForumTopics()
  
   return (
     <div className={styles['forum-container']}>
