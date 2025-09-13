@@ -8,8 +8,9 @@
   "description": "- forumn - login - tracking - moderation",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test --workspaces",
-    "lint": "npm run lint --workspaces",
+    "test": "yarn workspace neo-nano-ui test",
+    "lint": "yarn workspace neo-nano-ui lint",
+    "build": "yarn workspace neo-nano-ui build",
     "prepare": "husky"
   },
   "author": "",
