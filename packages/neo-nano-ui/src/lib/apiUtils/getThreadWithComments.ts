@@ -1,6 +1,6 @@
 import { getSingle } from '@/lib/apiUtils/getSingle'
 import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
-import { neon } from '@neondatabase/serverless'
+import { NeonQueryFunction } from '@neondatabase/serverless'
 
 export type ReturnType = {
   comments: Comment[]
@@ -9,13 +9,12 @@ export type ReturnType = {
   topic: Topic
 }
 
-if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
-const sql = neon(process.env.DATABASE_URL)
 
-export const getThreadWithComments = async (threadId: string) => {
+export const getThreadWithComments = async (threadId: string, sql:  NeonQueryFunction<false, false>,) => {
   const _comments = await sql`SELECT comment_text, author, comments.id, thread, display_name 
     FROM comments JOIN users on comments.author=users.id
   WHERE thread=${threadId}`
+  console.log({_comments})
 
   const threadDetails = await getSingle(
     'thread',
@@ -23,12 +22,17 @@ export const getThreadWithComments = async (threadId: string) => {
   WHERE id=${threadId}`,
   )
 
+  console.log({threadDetails})
+  
+
   const topic = await getSingle(
     'topic',
     sql`SELECT id, title, description, icon, category FROM topics where id=${threadDetails.topic} LIMIT 1`,
   )
+  console.log({topic})
   const category = await getSingle('category', sql`SELECT id, title FROM categories where id=${topic.category} LIMIT 1`)
 
+  console.log({category})
   const comments = _comments.map(({ comment_text, author, id, thread, display_name }) => ({
     text: comment_text,
     author,
