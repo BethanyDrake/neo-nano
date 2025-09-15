@@ -8,7 +8,7 @@ describe('getThreadWithComments', () => {
           comment_text: 'comment text',
           author: '1',
           id: '2',
-          thread: '3',
+          thread: '5',
           display_name: 'Author Name',
         },
       ],
@@ -28,19 +28,20 @@ describe('getThreadWithComments', () => {
 
     // @ts-expect-error mock function
     expect(await getThreadWithComments('6', sql)).toEqual({
+      commentCardDataEntries: [{
+        comment: {
+            text: 'comment text',
+            id: '2',
+        },
+        author: {
+          id: '1',
+          displayName: 'Author Name'
+        }
+      }],
       category: {
         id: '7',
         title: 'Category Title',
       },
-      comments: [
-        {
-          author: '1',
-          authorDisplayName: 'Author Name',
-          id: '2',
-          text: 'comment text',
-          thread: '3',
-        },
-      ],
       thread: {
         author: '4',
         id: '5',

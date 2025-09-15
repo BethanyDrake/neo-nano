@@ -7,14 +7,17 @@ jest.mock('@/lib/apiUtils/getThreadWithComments')
 describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {
     jest.mocked(getThreadWithComments).mockResolvedValue({
-      comments: [
+      commentCardDataEntries: [
         {
+          comment: {
             text: 'some comment text',
-            authorDisplayName: 'Some Name',
-            author: undefined,
-            id: 2,
-            thread: undefined
-        },
+            id: '2'
+          },
+          author: {
+            id: '1',
+            displayName: 'Some Name'
+          }
+        }
       ],
       category: {
           title: 'Some Category',

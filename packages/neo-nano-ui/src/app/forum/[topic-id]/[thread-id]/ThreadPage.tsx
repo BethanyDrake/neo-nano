@@ -2,7 +2,7 @@
 import { ReturnType } from '@/app/api/comments/route'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
-import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
+import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column } from '@/lib/layout'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
@@ -12,6 +12,7 @@ import styles from '@/lib/styles/forum.module.css'
 import formClasses from '@/lib/form.module.css'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { redirect } from 'next/navigation'
+import { CommentCard, CommentCardDataEntry } from '@/lib/CommentCard'
 
 type Inputs = {
   commentText: string
@@ -59,14 +60,14 @@ export const ThreadPage = ({
   thread: Thread
   topic: Topic
   category: Category
-  initialComments: Comment[]
+  initialComments: CommentCardDataEntry[]
   isLoggedIn: boolean
 }) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
-  const [comments, setComments] = useState<Comment[]>(initialComments)
+  const [commentCards, setComments] = useState<CommentCardDataEntry[]>(initialComments)
 
   const updateComments = useCallback(async () => {
-    const _comments: Comment[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data.comments
+    const _comments: CommentCardDataEntry[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data.commentCardDataEntries
     setComments(_comments)
   }, [thread])
 
@@ -81,16 +82,8 @@ export const ThreadPage = ({
       <Column>
         <Breadcrumbs breadcrumbItems={breadcrumbItems} />
         <div>
-          {comments &&
-            comments.map((comment: Comment) => {
-              return (
-                <div key={comment.id}>
-                  <p>
-                    <span style={{ fontWeight: 'bold' }}>{comment.authorDisplayName}</span>: {comment.text}
-                  </p>
-                </div>
-              )
-            })}
+          {commentCards &&
+            commentCards.map(({comment, author}) => <CommentCard key={comment.id} comment={comment} author={author}/>)}
         </div>
         <ExtendableIconButton icon={faAdd} onClick={() => isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')} text="Add Comment" />
         {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}

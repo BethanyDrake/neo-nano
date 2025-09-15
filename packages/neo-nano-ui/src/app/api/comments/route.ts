@@ -2,11 +2,12 @@ import { getQueryFunction } from '@/lib/apiUtils/getQueryFunction'
 import { getThreadWithComments } from '@/lib/apiUtils/getThreadWithComments'
 import { getUserIdFromSession } from '@/lib/apiUtils/getUserIdFromSession'
 import { auth0 } from '@/lib/auth0'
-import { Category, Comment, Thread, Topic } from '@/lib/forum.types'
+import { CommentCardDataEntry } from '@/lib/CommentCard'
+import { Category, Thread, Topic } from '@/lib/forum.types'
 import { NextRequest, NextResponse } from 'next/server'
 
 export type ReturnType = {
-  comments: Comment[]
+  commentCardDataEntries: CommentCardDataEntry[]
   thread: Thread
   category: Category
   topic: Topic
