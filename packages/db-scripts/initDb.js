@@ -99,6 +99,22 @@ const initGoals = async () => {
     user_id bigint REFERENCES users(id))`
 }
 
+const initFlags = async () => {
+
+    await sql`drop table if exists flags`
+    await sql`drop type if exists reason`
+    await sql`CREATE TYPE reason AS ENUM ('sexual-content', 'harrassment', 'spam','other')`;
+ await sql`create table flags (
+ id bigint primary key GENERATED ALWAYS AS IDENTITY,
+ comment bigint REFERENCES comments(id),
+ reported_by bigint REFERENCES users(id),
+ created_at TIMESTAMPTZ DEFAULT Now(),
+ reason reason,
+ details text
+ )`
+
+}
+
 const initDB = async () => {
     await initCategories()
     await initTopics()
@@ -106,6 +122,7 @@ const initDB = async () => {
     await initThreads()
     await initComments()
     await initGoals()
+    await initFlags()
 }
 
 

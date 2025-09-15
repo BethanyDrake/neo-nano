@@ -1,0 +1,13 @@
+.card {
+    padding: 16px;
+    border-bottom:  solid #f1f1f1
+}
+
+.flag {
+    border: none;
+    background-color: transparent;
+
+    &:hover {
+        color: red;
+    }
+}

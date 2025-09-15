@@ -40,7 +40,7 @@ describe('<ThreadPage />', () => {
     const {getByText} = render(await Page({ params: Promise.resolve({ 'thread-id': 'some-thread-id' }) }))
 
     expect(getByText(/some comment text/)).toBeInTheDocument()
-        expect(getByText('Some Name')).toBeInTheDocument()
+        expect(getByText(/Some Name/)).toBeInTheDocument()
 
   })
 })
