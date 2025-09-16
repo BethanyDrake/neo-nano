@@ -1,13 +1,13 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import classNames from './Modal.module.css'
 import axios from 'axios'
-import { BasicButton } from './buttons/BasicButton'
-import { Column, Row } from './layout'
+import { BasicButton } from '../buttons/BasicButton'
+import { Column, Row } from '../layout'
 import { useState } from 'react'
-import { Profile } from './forum.types'
-import { ExtendableIconButton } from './buttons/ExtendableIconButton'
+import { Profile } from '../forum.types'
+import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
-import formClasses from './form.module.css'
+import formClasses from '../form.module.css'
 
 type Inputs = {
   displayName: string
@@ -76,7 +76,7 @@ export const EditProfileModal = ({ onUpdate }: { onUpdate: (updatedProfile: Prof
     <>
       <ExtendableIconButton onClick={() => setIsOpen(true)} text="edit profile" icon={faEdit} />
       {isOpen && (
-        <div className={classNames['modal']}>
+         <div className={classNames['modal']}>
           <EditProfileForm onUpdate={onUpdate} closeModal={() => setIsOpen(false)} />
         </div>
       )}

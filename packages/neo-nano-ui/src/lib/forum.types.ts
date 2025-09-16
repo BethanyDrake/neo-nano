@@ -2,7 +2,6 @@ export type Comment = {
     id: string
     text: string
     author: string
-    authorDisplayName: string
 }
 
 export type Thread = {
@@ -34,10 +33,19 @@ export type Profile = {
 export type Goal = {
     id:string
     title: string
-    //yyyy-MM-dd
+    // yyyy-MM-dd
     startDate: string
     lengthDays: number
     records: number[]
     userId: string
     target: number
+}
+
+export type Flag = {
+    id: string
+    reason: 'sexual-content' | 'harrassment' | 'spam' | 'other'
+    reportedBy: string,
+    createdAt: Date,
+    details: string,
+    comment: string
 }

@@ -16,4 +16,12 @@
         box-shadow: 0;
         background-color: #9ac5bc;
     }
+
+    &.basic:active {
+        background-color: #9ac5bc;
+    }
+
+    &.angry:active {
+        background-color: #c59a9a;
+    }
 }

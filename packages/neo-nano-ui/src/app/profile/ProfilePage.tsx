@@ -2,7 +2,7 @@
 
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { WordsPerDay } from '@/lib/charts/WordsPerDay'
-import { EditProfileModal } from '@/lib/EditProfileModal'
+import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { Goal, Profile } from '@/lib/forum.types'
 import { Centered, Row } from '@/lib/layout'
 import { UpdateWordCount } from '@/lib/UpdateWordCount'

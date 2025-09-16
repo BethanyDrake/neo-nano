@@ -8,6 +8,7 @@
   "description": "- forumn - login - tracking - moderation",
   "main": "index.js",
   "scripts": {
+    "typecheck":"yarn workspace neo-nano-ui tsc",
     "test": "yarn workspace neo-nano-ui test",
     "lint": "yarn workspace neo-nano-ui lint",
     "build": "yarn workspace neo-nano-ui build",

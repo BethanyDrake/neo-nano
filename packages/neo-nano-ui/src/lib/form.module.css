@@ -12,7 +12,10 @@
     .error {
         color: #b3401a
     }
-
-    
-
 }
+
+.form.angry {
+    input {
+        border: 1px solid #c59a9a;
+    }
+} 
