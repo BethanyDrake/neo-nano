@@ -40,3 +40,12 @@ export type Goal = {
     userId: string
     target: number
 }
+
+export type Flag = {
+    id: string
+    reason: 'sexual-content' | 'harrassment' | 'spam' | 'other'
+    reportedBy: string,
+    createdAt: Date,
+    details: string,
+    comment: string
+}
