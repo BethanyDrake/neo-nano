@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { ReturnType } from '@/app/api/comments/route'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
@@ -13,18 +13,21 @@ import formClasses from '@/lib/form.module.css'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { redirect } from 'next/navigation'
 import { CommentCard, CommentCardDataEntry } from '@/lib/CommentCard'
+import { ThreadContext, useThreadContext } from '@/lib/apiUtils/ThreadContext'
 
 type Inputs = {
   commentText: string
 }
 
-const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: () => void }) => {
+const AddCommentForm = ({ threadId }: { threadId: number }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<Inputs>()
+
+  const { updateCommentsData } = useThreadContext()
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const body = {
@@ -33,7 +36,7 @@ const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: ()
     }
     await axios.post(`/api/comments`, body).then(() => {
       reset()
-      onSubmit()
+      updateCommentsData()
     })
   }
 
@@ -44,7 +47,7 @@ const AddCommentForm = ({ threadId, onSubmit }: { threadId: number; onSubmit: ()
         <input id="comment" {...register('commentText', { required: true })} />
         {errors.commentText && <span>This field is required</span>}
 
-        <BasicButton buttonProps={{type:"submit"}}>Post!</BasicButton>
+        <BasicButton buttonProps={{ type: 'submit' }}>Post!</BasicButton>
       </Column>
     </form>
   )
@@ -55,7 +58,7 @@ export const ThreadPage = ({
   topic,
   category,
   initialComments,
-  isLoggedIn
+  isLoggedIn,
 }: {
   thread: Thread
   topic: Topic
@@ -67,7 +70,8 @@ export const ThreadPage = ({
   const [commentCards, setComments] = useState<CommentCardDataEntry[]>(initialComments)
 
   const updateComments = useCallback(async () => {
-    const _comments: CommentCardDataEntry[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data.commentCardDataEntries
+    const _comments: CommentCardDataEntry[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data
+      .commentCardDataEntries
     setComments(_comments)
   }, [thread])
 
@@ -78,16 +82,24 @@ export const ThreadPage = ({
   ]
 
   return (
-    <div className={styles['forum-container']}>
-      <Column>
-        <Breadcrumbs breadcrumbItems={breadcrumbItems} />
-        <div>
-          {commentCards &&
-            commentCards.map(({comment, author}) => <CommentCard key={comment.id} comment={comment} author={author}/>)}
-        </div>
-        <ExtendableIconButton icon={faAdd} onClick={() => isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')} text="Add Comment" />
-        {createThreadFormIsOpen && <AddCommentForm onSubmit={updateComments} threadId={thread.id} />}
-      </Column>
-    </div>
+    <ThreadContext value={{ updateCommentsData: updateComments, commentsData: commentCards }}>
+      <div className={styles['forum-container']}>
+        <Column>
+          <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+          <div>
+            {commentCards &&
+              commentCards.map(({ comment, author, flags }) => (
+                <CommentCard key={comment.id} comment={comment} author={author} flags={flags} />
+              ))}
+          </div>
+          <ExtendableIconButton
+            icon={faAdd}
+            onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect('/auth/login'))}
+            text="Add Comment"
+          />
+          {createThreadFormIsOpen && <AddCommentForm threadId={thread.id} />}
+        </Column>
+      </div>
+    </ThreadContext>
   )
 }
