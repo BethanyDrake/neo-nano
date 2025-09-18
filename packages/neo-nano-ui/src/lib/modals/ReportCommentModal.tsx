@@ -9,10 +9,18 @@ import classNames from './Modal.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAwesomeFlag'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { useThreadContext } from '../apiUtils/ThreadContext'
 
 type Inputs = Pick<Flag, 'reason' | 'details'>
 
-const ReportCommentForm = ({ closeModal, comment }: { closeModal: () => void; comment: Pick<Comment, 'id'| 'text'> }) => {
+const ReportCommentForm = ({
+  closeModal,
+  comment,
+}: {
+  closeModal: () => void
+  comment: Pick<Comment, 'id' | 'text'>
+}) => {
+  const { updateCommentsData } = useThreadContext()
   const {
     register,
     handleSubmit,
@@ -24,6 +32,7 @@ const ReportCommentForm = ({ closeModal, comment }: { closeModal: () => void; co
       ...data,
       comment: comment.id,
     })
+    updateCommentsData()
     closeModal()
   }
 
@@ -33,41 +42,59 @@ const ReportCommentForm = ({ closeModal, comment }: { closeModal: () => void; co
         <h2>Report Comment as Inappropriate</h2>
         <p className={classNames['comment']}>{comment.text}</p>
         <fieldset className={classNames['reason-fieldset']}>
-        <legend>Reason:</legend>
-    
+          <legend>Reason:</legend>
+
           <Column gap="4px">
-        <LeftRow>
-                <input id="sexual-content" {...register('reason', {required: true})} type="radio" value="sexual-content" />
-                <label htmlFor="sexual-conent">sexual content</label>
-        </LeftRow>
-        <LeftRow>
-                <input id="harrassment" {...register('reason',  {required: true})} type="radio" value="harrassment" />
-                <label htmlFor="harrassment">harrassment</label>
-        </LeftRow>
-         <LeftRow>
-                <input id="spam" {...register('reason',  {required: true})} type="radio" value="spam" />
-                <label htmlFor="spam">spam</label>
-        </LeftRow>
-          <LeftRow>
-                <input id="other" {...register('reason',  {required: true})} type="radio" value="other" />
-                <label htmlFor="other">other</label>
-        </LeftRow>
-             {errors.reason && <span className={formClasses.error}><FontAwesomeIcon icon={faCircleExclamation}/> Must select a reason.</span>}
-        </Column>
+            <LeftRow>
+              <input
+                id="sexual-content"
+                {...register('reason', { required: true })}
+                type="radio"
+                value="sexual-content"
+              />
+              <label htmlFor="sexual-conent">sexual content</label>
+            </LeftRow>
+            <LeftRow>
+              <input id="harrassment" {...register('reason', { required: true })} type="radio" value="harrassment" />
+              <label htmlFor="harrassment">harrassment</label>
+            </LeftRow>
+            <LeftRow>
+              <input id="spam" {...register('reason', { required: true })} type="radio" value="spam" />
+              <label htmlFor="spam">spam</label>
+            </LeftRow>
+            <LeftRow>
+              <input id="other" {...register('reason', { required: true })} type="radio" value="other" />
+              <label htmlFor="other">other</label>
+            </LeftRow>
+            {errors.reason && (
+              <span className={formClasses.error}>
+                <FontAwesomeIcon icon={faCircleExclamation} /> Must select a reason.
+              </span>
+            )}
+          </Column>
         </fieldset>
         <label htmlFor="details">More details:</label>
-        <input id="details" type="text" placeholder="This comment is innappropriate because..." {...register('details')} />
+        <input
+          id="details"
+          type="text"
+          placeholder="This comment is innappropriate because..."
+          {...register('details')}
+        />
 
         <Row>
-          <BasicButton variant="angry" buttonProps={{ onClick: closeModal }}>Cancel</BasicButton>{' '}
-          <BasicButton variant="angry" buttonProps={{ type: 'submit' }}>Save</BasicButton>
+          <BasicButton variant="angry" buttonProps={{ onClick: closeModal }}>
+            Cancel
+          </BasicButton>{' '}
+          <BasicButton variant="angry" buttonProps={{ type: 'submit' }}>
+            Save
+          </BasicButton>
         </Row>
       </Column>
     </form>
   )
 }
 
-export const ReportCommentModal = ({ comment }: { comment: Pick<Comment, 'id'| 'text'> }) => {
+export const ReportCommentModal = ({ comment }: { comment: Pick<Comment, 'id' | 'text'> }) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>

@@ -16,7 +16,8 @@ describe('<ThreadPage />', () => {
           author: {
             id: '1',
             displayName: 'Some Name'
-          }
+          },
+          flags: []
         }
       ],
       category: {

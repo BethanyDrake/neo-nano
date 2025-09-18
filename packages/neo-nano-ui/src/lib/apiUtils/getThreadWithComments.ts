@@ -1,7 +1,7 @@
 import { getSingle } from '@/lib/apiUtils/getSingle'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { NeonQueryFunction } from '@neondatabase/serverless'
-import { CommentCardDataEntry } from '../CommentCard';
+import { CommentCardDataEntry } from '../CommentCard'
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
@@ -10,11 +10,13 @@ export type ReturnType = {
   topic: Topic
 }
 
-
-export const getThreadWithComments = async (threadId: string, sql:  NeonQueryFunction<false, false>,) => {
-  const _comments = await sql`SELECT comment_text, author, comments.id, thread, display_name 
+export const getThreadWithComments = async (threadId: string, sql: NeonQueryFunction<false, false>) => {
+  const _comments =
+    await sql`SELECT comment_text, author, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
     FROM comments JOIN users on comments.author=users.id
-  WHERE thread=${threadId}`
+    LEFT OUTER JOIN  flags on flags.comment = comments.id
+  WHERE thread=${threadId}
+  GROUP BY comments.id, users.id`
 
   const threadDetails = await getSingle(
     'thread',
@@ -28,16 +30,22 @@ export const getThreadWithComments = async (threadId: string, sql:  NeonQueryFun
   )
   const category = await getSingle('category', sql`SELECT id, title FROM categories where id=${topic.category} LIMIT 1`)
 
-  const commentCardDataEntries = _comments.map(({ comment_text, author, id, display_name }) => ({
+  const commentCardDataEntries = _comments.map(({ comment_text, author, id, display_name, flags }) => ({
     comment: {
       text: comment_text,
       id,
     },
     author: {
       id: author,
-      displayName: display_name
-    }
+      displayName: display_name,
+    },
+    flags,
   }))
 
-  return { commentCardDataEntries, thread: threadDetails as Thread, category: category as Category, topic: topic as Topic }
+  return {
+    commentCardDataEntries,
+    thread: threadDetails as Thread,
+    category: category as Category,
+    topic: topic as Topic,
+  }
 }
