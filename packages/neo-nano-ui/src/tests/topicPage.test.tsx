@@ -23,7 +23,7 @@ describe('<TopicPage />', () => {
     jest.mocked(getThreads).mockResolvedValue([])
 })
   it('displays existing threads', async () => {
-    jest.mocked(getThreads).mockResolvedValue([{ id: 1, title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }])
+    jest.mocked(getThreads).mockResolvedValue([{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }])
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
     expect(getByText('Existing Topic 1')).toBeInTheDocument()
@@ -50,7 +50,7 @@ describe('<TopicPage />', () => {
     })
     mockRequest('post', '/api/threads', null)
     mockRequest<ReturnType>('get', '/api/threads', {
-      threads: [{ id: 1, title: 'New Thread Title', author: 'some-author', text: 'First comment text' }],
+      threads: [{ id: '1', title: 'New Thread Title', author: 'some-author', text: 'First comment text' }],
     })
 
     const { getByRole, findByLabelText, getByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))

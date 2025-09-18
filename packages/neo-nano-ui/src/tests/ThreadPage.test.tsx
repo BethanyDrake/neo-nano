@@ -34,7 +34,7 @@ describe('<ThreadPage />', () => {
       },
       thread: {
           title: 'Some Thread',
-          id: 1,
+          id: '1',
           author: ''
       }
     })

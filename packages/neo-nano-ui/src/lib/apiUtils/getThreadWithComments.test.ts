@@ -1,4 +1,7 @@
 import { getThreadWithComments } from './getThreadWithComments'
+import { getQueryFunction } from './getQueryFunction';
+
+jest.mock('./getQueryFunction')
 
 describe('getThreadWithComments', () => {
   test('comment with no flags', async () => {
@@ -24,6 +27,11 @@ describe('getThreadWithComments', () => {
       .mockResolvedValueOnce(queryResults[1])
       .mockResolvedValueOnce(queryResults[2])
       .mockResolvedValueOnce(queryResults[3])
+
+    // @ts-expect-error mocks
+    jest.mocked(getQueryFunction).mockReturnValue(sql)
+  
+
 
     // @ts-expect-error mock function
     expect(await getThreadWithComments('6', sql)).toEqual({
