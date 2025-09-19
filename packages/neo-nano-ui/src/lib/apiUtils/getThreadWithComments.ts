@@ -1,7 +1,9 @@
+'use server'
+
 import { getSingle } from '@/lib/apiUtils/getSingle'
 import { Category, Thread, Topic } from '@/lib/forum.types'
-import { NeonQueryFunction } from '@neondatabase/serverless'
 import { CommentCardDataEntry } from '../CommentCard'
+import { getQueryFunction } from "@/lib/apiUtils/getQueryFunction";
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
@@ -10,7 +12,8 @@ export type ReturnType = {
   topic: Topic
 }
 
-export const getThreadWithComments = async (threadId: string, sql: NeonQueryFunction<false, false>) => {
+export const getThreadWithComments = async (threadId: string) => {
+  const sql = getQueryFunction()
   const _comments =
     await sql`SELECT comment_text, author, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
     FROM comments JOIN users on comments.author=users.id

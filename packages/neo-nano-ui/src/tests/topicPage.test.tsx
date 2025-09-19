@@ -1,18 +1,18 @@
-import { ReturnType } from '@/app/api/threads/route'
-import { Category, Topic } from '@/lib/forum.types'
 import TopicPage from '@/app/forum/[topic-id]/page'
-import { fireEvent, render } from '@testing-library/react'
-import axios from 'axios'
-import { mockRequest } from './utils/mswHelpers'
+import { createThread } from '@/lib/apiUtils/createThread'
 import { getThreads } from "@/lib/apiUtils/getThreads"
 import { getTopic } from "@/lib/apiUtils/getTopic"
 import { auth0 } from "@/lib/auth0"
+import { Category, Topic } from '@/lib/forum.types'
 import { SessionData } from '@auth0/nextjs-auth0/types'
+import { fireEvent, render } from '@testing-library/react'
+import axios from 'axios'
 
 jest.spyOn(axios, 'post')
 jest.mock('@/lib/useRequireLogin')
 jest.mock('@/lib/apiUtils/getThreads')
 jest.mock('@/lib/apiUtils/getTopic')
+jest.mock('@/lib/apiUtils/createThread')
 
 describe('<TopicPage />', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('<TopicPage />', () => {
     jest.mocked(getThreads).mockResolvedValue([])
 })
   it('displays existing threads', async () => {
-    jest.mocked(getThreads).mockResolvedValue([{ id: 1, title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }])
+    jest.mocked(getThreads).mockResolvedValue([{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }])
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
     expect(getByText('Existing Topic 1')).toBeInTheDocument()
@@ -48,10 +48,7 @@ describe('<TopicPage />', () => {
       topic: { id: 'someTopic'} as Topic,
       category: {} as Category,
     })
-    mockRequest('post', '/api/threads', null)
-    mockRequest<ReturnType>('get', '/api/threads', {
-      threads: [{ id: 1, title: 'New Thread Title', author: 'some-author', text: 'First comment text' }],
-    })
+     jest.mocked(createThread).mockResolvedValue([])
 
     const { getByRole, findByLabelText, getByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
 
@@ -62,11 +59,13 @@ describe('<TopicPage />', () => {
 
     fireEvent.change(await findByLabelText(/Title/), { target: { value: 'New Thread Title' } })
     fireEvent.change(getByLabelText(/Comment/), { target: { value: 'Some comment' } })
+
+    jest.mocked(getThreads).mockResolvedValue([{ id: '1', title: 'New Thread Title', author: 'some-author', text: 'First comment text' }])
     fireEvent.click(getByRole('button', { name: 'Post!' }))
 
     expect(await findByText('New Thread Title')).toBeInTheDocument()
 
-    expect(axios.post).toHaveBeenCalledWith(expect.anything(), {
+    expect(createThread).toHaveBeenCalledWith({
       title: 'New Thread Title',
       commentText: 'Some comment',
       topic: 'someTopic',

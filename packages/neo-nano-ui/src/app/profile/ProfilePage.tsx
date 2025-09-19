@@ -6,13 +6,15 @@ import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { Goal, Profile } from '@/lib/forum.types'
 import { Centered, Row } from '@/lib/layout'
 import { UpdateWordCount } from '@/lib/UpdateWordCount'
-import axios from 'axios'
 import { isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import classNames from './profile.module.css'
+import { updateGoalProgress } from '@/lib/apiUtils/goals/updateGoalProgress'
+import { joinCurrentChallenge } from '@/lib/apiUtils/goals/joinCurrentChallenge'
+import { getMyGoals } from '@/lib/apiUtils/goals/getMyGoals'
 
 type GoalProps = {
-  id: string | number
+  id: string
   title: string
   initialRecords: number[]
 }
@@ -31,7 +33,7 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
     setRecords(initialRecords)
   }
   const onSave = async () => {
-    await axios.put(`/api/goals/${id}`, { records })
+    await updateGoalProgress({id, records})
     console.log('Successfuly updated!')
   }
 
@@ -49,17 +51,12 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
 }
 
 export const ProfilePageInner = ({ initalProfile }: { initalProfile: Profile }) => {
-  const joinChallenge = async () =>
-    await axios.post(`/api/goals`).then((response) => {
-      setGoals(response.data.updatedGoals)
-    })
+  const joinChallenge = () => joinCurrentChallenge().then(setGoals)
   const [goals, setGoals] = useState<Goal[]>([])
   const [profile, setProfile] = useState<Profile>(initalProfile)
 
   useEffect(() => {
-    axios.get(`/api/goals`).then((response) => {
-      setGoals(response.data.goals)
-    })
+    getMyGoals().then(setGoals)
   }, [])
 
   return (

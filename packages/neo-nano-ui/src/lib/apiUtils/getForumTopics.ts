@@ -1,10 +1,9 @@
+'use server'
 import { Category } from '@/lib/forum.types'
-import { neon } from '@neondatabase/serverless'
-
-if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
-const sql = neon(process.env.DATABASE_URL)
+import { getQueryFunction } from './getQueryFunction'
 
 export const getForumTopics  = async () => {
+  const sql = getQueryFunction()
   const _categories = await sql`SELECT * FROM categories`
   const _topics = await sql`SELECT * FROM topics`
 

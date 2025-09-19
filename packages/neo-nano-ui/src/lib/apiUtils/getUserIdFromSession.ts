@@ -1,6 +1,16 @@
+'use server'
 import { SessionData } from "@auth0/nextjs-auth0/types"
 import { NeonQueryFunction } from "@neondatabase/serverless"
+import { getQueryFunction } from "@/lib/apiUtils/getQueryFunction"
+import { auth0 } from "@/lib/auth0"
 
+export const getUserId = async () => {
+  const session = await auth0.getSession()
+  const sql = getQueryFunction()
+  return getUserIdFromSession(session, sql)
+}
+
+// TODO: deprececate, call getUserId instead
 export const getUserIdFromSession = async (session: SessionData | null, sql: NeonQueryFunction<false, false>):Promise<string>  => {
       if (!session ) {
         throw new Error(`No session found`)

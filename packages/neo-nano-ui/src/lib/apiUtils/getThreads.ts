@@ -1,12 +1,12 @@
 
+'use server'
 import { Comment, Thread } from '@/lib/forum.types'
-import { neon } from '@neondatabase/serverless'
-if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')
-const sql = neon(process.env.DATABASE_URL)
+import { getQueryFunction } from './getQueryFunction'
 
 export type ThreadSummary = Thread & Pick<Comment, 'text'>
 
 export async function getThreads(topicId: string): Promise<ThreadSummary[]>{
+  const sql = getQueryFunction()
   const _threads = await sql`
     SELECT * FROM threads, 
       LATERAL (SELECT comment_text FROM comments WHERE comments.thread=threads.id LIMIT 1)

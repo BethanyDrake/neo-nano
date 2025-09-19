@@ -1,25 +1,25 @@
 'use client'
-import { ReturnType } from '@/app/api/comments/route'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
-import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
-import { Category, Thread, Topic } from '@/lib/forum.types'
-import { Column } from '@/lib/layout'
-import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
-import { useCallback, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import styles from '@/lib/styles/forum.module.css'
-import formClasses from '@/lib/form.module.css'
-import { BasicButton } from '@/lib/buttons/BasicButton'
-import { redirect } from 'next/navigation'
 import { CommentCard, CommentCardDataEntry } from '@/lib/CommentCard'
 import { ThreadContext, useThreadContext } from '@/lib/apiUtils/ThreadContext'
+import { addThreadComment } from '@/lib/apiUtils/addThreadComment'
+import { getThreadWithComments } from '@/lib/apiUtils/getThreadWithComments'
+import { BasicButton } from '@/lib/buttons/BasicButton'
+import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
+import formClasses from '@/lib/form.module.css'
+import { Category, Thread, Topic } from '@/lib/forum.types'
+import { Column } from '@/lib/layout'
+import styles from '@/lib/styles/forum.module.css'
+import { faAdd } from '@fortawesome/free-solid-svg-icons'
+import { redirect } from 'next/navigation'
+import { useCallback, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 type Inputs = {
   commentText: string
 }
 
-const AddCommentForm = ({ threadId }: { threadId: number }) => {
+const AddCommentForm = ({ threadId }: { threadId: string }) => {
   const {
     register,
     handleSubmit,
@@ -30,11 +30,7 @@ const AddCommentForm = ({ threadId }: { threadId: number }) => {
   const { updateCommentsData } = useThreadContext()
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    const body = {
-      ...data,
-      thread: threadId,
-    }
-    await axios.post(`/api/comments`, body).then(() => {
+    await addThreadComment(threadId, data.commentText).then(() => {
       reset()
       updateCommentsData()
     })
@@ -70,8 +66,7 @@ export const ThreadPage = ({
   const [commentCards, setComments] = useState<CommentCardDataEntry[]>(initialComments)
 
   const updateComments = useCallback(async () => {
-    const _comments: CommentCardDataEntry[] = (await axios.get<ReturnType>(`/api/comments?thread=${thread.id}`)).data
-      .commentCardDataEntries
+    const _comments: CommentCardDataEntry[] = (await getThreadWithComments(thread.id)).commentCardDataEntries
     setComments(_comments)
   }, [thread])
 
