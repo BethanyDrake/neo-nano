@@ -3,7 +3,7 @@
 import { getSingle } from '@/lib/apiUtils/getSingle'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { CommentCardDataEntry } from '../CommentCard'
-import { getQueryFunction } from './getQueryFunction';
+import { getQueryFunction } from "@/lib/apiUtils/getQueryFunction";
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
