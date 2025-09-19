@@ -1,20 +1,19 @@
 "use client"
 
+import { createThread } from '@/lib/apiUtils/createThread'
+import { getThreads, ThreadSummary } from '@/lib/apiUtils/getThreads'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import formClasses from '@/lib/form.module.css'
 import { Category } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
+import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import styles from '@/lib/styles/forum.module.css'
-import { ThreadSummary } from '@/lib/apiUtils/getThreads'
-import { ReturnType } from '@/app/api/threads/route'
-import { redirect } from 'next/navigation'
 
 type Inputs = {
   title: string
@@ -40,7 +39,7 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
       ...data,
       topic: topicId,
     }
-    await axios.post(`/api/threads`, body).then(() => {
+    createThread(body).then(() => {
       reset()
       onSubmit()
     })
@@ -80,8 +79,7 @@ const TopicPage = ({
   const [threads, setThreads] = useState<ThreadSummary[]>(initialThreads)
 
   const updateThreads = useCallback(async () => {
-    const _threads: ThreadSummary[] = (await axios.get<ReturnType>(`/api/threads?topic=${topic.id}`)).data.threads
-    setThreads(_threads)
+    getThreads(topic.id).then(setThreads)
     setCreateThreadFormIsOpen(false)
   }, [topic])
 

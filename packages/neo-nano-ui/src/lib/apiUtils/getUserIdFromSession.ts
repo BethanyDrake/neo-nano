@@ -1,12 +1,12 @@
 'use server'
 import { SessionData } from "@auth0/nextjs-auth0/types"
 import { NeonQueryFunction } from "@neondatabase/serverless"
-import { getDbConnection } from "./getDbConnection"
-import { auth0 } from "../auth0"
+import { getQueryFunction } from "@/lib/apiUtils/getQueryFunction"
+import { auth0 } from "@/lib/auth0"
 
 export const getUserId = async () => {
   const session = await auth0.getSession()
-  const sql = getDbConnection()
+  const sql = getQueryFunction()
   return getUserIdFromSession(session, sql)
 }
 
