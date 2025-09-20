@@ -1,9 +1,9 @@
 .card {
     padding: 16px;
-    border-bottom:  solid #f1f1f1
+    border-bottom:  solid var(--grey-light)
 }
 
 .flaggedCommentMessage {
-    color: rgb(180, 124, 28);
+    color: var(--warning-dark);
     font-style: italic;
 }

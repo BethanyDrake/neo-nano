@@ -3,19 +3,19 @@
         font-weight: bold;
     }
     input {
-        border: 1px solid #9ac5bc;
+        border: 1px solid var(--primary-light);
         border-radius: 2px;
         box-shadow: inset 0 3px 5px rgb(0 0 0 / 0.1);
         padding: .6em;
     }
 
     .error {
-        color: #b3401a
+        color: var(--angry-dark)
     }
 }
 
 .form.angry {
     input {
-        border: 1px solid #c59a9a;
+        border: 1px solid var(--angry-light);
     }
 } 
