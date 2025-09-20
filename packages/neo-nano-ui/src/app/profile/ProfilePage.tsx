@@ -2,16 +2,17 @@
 
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { WordsPerDay } from '@/lib/charts/WordsPerDay'
-import { EditProfileModal } from '@/lib/modals/EditProfileModal'
-import { Goal, Profile } from '@/lib/forum.types'
+import { Goal } from '@/lib/forum.types'
 import { Centered, Row } from '@/lib/layout'
+import { EditProfileModal } from '@/lib/modals/EditProfileModal'
+import { useProfileContext } from '@/lib/ProfileContext'
+import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
+import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
 import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import classNames from './profile.module.css'
-import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
-import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
-import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 
 type GoalProps = {
   id: string
@@ -33,7 +34,7 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
     setRecords(initialRecords)
   }
   const onSave = async () => {
-    await updateGoalProgress({id, records})
+    await updateGoalProgress({ id, records })
     console.log('Successfuly updated!')
   }
 
@@ -50,10 +51,10 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
   )
 }
 
-export const ProfilePageInner = ({ initalProfile }: { initalProfile: Profile }) => {
+export const ProfilePageInner = () => {
   const joinChallenge = () => joinCurrentChallenge().then(setGoals)
   const [goals, setGoals] = useState<Goal[]>([])
-  const [profile, setProfile] = useState<Profile>(initalProfile)
+  const { profile } = useProfileContext()
 
   useEffect(() => {
     getMyGoals().then(setGoals)
@@ -62,7 +63,7 @@ export const ProfilePageInner = ({ initalProfile }: { initalProfile: Profile }) 
   return (
     <div style={{ padding: '24px' }}>
       <Row alignItems="center">
-        <h1>My Profile</h1> <EditProfileModal onUpdate={(updatedProfile: Profile) => setProfile(updatedProfile)} />
+        <h1>My Profile</h1> <EditProfileModal />
       </Row>
       <h2>{profile.displayName}</h2>
       <p>{profile.aboutMe}</p>

@@ -7,33 +7,28 @@ import { Profile } from '../forum.types'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import formClasses from '../form.module.css'
-import { updateProfile } from '../serverFunctions/profile/updateProfile'
+import { useProfileContext } from '../ProfileContext'
 
-type Inputs = {
-  displayName: string
-  aboutMe: string
-}
+type Inputs = Pick<Profile, 'displayName' | 'aboutMe'>
 
 const EditProfileForm = ({
   closeModal,
-  onUpdate,
 }: {
   closeModal: () => void
-  onUpdate: (updatedProfile: Profile) => void
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>()
+   const {updateProfile, isLoading} = useProfileContext()
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const body = {
       ...data,
     }
 
-    updateProfile(body).then((updatedProfile) => {
-      onUpdate(updatedProfile)
+    updateProfile(body).then(() => {
       closeModal()
     })
   }
@@ -51,7 +46,6 @@ const EditProfileForm = ({
         </Row>
          {errors.displayName && <span className={formClasses.error}>^Please tell us what to call you.</span>}
         
-
         <label style={{ fontWeight: 'bold' }} htmlFor="aboutMe">
           About me:
         </label>
@@ -62,21 +56,21 @@ const EditProfileForm = ({
         />
         <Row>
           <BasicButton buttonProps={{ onClick: closeModal }}>Cancel</BasicButton>{' '}
-          <BasicButton buttonProps={{ type: 'submit' }}>Save</BasicButton>
+          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>Save</BasicButton>
         </Row>
       </Column>
     </form>
   )
 }
 
-export const EditProfileModal = ({ onUpdate }: { onUpdate: (updatedProfile: Profile) => void }) => {
+export const EditProfileModal = () => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
       <ExtendableIconButton onClick={() => setIsOpen(true)} text="edit profile" icon={faEdit} />
       {isOpen && (
          <div className={classNames['modal']}>
-          <EditProfileForm onUpdate={onUpdate} closeModal={() => setIsOpen(false)} />
+          <EditProfileForm closeModal={() => setIsOpen(false)} />
         </div>
       )}
       {isOpen && <div className={classNames['modal-overlay']} />}
