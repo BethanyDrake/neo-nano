@@ -1,7 +1,7 @@
 'use server'
 
-import { getQueryFunction } from '../getQueryFunction'
-import { getUserId } from '../getUserIdFromSession'
+import { getQueryFunction } from '../_utils/getQueryFunction'
+import { getUserId } from '../_utils/getUserIdFromSession'
 import { getMyGoals } from './getMyGoals'
 
 export const joinCurrentChallenge = async () => {

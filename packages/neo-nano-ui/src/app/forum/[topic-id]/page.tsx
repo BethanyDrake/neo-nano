@@ -1,5 +1,5 @@
-import { getThreads } from "@/lib/apiUtils/getThreads"
-import { getTopic } from "@/lib/apiUtils/getTopic"
+import { getThreads } from "@/lib/serverFunctions/forum/getThreads"
+import { getTopic } from "@/lib/serverFunctions/forum/getTopic"
 import TopicPage from "./TopicPage"
 import { auth0 } from "@/lib/auth0"
 

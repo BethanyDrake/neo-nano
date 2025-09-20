@@ -3,14 +3,14 @@ import { render } from '@testing-library/react'
 import { auth0 } from '@/lib/auth0'
 import { redirect } from 'next/navigation'
 import { SessionData } from '@auth0/nextjs-auth0/types'
-import { getMyProfile } from '@/lib/apiUtils/getMyProfile'
-import { getMyGoals } from '@/lib/apiUtils/goals/getMyGoals'
+import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
+import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 
 jest.mock('@/lib/auth0')
 jest.mock('next/navigation')
 jest.mock('@/lib/UpdateWordCount')
-jest.mock('@/lib/apiUtils/getMyProfile')
-jest.mock('@/lib/apiUtils/goals/getMyGoals')
+jest.mock('@/lib/serverFunctions/profile/getMyProfile')
+jest.mock('@/lib/serverFunctions/goals/getMyGoals')
 describe('<ProfilePage />', () => {
   it('redirects if not logged in', async () => {
     jest.mocked(auth0.getSession).mockResolvedValue(null)

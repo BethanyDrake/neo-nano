@@ -1,5 +1,5 @@
 
-import { getMyProfile } from "@/lib/apiUtils/getMyProfile"
+import { getMyProfile } from "@/lib/serverFunctions/profile/getMyProfile"
 import { ProfilePageInner } from "./ProfilePage"
 import { auth0 } from "@/lib/auth0"
 import { redirect } from 'next/navigation'

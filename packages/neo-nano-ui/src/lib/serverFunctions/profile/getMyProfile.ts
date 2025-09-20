@@ -2,8 +2,8 @@
 import { auth0 } from '@/lib/auth0'
 import { Profile } from '@/lib/forum.types'
 import camelcaseKeys from 'camelcase-keys'
-import { getSingle } from './getSingle'
-import { getQueryFunction } from './getQueryFunction'
+import { getSingle } from '../_utils/getSingle'
+import { getQueryFunction } from '../_utils/getQueryFunction'
 
 export const getMyProfile = async (): Promise<Profile> => {
   const session = await auth0.getSession()

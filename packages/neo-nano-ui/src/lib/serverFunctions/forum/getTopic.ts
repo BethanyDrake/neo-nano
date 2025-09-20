@@ -1,7 +1,7 @@
 'use server'
-import { getSingle } from '@/lib/apiUtils/getSingle'
+import { getSingle } from '@/lib/serverFunctions/_utils/getSingle'
 import { Category, Topic } from '@/lib/forum.types'
-import { getQueryFunction } from './getQueryFunction'
+import { getQueryFunction } from '../_utils/getQueryFunction'
 
 export type GetTopicReturn = {
   topic: Topic

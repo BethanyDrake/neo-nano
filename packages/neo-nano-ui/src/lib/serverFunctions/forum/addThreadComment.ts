@@ -1,7 +1,7 @@
 'use server'
 
-import { getDbConnection } from "./getDbConnection"
-import { getUserId } from "./getUserIdFromSession"
+import { getDbConnection } from "../_utils/getDbConnection"
+import { getUserId } from "../_utils/getUserIdFromSession"
 
 export async function addThreadComment(threadId: string, commentText: string) {
   const sql = getDbConnection()

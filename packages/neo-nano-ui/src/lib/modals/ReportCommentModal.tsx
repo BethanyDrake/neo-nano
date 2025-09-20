@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { flagComment } from '../apiUtils/flagComment'
 import { BasicButton } from '../buttons/BasicButton'
 import formClasses from '../form.module.css'
 import { Comment, Flag } from '../forum.types'
@@ -9,7 +8,8 @@ import classNames from './Modal.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAwesomeFlag'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import { useThreadContext } from '../apiUtils/ThreadContext'
+import { useThreadContext } from '../ThreadContext'
+import { flagComment } from '../serverFunctions/moderation/flagComment'
 
 type Inputs = Pick<Flag, 'reason' | 'details'>
 

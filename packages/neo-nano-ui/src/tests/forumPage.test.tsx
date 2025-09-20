@@ -1,8 +1,9 @@
 import { render } from '@testing-library/react'
 import Forum from '@/app/forum/page'
-import { getForumTopics } from '@/lib/apiUtils/getForumTopics'
+import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 
-jest.mock('@/lib/apiUtils/getForumTopics')
+
+jest.mock('@/lib/serverFunctions/forum/getForumTopics')
 
 describe('<Forum />', () => {
   it('displays categories and topics', async () => {

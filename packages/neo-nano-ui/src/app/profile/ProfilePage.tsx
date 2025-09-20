@@ -9,9 +9,9 @@ import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import classNames from './profile.module.css'
-import { updateGoalProgress } from '@/lib/apiUtils/goals/updateGoalProgress'
-import { joinCurrentChallenge } from '@/lib/apiUtils/goals/joinCurrentChallenge'
-import { getMyGoals } from '@/lib/apiUtils/goals/getMyGoals'
+import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
+import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 
 type GoalProps = {
   id: string

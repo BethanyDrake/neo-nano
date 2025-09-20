@@ -1,7 +1,7 @@
 'use server'
 import camelcaseKeys from 'camelcase-keys'
-import { getQueryFunction } from '../getQueryFunction'
-import { getUserId } from '../getUserIdFromSession'
+import { getQueryFunction } from '../_utils/getQueryFunction'
+import { getUserId } from '../_utils/getUserIdFromSession'
 import { Goal } from '@/lib/forum.types'
 
 export const getMyGoals = async () => {

@@ -3,7 +3,7 @@ import styles from '@/lib/styles/forum.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { getForumTopics } from '@/lib/apiUtils/getForumTopics'
+import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 
 const ForumItem = ({
   topicId,

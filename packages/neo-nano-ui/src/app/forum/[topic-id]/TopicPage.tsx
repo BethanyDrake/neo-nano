@@ -1,7 +1,7 @@
 "use client"
 
-import { createThread } from '@/lib/apiUtils/createThread'
-import { getThreads, ThreadSummary } from '@/lib/apiUtils/getThreads'
+import { createThread } from '@/lib/serverFunctions/forum/createThread'
+import { getThreads, ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'

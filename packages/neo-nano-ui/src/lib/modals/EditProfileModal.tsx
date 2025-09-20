@@ -7,7 +7,7 @@ import { Profile } from '../forum.types'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import formClasses from '../form.module.css'
-import { updateProfile } from '../apiUtils/updateProfile'
+import { updateProfile } from '../serverFunctions/profile/updateProfile'
 
 type Inputs = {
   displayName: string

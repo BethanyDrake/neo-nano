@@ -1,9 +1,9 @@
 'use server'
 
-import { auth0 } from "../auth0"
-import { Profile } from "../forum.types"
+import { auth0 } from "../../auth0"
+import { Profile } from "../../forum.types"
 import { getMyProfile } from "./getMyProfile"
-import { getQueryFunction } from "./getQueryFunction"
+import { getQueryFunction } from "../_utils/getQueryFunction"
 
 export const updateProfile = async (newProfile: Pick<Profile, 'aboutMe' | 'displayName'>)  => {
     const session = await auth0.getSession()

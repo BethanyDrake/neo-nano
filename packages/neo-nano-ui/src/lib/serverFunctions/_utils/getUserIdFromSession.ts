@@ -1,7 +1,7 @@
 'use server'
 import { SessionData } from "@auth0/nextjs-auth0/types"
 import { NeonQueryFunction } from "@neondatabase/serverless"
-import { getQueryFunction } from "@/lib/apiUtils/getQueryFunction"
+import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction"
 import { auth0 } from "@/lib/auth0"
 
 export const getUserId = async () => {
