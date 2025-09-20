@@ -1,7 +1,8 @@
 'use server'
-import { Flag } from '../forum.types'
-import { getDbConnection } from './getDbConnection'
-import { getUserId } from './getUserIdFromSession'
+
+import { Flag } from '@/lib/forum.types'
+import { getDbConnection } from '../_utils/getDbConnection'
+import { getUserId } from '../_utils/getUserIdFromSession'
 
 export const flagComment = async (flag: Pick<Flag, 'comment' | 'reason' | 'details'>) => {
   const sql = getDbConnection()

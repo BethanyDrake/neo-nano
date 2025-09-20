@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { CommentCardDataEntry } from "../CommentCard";
+import { CommentCardDataEntry } from "./CommentCard";
 
 export const ThreadContext = createContext<
 {

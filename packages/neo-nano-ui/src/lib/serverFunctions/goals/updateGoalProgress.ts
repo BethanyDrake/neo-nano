@@ -1,7 +1,7 @@
 'use server'
 import { Goal } from "../../forum.types"
-import { getQueryFunction } from "../getQueryFunction"
-import { getUserId } from "../getUserIdFromSession"
+import { getQueryFunction } from "../_utils/getQueryFunction"
+import { getUserId } from "../_utils/getUserIdFromSession"
 
 export async function updateGoalProgress(goal: Pick<Goal, 'id' | 'records'>) {
   const user_id = await getUserId()

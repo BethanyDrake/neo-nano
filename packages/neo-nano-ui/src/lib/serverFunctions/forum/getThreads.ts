@@ -1,7 +1,7 @@
 
 'use server'
 import { Comment, Thread } from '@/lib/forum.types'
-import { getQueryFunction } from './getQueryFunction'
+import { getQueryFunction } from '../_utils/getQueryFunction'
 
 export type ThreadSummary = Thread & Pick<Comment, 'text'>
 

@@ -1,6 +1,6 @@
 'use server'
 import { Category } from '@/lib/forum.types'
-import { getQueryFunction } from './getQueryFunction'
+import { getQueryFunction } from '../_utils/getQueryFunction'
 
 export const getForumTopics  = async () => {
   const sql = getQueryFunction()

@@ -1,8 +1,8 @@
 import Page from '@/app/forum/[topic-id]/[thread-id]/page'
 import { render } from '@testing-library/react'
-import { getThreadWithComments } from '@/lib/apiUtils/getThreadWithComments'
+import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWithComments'
 
-jest.mock('@/lib/apiUtils/getThreadWithComments')
+jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
 
 describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {

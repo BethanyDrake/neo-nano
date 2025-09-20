@@ -1,7 +1,7 @@
 import { mockQueryFunction } from '@/tests/utils/mockQueryFunction'
-import { getQueryFunction } from './getQueryFunction'
+import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getThreadWithComments } from './getThreadWithComments'
-jest.mock('./getQueryFunction')
+jest.mock('../_utils/getQueryFunction')
 
 describe('getThreadWithComments', () => {
   test('comment with no flags', async () => {

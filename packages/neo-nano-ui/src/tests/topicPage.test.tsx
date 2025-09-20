@@ -1,7 +1,7 @@
 import TopicPage from '@/app/forum/[topic-id]/page'
-import { createThread } from '@/lib/apiUtils/createThread'
-import { getThreads } from "@/lib/apiUtils/getThreads"
-import { getTopic } from "@/lib/apiUtils/getTopic"
+import { createThread } from '@/lib/serverFunctions/forum/createThread'
+import { getThreads } from "@/lib/serverFunctions/forum/getThreads"
+import { getTopic } from "@/lib/serverFunctions/forum/getTopic"
 import { auth0 } from "@/lib/auth0"
 import { Category, Topic } from '@/lib/forum.types'
 import { SessionData } from '@auth0/nextjs-auth0/types'
@@ -10,9 +10,9 @@ import axios from 'axios'
 
 jest.spyOn(axios, 'post')
 jest.mock('@/lib/useRequireLogin')
-jest.mock('@/lib/apiUtils/getThreads')
-jest.mock('@/lib/apiUtils/getTopic')
-jest.mock('@/lib/apiUtils/createThread')
+jest.mock('@/lib/serverFunctions/forum/getThreads')
+jest.mock('@/lib/serverFunctions/forum/getTopic')
+jest.mock('@/lib/serverFunctions/forum/createThread')
 
 describe('<TopicPage />', () => {
   beforeEach(() => {

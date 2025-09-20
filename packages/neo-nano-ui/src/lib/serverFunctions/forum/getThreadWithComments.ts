@@ -1,9 +1,9 @@
 'use server'
 
-import { getSingle } from '@/lib/apiUtils/getSingle'
+import { getSingle } from '@/lib/serverFunctions/_utils/getSingle'
 import { Category, Thread, Topic } from '@/lib/forum.types'
-import { CommentCardDataEntry } from '../CommentCard'
-import { getQueryFunction } from "@/lib/apiUtils/getQueryFunction";
+import { CommentCardDataEntry } from '@/lib/CommentCard'
+import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction";
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
