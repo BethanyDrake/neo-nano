@@ -3,7 +3,7 @@
   font-size: larger;
 
   &a:hover {
-    color: #1ab394;
+    color: var(--primary-vibrant);
   }
 }
 

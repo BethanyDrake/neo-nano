@@ -10,7 +10,7 @@
   padding: 1em;
   display: flex;
   z-index: 500;
-  background-color: #526565;
+  background-color: var(--primary-dark);
   justify-content: space-between;
   align-items: center;
   position: fixed;

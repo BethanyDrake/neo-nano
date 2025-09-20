@@ -2,10 +2,9 @@
   max-width: 1000px;
   background-color: white;
   padding: 5em;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
+  border-left: 2px solid var(--off-black);
+  border-right: 2px solid var(--off-black);
 }
-
 
 .h1 {
   text-align: center;
@@ -14,26 +13,13 @@
   font-size: 3em;
 }
 
-
-
 .background {
   display: flex;
   justify-content: center;
-  background-color: #C0E5C8;
+  background-color: var(--primary-light)
 }
 
 .section-header {
   padding-top: 0.5em; 
   padding-bottom: 0.5em;
-}
-
-.big-button {
-  height: 80px;
-  width: 80px;
-  background-color: #4ce1e1;
-  border-radius: 4px;
-  border: #16302b;
-  cursor: pointer;
-  
-  
 }
