@@ -53,7 +53,7 @@ export default async function Home() {
   return (
     <div className={styles.background} style={{ backgroundImage: `url(${bg.src})`, backgroundSize: '1000px' }}>
       <main className={styles.main}>
-        <h1 className={styles.h1}>National Novel Writing Month - Resurrected</h1>
+        <h1 className={styles.h1}>Novel November</h1>
         <Column gap="3em">
           <HistorySection />
           <ChallengeSection />

@@ -10,7 +10,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;  
 
 export const metadata: Metadata = {
-  title: 'Neo Nano',
+  title: 'Novel November',
   description: 'Write a novel this November!',
 }
 
