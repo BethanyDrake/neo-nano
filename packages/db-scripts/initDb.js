@@ -81,6 +81,7 @@ const initComments = async () => {
     await sql`CREATE TABLE comments (
   id bigint primary key GENERATED ALWAYS AS IDENTITY,
   comment_text text,
+  rich_text text,
   author bigint REFERENCES users(id),
   thread bigint REFERENCES threads(id)
 );`;

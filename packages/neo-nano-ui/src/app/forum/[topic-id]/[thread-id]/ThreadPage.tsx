@@ -14,34 +14,40 @@ import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import { redirect } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
+import dynamic from 'next/dynamic'
+const RichTextEditor = dynamic(() => import('@/lib/richText/RichTextEditor'), {
+  ssr: false,
+})
 type Inputs = {
   commentText: string
 }
 
 const AddCommentForm = ({ threadId }: { threadId: string }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<Inputs>()
+  const { handleSubmit, reset } = useForm<Inputs>()
 
   const { updateCommentsData } = useThreadContext()
 
-  const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    await addThreadComment(threadId, data.commentText).then(() => {
-      reset()
-      updateCommentsData()
-    })
+  const [richText, setRichText] = useState('')
+  const [plainText, setPlainText] = useState('')
+
+  const [errors, setErrors] = useState({ commentText: false })
+  const _onSubmit: SubmitHandler<Inputs> = async () => {
+    const commentTextError = !richText
+    setErrors({ commentText: commentTextError })
+    if (!commentTextError) {
+      console.log("submitting")
+      await addThreadComment(threadId, plainText, richText).then(() => {
+        reset()
+        updateCommentsData()
+      })
+    }
   }
 
   return (
     <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
-        <label htmlFor="comment">Comment</label>
-        <input id="comment" {...register('commentText', { required: true })} />
         {errors.commentText && <span>This field is required</span>}
+        <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
 
         <BasicButton buttonProps={{ type: 'submit' }}>Post!</BasicButton>
       </Column>
