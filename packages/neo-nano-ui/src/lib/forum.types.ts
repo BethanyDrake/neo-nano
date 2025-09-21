@@ -1,6 +1,7 @@
 export type Comment = {
     id: string
     text: string
+    richText: string
     author: string
 }
 

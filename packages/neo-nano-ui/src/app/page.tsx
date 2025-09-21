@@ -5,7 +5,6 @@ import bg from './pexels-technobulka-2908984.jpg'
 import { Column, Row } from '@/lib/layout'
 import Link from 'next/link'
 import { BasicButton } from '@/lib/buttons/BasicButton'
-
 const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
   return (
     <section>

@@ -11,6 +11,7 @@ describe('<ThreadPage />', () => {
         {
           comment: {
             text: 'some comment text',
+            richText: '<p>some comment text</p>',
             id: '2'
           },
           author: {
