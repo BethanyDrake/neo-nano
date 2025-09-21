@@ -1,20 +1,22 @@
 'use client'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
-import { CommentCard, CommentCardDataEntry } from '@/lib/CommentCard'
-import { ThreadContext, useThreadContext } from '@/lib/ThreadContext'
-import { addThreadComment } from '@/lib/serverFunctions/forum/addThreadComment'
-import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWithComments'
+import { CommentCard } from '@/lib/CommentCard'
+import { useThreadContext } from '@/lib/ThreadContext'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import formClasses from '@/lib/form.module.css'
 import { Category, Thread, Topic } from '@/lib/forum.types'
-import { Column } from '@/lib/layout'
+import { Column, Row } from '@/lib/layout'
+import { addThreadComment } from '@/lib/serverFunctions/forum/addThreadComment'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import { redirect } from 'next/navigation'
-import { useCallback, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import dynamic from 'next/dynamic'
+import { redirect } from 'next/navigation'
+import Pagination from 'rc-pagination'
+import 'rc-pagination/assets/index.css'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
 const RichTextEditor = dynamic(() => import('@/lib/richText/RichTextEditor'), {
   ssr: false,
 })
@@ -35,7 +37,7 @@ const AddCommentForm = ({ threadId }: { threadId: string }) => {
     const commentTextError = !richText
     setErrors({ commentText: commentTextError })
     if (!commentTextError) {
-      console.log("submitting")
+      console.log('submitting')
       await addThreadComment(threadId, plainText, richText).then(() => {
         reset()
         updateCommentsData()
@@ -59,22 +61,14 @@ export const ThreadPage = ({
   thread,
   topic,
   category,
-  initialComments,
   isLoggedIn,
 }: {
   thread: Thread
   topic: Topic
   category: Category
-  initialComments: CommentCardDataEntry[]
   isLoggedIn: boolean
 }) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
-  const [commentCards, setComments] = useState<CommentCardDataEntry[]>(initialComments)
-
-  const updateComments = useCallback(async () => {
-    const _comments: CommentCardDataEntry[] = (await getThreadWithComments(thread.id)).commentCardDataEntries
-    setComments(_comments)
-  }, [thread])
 
   const breadcrumbItems = [
     { href: '/forum', text: category.title },
@@ -82,14 +76,23 @@ export const ThreadPage = ({
     { text: thread.title },
   ]
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const onChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const {commentsData} = useThreadContext()
   return (
-    <ThreadContext value={{ updateCommentsData: updateComments, commentsData: commentCards }}>
       <div className={styles['forum-container']}>
         <Column>
-          <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+          <Row justifyContent="space-between">
+            <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+            <Pagination pageSize={20} onChange={onChange} current={currentPage} total={100} />
+          </Row>
+
           <div>
-            {commentCards &&
-              commentCards.map(({ comment, author, flags }) => (
+            {commentsData &&
+              commentsData.map(({ comment, author, flags }) => (
                 <CommentCard key={comment.id} comment={comment} author={author} flags={flags} />
               ))}
           </div>
@@ -101,6 +104,5 @@ export const ThreadPage = ({
           {createThreadFormIsOpen && <AddCommentForm threadId={thread.id} />}
         </Column>
       </div>
-    </ThreadContext>
   )
 }

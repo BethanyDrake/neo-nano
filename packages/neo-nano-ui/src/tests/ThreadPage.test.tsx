@@ -1,6 +1,6 @@
 import Page from '@/app/forum/[topic-id]/[thread-id]/page'
-import { render } from '@testing-library/react'
 import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWithComments'
+import { render } from '@testing-library/react'
 
 jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
 
@@ -11,38 +11,37 @@ describe('<ThreadPage />', () => {
         {
           comment: {
             text: 'some comment text',
-            richText: '<p>some comment text</p>',
-            id: '2'
+            richText: '<p>some rich text</p>',
+            id: '2',
           },
           author: {
             id: '1',
-            displayName: 'Some Name'
+            displayName: 'Some Name',
           },
-          flags: []
-        }
+          flags: [],
+        },
       ],
       category: {
-          title: 'Some Category',
-          id: 'some-category-id',
-          topics: []
+        title: 'Some Category',
+        id: 'some-category-id',
+        topics: [],
       },
       topic: {
-          id: 'some-topic-id',
-          title: 'Some Topic',
-          description: '',
-          icon: 'faBoltLightning',
-          category: ''
+        id: 'some-topic-id',
+        title: 'Some Topic',
+        description: '',
+        icon: 'faBoltLightning',
+        category: '',
       },
       thread: {
-          title: 'Some Thread',
-          id: '1',
-          author: ''
-      }
+        title: 'Some Thread',
+        id: '1',
+        author: '',
+      },
     })
-    const {getByText} = render(await Page({ params: Promise.resolve({ 'thread-id': 'some-thread-id' }) }))
+    const { findByText } = render(await Page({ params: Promise.resolve({ 'thread-id': 'some-thread-id' }) }))
 
-    expect(getByText(/some comment text/)).toBeInTheDocument()
-        expect(getByText(/Some Name/)).toBeInTheDocument()
-
+    expect(await findByText(/some comment text/)).toBeInTheDocument()
+    expect(await findByText(/Some Name/)).toBeInTheDocument()
   })
 })
