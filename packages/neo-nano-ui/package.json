@@ -20,6 +20,7 @@
     "date-fns": "^4.1.0",
     "msw": "^2.10.5",
     "next": "15.4.6",
+    "rc-pagination": "^5.1.0",
     "react": "19.1.0",
     "react-calendar": "^6.0.0",
     "react-dom": "19.1.0",

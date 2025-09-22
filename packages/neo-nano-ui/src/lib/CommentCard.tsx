@@ -19,7 +19,7 @@ export type CommentCardDataEntry = {
 export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) => {
   return (
     <div className={classNames.card}>
-      {flags.length > 1 ? (
+      {flags.length > 0 ? (
         <p className={classNames.flaggedCommentMessage}>
           This comment has been flagged as potentially innapropriate, and has been hidden while pending manual review.
         </p>

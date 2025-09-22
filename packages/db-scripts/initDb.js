@@ -70,7 +70,8 @@ const initThreads = async () => {
   id bigint primary key GENERATED ALWAYS AS IDENTITY,
   title text,
   author bigint REFERENCES users(id),
-  topic varchar(128) REFERENCES topics(id)
+  topic varchar(128) REFERENCES topics(id),
+   created_at TIMESTAMPTZ DEFAULT Now()
 );`;
 
 }
@@ -83,7 +84,8 @@ const initComments = async () => {
   comment_text text,
   rich_text text,
   author bigint REFERENCES users(id),
-  thread bigint REFERENCES threads(id)
+  thread bigint REFERENCES threads(id),
+  created_at TIMESTAMPTZ DEFAULT Now()
 );`;
 
 }
@@ -92,6 +94,7 @@ const initGoals = async () => {
     await sql`drop table if exists goals cascade`;
     await sql`create table goals (
     id bigint primary key GENERATED ALWAYS AS IDENTITY,
+    created_at TIMESTAMPTZ DEFAULT Now(),
     title text,
     target int,
     start_date date,
