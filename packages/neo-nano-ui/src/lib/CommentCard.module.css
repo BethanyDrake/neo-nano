@@ -1,6 +1,11 @@
 .card {
     padding: 16px;
-    border-bottom:  solid var(--grey-light)
+    border-bottom:  solid var(--grey-light);
+}
+
+.datetime {
+    font-size: small;
+    color: var(--grey-dark);
 }
 
 .flaggedCommentMessage {

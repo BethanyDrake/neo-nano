@@ -3,6 +3,7 @@ export type Comment = {
     text: string
     richText: string
     author: string
+    createdAt: Date
 }
 
 export type Thread = {
