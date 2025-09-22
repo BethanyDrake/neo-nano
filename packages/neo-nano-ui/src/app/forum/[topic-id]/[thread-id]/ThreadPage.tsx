@@ -7,6 +7,7 @@ import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import formClasses from '@/lib/form.module.css'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
+import { COMMENTS_PER_PAGE } from '@/lib/misc'
 import { addThreadComment } from '@/lib/serverFunctions/forum/addThreadComment'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
@@ -76,33 +77,42 @@ export const ThreadPage = ({
     { text: thread.title },
   ]
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const onChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
-  const {commentsData} = useThreadContext()
+  const { commentsData, onPageChange, currentPage, totalComments } = useThreadContext()
   return (
-      <div className={styles['forum-container']}>
-        <Column>
-          <Row justifyContent="space-between">
-            <Breadcrumbs breadcrumbItems={breadcrumbItems} />
-            <Pagination pageSize={20} onChange={onChange} current={currentPage} total={100} />
-          </Row>
-
-          <div>
-            {commentsData &&
-              commentsData.map(({ comment, author, flags }) => (
-                <CommentCard key={comment.id} comment={comment} author={author} flags={flags} />
-              ))}
-          </div>
-          <ExtendableIconButton
-            icon={faAdd}
-            onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect('/auth/login'))}
-            text="Add Comment"
+    <div className={styles['forum-container']}>
+      <Column>
+        <Row justifyContent="space-between">
+          <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+          <Pagination
+            pageSize={COMMENTS_PER_PAGE}
+            onChange={onPageChange}
+            current={currentPage}
+            total={totalComments}
           />
-          {createThreadFormIsOpen && <AddCommentForm threadId={thread.id} />}
-        </Column>
-      </div>
+        </Row>
+
+        <div>
+          {commentsData &&
+            commentsData.map(({ comment, author, flags }) => (
+              <CommentCard key={comment.id} comment={comment} author={author} flags={flags} />
+            ))}
+        </div>
+        <Row justifyContent="right">
+          <Pagination
+            pageSize={COMMENTS_PER_PAGE}
+            onChange={onPageChange}
+            current={currentPage}
+            total={totalComments}
+          />
+        </Row>
+
+        <ExtendableIconButton
+          icon={faAdd}
+          onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect('/auth/login'))}
+          text="Add Comment"
+        />
+        {createThreadFormIsOpen && <AddCommentForm threadId={thread.id} />}
+      </Column>
+    </div>
   )
 }

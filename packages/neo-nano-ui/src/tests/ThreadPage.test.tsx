@@ -7,6 +7,7 @@ jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
 describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {
     jest.mocked(getThreadWithComments).mockResolvedValue({
+      totalComments: 1,
       commentCardDataEntries: [
         {
           comment: {

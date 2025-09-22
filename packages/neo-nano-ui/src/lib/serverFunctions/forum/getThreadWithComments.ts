@@ -3,23 +3,34 @@
 import { getSingle } from '@/lib/serverFunctions/_utils/getSingle'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { CommentCardDataEntry } from '@/lib/CommentCard'
-import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction";
+import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
+import { COMMENTS_PER_PAGE } from '@/lib/misc'
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
+  totalComments: number
   thread: Thread
   category: Category
   topic: Topic
 }
 
-export const getThreadWithComments = async (threadId: string) => {
+export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   const sql = getQueryFunction()
   const _comments =
     await sql`SELECT comment_text, rich_text, author, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
     FROM comments JOIN users on comments.author=users.id
     LEFT OUTER JOIN  flags on flags.comment = comments.id
   WHERE thread=${threadId}
-  GROUP BY comments.id, users.id`
+  GROUP BY comments.id, users.id
+  ORDER BY comments.created_at
+  LIMIT ${COMMENTS_PER_PAGE}
+  OFFSET ${(currentPage - 1) * COMMENTS_PER_PAGE}
+  `
+
+  const totalComments = (
+    await sql`SELECT count(comments.id) FROM comments 
+  WHERE thread=${threadId}`
+  )[0].count
 
   const threadDetails = await getSingle(
     'thread',
@@ -47,6 +58,7 @@ export const getThreadWithComments = async (threadId: string) => {
   }))
 
   return {
+    totalComments,
     commentCardDataEntries,
     thread: threadDetails as Thread,
     category: category as Category,

@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: Promise<{ 'thread-id': 
   const session = await auth0.getSession()
   const threadId = (await params)['thread-id'] as string
 
-  const { thread, category, commentCardDataEntries, topic } = await getThreadWithComments(threadId)
+  const { thread, category, commentCardDataEntries, topic , totalComments} = await getThreadWithComments(threadId)
 
-  return  <ThreadContextProvider initialComments={commentCardDataEntries} threadId={thread.id}><ThreadPage thread={thread} topic={topic} category={category} isLoggedIn={!!session} /></ThreadContextProvider>
+  return  <ThreadContextProvider initialComments={commentCardDataEntries} initialTotalComments={totalComments} threadId={thread.id}><ThreadPage thread={thread} topic={topic} category={category} isLoggedIn={!!session} /></ThreadContextProvider>
 }

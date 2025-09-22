@@ -5,12 +5,12 @@ import { flagComment } from './serverFunctions/moderation/flagComment'
 jest.mock('./serverFunctions/moderation/flagComment')
 
 describe('<CommentCard />', () => {
-  it('renders', () => {
-    const { getByText } = render(
+  it('renders', async () => {
+    const { findByText } = render(
       <CommentCard comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', }} author={{ id: '2', displayName: 'Some Name' }} flags={[]} />,
     )
-    expect(getByText(/Some text/)).toBeInTheDocument()
-    expect(getByText(/Some Name/)).toBeInTheDocument()
+    expect(await findByText(/Some text/)).toBeInTheDocument()
+    expect(await findByText(/Some Name/)).toBeInTheDocument()
   })
 
   test('flag a comment as innapropriate', async () => {
