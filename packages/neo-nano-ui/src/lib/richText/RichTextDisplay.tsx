@@ -1,5 +1,6 @@
 import ReactQuill from "react-quill-new"
 import 'react-quill-new/dist/quill.snow.css'
+import './richTextStyle.css'
 
 const RichTextDisplay = ({ value }: { value: string }) => {
   return <ReactQuill modules={{ toolbar: null }} value={value} readOnly bounds={'main'} />

@@ -7,7 +7,7 @@ jest.mock('./serverFunctions/moderation/flagComment')
 describe('<CommentCard />', () => {
   it('renders', async () => {
     const { findByText } = render(
-      <CommentCard comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', }} author={{ id: '2', displayName: 'Some Name' }} flags={[]} />,
+      <CommentCard comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }} author={{ id: '2', displayName: 'Some Name' }} flags={[]} />,
     )
     expect(await findByText(/Some text/)).toBeInTheDocument()
     expect(await findByText(/Some Name/)).toBeInTheDocument()
@@ -15,7 +15,7 @@ describe('<CommentCard />', () => {
 
   test('flag a comment as innapropriate', async () => {
     const { getByRole } = render(
-      <CommentCard comment={{ id: 'comment-id', text: '', richText: '', }} author={{ id: '2', displayName: '' }} flags={[]}/>,
+      <CommentCard comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }} author={{ id: '2', displayName: '' }} flags={[]}/>,
     )
     fireEvent.click(getByRole('button', { name: 'Report comment as inappropriate' }))
     expect(getByRole('heading', { name: 'Report Comment as Inappropriate' })).toBeInTheDocument()

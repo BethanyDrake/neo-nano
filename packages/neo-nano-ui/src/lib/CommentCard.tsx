@@ -11,7 +11,7 @@ const RichTextDisplay = dynamic(() => import('./richText/RichTextDisplay'), {
 })
 
 export type CommentCardDataEntry = {
-  comment: Pick<Comment, 'id' | 'text' | 'richText'>
+  comment: Pick<Comment, 'id' | 'text' | 'richText'| 'createdAt'>
   author: Pick<Profile, 'id' | 'displayName'>
   flags: { reason: string }[]
 }
@@ -26,10 +26,15 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
       ) : (
         <>
           <Row justifyContent="space-between">
-            <h4>{author.displayName}:</h4> <ReportCommentModal comment={comment} />
+            <h4>{author.displayName}:</h4><ReportCommentModal comment={comment} />
           </Row>
-          <div style={{visibility: 'hidden'}}>{comment.text}</div>
-          <ClientSideOnly> <RichTextDisplay value={comment.richText}/></ClientSideOnly>
+         
+          <div style={{height: '16px', visibility: 'hidden'}}>{comment.text}</div>
+          <ClientSideOnly> 
+            <RichTextDisplay value={comment.richText}/>
+            <Row justifyContent='right'> <span style={{paddingTop:'16px'}} className={classNames.datetime}>{comment.createdAt.toLocaleString()}</span></Row>
+          </ClientSideOnly>
+          
         </>
       )}
     </div>

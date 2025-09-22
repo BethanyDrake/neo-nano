@@ -17,7 +17,7 @@ export type ReturnType = {
 export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   const sql = getQueryFunction()
   const _comments =
-    await sql`SELECT comment_text, rich_text, author, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
+    await sql`SELECT comment_text, rich_text, author, comments.created_at, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
     FROM comments JOIN users on comments.author=users.id
     LEFT OUTER JOIN  flags on flags.comment = comments.id
   WHERE thread=${threadId}
@@ -44,10 +44,11 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   )
   const category = await getSingle('category', sql`SELECT id, title FROM categories where id=${topic.category} LIMIT 1`)
 
-  const commentCardDataEntries = _comments.map(({ comment_text, rich_text, author, id, display_name, flags }) => ({
+  const commentCardDataEntries = _comments.map(({created_at, comment_text, rich_text, author, id, display_name, flags }) => ({
     comment: {
       text: comment_text,
       richText: rich_text,
+      createdAt: created_at,
       id,
     },
     author: {

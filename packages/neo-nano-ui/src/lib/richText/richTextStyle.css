@@ -1,0 +1,13 @@
+.quill {
+    .ql-container.ql-snow.ql-disabled {
+        border: none;
+    }
+
+    .ql-disabled {
+        .ql-editor {
+            font-size: medium;
+            padding: 0;
+        }
+    }
+
+}
