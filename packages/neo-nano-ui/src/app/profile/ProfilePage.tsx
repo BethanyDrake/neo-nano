@@ -13,6 +13,7 @@ import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import classNames from './profile.module.css'
+import { CumulativeWords } from '@/lib/charts/CumulativeWords'
 
 type GoalProps = {
   id: string
@@ -45,7 +46,8 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
       </Centered>
       <div className={classNames['goal-row']}>
         <UpdateWordCount onCancel={onCancel} onSave={onSave} records={records} setRecords={setRecords} />
-        <WordsPerDay title={title} wordCountPerDay={records} />
+        {/* <WordsPerDay title={title} wordCountPerDay={records} /> */}
+        <CumulativeWords title={title} wordCountPerDay={records} />
       </div>
     </div>
   )
