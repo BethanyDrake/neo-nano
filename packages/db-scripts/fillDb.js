@@ -1,11 +1,7 @@
 require('dotenv').config()
 const { neon } = require('@neondatabase/serverless')
 const { faker } = require('@faker-js/faker')
-
-if (!process.env.DATABASE_URL) {
-  console.log('missing DATABASE_URL')
-  process.exit(1)
-}
+require('./validate-environment')
 
 const sql = neon(process.env.DATABASE_URL)
 

@@ -13,14 +13,17 @@
     "postgres-bytea": "^1.0.0",
     "postgres-date": "^1.0.7",
     "postgres-interval": "^1.2.0",
+    "prompt-sync": "^4.2.0",
     "undici-types": "^6.21.0",
     "xtend": "^4.0.2"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"No test specified\"",
-    "initDb": "node ./initDb",
-    "fillDb": "node ./fillDb"
+    "getStats": "DOTENV_PATH=preview node ./getStats",
+    "getProdStats": "DOTENV_PATH=prod node ./getStats",
+    "initDb": "DOTENV_PATH=preview node ./initDb",
+    "fillDb": "DOTENV_PATH=preview node ./fillDb"
   },
   "author": "",
   "license": "ISC",
