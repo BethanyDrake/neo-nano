@@ -27,10 +27,10 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   OFFSET ${(currentPage - 1) * COMMENTS_PER_PAGE}
   `
 
-  const totalComments = (
-    await sql`SELECT count(comments.id) FROM comments 
+  const totalComments = parseInt((
+    await sql`SELECT count(comments.id), pg_typeof(count(comments.id)) FROM comments 
   WHERE thread=${threadId}`
-  )[0].count
+  )[0].count)
 
   const threadDetails = await getSingle(
     'thread',
