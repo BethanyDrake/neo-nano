@@ -3,11 +3,15 @@ import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getThreadWithComments } from './getThreadWithComments'
 jest.mock('../_utils/getQueryFunction')
 
+
+const someDate = new Date()
 describe('getThreadWithComments', () => {
   test('comment with no flags', async () => {
     const comments = [
       {
         comment_text: 'comment text',
+        rich_text: "<p>comment text</p>",
+        created_at: someDate,
         author: '1',
         id: '2',
         thread: '5',
@@ -27,6 +31,8 @@ describe('getThreadWithComments', () => {
       threads,
       topics,
       categories,
+    }, {
+      'select count.* from comments': [{count: '1'}]
     })
 
     expect(await getThreadWithComments('6')).toEqual({
@@ -35,6 +41,8 @@ describe('getThreadWithComments', () => {
           comment: {
             text: 'comment text',
             id: '2',
+            createdAt: someDate,
+            richText: '<p>comment text</p>'
           },
           author: {
             id: '1',
@@ -60,6 +68,7 @@ describe('getThreadWithComments', () => {
         id: '6',
         title: 'Topic Title',
       },
+      totalComments: 1
     })
   })
 

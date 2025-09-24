@@ -8,7 +8,6 @@ import formClasses from '@/lib/form.module.css'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
-import { addThreadComment } from '@/lib/serverFunctions/forum/addThreadComment'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import dynamic from 'next/dynamic'
@@ -25,34 +24,31 @@ type Inputs = {
   commentText: string
 }
 
-const AddCommentForm = ({ threadId }: { threadId: string }) => {
+const AddCommentForm = () => {
   const { handleSubmit, reset } = useForm<Inputs>()
-
-  const { updateCommentsData } = useThreadContext()
+  const { isLoading, postComment } = useThreadContext()
 
   const [richText, setRichText] = useState('')
   const [plainText, setPlainText] = useState('')
-
-  const [errors, setErrors] = useState({ commentText: false })
+  const [errorText, setErrorText] = useState('')
   const _onSubmit: SubmitHandler<Inputs> = async () => {
-    const commentTextError = !richText
-    setErrors({ commentText: commentTextError })
-    if (!commentTextError) {
-      console.log('submitting')
-      await addThreadComment(threadId, plainText, richText).then(() => {
-        reset()
-        updateCommentsData()
-      })
+    if (plainText.trim()) {
+      await postComment(plainText, richText)
+      reset()
+      setRichText('')
+      setPlainText('')
+    } else {
+      setErrorText("Can't post an empty comment.")
     }
   }
 
   return (
     <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
-        {errors.commentText && <span>This field is required</span>}
+        {errorText && <span>{errorText}</span>}
         <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
 
-        <BasicButton buttonProps={{ type: 'submit' }}>Post!</BasicButton>
+        <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>Post!</BasicButton>
       </Column>
     </form>
   )
@@ -77,7 +73,7 @@ export const ThreadPage = ({
     { text: thread.title },
   ]
 
-  const { commentsData, onPageChange, currentPage, totalComments } = useThreadContext()
+  const { commentsData, onPageChange, currentPage, totalComments, isLoading } = useThreadContext()
   return (
     <div className={styles['forum-container']}>
       <Column>
@@ -88,6 +84,7 @@ export const ThreadPage = ({
             onChange={onPageChange}
             current={currentPage}
             total={totalComments}
+            disabled={isLoading}
           />
         </Row>
 
@@ -103,6 +100,7 @@ export const ThreadPage = ({
             onChange={onPageChange}
             current={currentPage}
             total={totalComments}
+            disabled={isLoading}
           />
         </Row>
 
@@ -111,7 +109,7 @@ export const ThreadPage = ({
           onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect('/auth/login'))}
           text="Add Comment"
         />
-        {createThreadFormIsOpen && <AddCommentForm threadId={thread.id} />}
+        {createThreadFormIsOpen && <AddCommentForm />}
       </Column>
     </div>
   )
