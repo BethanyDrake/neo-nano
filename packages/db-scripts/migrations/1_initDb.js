@@ -1,6 +1,6 @@
 require('dotenv').config()
 const { neon } = require('@neondatabase/serverless');
-require('./validate-environment')
+require('../validate-environment')
 
 const sql = neon(process.env.DATABASE_URL);
 

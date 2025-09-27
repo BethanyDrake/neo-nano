@@ -22,7 +22,6 @@
     "test": "echo \"No test specified\"",
     "getStats": "DOTENV_PATH=preview node ./getStats",
     "getProdStats": "DOTENV_PATH=prod node ./getStats",
-    "initDb": "DOTENV_PATH=preview node ./initDb",
     "fillDb": "DOTENV_PATH=preview node ./fillDb"
   },
   "author": "",
