@@ -12,7 +12,7 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
       <Link style={{color: 'white', alignSelf: 'center'}} href="/auth/logout">
         Log out
       </Link>
-      <Link href="/forum">
+      <Link prefetch={false} href="/forum">
         <BasicButton>Browse Forum</BasicButton>
       </Link>
        <Link href="/profile">
@@ -23,10 +23,10 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
 
   return (
      <Row>
-      <Link href="/auth/login?screen_hint=signup">
+      <Link prefetch={false}  href="/auth/login?screen_hint=signup">
         <BasicButton>Sign up</BasicButton>
       </Link>
-      <Link href="/auth/login">
+      <Link  prefetch={false} href="/auth/login">
         <BasicButton>Log in</BasicButton>
       </Link>
     </Row>
