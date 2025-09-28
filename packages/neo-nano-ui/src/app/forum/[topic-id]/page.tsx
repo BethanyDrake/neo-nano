@@ -2,6 +2,7 @@ import { getThreads } from "@/lib/serverFunctions/forum/getThreads"
 import { getTopic } from "@/lib/serverFunctions/forum/getTopic"
 import TopicPage from "./TopicPage"
 import { auth0 } from "@/lib/auth0"
+import { TopicContextProvider } from "@/lib/context/TopicContext"
 
 
 export default async function Page({
@@ -14,8 +15,8 @@ export default async function Page({
   const topicId = (await params)['topic-id'] as string
   const { topic, category } = await getTopic(topicId)
 
-  const initialThreads = await getThreads(topicId)
+  const response = await getThreads(topicId)
 
-  return <TopicPage topic={topic} category={category} initialThreads={initialThreads} isLoggedIn={!!session} />
+  return <TopicContextProvider initialThreads={response.threadSummaries} initialTotalThreads={response.totalThreads} topicId={topicId}> <TopicPage topic={topic} category={category} isLoggedIn={!!session} /></TopicContextProvider>
 }
 

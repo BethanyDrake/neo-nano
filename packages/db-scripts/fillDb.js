@@ -1,6 +1,9 @@
-require('dotenv').config()
+require('dotenv').config({ path: `.env.${process.env.DOTENV_PATH}`})
 const { neon } = require('@neondatabase/serverless')
-const { faker } = require('@faker-js/faker')
+import('@faker-js/faker').then(({faker}) => {
+  
+
+
 require('./validate-environment')
 
 const sql = neon(process.env.DATABASE_URL)
@@ -23,10 +26,10 @@ const createThreads = async () => {
   console.log(users, topics)
   console.log('initThreads start')
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 60; i++) {
     const userId = users[faker.number.int(users.length - 1)].id
     const createdThread = await sql`insert into threads (title, author, topic) values 
-            (${faker.book.title()}, ${userId}, 'generalDiscussion')
+            (${faker.book.title()}, ${userId}, 'introductions')
             returning id
     ;`
     const commentText = faker.lorem.paragraph()
@@ -60,9 +63,11 @@ const createComments = async () => {
 }
 
 const fillDb = async () => {
-  await createUsers()
+  // await createUsers()
   await createThreads()
-  await createComments()
+  // await createComments()
 }
 
 fillDb().then(() => process.exit(0))
+
+})

@@ -1,7 +1,6 @@
 "use client"
 
-import { createThread } from '@/lib/serverFunctions/forum/createThread'
-import { getThreads, ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
+import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
@@ -15,6 +14,10 @@ import { redirect } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import RichTextEditor from '@/lib/richText/RichTextEditor'
+import { useTopicContext } from '@/lib/context/TopicContext'
+import Pagination from 'rc-pagination'
+import { THREADS_PER_PAGE } from '@/lib/misc'
+import 'rc-pagination/assets/index.css'
 
 type Inputs = {
   title: string
@@ -38,6 +41,8 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
     const [plainText, setPlainText] = useState('')
     const [errorText, setErrorText] = useState('')
 
+    const { createThread, isLoading } = useTopicContext()
+
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     if (!plainText.trim()) {
       setErrorText("Can't post an empty comment.")
@@ -45,7 +50,6 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
     }
     const body = {
       ...data,
-      topic: topicId,
       commentRichText: richText,
       commentText: plainText
     }
@@ -70,7 +74,7 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
         <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
         {errorText && <span  className={formClasses.error}>^Please enter a comment to start the conversion.</span>}
         
-        <BasicButton buttonProps={{type:"submit"}}>Post!</BasicButton>
+        <BasicButton isLoading={isLoading} buttonProps={{type:"submit"}}>Post!</BasicButton>
       </Column>
     </form>
   )
@@ -79,32 +83,38 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
 const TopicPage = ({
   topic,
   category,
-  initialThreads,
   isLoggedIn
 }: {
   topic: Topic
   category: Category
-  initialThreads: ThreadSummary[]
   isLoggedIn: boolean
 }) => {
   const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
-  const [threads, setThreads] = useState<ThreadSummary[]>(initialThreads)
+  const { threadsData: threads, onPageChange, currentPage, totalThreads, isLoading } = useTopicContext()
 
-  const updateThreads = useCallback(async () => {
-    getThreads(topic.id).then(setThreads)
+  const onCreateThread = useCallback(async () => {
     setCreateThreadFormIsOpen(false)
-  }, [topic])
+  }, [])
 
   const breadcrumbItems = [{href: '/forum', text: category.title}, {text: topic.title} ]
   return (
     <div className={styles['forum-container']}>
       <Column>
+      <Row justifyContent="space-between">
       <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+       <Pagination
+            pageSize={THREADS_PER_PAGE}
+            onChange={onPageChange}
+            current={currentPage}
+            total={totalThreads}
+            disabled={isLoading}
+          />
+      </Row>
         <p>{topic.description}</p>
         <ExtendableIconButton icon={faAdd} onClick={() => 
           isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')
         } text="Create Thread" />
-        {createThreadFormIsOpen && <CreateThreadForm onSubmit={updateThreads} topicId={topic.id} />}
+        {createThreadFormIsOpen && <CreateThreadForm onSubmit={onCreateThread} topicId={topic.id} />}
         <Column>
           <h2>Threads:</h2>
           {threads &&

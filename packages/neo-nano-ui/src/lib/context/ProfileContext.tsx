@@ -1,7 +1,7 @@
 "use client"
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react";
-import { Profile } from "./forum.types";
-import { updateProfile as updateProfileServerSide } from "./serverFunctions/profile/updateProfile";
+import { Profile } from "../forum.types";
+import { updateProfile as updateProfileServerSide } from "../serverFunctions/profile/updateProfile";
 
 const ProfileContext = createContext<
 {

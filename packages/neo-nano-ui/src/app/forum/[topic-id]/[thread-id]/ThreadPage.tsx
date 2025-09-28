@@ -1,7 +1,7 @@
 'use client'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { CommentCard } from '@/lib/CommentCard'
-import { useThreadContext } from '@/lib/ThreadContext'
+import { useThreadContext } from '@/lib/context/ThreadContext'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import formClasses from '@/lib/form.module.css'

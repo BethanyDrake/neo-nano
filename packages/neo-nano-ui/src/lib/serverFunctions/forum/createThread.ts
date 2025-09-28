@@ -5,7 +5,9 @@ import { getQueryFunction } from "../_utils/getQueryFunction"
 import { getThreads } from "./getThreads"
 import { getUserId } from "../_utils/getUserIdFromSession"
 
-export const createThread = async ({title, topic, commentText, commentRichText}: Pick<Thread, 'title'> & {topic: string, commentText: string, commentRichText: string }) => {
+export type CreateThreadPayload = Pick<Thread, 'title'> & {topic: string, commentText: string, commentRichText: string }
+
+export const createThread = async ({title, topic, commentText, commentRichText}: CreateThreadPayload) => {
     const sql = getQueryFunction()
     const userId = await getUserId()
 

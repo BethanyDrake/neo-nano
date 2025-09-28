@@ -2,7 +2,7 @@ import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { ProfilePageInner } from './ProfilePage'
 import { auth0 } from '@/lib/auth0'
 import { redirect } from 'next/navigation'
-import { ProfileContextProvider } from '@/lib/ProfileContext'
+import { ProfileContextProvider } from '@/lib/context/ProfileContext'
 
 const ProfilePage = async () => {
   const session = await auth0.getSession()

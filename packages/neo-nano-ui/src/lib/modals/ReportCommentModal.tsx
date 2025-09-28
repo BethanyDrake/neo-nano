@@ -8,7 +8,7 @@ import classNames from './Modal.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAwesomeFlag'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import { useThreadContext } from '../ThreadContext'
+import { useThreadContext } from '../context/ThreadContext'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
 
 type Inputs = Pick<Flag, 'reason' | 'details'>
