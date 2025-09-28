@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import RichTextEditor from '@/lib/richText/RichTextEditor'
 
 type Inputs = {
   title: string
@@ -33,15 +34,26 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
     reset,
     formState: { errors },
   } = useForm<Inputs>()
+   const [richText, setRichText] = useState('')
+    const [plainText, setPlainText] = useState('')
+    const [errorText, setErrorText] = useState('')
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    if (!plainText.trim()) {
+      setErrorText("Can't post an empty comment.")
+      return
+    }
     const body = {
       ...data,
       topic: topicId,
+      commentRichText: richText,
+      commentText: plainText
     }
     createThread(body).then(() => {
       reset()
       onSubmit()
+      setRichText('')
+      setPlainText('')
     })
   }
 
@@ -55,8 +67,8 @@ const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: ()
 
         {errors.title && <span className={formClasses.error}>^Please enter a title. This should be a short description of what you want to say.</span>}
         <label htmlFor="comment">Comment:</label>
-        <textarea rows={5} id="comment" {...register('commentText', { required: true })} />
-        {errors.commentText && <span  className={formClasses.error}>^Please enter a comment to start the conversion.</span>}
+        <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
+        {errorText && <span  className={formClasses.error}>^Please enter a comment to start the conversion.</span>}
         
         <BasicButton buttonProps={{type:"submit"}}>Post!</BasicButton>
       </Column>

@@ -5,8 +5,7 @@ import { getQueryFunction } from "../_utils/getQueryFunction"
 import { getThreads } from "./getThreads"
 import { getUserId } from "../_utils/getUserIdFromSession"
 
-export const createThread = async ({title, topic, commentText}: Pick<Thread, 'title'> & {topic: string, commentText: string}) => {
-    console.log("create thread")
+export const createThread = async ({title, topic, commentText, commentRichText}: Pick<Thread, 'title'> & {topic: string, commentText: string, commentRichText: string }) => {
     const sql = getQueryFunction()
     const userId = await getUserId()
 
@@ -16,12 +15,12 @@ export const createThread = async ({title, topic, commentText}: Pick<Thread, 'ti
 
     const createdThreadId = res[0].id
 
-    await sql`INSERT INTO comments (comment_text, author, thread) 
-        VALUES (${commentText}, ${userId}, ${createdThreadId})
+    await sql`INSERT INTO comments (comment_text, author, thread, rich_text) 
+        VALUES (${commentText}, ${userId}, ${createdThreadId}, ${commentRichText})
         RETURNING id`
 
     const result = await getThreads(topic)
-    console.log('create threads done', result)
+    console.log('create thread done', result)
     return result
 
 }

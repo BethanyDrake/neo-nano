@@ -1,6 +1,9 @@
+import dynamic from 'next/dynamic'
 import { useCallback } from 'react'
-import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
+const ReactQuill = dynamic(() => import('react-quill-new'), {
+  ssr: false,
+})
 
 const formats = ['header', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'link']
 
@@ -26,7 +29,7 @@ const RichTextEditor = ({
   setPlainText: (s: string) => void
 }) => {
   const onChange = useCallback(
-    (newValue: string, _delta: unknown, _source: unknown, editor: ReactQuill.UnprivilegedEditor) => {
+    (newValue: string, _delta: unknown, _source: unknown, editor: {getText: () => string}) => {
       setValue(newValue)
       setPlainText(editor.getText())
     },

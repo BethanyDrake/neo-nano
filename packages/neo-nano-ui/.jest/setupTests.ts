@@ -4,6 +4,8 @@ import { setupServer } from 'msw/node';
 
 jest.mock('@auth0/nextjs-auth0/server')
 jest.mock('@neondatabase/serverless')
+jest.mock('@neondatabase/serverless')
+jest.mock('@/lib/richText/RichTextEditor', () => jest.requireActual('./MockRichTextEditor'))
 
 process.env.DATABASE_URL = 'DATABASE_URL'
 

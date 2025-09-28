@@ -8,18 +8,16 @@ import formClasses from '@/lib/form.module.css'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
+import RichTextEditor from '@/lib/richText/RichTextEditor'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-const RichTextEditor = dynamic(() => import('@/lib/richText/RichTextEditor'), {
-  ssr: false,
-})
+
 type Inputs = {
   commentText: string
 }
