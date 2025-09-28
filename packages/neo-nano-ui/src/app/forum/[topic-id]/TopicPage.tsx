@@ -30,7 +30,7 @@ type Topic = {
   description: string
 }
 
-const CreateThreadForm = ({ topicId, onSubmit }: { topicId: string; onSubmit: () => void }) => {
+const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
   const {
     register,
     handleSubmit,
@@ -114,7 +114,7 @@ const TopicPage = ({
         <ExtendableIconButton icon={faAdd} onClick={() => 
           isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')
         } text="Create Thread" />
-        {createThreadFormIsOpen && <CreateThreadForm onSubmit={onCreateThread} topicId={topic.id} />}
+        {createThreadFormIsOpen && <CreateThreadForm onSubmit={onCreateThread} />}
         <Column>
           <h2>Threads:</h2>
           {threads &&
@@ -122,7 +122,8 @@ const TopicPage = ({
               return (
                 <Link href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}>
                   <h3 className={styles['forum-item-title']}>{thread.title}</h3>
-                  <p>{thread.text}</p>
+                  <p style={{whiteSpace: 'nowrap', overflow: 'hidden',
+  textOverflow: 'ellipsis', paddingBottom: '12px'}}>{thread.text}</p>
                 </Link>
               )
             })}
