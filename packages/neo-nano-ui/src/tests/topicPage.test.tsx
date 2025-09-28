@@ -20,10 +20,10 @@ describe('<TopicPage />', () => {
       topic: { } as Topic,
       category: {} as Category,
     })
-    jest.mocked(getThreads).mockResolvedValue([])
+    jest.mocked(getThreads).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 })
   it('displays existing threads', async () => {
-    jest.mocked(getThreads).mockResolvedValue([{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }])
+    jest.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }]})
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
     expect(getByText('Existing Topic 1')).toBeInTheDocument()
@@ -48,9 +48,9 @@ describe('<TopicPage />', () => {
       topic: { id: 'someTopic'} as Topic,
       category: {} as Category,
     })
-     jest.mocked(createThread).mockResolvedValue([])
+     jest.mocked(createThread).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 
-    const { getByRole, findByLabelText, getByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
+    const {getByTestId, getByRole, findByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
 
     const button = getByRole('button', { name: 'Create Thread' })
 
@@ -58,9 +58,11 @@ describe('<TopicPage />', () => {
     fireEvent.click(button)
 
     fireEvent.change(await findByLabelText(/Title/), { target: { value: 'New Thread Title' } })
-    fireEvent.change(getByLabelText(/Comment/), { target: { value: 'Some comment' } })
-
-    jest.mocked(getThreads).mockResolvedValue([{ id: '1', title: 'New Thread Title', author: 'some-author', text: 'First comment text' }])
+    fireEvent.change(getByTestId('mock-rich-text-editor'), { target: { value: 'Some comment' } })
+    
+   jest.mocked(getThreads).mockResolvedValue({
+    totalThreads: 1,
+    threadSummaries: [{ id: '1', title: 'New Thread Title', author: 'some-author', text: 'First comment text' }]})
     fireEvent.click(getByRole('button', { name: 'Post!' }))
 
     expect(await findByText('New Thread Title')).toBeInTheDocument()
@@ -68,6 +70,7 @@ describe('<TopicPage />', () => {
     expect(createThread).toHaveBeenCalledWith({
       title: 'New Thread Title',
       commentText: 'Some comment',
+      commentRichText: '<p>Some comment</p>',
       topic: 'someTopic',
     })
   })

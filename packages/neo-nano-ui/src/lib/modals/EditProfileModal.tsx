@@ -7,7 +7,7 @@ import { Profile } from '../forum.types'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import formClasses from '../form.module.css'
-import { useProfileContext } from '../ProfileContext'
+import { useProfileContext } from '../context/ProfileContext'
 
 type Inputs = Pick<Profile, 'displayName' | 'aboutMe'>
 

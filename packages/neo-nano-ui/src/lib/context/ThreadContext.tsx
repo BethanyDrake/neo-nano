@@ -1,9 +1,9 @@
 'use client'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
-import { CommentCardDataEntry } from './CommentCard'
-import { getThreadWithComments } from './serverFunctions/forum/getThreadWithComments'
-import { addThreadComment } from './serverFunctions/forum/addThreadComment'
-import { COMMENTS_PER_PAGE } from './misc'
+import { CommentCardDataEntry } from '../CommentCard'
+import { getThreadWithComments } from '../serverFunctions/forum/getThreadWithComments'
+import { addThreadComment } from '../serverFunctions/forum/addThreadComment'
+import { COMMENTS_PER_PAGE } from '../misc'
 
 export const ThreadContext = createContext<{
   updateCommentsData: () => Promise<void>
