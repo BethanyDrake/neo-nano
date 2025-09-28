@@ -33,7 +33,7 @@ const addTopics= async () => {
 ('description','Description','Y''know, what things look like.','faPalette', 'craft-of-writing'),
 ('questions','Questions','How do I...? What should I...? Why can''t I...?','faQuestion', 'general'),
 ('progress','Progress Updates','Comiseration, celebration, and accountability.', 'faChartLine','general'),
-('meta','Meta','Discussion regarding novel-noveber.com, including feature requests, bug reports, and suggestions for new forum topics.','faAtom','general'),
+('meta','Meta','Discussion regarding novel-november.com, including feature requests, bug reports, and suggestions for new forum topics.','faAtom','general'),
 ('fun-and-games','I should be writing but...','A place for forum games or non-writing related chat.', 'faGamepad','general'),
 ('undecided','What''s my genre?','For the undecided and unsure.','faSignsPost','genres')
 ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description, icon = EXCLUDED.icon, category = EXCLUDED.category;
