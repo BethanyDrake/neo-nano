@@ -26,9 +26,9 @@ const addCategories = async () => {
 
 const addTopics= async () => {
   await sql`insert into topics (id, title, description, icon, category) values 
-('grammar','Grammar','A place for debating the proper use of a semicolon, or finally figure out what a past participle is.','faSpellCheck', 'craft-of-writing'),
+('grammar','Grammar','A place for debating the proper use of a semicolon, or to finally figure out what a past participle is.','faSpellCheck', 'craft-of-writing'),
 ('voice','Voice','It''s not about what''s right, it''s about what sounds good.','faMusic', 'craft-of-writing'),
-('dialogue','Dialogue','"Dialogue is easy,"" they said.','faComments','craft-of-writing'),
+('dialogue','Dialogue','"Dialogue is easy," they said.','faComments','craft-of-writing'),
 ('structure-and-pacing','Structure/Pacing','How the different parts of a novel should fit together.', 'faFolderTree' ,'craft-of-writing'),
 ('description','Description','Y''know, what things look like.','faPalette', 'craft-of-writing'),
 ('questions','Questions','How do I...? What should I...? Why can''t I...?','faQuestion', 'general'),
