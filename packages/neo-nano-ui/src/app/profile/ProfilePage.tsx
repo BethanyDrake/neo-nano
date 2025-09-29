@@ -2,16 +2,15 @@
 
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { WordsPerDay } from '@/lib/charts/WordsPerDay'
+import { useProfileContext } from '@/lib/context/ProfileContext'
 import { Goal } from '@/lib/forum.types'
 import { Centered, Row } from '@/lib/layout'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
-import { useProfileContext } from '@/lib/context/ProfileContext'
-import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
 import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { isSameDay } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import classNames from './profile.module.css'
 
 type GoalProps = {
@@ -27,9 +26,7 @@ const hasJoinedCurrentChallenge = (goals: Goal[]) => {
 }
 
 const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
-  'use client'
   const [records, setRecords] = useState<number[]>(initialRecords)
-
   const onCancel = () => {
     setRecords(initialRecords)
   }
@@ -52,13 +49,8 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
 }
 
 export const ProfilePageInner = () => {
-  const joinChallenge = () => joinCurrentChallenge().then(setGoals)
-  const [goals, setGoals] = useState<Goal[]>([])
-  const { profile } = useProfileContext()
-
-  useEffect(() => {
-    getMyGoals().then(setGoals)
-  }, [])
+  const { profile, goals, setGoals } = useProfileContext()
+    const joinChallenge = () => joinCurrentChallenge().then(setGoals)
 
   return (
     <div style={{ padding: '24px' }}>
