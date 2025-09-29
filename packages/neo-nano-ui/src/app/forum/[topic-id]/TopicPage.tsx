@@ -1,23 +1,23 @@
 "use client"
 
-import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
+import { useTopicContext } from '@/lib/context/TopicContext'
 import formClasses from '@/lib/form.module.css'
 import { Category } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
+import { THREADS_PER_PAGE } from '@/lib/misc'
+import RichTextEditor from '@/lib/richText/RichTextEditor'
+import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
+import Pagination from 'rc-pagination'
+import 'rc-pagination/assets/index.css'
 import { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import RichTextEditor from '@/lib/richText/RichTextEditor'
-import { useTopicContext } from '@/lib/context/TopicContext'
-import Pagination from 'rc-pagination'
-import { THREADS_PER_PAGE } from '@/lib/misc'
-import 'rc-pagination/assets/index.css'
 
 type Inputs = {
   title: string
@@ -95,6 +95,7 @@ const TopicPage = ({
   const onCreateThread = useCallback(async () => {
     setCreateThreadFormIsOpen(false)
   }, [])
+  const pathname = usePathname()
 
   const breadcrumbItems = [{href: '/forum', text: category.title}, {text: topic.title} ]
   return (
@@ -112,7 +113,7 @@ const TopicPage = ({
       </Row>
         <p>{topic.description}</p>
         <ExtendableIconButton icon={faAdd} onClick={() => 
-          isLoggedIn? setCreateThreadFormIsOpen(true) : redirect('/auth/login')
+          isLoggedIn? setCreateThreadFormIsOpen(true) : redirect(`/auth/login?returnTo=${pathname}`)
         } text="Create Thread" />
         {createThreadFormIsOpen && <CreateThreadForm onSubmit={onCreateThread} />}
         <Column>

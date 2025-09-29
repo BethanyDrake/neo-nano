@@ -1,9 +1,9 @@
 'use client'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
-import { CommentCard } from '@/lib/CommentCard'
-import { useThreadContext } from '@/lib/context/ThreadContext'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
+import { CommentCard } from '@/lib/CommentCard'
+import { useThreadContext } from '@/lib/context/ThreadContext'
 import formClasses from '@/lib/form.module.css'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
@@ -11,12 +11,11 @@ import { COMMENTS_PER_PAGE } from '@/lib/misc'
 import RichTextEditor from '@/lib/richText/RichTextEditor'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import { redirect } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
 
 type Inputs = {
   commentText: string
@@ -46,7 +45,9 @@ const AddCommentForm = () => {
         {errorText && <span>{errorText}</span>}
         <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
 
-        <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>Post!</BasicButton>
+        <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+          Post!
+        </BasicButton>
       </Column>
     </form>
   )
@@ -70,6 +71,8 @@ export const ThreadPage = ({
     { href: `/forum/${topic.id}`, text: topic.title },
     { text: thread.title },
   ]
+
+  const pathname = usePathname()
 
   const { commentsData, onPageChange, currentPage, totalComments, isLoading } = useThreadContext()
   return (
@@ -104,7 +107,7 @@ export const ThreadPage = ({
 
         <ExtendableIconButton
           icon={faAdd}
-          onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect('/auth/login'))}
+          onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect(`/auth/login?returnTo=${pathname}`))}
           text="Add Comment"
         />
         {createThreadFormIsOpen && <AddCommentForm />}
