@@ -23,6 +23,7 @@ describe('<ProfilePage />', () => {
     jest.mocked(getMyProfile).mockResolvedValue({
       displayName: 'Some Name',
       id: '1',
+      role: 'user'
     })
     jest.mocked(getMyGoals).mockResolvedValue([
         {
@@ -38,5 +39,29 @@ describe('<ProfilePage />', () => {
     const { findByText } = render(await ProfilePage())
     expect(await findByText('Some Name')).toBeInTheDocument()
     expect(await findByText('Goal Title')).toBeInTheDocument()
+  })
+
+  test('invites users without a goal to join the challenge', async () => {
+    jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    jest.mocked(getMyProfile).mockResolvedValue({
+      displayName: 'Some Name',
+      id: '1',
+      role: 'user'
+    })
+    jest.mocked(getMyGoals).mockResolvedValue([ ])
+    const { findByRole } = render(await ProfilePage())
+    expect(await findByRole('button', {name: 'Join the challenge'})).toBeInTheDocument()
+  })
+
+  test('moderators have a label on their profile', async () => {
+    jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    jest.mocked(getMyProfile).mockResolvedValue({
+      displayName: 'Some Name',
+      id: '1',
+      role: 'moderator'
+    })
+    jest.mocked(getMyGoals).mockResolvedValue([ ])
+    const { findByText } = render(await ProfilePage())
+    expect(await findByText('Moderator')).toBeInTheDocument()
   })
 })

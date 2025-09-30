@@ -12,7 +12,7 @@ export const getMyProfile = async (): Promise<Profile> => {
 
   const myProfile = await getSingle(
     'user',
-    sql`SELECT id, display_name, about_me FROM users 
+    sql`SELECT id, display_name, about_me, role FROM users 
     WHERE external_id=${external_id}
     LIMIT 1`,
   )
