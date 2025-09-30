@@ -50,7 +50,7 @@ const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals } = useProfileContext()
-    const joinChallenge = () => joinCurrentChallenge().then(setGoals)
+  const joinChallenge = () => joinCurrentChallenge().then(setGoals)
 
   return (
     <div style={{ padding: '24px' }}>
@@ -58,6 +58,7 @@ export const ProfilePageInner = () => {
         <h1>My Profile</h1> <EditProfileModal />
       </Row>
       <h2>{profile.displayName}</h2>
+      {profile.role === 'moderator' && <p>Moderator</p>}
       <p>{profile.aboutMe}</p>
       {!hasJoinedCurrentChallenge(goals) && (
         <BasicButton buttonProps={{ onClick: joinChallenge }}>Join the challenge</BasicButton>

@@ -11,7 +11,7 @@ const ProfileContext = createContext<{
   setGoals: (goals: Goal[]) => void
 }>({
   updateProfile: () => Promise.resolve(),
-  profile: { id: '', displayName: '' },
+  profile: { id: '', displayName: '', role: 'user' },
   isLoading: false,
   goals: [],
   setGoals: () => Promise.resolve(),

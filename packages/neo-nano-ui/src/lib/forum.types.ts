@@ -30,6 +30,7 @@ export type Profile = {
     id:string
     displayName: string
     aboutMe?: string | null
+    role: 'user' | 'moderator'
 }
 
 export type Goal = {

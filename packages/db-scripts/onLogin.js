@@ -7,13 +7,13 @@ const { neon } = require('@neondatabase/serverless');
 * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
 */
 exports.onExecutePostLogin = async (event, api) => {
-  if (!event.session) throw new Error("session is not defined")
-
+  console.log("onExecutePostLogin")
   const databaseUrl = event.secrets["DATABASE_URL"]
   if (!databaseUrl) throw new Error("DATABASE_URL is not defined")
   const sql = neon(databaseUrl)
   const external_id = event.user.user_id
   const display_name = event.user.nickname ?? 'anonymous'
+  console.log({external_id, display_name})
 
   const existingUsers = await sql`select id from users where external_id=${external_id} limit 1`
 
@@ -28,7 +28,10 @@ exports.onExecutePostLogin = async (event, api) => {
     userId= existingUsers[0].id
   }
 
-  api.user.setAppMetadata('userId', userId)
+  
+  api.user.setUserMetadata('user_id', userId)
+  console.log({userId})
+  console.log("onExecutePostLogin DONE")
 };
 
 
