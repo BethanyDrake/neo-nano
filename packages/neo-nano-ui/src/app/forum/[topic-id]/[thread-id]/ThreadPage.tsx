@@ -2,7 +2,7 @@
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
-import { CommentCard } from '@/lib/CommentCard'
+import { CommentCard } from '@/lib/commentCards/CommentCard'
 import { useThreadContext } from '@/lib/context/ThreadContext'
 import formClasses from '@/lib/form.module.css'
 import { Category, Thread, Topic } from '@/lib/forum.types'

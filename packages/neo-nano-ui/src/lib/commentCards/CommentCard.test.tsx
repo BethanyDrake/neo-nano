@@ -1,8 +1,8 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { CommentCard } from './CommentCard'
-import { flagComment } from './serverFunctions/moderation/flagComment'
+import { flagComment } from '@/lib/serverFunctions/moderation/flagComment'
 
-jest.mock('./serverFunctions/moderation/flagComment')
+jest.mock('@/lib/serverFunctions/moderation/flagComment')
 
 describe('<CommentCard />', () => {
   it('renders', async () => {

@@ -7,6 +7,7 @@ import { NavBar } from '@/lib/NavBar'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { getIsModerator } from '@/lib/serverFunctions/moderation/getIsModerator';
 config.autoAddCss = false;  
 
 export const metadata: Metadata = {
@@ -20,11 +21,12 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const session = await auth0.getSession()
+  const isModerator = await getIsModerator()
   const isLoggedIn = !!session
   return (
     <html lang="en">
       <body>
-        <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} />
+        <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} isModerator={isModerator} />
         <main>{children}</main>
       </body>
     </html>

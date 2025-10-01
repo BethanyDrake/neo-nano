@@ -3,6 +3,7 @@ import styles from './NavBar.module.css'
 import { ClientSideOnly } from './ClientSideOnly'
 import { BasicButton } from './buttons/BasicButton';
 import { Row } from './layout';
+import { NavMenu } from './NavMenu';
 
 const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoading: boolean }) => {
   if (isLoading) return null
@@ -33,14 +34,11 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
   )
 }
 
-export const NavBar = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoading: boolean }) => {
+export const NavBar = ({ isLoggedIn, isLoading, isModerator }: { isLoggedIn: boolean; isLoading: boolean, isModerator: boolean }) => {
 
   return (
     <nav className={styles.nav}>
-      <Link href="/" className={styles['nav-header']}>
-        Home
-      </Link>
-
+      <NavMenu isModerator={isModerator}/>
       <ClientSideOnly>
         <NavBarButtons isLoggedIn={isLoggedIn} isLoading={isLoading} />
       </ClientSideOnly>
