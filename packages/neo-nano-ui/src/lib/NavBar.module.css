@@ -22,3 +22,57 @@
   }
   
 }
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  box-shadow: 0 3px 20px rgb(0 0 0 / 0.2); 
+  min-width: 200px;
+  border-radius: 4px;
+  margin: 16px;
+  margin-top: 0;
+  &:focus-visible {
+     outline: none;
+     border: 1px solid var(--primary-light);
+  }
+}
+
+.menu-item {
+  position: relative;
+  z-index: 501;
+  padding: 16px 24px;
+  background-color: white;
+  font-weight: bold;
+
+  
+  color: black;
+  text-decoration: none;
+  
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--grey-light);
+  }
+ 
+
+  &:hover {
+     background-color: var(--primary-light)
+  }
+}
+
+.nav-bar-button {
+    background-color: transparent;
+    padding: 0.5em;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    &:hover {
+      background-color: var(--primary-light);
+    }
+
+    &:active {
+        background-color: var(--primary-light);
+    }
+}

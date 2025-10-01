@@ -14,6 +14,7 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^0.2.3",
+    "@headlessui/react": "^2.2.9",
     "@neondatabase/serverless": "^1.0.1",
     "axios": "^1.11.0",
     "camelcase-keys": "^9.1.3",
