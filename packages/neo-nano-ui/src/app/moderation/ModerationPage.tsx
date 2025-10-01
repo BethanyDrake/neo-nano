@@ -1,17 +1,10 @@
 "use client"
-import RichTextDisplay from "@/lib/richText/RichTextDisplay"
+import { FlaggedCommentCard } from "@/lib/commentCards/FlaggedCommentCard"
 import { CommentFlag } from "@/lib/serverFunctions/moderation/getFlaggedComments"
-import cardStyles from '@/lib/CommentCard.module.css'
 
 export const ModerationPage = ({flaggedComments}: {flaggedComments:CommentFlag[]}) => {
-
-  console.log(flaggedComments)
   return <>{
-    flaggedComments.map(({comment, flag}) => (<div  className={cardStyles['card']} key={comment.id} >
-        <RichTextDisplay value={comment.richText} />
-   <div><span>Reason:</span> <span>{flag.reason}</span></div>
-         <div><span>Details:</span> <span>{flag.details || '(none)'}</span></div>
-      </div>
+    flaggedComments.map(({comment, flag}) => (<FlaggedCommentCard key={`${comment.id}-${flag.id}`} comment={comment} flag={flag} />
       ))}</>
 }
 

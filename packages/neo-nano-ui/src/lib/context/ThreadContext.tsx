@@ -1,6 +1,6 @@
 'use client'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
-import { CommentCardDataEntry } from '../CommentCard'
+import { CommentCardDataEntry } from '../commentCards/CommentCard'
 import { getThreadWithComments } from '../serverFunctions/forum/getThreadWithComments'
 import { addThreadComment } from '../serverFunctions/forum/addThreadComment'
 import { COMMENTS_PER_PAGE } from '../misc'

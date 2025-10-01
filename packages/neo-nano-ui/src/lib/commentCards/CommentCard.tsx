@@ -1,12 +1,12 @@
 
 "use client"
 import dynamic from 'next/dynamic'
-import { ClientSideOnly } from './ClientSideOnly'
+import { ClientSideOnly } from '../ClientSideOnly'
 import classNames from './CommentCard.module.css'
-import { Comment, Profile } from './forum.types'
-import { Row } from './layout'
-import { ReportCommentModal } from './modals/ReportCommentModal'
-const RichTextDisplay = dynamic(() => import('./richText/RichTextDisplay'), {
+import { Comment, Profile } from '../forum.types'
+import { Row } from '../layout'
+import { ReportCommentModal } from '../modals/ReportCommentModal'
+const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
 

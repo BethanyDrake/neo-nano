@@ -12,3 +12,14 @@
     color: var(--warning-dark);
     font-style: italic;
 }
+
+.label {
+    font-weight: bold;
+}
+
+.angryPaper {
+   background-color: rgba(0, 0, 0, 0.1);
+   padding: 8px;
+   border-radius: 4px;
+   margin: 8px;
+}
