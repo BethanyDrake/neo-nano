@@ -1,11 +1,16 @@
+import { ClientSideOnly } from "@/lib/ClientSideOnly"
+import { getFlaggedComments } from "@/lib/serverFunctions/moderation/getFlaggedComments"
 import { getIsModerator } from "@/lib/serverFunctions/moderation/getIsModerator"
+import {ModerationPage} from "./ModerationPage"
 
-export const ModeratorPage = async () => {
+const Page = async () => {
   const isModerator = await getIsModerator()
+  const flaggedComments = await getFlaggedComments()
   if (!isModerator) return <div>
     Access Denied
   </div>
-  return <div>Secret Moderator Page</div>
+  console.log(flaggedComments)
+  return <ClientSideOnly><ModerationPage flaggedComments={flaggedComments} /></ClientSideOnly>
 }
 
-export default ModeratorPage
+export default Page
