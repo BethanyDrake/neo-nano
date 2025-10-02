@@ -19,7 +19,7 @@ const ChallengeBody = () => {
     '50,000 words',
     '30 days',
     'A full, completed draft of a new novel',
-    'No editting, no second guessing, no hesitation',
+    'No editing, no second guessing, no hesitation',
     'Get. It. Done!',
   ]
 
@@ -41,8 +41,22 @@ const ChallengeSection = () => {
 const HistorySection = () => {
   const title = 'History'
   const body =
-    "Previously, 'National Novel Writing Month' (NaNoWriMo) was a world-wide writing challenge run by a non-profit organisation. The official website and forumns shut down in March 2025, but the challenge lives on."
+    "Previously, 'National Novel Writing Month' (NaNoWriMo) was a world-wide writing challenge run by a non-profit organisation. The official website and forums shut down in March 2025, but the challenge lives on."
   return <Section title={title} body={<p>{body}</p>} />
+}
+
+const ContibutionSection = () => {
+  const title = 'How to Contribute'
+//   const body =
+//     "This website is open source, and open to community contributions. For programmers wanting to pitch in, please head over to 
+    
+// "
+  return <Section 
+    title={title} 
+    body={<>
+      <p>This website is open source, and open to community contributions. For programmers wanting to pitch in, please head over to <Link href='https://github.com/BethanyDrake/neo-nano'>github</Link> and check out the readme for further details. For everyone else, take a look at the <Link href="https://github.com/BethanyDrake/neo-nano/issues">issues tab</Link> to see upcoming features, make formal bug reports, and discuss future development. Not every suggestion will be implemented, but all discussion is valued and helps to make this project the best version of itself.</p>
+      
+      </>} />
 }
 
 export default async function Home() {
@@ -56,6 +70,7 @@ export default async function Home() {
         <Column gap="3em">
           <HistorySection />
           <ChallengeSection />
+          <ContibutionSection/>
 
           <section>
             <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
