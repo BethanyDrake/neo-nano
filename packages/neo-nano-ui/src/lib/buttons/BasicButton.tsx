@@ -1,4 +1,6 @@
-import { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from "react"
+ "use client"
+
+import { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren, useCallback, useState } from "react"
 import classes from './BasicButton.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner"
@@ -8,3 +10,16 @@ export const BasicButton = ({buttonProps, children, variant, isLoading}: PropsWi
     
     return <button className={[classes["basic-button"], classes[variant ?? 'basic']].join(' ')}{...buttonProps}>{content}</button>
 }
+
+/**Button that handles its own loading state */
+export const LoadingButton = ({onClick, children, variant}: PropsWithChildren & {variant?: 'angry', onClick: () => Promise<unknown>} ) => {
+
+    const [isLoading, setIsLoading] = useState(false)
+    
+    const _onClick = useCallback(() => {
+        setIsLoading(true)
+        onClick().finally(() => setIsLoading(false))
+    }, [onClick])
+    
+    return <BasicButton buttonProps={{onClick: _onClick}} isLoading={isLoading} variant={variant}>{children}</BasicButton>
+   }

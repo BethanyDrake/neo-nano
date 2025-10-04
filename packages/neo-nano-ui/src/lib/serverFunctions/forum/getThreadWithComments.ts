@@ -14,6 +14,18 @@ export type ReturnType = {
   topic: Topic
 }
 
+// @ts-expect-error db mapper
+const mapFlag = ({ id, comment, reported_by, created_at, reason, details, reviewed_by, review_outcome }) => ({
+  id,
+  comment,
+  reportedBy: reported_by,
+  createdAt: created_at,
+  reason,
+  details,
+  reviewedBy: reviewed_by,
+  reviewOutcome: review_outcome,
+})
+
 export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   const sql = getQueryFunction()
   const _comments =
@@ -27,10 +39,12 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   OFFSET ${(currentPage - 1) * COMMENTS_PER_PAGE}
   `
 
-  const totalComments = parseInt((
-    await sql`SELECT count(comments.id), pg_typeof(count(comments.id)) FROM comments 
+  const totalComments = parseInt(
+    (
+      await sql`SELECT count(comments.id), pg_typeof(count(comments.id)) FROM comments 
   WHERE thread=${threadId}`
-  )[0].count)
+    )[0].count,
+  )
 
   const threadDetails = await getSingle(
     'thread',
@@ -44,19 +58,21 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   )
   const category = await getSingle('category', sql`SELECT id, title FROM categories where id=${topic.category} LIMIT 1`)
 
-  const commentCardDataEntries = _comments.map(({created_at, comment_text, rich_text, author, id, display_name, flags }) => ({
-    comment: {
-      text: comment_text,
-      richText: rich_text,
-      createdAt: created_at,
-      id,
-    },
-    author: {
-      id: author,
-      displayName: display_name,
-    },
-    flags,
-  }))
+  const commentCardDataEntries = _comments.map(
+    ({ created_at, comment_text, rich_text, author, id, display_name, flags }) => ({
+      comment: {
+        text: comment_text,
+        richText: rich_text,
+        createdAt: created_at,
+        id,
+      },
+      author: {
+        id: author,
+        displayName: display_name,
+      },
+      flags: flags.map(mapFlag),
+    }),
+  )
 
   return {
     totalComments,

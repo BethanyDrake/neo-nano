@@ -13,6 +13,11 @@
     font-style: italic;
 }
 
+.confirmedInnapropriateMessage {
+    color: var(--angry-dark);
+    font-style: italic;
+}
+
 .label {
     font-weight: bold;
 }

@@ -3,7 +3,6 @@ import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getThreadWithComments } from './getThreadWithComments'
 jest.mock('../_utils/getQueryFunction')
 
-
 const someDate = new Date()
 describe('getThreadWithComments', () => {
   test('comment with no flags', async () => {
