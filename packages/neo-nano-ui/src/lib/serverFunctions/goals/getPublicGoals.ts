@@ -1,0 +1,13 @@
+'use server'
+import camelcaseKeys from 'camelcase-keys'
+import { getQueryFunction } from '../_utils/getQueryFunction'
+import { Goal } from '@/lib/forum.types'
+
+export const getPublicGoals = async (userId: string) => {
+  const sql = getQueryFunction()
+  const goals = await sql`SELECT id, title, target, start_date, length_days, records
+    FROM goals
+    WHERE user_id=${userId}
+    ORDER BY start_date DESC`
+  return camelcaseKeys(goals) as Goal[]
+}

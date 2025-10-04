@@ -1,3 +1,5 @@
+'use client'
+
 import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
 type Props = {
