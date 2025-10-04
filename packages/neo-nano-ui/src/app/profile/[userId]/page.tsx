@@ -1,12 +1,10 @@
 import { auth0 } from '@/lib/auth0'
-import { redirect } from 'next/navigation'
 import { Goal, Profile } from '@/lib/forum.types'
-import { WordsPerDay } from '@/lib/charts/WordsPerDay'
+import { PublicGoalSection } from '@/lib/goalTracker/PublicGoalSection'
 import { Centered } from '@/lib/layout'
-import profileClassNames from '../profile.module.css'
-import { getPublicProfile } from '@/lib/serverFunctions/profile/publicProfile'
 import { getPublicGoals } from '@/lib/serverFunctions/goals/getPublicGoals'
-import { ClientSideOnly } from '@/lib/ClientSideOnly'
+import { getPublicProfile } from '@/lib/serverFunctions/profile/publicProfile'
+import { redirect } from 'next/navigation'
 const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string }> }) => {
   const userId = (await params).userId
   const session = await auth0.getSession()
@@ -25,17 +23,8 @@ const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string 
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p>{profile.aboutMe}</p>
-      {goals.map(({ id, title, records }) => (
-        <div key={id} style={{ padding: '16px' }}>
-          <Centered>
-            <h2>{title}</h2>
-          </Centered>
-          <ClientSideOnly>
-            <div className={profileClassNames['goal-row']}>
-              <WordsPerDay title={title} wordCountPerDay={records} />
-            </div>
-          </ClientSideOnly>
-        </div>
+      {goals.map((goal) => (
+        <PublicGoalSection key={goal.id} goal={goal} />
       ))}
     </div>
   )

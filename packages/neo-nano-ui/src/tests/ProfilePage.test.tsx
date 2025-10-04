@@ -8,7 +8,7 @@ import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 
 jest.mock('@/lib/auth0')
 jest.mock('next/navigation')
-jest.mock('@/lib/UpdateWordCount')
+jest.mock('@/lib/goalTracker/UpdateWordCount')
 jest.mock('@/lib/serverFunctions/profile/getMyProfile')
 jest.mock('@/lib/serverFunctions/goals/getMyGoals')
 describe('<ProfilePage />', () => {

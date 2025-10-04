@@ -10,5 +10,5 @@ export const ExtendableIconButton = ({text, onClick, icon, isLoading}: {text:str
 
 export const SmallIconButton = ({text, onClick, icon, isLoading}: {text:string, isLoading?: boolean, variant?: 'secondary'} & Pick<DOMAttributes<HTMLButtonElement>, 'onClick'> & Pick<FontAwesomeIconProps, 'icon'>) => {
     if (isLoading) return <button className={styles["small-icon-button"]}><FontAwesomeIcon spin icon={faSpinner} /></button>
-    return <button className={styles["small-icon-button"]} onClick={onClick}><FontAwesomeIcon icon={icon} /><p className={styles['tooltip']}>{text}</p></button>
+    return <button aria-labelledby="tooltip-text" className={styles["small-icon-button"]} onClick={onClick}><FontAwesomeIcon icon={icon} /><p id="tooltip-text" className={styles['tooltip']}>{text}</p></button>
 }

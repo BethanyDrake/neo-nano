@@ -2,8 +2,8 @@ import { differenceInCalendarDays } from 'date-fns'
 import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-import { BasicButton } from './buttons/BasicButton'
-import { Column, Row } from './layout'
+import { BasicButton } from '../buttons/BasicButton'
+import { Column, Row } from '../layout'
 import './UpdateWordCount.css'
 
 const isSameDay = (a: Date, b: Date) => {
