@@ -50,5 +50,7 @@ export type Flag = {
     reportedBy: string,
     createdAt: Date,
     details: string,
-    comment: string
+    comment: string,
+    reviewedBy?: string,
+    reviewOutcome?: 'confirmed'| 'overruled'
 }
