@@ -5,6 +5,7 @@ import classNames from './CommentCard.module.css'
 import { Comment, Flag, Profile } from '../forum.types'
 import { Row } from '../layout'
 import { ReportCommentModal } from '../modals/ReportCommentModal'
+import Link from 'next/link'
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
@@ -40,7 +41,7 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
   return (
     <div className={classNames.card}>
       <Row justifyContent="space-between">
-        <h4>{author.displayName}:</h4>
+       <Link className={classNames.authorLink} href={`/profile/${author.id}`}>{author.displayName}:</Link>
         <ReportCommentModal comment={comment} />
       </Row>
 
