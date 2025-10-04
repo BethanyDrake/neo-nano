@@ -33,7 +33,8 @@ describe('<ProfilePage />', () => {
           userId: '2',
           target: 50000,
           startDate: '2025-11-01',
-          lengthDays: 30
+          lengthDays: 30,
+          visibility: 'private'
         },
       ])
     const { findByText } = render(await ProfilePage())

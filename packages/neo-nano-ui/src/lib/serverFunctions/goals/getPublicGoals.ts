@@ -8,6 +8,7 @@ export const getPublicGoals = async (userId: string) => {
   const goals = await sql`SELECT id, title, target, start_date, length_days, records
     FROM goals
     WHERE user_id=${userId}
+    AND visibility='public'
     ORDER BY start_date DESC`
   return camelcaseKeys(goals) as Goal[]
 }

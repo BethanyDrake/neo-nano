@@ -33,6 +33,8 @@ export type Profile = {
     role: 'user' | 'moderator'
 }
 
+export type Visibility ='private' | 'public'
+
 export type Goal = {
     id:string
     title: string
@@ -42,6 +44,7 @@ export type Goal = {
     records: number[]
     userId: string
     target: number
+    visibility: Visibility
 }
 
 export type Flag = {
