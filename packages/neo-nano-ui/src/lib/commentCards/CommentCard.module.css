@@ -28,3 +28,12 @@
    border-radius: 4px;
    margin: 8px;
 }
+
+.authorLink {
+    font-weight: bold;
+    color: var(--off-black);
+    text-decoration: none;
+    &:hover {
+        color: var(--primary-vibrant)
+    }
+}

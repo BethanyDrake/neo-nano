@@ -8,7 +8,7 @@ import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 
 jest.mock('@/lib/auth0')
 jest.mock('next/navigation')
-jest.mock('@/lib/UpdateWordCount')
+jest.mock('@/lib/goalTracker/UpdateWordCount')
 jest.mock('@/lib/serverFunctions/profile/getMyProfile')
 jest.mock('@/lib/serverFunctions/goals/getMyGoals')
 describe('<ProfilePage />', () => {
@@ -33,7 +33,8 @@ describe('<ProfilePage />', () => {
           userId: '2',
           target: 50000,
           startDate: '2025-11-01',
-          lengthDays: 30
+          lengthDays: 30,
+          visibility: 'private'
         },
       ])
     const { findByText } = render(await ProfilePage())

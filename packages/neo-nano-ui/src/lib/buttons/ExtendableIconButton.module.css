@@ -1,3 +1,4 @@
+
 .icon-button {
     font-size: 25px;
     max-width: 50px;
@@ -26,5 +27,49 @@
 
     &:hover {
         max-width: 500px;
+        
+    }
+}
+
+
+.small-icon-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 35px;
+    cursor: pointer;
+    background-color: var(--primary-light);
+    border: none;
+    color: white;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+        position: relative;
+
+    .tooltip {
+        background-color: var(--grey-light);
+        min-width: 100px;
+        color: black;
+        visibility: hidden;
+        position: absolute;
+        z-index: 1; 
+    }
+
+    &:active {
+     box-shadow: none
+    }
+
+    svg {
+        padding: 0 2px;
+    }
+
+    span {
+        padding-right: 20px;
+    }
+
+    &:hover {
+        max-width: 500px;
+
+        .tooltip {
+
+            visibility: visible;
+        }
     }
 }

@@ -1,51 +1,17 @@
-'use client'
-
+"use client"
 import { BasicButton } from '@/lib/buttons/BasicButton'
-import { WordsPerDay } from '@/lib/charts/WordsPerDay'
 import { useProfileContext } from '@/lib/context/ProfileContext'
 import { Goal } from '@/lib/forum.types'
-import { Centered, Row } from '@/lib/layout'
+import { GoalSection } from '@/lib/goalTracker/GoalSection'
+import { Row } from '@/lib/layout'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
-import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
-import { UpdateWordCount } from '@/lib/UpdateWordCount'
 import { isSameDay } from 'date-fns'
-import { useState } from 'react'
-import classNames from './profile.module.css'
-
-type GoalProps = {
-  id: string
-  title: string
-  initialRecords: number[]
-}
 
 const hasJoinedCurrentChallenge = (goals: Goal[]) => {
   return goals.some(({ startDate }) => {
     return isSameDay(startDate, '2025-11-01')
   })
-}
-
-const GoalSection = ({ id, title, initialRecords }: GoalProps) => {
-  const [records, setRecords] = useState<number[]>(initialRecords)
-  const onCancel = () => {
-    setRecords(initialRecords)
-  }
-  const onSave = async () => {
-    await updateGoalProgress({ id, records })
-    console.log('Successfuly updated!')
-  }
-
-  return (
-    <div style={{ padding: '16px' }}>
-      <Centered>
-        <h2>{title}</h2>
-      </Centered>
-      <div className={classNames['goal-row']}>
-        <UpdateWordCount onCancel={onCancel} onSave={onSave} records={records} setRecords={setRecords} />
-        <WordsPerDay title={title} wordCountPerDay={records} />
-      </div>
-    </div>
-  )
 }
 
 export const ProfilePageInner = () => {
@@ -64,8 +30,8 @@ export const ProfilePageInner = () => {
         <BasicButton buttonProps={{ onClick: joinChallenge }}>Join the challenge</BasicButton>
       )}
 
-      {goals.map(({ id, title, records }) => (
-        <GoalSection id={id} key={id} title={title} initialRecords={records} />
+      {goals.map(({ id, title, records, visibility }) => (
+        <GoalSection id={id} key={id} title={title} initialRecords={records} initialVisibility={visibility} />
       ))}
     </div>
   )

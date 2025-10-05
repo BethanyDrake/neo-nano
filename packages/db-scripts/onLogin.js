@@ -19,8 +19,8 @@ exports.onExecutePostLogin = async (event, api) => {
   if (existingUsers.length < 1) {
     const createdUsers = await sql`INSERT INTO users (external_id, display_name) 
       VALUES (${external_id}, ${display_name})
-      returning id
-      ON CONFLICT (external_id) DO NOTHING`
+      ON CONFLICT (external_id) DO NOTHING
+      RETURNING id`
 
     userId=createdUsers[0].id
   } else {
