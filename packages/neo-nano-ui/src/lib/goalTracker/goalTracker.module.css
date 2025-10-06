@@ -8,3 +8,9 @@
     flex-wrap: wrap;
   }
 }
+
+.statCard {
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: var(--shadow-1);
+}
