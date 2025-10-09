@@ -40,7 +40,7 @@
     background-color: var(--primary-light);
     border: none;
     color: white;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    box-shadow: var(--shadow-1);
         position: relative;
 
     .tooltip {

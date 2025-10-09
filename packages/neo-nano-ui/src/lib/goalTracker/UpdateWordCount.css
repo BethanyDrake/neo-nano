@@ -1,7 +1,7 @@
 .react-calendar {
     min-width: 350px;
     border: unset;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    box-shadow: var(--shadow-1);
 }
 
 .react-calendar__tile--active, .react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus {
@@ -11,5 +11,19 @@
     input {
         border: none;
         width: 100%;
+        margin:0;
+        overflow: visible !important; 
+        
     }
+
+    input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
 }

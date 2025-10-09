@@ -1,22 +1,22 @@
 'use client'
 
-import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
-import { Record } from '../forum.types'
+import { Label, Line, LineChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
+import {Record} from '@/lib/forum.types'
 type Props = {
   title: string
-  wordCountPerDay: Record[]
+  cumulativeWordCount: Record[]
 }
 
-export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
-  const data = wordCountPerDay.map((wordCount, i) => ({
+export const CumulativeWords = ({ title, cumulativeWordCount }: Props) => {
+  const data = cumulativeWordCount.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
   }))
 
   return (
       <ResponsiveContainer height={400}>
-        <BarChart
+        <LineChart
           title={title}
           accessibilityLayer
           data={data}
@@ -35,9 +35,9 @@ export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
             <Label value="day" position="bottom" />
           </XAxis>
 
-          <Bar dataKey="wordCount" fill="#1ab394" />
-          <ReferenceLine y={1667} stroke="#5e53a5ff" strokeDasharray="3 3" />
-        </BarChart>
+          <Line dataKey="wordCount" fill="#1ab394" />
+          <ReferenceLine y={50000} stroke="#5e53a5ff" strokeDasharray="3 3" />
+        </LineChart>
       </ResponsiveContainer>
   )
 }
