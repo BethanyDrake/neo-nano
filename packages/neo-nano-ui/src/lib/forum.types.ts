@@ -35,13 +35,14 @@ export type Profile = {
 
 export type Visibility ='private' | 'public'
 
+export type Record = (number | null)
 export type Goal = {
     id:string
     title: string
     // yyyy-MM-dd
     startDate: string
     lengthDays: number
-    records: number[]
+    records: Record[]
     userId: string
     target: number
     visibility: Visibility

@@ -14,3 +14,17 @@
   border-radius: 4px;
   box-shadow: var(--shadow-1);
 }
+
+.switchContainer {
+  border: none;
+  background-color: transparent;
+  padding: 16px;
+}
+
+.inactiveMode {
+  color: val(--grey);
+}
+.activeMode {
+  color: black;
+  font-weight: bold;
+}

@@ -1,10 +1,12 @@
 import { differenceInCalendarDays } from 'date-fns'
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { BasicButton } from '../buttons/BasicButton'
 import { Column, Row } from '../layout'
 import './UpdateWordCount.css'
+import { changeAtIndex, toCumulative } from './recordUtils'
+import { Record } from '../forum.types'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -20,25 +22,36 @@ export const UpdateWordCount = ({
   setRecords,
   onSave,
   onCancel,
+  isCumulative,
 }: {
-  records: number[]
-  setRecords: Dispatch<SetStateAction<number[]>>
+  records: Record[]
+  setRecords: (newRecords: Record[]) => void
   onSave: () => void
   onCancel: () => void
+  isCumulative: boolean
 }) => {
   const [value, onChange] = useState<Value>(startDate)
+  console.log(value)
+  const calendarRef = useRef(null)
+  const cumulativeRecords = useMemo(() => {
+    return toCumulative(records)
+  }, [records])
+  console.log({ records })
+  console.log({ cumulativeRecords })
+  console.log("AAA", calendarRef)
 
   const updateRecord = useCallback(
     (day: number, newValue: number) => {
       if (isNaN(newValue)) return
-      setRecords((previousRecords) => {
-        const head = previousRecords.slice(0, day)
-        const tail = previousRecords.slice(day + 1)
-        const newRecords = [...head, newValue, ...tail]
-        return newRecords
-      })
+      if (isCumulative) {
+        const difference = day === 0 ? newValue : newValue - (cumulativeRecords[day - 1] ?? 0)
+        console.log({difference})
+        setRecords(changeAtIndex(records, day, difference))
+      } else {
+        setRecords(changeAtIndex(records, day, newValue))
+      }
     },
-    [setRecords],
+    [cumulativeRecords, isCumulative, records, setRecords],
   )
 
   const renderTile = useCallback<TileContentFunc>(
@@ -46,15 +59,23 @@ export const UpdateWordCount = ({
       if (view !== 'month' || !(value instanceof Date)) return
       const isSelected = isSameDay(date, value)
       const challengeDay = differenceInCalendarDays(date, startDate)
+      
 
-      const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) =>
+      const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) => {
+        console.log('onSubmit')
         updateRecord(challengeDay, target.valueAsNumber)
+      }
+
+      const wordCount = isCumulative ? cumulativeRecords[challengeDay] : records[challengeDay]
 
       if (view === 'month') {
         if (isSelected) {
+          console.log({ wordCount })
           return (
             <input
               autoFocus
+              defaultValue={wordCount ?? undefined}
+              name={`wordcount for ${date}${isCumulative? ' (cumulative)': ''}`}
               onBlur={onSubmit}
               onKeyDown={({ target, key }) => {
                 if (key === 'Enter') {
@@ -66,10 +87,10 @@ export const UpdateWordCount = ({
           )
         }
 
-        return <div>{records[challengeDay]}</div>
+        return <div>{wordCount}</div>
       }
     },
-    [value, records, updateRecord],
+    [value, updateRecord, isCumulative, cumulativeRecords, records],
   )
 
   return (
@@ -80,6 +101,7 @@ export const UpdateWordCount = ({
         maxDate={new Date('2025-11-30')}
         onChange={onChange}
         value={value}
+        inputRef={calendarRef}
       />
       <Row>
         <BasicButton buttonProps={{ onClick: onSave, style: { width: '50%' } }}>Save</BasicButton>

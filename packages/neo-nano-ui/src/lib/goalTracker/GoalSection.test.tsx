@@ -23,4 +23,9 @@ describe('<GoalSection />', () => {
     expect(setGoalVisibility).toHaveBeenCalledWith({id: 'goal-id', visibility: 'public'})
     expect(await findByRole('button', {name: 'make private'})).toBeInTheDocument()
   })
+
+    test('toggle cumulative/perday', async () => {
+    const {getByRole} = render(<GoalSection id='goal-id' initialRecords={[]} initialVisibility="private" title="Goal Title"/>)
+    fireEvent.click(getByRole('switch', {name: 'Words Per Day • Cumulative'}))
+  })
 })
