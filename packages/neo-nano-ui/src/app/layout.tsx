@@ -8,6 +8,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { getIsModerator } from '@/lib/serverFunctions/moderation/getIsModerator';
+import { GoogleTagManager } from '@next/third-parties/google'
 config.autoAddCss = false;  
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default async function RootLayout({
   const isLoggedIn = !!session
   return (
     <html lang="en">
+      <GoogleTagManager gtmId="AW-17636227789" />
       <body>
         <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} isModerator={isModerator} />
         <main>{children}</main>
