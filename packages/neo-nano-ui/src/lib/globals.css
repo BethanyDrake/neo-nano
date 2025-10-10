@@ -1,13 +1,13 @@
 :root {
-  --primary-light: #C0E5C8;
-  --primary-vibrant: #1ab394;
-  --primary-dark: #526565;
+  --primary-light: #e5c0df;
+  --primary-vibrant: #9418b0;
+  --primary-dark: #3d0340;
   --off-black: #16302b;
   --angry-light: #c59a9a;
   --angry-vibrant: #db2e2e;
   --angry-dark: #b3401a;
   --grey-light: #f1f1f1;
-  --grey-dark: #646262;
+  --grey-dark: #646264;
   --warning-dark: #ac7e33;
 
   --shadow-1: 0 3px 10px rgb(0 0 0 / 0.2);
