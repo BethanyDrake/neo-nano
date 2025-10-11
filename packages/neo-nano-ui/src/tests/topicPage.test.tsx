@@ -7,6 +7,7 @@ import { Category, Topic } from '@/lib/forum.types'
 import { SessionData } from '@auth0/nextjs-auth0/types'
 import { fireEvent, render } from '@testing-library/react'
 import axios from 'axios'
+import { buildThreadSummary } from '@/lib/forum.builders'
 
 jest.spyOn(axios, 'post')
 jest.mock('@/lib/useRequireLogin')
@@ -23,11 +24,12 @@ describe('<TopicPage />', () => {
     jest.mocked(getThreads).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 })
   it('displays existing threads', async () => {
-    jest.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text' }]})
+    jest.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text', totalComments: 7 }]})
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
     expect(getByText('Existing Topic 1')).toBeInTheDocument()
     expect(getByText('First comment text')).toBeInTheDocument()
+        expect(getByText('7')).toBeInTheDocument()
   })
 
   test('breadcumbs: category > topic', async () => {
@@ -62,7 +64,7 @@ describe('<TopicPage />', () => {
     
    jest.mocked(getThreads).mockResolvedValue({
     totalThreads: 1,
-    threadSummaries: [{ id: '1', title: 'New Thread Title', author: 'some-author', text: 'First comment text' }]})
+    threadSummaries: [buildThreadSummary({ id: '1', title: 'New Thread Title'})]})
     fireEvent.click(getByRole('button', { name: 'Post!' }))
 
     expect(await findByText('New Thread Title')).toBeInTheDocument()
