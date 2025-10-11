@@ -5,18 +5,27 @@ import { Column, Row } from './layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 
+export const truncateText = (text: string) => {
+  const targetLength = 100
+    if(text.length <= targetLength) {
+        return text
+    }
+    
+    return `${text.slice(0, targetLength)}...`
+}
+
 export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId: string }) => {
   const { id, title, text, totalComments } = thread
   return (
     <Link href={`/forum/${topicId}/${thread.id}`} className={styles['thread']} key={id}>
         <Row justifyContent='space-between'>
-        <Column style={{ width: '80%'}}>
+        <Column>
       <h3 className={styles['forum-item-title']}>{title}</h3>
-      <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', paddingBottom: '12px' }}>
-        {text}
+      <p style={{ paddingBottom: '12px' }}>
+        {truncateText(text)}
       </p>
       </Column>
-      <div style={{color:'var(--primary-vibrant)', maxWidth: '20%'}}>{totalComments} <FontAwesomeIcon icon={faComment}/></div>
+      <div style={{color:'var(--primary-vibrant)', minWidth: '50px'}}>{totalComments} <FontAwesomeIcon icon={faComment}/></div>
       </Row>
     </Link>
   )
