@@ -2,7 +2,6 @@ import { render } from '@testing-library/react'
 import Forum from '@/app/forum/page'
 import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 
-
 jest.mock('@/lib/serverFunctions/forum/getForumTopics')
 
 describe('<Forum />', () => {
@@ -18,6 +17,8 @@ describe('<Forum />', () => {
             description: 'some descripiton',
             icon: 'faPenFancy',
             category: '1',
+            total_comments: 5,
+            total_threads: 3,
           },
         ],
       },
@@ -27,5 +28,7 @@ describe('<Forum />', () => {
     expect(getByText('Some Category Title')).toBeInTheDocument()
     expect(getByText('Some Topic Title')).toBeInTheDocument()
     expect(getByText('some descripiton')).toBeInTheDocument()
+    expect(getByText('5')).toBeInTheDocument()
+    expect(getByText('3')).toBeInTheDocument()
   })
 })

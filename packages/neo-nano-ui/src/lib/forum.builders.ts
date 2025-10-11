@@ -1,10 +1,23 @@
-export type Comment = {
-    id: string
-    text: string
-    richText: string
-    author: string
-    createdAt: Date
-}
+import { Comment } from "./forum.types"
+import { ThreadSummary } from "./serverFunctions/forum/getThreads"
+
+export const buildComment = (comment: Partial<Comment> = {}) => ({
+    id: '',
+    text: '',
+    richText: '',
+    author: '',
+    createdAt: Date(),
+    ...comment
+})
+
+export const buildThreadSummary = (threadSummary: Partial<ThreadSummary> = {}) => ({
+    id: '',
+    title: '',
+    author: '',
+    totalComments: 0,
+    text: '',
+    ...threadSummary
+})
 
 export type Thread = {
     id: string
@@ -23,6 +36,7 @@ export type Topic = {
 export type Category = {
     id:string
     title: string
+    topics: Topic[]
 }
 
 export type Profile = {

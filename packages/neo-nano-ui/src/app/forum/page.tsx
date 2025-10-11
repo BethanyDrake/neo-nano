@@ -10,16 +10,21 @@ const ForumItem = ({
   title,
   icon,
   description,
+  totalComments,
+  totalThreads
 }: {
   topicId: string
   title: string
   icon: IconProp
   description: string
+  totalThreads: number
+  totalComments: number
 }) => {
   return (
 
     <div className={styles['forum-item']}>
-      <Row justifyContent="left">
+      <Row justifyContent="space-between">
+        <Row>
         <Column>
           <div className={styles['forum-icon']}>
             <FontAwesomeIcon icon={icon} />
@@ -31,6 +36,11 @@ const ForumItem = ({
           </a>
           <div className={styles['forum-sub-title']}>{description}</div>
         </Column>
+        </Row>
+        <div style={{display:'flex', minWidth:'50px', flexDirection:'column', gap:'1em'}}>
+        <div style={{color:'var(--primary-vibrant)'}}>{totalThreads} <FontAwesomeIcon icon={Icons.faWorm}/></div>
+        <div style={{color:'var(--grey-dark)'}}>{totalComments} <FontAwesomeIcon icon={Icons.faComment}/></div>
+        </div>
       </Row>
     </div>
   )
@@ -45,8 +55,15 @@ const Forum = async () => {
         return (
           <div key={id}>
             <h2>{title}</h2>
-            {topics.map(({ id, title, description, icon }) => {
-              return <ForumItem key={id} topicId={id} title={title} description={description} icon={Icons[icon]} />
+            {topics?.map(({ id, title, description, icon, total_threads, total_comments }) => {
+              return <ForumItem 
+                key={id} 
+                topicId={id} 
+                title={title} 
+                description={description} 
+                icon={Icons[icon]} 
+                totalThreads={total_threads}
+                totalComments={total_comments} />
             })}
           </div>
         )

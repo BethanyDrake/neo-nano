@@ -11,8 +11,8 @@ import { THREADS_PER_PAGE } from '@/lib/misc'
 import RichTextEditor from '@/lib/richText/RichTextEditor'
 import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 import styles from '@/lib/styles/forum.module.css'
+import { ThreadCard } from '@/lib/ThreadCard'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import Link from 'next/link'
 import { redirect, usePathname } from 'next/navigation'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
@@ -119,15 +119,7 @@ const TopicPage = ({
         <Column>
           <h2>Threads:</h2>
           {threads &&
-            threads.map((thread: ThreadSummary) => {
-              return (
-                <Link href={`/forum/${topic.id}/${thread.id}`} className={styles['thread']} key={thread.id}>
-                  <h3 className={styles['forum-item-title']}>{thread.title}</h3>
-                  <p style={{whiteSpace: 'nowrap', overflow: 'hidden',
-  textOverflow: 'ellipsis', paddingBottom: '12px'}}>{thread.text}</p>
-                </Link>
-              )
-            })}
+            threads.map((thread: ThreadSummary) => <ThreadCard key={thread.id} topicId={topic.id} thread={thread}/>)}
         </Column>
       </Column>
     </div>
