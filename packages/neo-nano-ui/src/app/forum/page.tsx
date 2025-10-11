@@ -45,7 +45,7 @@ const Forum = async () => {
         return (
           <div key={id}>
             <h2>{title}</h2>
-            {topics.map(({ id, title, description, icon }) => {
+            {topics?.map(({ id, title, description, icon }) => {
               return <ForumItem key={id} topicId={id} title={title} description={description} icon={Icons[icon]} />
             })}
           </div>
