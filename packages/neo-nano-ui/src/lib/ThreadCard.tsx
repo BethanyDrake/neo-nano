@@ -10,13 +10,13 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
   return (
     <Link href={`/forum/${topicId}/${thread.id}`} className={styles['thread']} key={id}>
         <Row justifyContent='space-between'>
-        <Column>
+        <Column style={{ width: '80%'}}>
       <h3 className={styles['forum-item-title']}>{title}</h3>
       <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', paddingBottom: '12px' }}>
         {text}
       </p>
       </Column>
-      <div style={{color:'var(--primary-vibrant)'}}>{totalComments} <FontAwesomeIcon icon={faComment}/></div>
+      <div style={{color:'var(--primary-vibrant)', maxWidth: '20%'}}>{totalComments} <FontAwesomeIcon icon={faComment}/></div>
       </Row>
     </Link>
   )
