@@ -6,6 +6,7 @@ import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { Row } from '@/lib/layout'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { sendGTMEvent } from '@next/third-parties/google'
 import { isSameDay } from 'date-fns'
 
 const hasJoinedCurrentChallenge = (goals: Goal[]) => {
@@ -16,7 +17,11 @@ const hasJoinedCurrentChallenge = (goals: Goal[]) => {
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals } = useProfileContext()
-  const joinChallenge = () => joinCurrentChallenge().then(setGoals)
+  const joinChallenge = () => {
+    sendGTMEvent({ event: 'join_the_challenge' })
+    return joinCurrentChallenge().then(setGoals)
+  }
+
 
   return (
     <div style={{ padding: '24px' }}>
