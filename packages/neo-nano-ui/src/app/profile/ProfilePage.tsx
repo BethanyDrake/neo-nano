@@ -19,7 +19,7 @@ const hasJoinedCurrentChallenge = (goals: Goal[]) => {
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals } = useProfileContext()
   const joinChallenge = () => {
-    sendGTMEvent({ event: 'conversion', value: { 'send_to': 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' }}) 
+    sendGTMEvent({ event: 'sign_up', 'send_to': 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' }) 
     return joinCurrentChallenge().then(setGoals)
   }
 
