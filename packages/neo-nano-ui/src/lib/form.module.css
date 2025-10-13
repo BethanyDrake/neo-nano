@@ -9,6 +9,12 @@
         padding: .6em;
     }
 
+    select {
+        border: 1px solid var(--primary-light);
+        border-radius: 2px;
+        padding: .6em;
+    }
+
     .error {
         color: var(--angry-dark)
     }

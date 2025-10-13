@@ -16,17 +16,28 @@ import { toCumulative } from './recordUtils'
 type GoalProps = {
   id: string
   title: string
-  initialRecords: (number|null)[]
+  initialRecords: (number | null)[]
   initialVisibility: Visibility
+  lengthDays: number
+  startDate: string
+  target: number
 }
 
 const getTotal = (cumulativeRecords: Record[]) => {
-if (cumulativeRecords.length === 0) return 0
-return (cumulativeRecords[cumulativeRecords.length - 1] ?? 0)
+  if (cumulativeRecords.length === 0) return 0
+  return cumulativeRecords[cumulativeRecords.length - 1] ?? 0
 }
 
-export const GoalSection = ({ id, title, initialRecords, initialVisibility }: GoalProps) => {
-  const [records, setRecords] = useState<(number |null)[]>(initialRecords)
+export const GoalSection = ({
+  id,
+  title,
+  target,
+  lengthDays,
+  startDate,
+  initialRecords,
+  initialVisibility,
+}: GoalProps) => {
+  const [records, setRecords] = useState<(number | null)[]>(initialRecords)
   const [isCumulative, setIsCumulative] = useState(false)
   const cumulativeRecords = toCumulative(records)
   const [visibility, setVisibility] = useState<Visibility>(initialVisibility)
@@ -50,10 +61,8 @@ export const GoalSection = ({ id, title, initialRecords, initialVisibility }: Go
       </Row>
 
       <LeftRow>
-        <div className={classNames.statCard}>Goal: {(50000).toLocaleString()}</div>
-        <div className={classNames.statCard}>
-          Total: {getTotal(cumulativeRecords).toLocaleString()} words
-        </div>
+        <div className={classNames.statCard}>Goal: {target.toLocaleString()}</div>
+        <div className={classNames.statCard}>Total: {getTotal(cumulativeRecords).toLocaleString()} words</div>
       </LeftRow>
       <Centered>
         <Switch checked={isCumulative} className={classNames.switchContainer} onChange={setIsCumulative}>
@@ -63,8 +72,21 @@ export const GoalSection = ({ id, title, initialRecords, initialVisibility }: Go
         </Switch>
       </Centered>
       <div className={classNames['goal-row']}>
-        <UpdateWordCount key={`${isCumulative ? 'cumulative' : 'per day'}`} isCumulative={isCumulative} onCancel={onCancel} onSave={onSave} records={records} setRecords={setRecords}/>
-        {isCumulative ? <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords}/> : <WordsPerDay title={title} wordCountPerDay={records} />}
+        <UpdateWordCount
+          key={`${isCumulative ? 'cumulative' : 'per day'}`}
+          isCumulative={isCumulative}
+          onCancel={onCancel}
+          onSave={onSave}
+          records={records}
+          setRecords={setRecords}
+          startDate={startDate}
+          lengthDays={lengthDays}
+        />
+        {isCumulative ? (
+          <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords} lengthDays={lengthDays} />
+        ) : (
+          <WordsPerDay title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} />
+        )}
       </div>
     </div>
   )
