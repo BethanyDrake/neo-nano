@@ -1,10 +1,14 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import { GoalSection } from './GoalSection'
 import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
+import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 
 jest.mock('./UpdateWordCount')
 jest.mock('@/lib/serverFunctions/goals/setGoalVisibility', () => ({
   setGoalVisibility: jest.fn().mockResolvedValue(undefined),
+}))
+jest.mock('@/lib/serverFunctions/goals/deleteGoal', () => ({
+  deleteGoal: jest.fn().mockResolvedValue([]),
 }))
 
 describe('<GoalSection />', () => {
@@ -69,5 +73,24 @@ describe('<GoalSection />', () => {
       />,
     )
     fireEvent.click(getByRole('switch', { name: 'Words Per Day • Cumulative' }))
+  })
+
+  test('delete goal', async () => {
+    const { getByRole } = render(
+      <GoalSection
+        id="goal-id"
+        initialRecords={[]}
+        initialVisibility="private"
+        title="Goal Title"
+        lengthDays={0}
+        startDate={''}
+        target={0}
+      />,
+    )
+    fireEvent.click(getByRole('button', { name: /delete/i }))
+
+    await waitFor(() => {
+      expect(deleteGoal).toHaveBeenCalledWith('goal-id')
+    })
   })
 })

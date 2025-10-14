@@ -3,7 +3,7 @@
 import { UpdateVisibilityButton } from '@/lib/buttons/UpdateVisibilityBotton'
 import { Record, Visibility } from '@/lib/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
-import { Centered, LeftRow, Row } from '@/lib/layout'
+import { Centered, Column, LeftRow, Row } from '@/lib/layout'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
 import { useState } from 'react'
@@ -12,6 +12,10 @@ import { UpdateWordCount } from './UpdateWordCount'
 import { Switch } from '@headlessui/react'
 import { CumulativeWords } from './CumulativeWords'
 import { toCumulative } from './recordUtils'
+import { SmallIconButton } from '../buttons/ExtendableIconButton'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
+import { useProfileContext } from '../context/ProfileContext'
 
 type GoalProps = {
   id: string
@@ -41,6 +45,7 @@ export const GoalSection = ({
   const [isCumulative, setIsCumulative] = useState(false)
   const cumulativeRecords = toCumulative(records)
   const [visibility, setVisibility] = useState<Visibility>(initialVisibility)
+  const {setGoals} = useProfileContext()
   const onCancel = () => {
     setRecords(initialRecords)
   }
@@ -53,11 +58,19 @@ export const GoalSection = ({
     await setGoalVisibility({ id, visibility: newVisibility })
     setVisibility(newVisibility)
   }
+  const _deleteGaol = async () => {
+    deleteGoal(id).then(setGoals)
+  }
 
   return (
-    <div style={{ padding: '16px' }}>
-      <Row alignItems="center">
-        <h2>{title}</h2> <UpdateVisibilityButton onClick={_updateGoalVisibility} visibility={visibility} />
+    <Column style={{ padding: '16px' }}>
+      <Row justifyContent='space-between' style={{padding: '1em 0'}}>
+      <Row alignItems='center'>
+        <h2>{title}</h2>
+        <UpdateVisibilityButton onClick={_updateGoalVisibility} visibility={visibility} />
+        <SmallIconButton id="edit" icon={faEdit} text="edit goal" />
+      </Row>
+       <SmallIconButton id="delete" onClick={_deleteGaol} icon={faTrash} text="delete goal" variant='angry' />
       </Row>
 
       <LeftRow>
@@ -88,6 +101,6 @@ export const GoalSection = ({
           <WordsPerDay title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} />
         )}
       </div>
-    </div>
+    </Column>
   )
 }
