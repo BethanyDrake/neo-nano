@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import classNames from './Modal.module.css'
 import { BasicButton } from '../buttons/BasicButton'
 import { Column, Row } from '../layout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Profile } from '../forum.types'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
@@ -11,17 +11,19 @@ import { useProfileContext } from '../context/ProfileContext'
 
 type Inputs = Pick<Profile, 'displayName' | 'aboutMe'>
 
-const EditProfileForm = ({
-  closeModal,
-}: {
-  closeModal: () => void
-}) => {
+const EditProfileForm = ({ closeModal }: { closeModal: () => void }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>()
-   const {updateProfile, isLoading} = useProfileContext()
+  const { updateProfile, isLoading, profile } = useProfileContext()
+
+  useEffect(() => {
+    setValue('displayName', profile.displayName)
+    setValue('aboutMe', profile.aboutMe)
+  }, [profile, setValue])
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const body = {
@@ -38,25 +40,20 @@ const EditProfileForm = ({
       <Column>
         <h2>Update Profile Details</h2>
         <Row alignItems="center" justifyContent="start">
-          <label htmlFor="displayName">
-            Display Name:
-          </label>
-          <input id="displayName" placeholder="Display Name" {...register('displayName', {required: true})}/>
-         
+          <label htmlFor="displayName">Display Name:</label>
+          <input id="displayName" placeholder="Display Name" {...register('displayName', { required: true })} />
         </Row>
-         {errors.displayName && <span className={formClasses.error}>^Please tell us what to call you.</span>}
-        
+        {errors.displayName && <span className={formClasses.error}>^Please tell us what to call you.</span>}
+
         <label style={{ fontWeight: 'bold' }} htmlFor="aboutMe">
           About me:
         </label>
-        <input
-          id="aboutMe"
-          placeholder="Favourite genres, writing experience, etc."
-          {...register('aboutMe')}
-        />
+        <input id="aboutMe" placeholder="Favourite genres, writing experience, etc." {...register('aboutMe')} />
         <Row>
           <BasicButton buttonProps={{ onClick: closeModal }}>Cancel</BasicButton>{' '}
-          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>Save</BasicButton>
+          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+            Save
+          </BasicButton>
         </Row>
       </Column>
     </form>
@@ -69,7 +66,7 @@ export const EditProfileModal = () => {
     <>
       <ExtendableIconButton onClick={() => setIsOpen(true)} text="edit profile" icon={faEdit} />
       {isOpen && (
-         <div className={classNames['modal']}>
+        <div className={classNames['modal']}>
           <EditProfileForm closeModal={() => setIsOpen(false)} />
         </div>
       )}
