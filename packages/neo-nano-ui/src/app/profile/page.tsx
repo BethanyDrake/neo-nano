@@ -5,6 +5,7 @@ import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { redirect } from 'next/navigation'
 import { ProfilePageInner } from './ProfilePage'
+import { ModalContextProvider } from '@/lib/modals/ModalContext'
 
 const ProfilePage = async () => {
   const session = await auth0.getSession()
@@ -17,9 +18,11 @@ const ProfilePage = async () => {
 
   return (
     <ClientSideOnly>
+      <ModalContextProvider>
       <ProfileContextProvider initialProfile={initalProfile} initialGoals={initialGoals}>
         <ProfilePageInner />
       </ProfileContextProvider>
+      </ModalContextProvider>
     </ClientSideOnly>
   )
 }

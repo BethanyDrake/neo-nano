@@ -51,7 +51,7 @@ describe('<ProfilePage />', () => {
     })
     jest.mocked(getMyGoals).mockResolvedValue([ ])
     const { findByRole } = render(await ProfilePage())
-    expect(await findByRole('button', {name: 'Join the challenge'})).toBeInTheDocument()
+    expect(await findByRole('button', {name: 'Join Novel November'})).toBeInTheDocument()
   })
 
   test('moderators have a label on their profile', async () => {

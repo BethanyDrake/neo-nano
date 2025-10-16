@@ -1,0 +1,6 @@
+.noGoalsContainer {
+    background-color: var(--grey-light);
+    padding: 24px 64px;
+    width: fit-content;
+    margin: 24px auto;
+}

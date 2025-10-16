@@ -1,24 +1,29 @@
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { useProfileContext } from '../context/ProfileContext'
 import { createGoal } from '../serverFunctions/goals/createGoal'
 import { AddEditGoalForm, GoalDetails } from './AddEditGoalForm'
 import classNames from './Modal.module.css'
+import { useModalContext } from './ModalContext'
+
+export const ADD_GOAL_MODAL = 'ADD_GOAL_MODAL'
 
 export const AddGoalModal = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const {openModal, setOpenModal, closeModal} = useModalContext()
+  const isOpen = openModal === ADD_GOAL_MODAL
+ 
   const { setGoals } = useProfileContext()
   const onSave = (goalDetails: GoalDetails) => {
     createGoal(goalDetails).then((response) => {
       setGoals(response)
-      setIsOpen(false)
+      closeModal()
     })
   }
 
+
   return (
     <>
-      <ExtendableIconButton onClick={() => setIsOpen(true)} text="add goal" icon={faAdd} />
+      <ExtendableIconButton onClick={() => setOpenModal(ADD_GOAL_MODAL)} text="add goal" icon={faAdd} />
       {isOpen && (
         <div className={classNames['modal']}>
           <AddEditGoalForm
@@ -30,7 +35,7 @@ export const AddGoalModal = () => {
               visibility: 'private',
               startDate: '2025-11-01',
             }}
-            closeModal={() => setIsOpen(false)}
+            closeModal={close}
             onSave={onSave}
           />
         </div>
