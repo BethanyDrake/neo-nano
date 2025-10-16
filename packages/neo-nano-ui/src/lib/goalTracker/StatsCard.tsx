@@ -14,7 +14,7 @@ export const StatsCard = ({ total, target, title }: { total: number; target: num
         <div>
           <strong>So far:</strong> {total.toLocaleString()} words
         </div>
-        <ProgressBar completed={total} maxCompleted={target} customLabel={`${((total / target) * 100).toFixed(0)}%`} />
+        <ProgressBar bgColor="var(--secondary-vibrant)" completed={total} maxCompleted={target} customLabel={`${((total / target) * 100).toFixed(0)}%`} />
       </Column>
     </div>
   )
