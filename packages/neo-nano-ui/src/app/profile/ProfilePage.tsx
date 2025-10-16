@@ -1,23 +1,18 @@
 'use client'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { useProfileContext } from '@/lib/context/ProfileContext'
-import { Goal } from '@/lib/forum.types'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
-import { Row } from '@/lib/layout'
-import { AddGoalModal } from '@/lib/modals/AddGoalModal'
+import { Column, Row } from '@/lib/layout'
+import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
+import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { sendGTMEvent } from '@next/third-parties/google'
-import { isSameDay } from 'date-fns'
-
-const hasJoinedCurrentChallenge = (goals: Goal[]) => {
-  return goals.some(({ startDate }) => {
-    return isSameDay(startDate, '2025-11-01')
-  })
-}
+import classNames from './profile.module.css'
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals } = useProfileContext()
+  const {setOpenModal} = useModalContext()
   const joinChallenge = () => {
     sendGTMEvent({ event: 'sign_up', send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' })
     return joinCurrentChallenge().then(setGoals)
@@ -31,9 +26,20 @@ export const ProfilePageInner = () => {
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p>{profile.aboutMe}</p>
-      <AddGoalModal />
-      {!hasJoinedCurrentChallenge(goals) && (
-        <BasicButton buttonProps={{ onClick: joinChallenge }}>Join the challenge</BasicButton>
+
+      <Row alignItems="center">
+        <h2>Goals</h2>
+        <AddGoalModal/>
+      </Row>
+
+      {goals.length === 0 && (
+        <div className={classNames.noGoalsContainer}>
+          <Column style={{ alignItems: 'center' }}>
+            <div>No goals so far.</div>
+            <BasicButton buttonProps={{ onClick: joinChallenge }}>Join Novel November</BasicButton> or{' '}
+            <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
+          </Column>
+        </div>
       )}
 
       {goals.map(({ id, title, records, visibility, target, lengthDays, startDate }) => (

@@ -1,12 +1,13 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { createGoal } from '../serverFunctions/goals/createGoal'
 import { AddGoalModal } from './AddGoalModal'
+import { ModalContextProvider } from './ModalContext'
 jest.mock('../serverFunctions/goals/createGoal')
 
 describe('AddGoalModal', () => {
   test('add default goal', async () => {
     jest.mocked(createGoal).mockResolvedValue([])
-    const { getByRole, queryByRole } = render(<AddGoalModal />)
+    const { getByRole, queryByRole } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
     fireEvent.click(getByRole('button', { name: 'add goal' }))
     expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
     fireEvent.click(getByRole('button', { name: 'Save' }))
@@ -25,7 +26,7 @@ describe('AddGoalModal', () => {
 
   test('add custom goal', async () => {
     jest.mocked(createGoal).mockResolvedValue([])
-    const { getByRole, queryByRole, getByLabelText } = render(<AddGoalModal />)
+    const { getByRole, queryByRole, getByLabelText } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
     fireEvent.click(getByRole('button', { name: 'add goal' }))
     expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
 

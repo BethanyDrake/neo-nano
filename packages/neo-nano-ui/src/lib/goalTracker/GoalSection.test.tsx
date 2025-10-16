@@ -40,7 +40,7 @@ describe('<GoalSection />', () => {
       />,
     )
     expect(getByText('Goal Title')).toBeInTheDocument()
-    expect(container).toHaveTextContent(/Total\: 300/)
+    expect(container).toHaveTextContent(/So far\: 300/)
   })
 
   test('toggle privacy', async () => {
