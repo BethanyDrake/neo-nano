@@ -1,4 +1,4 @@
-import { Comment, Profile } from './forum.types'
+import { Comment, Goal, Profile } from './forum.types'
 import { ThreadSummary } from './serverFunctions/forum/getThreads'
 
 export const buildComment = (comment: Partial<Comment> = {}) => ({
@@ -25,4 +25,16 @@ export const buildProfile = (profile: Partial<Profile> = {}): Profile => ({
   aboutMe: undefined,
   role: 'user',
   ...profile,
+})
+
+export const buildGoal = (goal: Partial<Goal> = {}): Goal => ({
+  id: '',
+  title: '',
+  startDate: '',
+  lengthDays: 0,
+  records: [],
+  userId: '',
+  target: 0,
+  visibility: 'private',
+  ...goal
 })

@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { GoalSection } from './GoalSection'
-import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
 import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
+import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
+import { GoalSection } from './GoalSection'
 
 jest.mock('./UpdateWordCount')
 jest.mock('@/lib/serverFunctions/goals/setGoalVisibility', () => ({
@@ -17,7 +17,7 @@ describe('<GoalSection />', () => {
       <GoalSection
         id="1"
         initialRecords={[]}
-        initialVisibility="private"
+        visibility="private"
         title="Goal Title"
         lengthDays={0}
         startDate={''}
@@ -32,7 +32,7 @@ describe('<GoalSection />', () => {
       <GoalSection
         id="1"
         initialRecords={[100, 200]}
-        initialVisibility="private"
+        visibility="private"
         title="Goal Title"
         lengthDays={2}
         startDate={''}
@@ -44,11 +44,11 @@ describe('<GoalSection />', () => {
   })
 
   test('toggle privacy', async () => {
-    const { getByRole, findByRole } = render(
+    const { getByRole, findByRole, rerender } = render(
       <GoalSection
         id="goal-id"
         initialRecords={[]}
-        initialVisibility="private"
+        visibility="private"
         title="Goal Title"
         lengthDays={0}
         startDate={''}
@@ -57,6 +57,15 @@ describe('<GoalSection />', () => {
     )
     fireEvent.click(getByRole('button', { name: 'make public' }))
     expect(setGoalVisibility).toHaveBeenCalledWith({ id: 'goal-id', visibility: 'public' })
+    rerender(<GoalSection
+        id="goal-id"
+        initialRecords={[]}
+        visibility="public"
+        title="Goal Title"
+        lengthDays={0}
+        startDate={''}
+        target={0}
+      />)
     expect(await findByRole('button', { name: 'make private' })).toBeInTheDocument()
   })
 
@@ -65,7 +74,7 @@ describe('<GoalSection />', () => {
       <GoalSection
         id="goal-id"
         initialRecords={[]}
-        initialVisibility="private"
+        visibility="private"
         title="Goal Title"
         lengthDays={0}
         startDate={''}
@@ -80,7 +89,7 @@ describe('<GoalSection />', () => {
       <GoalSection
         id="goal-id"
         initialRecords={[]}
-        initialVisibility="private"
+        visibility="private"
         title="Goal Title"
         lengthDays={0}
         startDate={''}

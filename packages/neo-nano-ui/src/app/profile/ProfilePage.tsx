@@ -42,7 +42,7 @@ export const ProfilePageInner = () => {
           key={id}
           title={title}
           initialRecords={records}
-          initialVisibility={visibility}
+          visibility={visibility}
           lengthDays={lengthDays}
           startDate={startDate}
           target={target}

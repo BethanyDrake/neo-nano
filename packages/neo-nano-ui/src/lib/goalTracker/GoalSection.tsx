@@ -6,22 +6,23 @@ import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered, Column, LeftRow, Row } from '@/lib/layout'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
-import { useState } from 'react'
-import classNames from './goalTracker.module.css'
-import { UpdateWordCount } from './UpdateWordCount'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Switch } from '@headlessui/react'
-import { CumulativeWords } from './CumulativeWords'
-import { toCumulative } from './recordUtils'
+import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 import { useProfileContext } from '../context/ProfileContext'
+import { EditGoalModal } from '../modals/EditGoalModal'
+import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
+import { CumulativeWords } from './CumulativeWords'
+import classNames from './goalTracker.module.css'
+import { toCumulative } from './recordUtils'
+import { UpdateWordCount } from './UpdateWordCount'
 
 type GoalProps = {
   id: string
   title: string
   initialRecords: (number | null)[]
-  initialVisibility: Visibility
+  visibility: Visibility
   lengthDays: number
   startDate: string
   target: number
@@ -39,12 +40,11 @@ export const GoalSection = ({
   lengthDays,
   startDate,
   initialRecords,
-  initialVisibility,
+  visibility,
 }: GoalProps) => {
   const [records, setRecords] = useState<(number | null)[]>(initialRecords)
   const [isCumulative, setIsCumulative] = useState(false)
   const cumulativeRecords = toCumulative(records)
-  const [visibility, setVisibility] = useState<Visibility>(initialVisibility)
   const {setGoals} = useProfileContext()
   const onCancel = () => {
     setRecords(initialRecords)
@@ -55,8 +55,8 @@ export const GoalSection = ({
   }
 
   const _updateGoalVisibility = async (newVisibility: Visibility) => {
-    await setGoalVisibility({ id, visibility: newVisibility })
-    setVisibility(newVisibility)
+    const updatedGoals = await setGoalVisibility({ id, visibility: newVisibility })
+    setGoals(updatedGoals)
   }
   const _deleteGaol = async () => {
     deleteGoal(id).then(setGoals)
@@ -68,7 +68,9 @@ export const GoalSection = ({
       <Row alignItems='center'>
         <h2>{title}</h2>
         <UpdateVisibilityButton onClick={_updateGoalVisibility} visibility={visibility} />
-        <SmallIconButton id="edit" icon={faEdit} text="edit goal" />
+        <EditGoalModal initialGoal={{
+          id, title, target, lengthDays, startDate, visibility
+        }}/>
       </Row>
        <SmallIconButton id="delete" onClick={_deleteGaol} icon={faTrash} text="delete goal" variant='angry' />
       </Row>
