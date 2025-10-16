@@ -10,6 +10,7 @@
 }
 
 .statCard {
+  width: 100%;
   padding: 16px;
   border-radius: 4px;
   box-shadow: var(--shadow-1);
