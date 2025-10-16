@@ -9,7 +9,6 @@ const Page = async () => {
   if (!isModerator) return <div>
     Access Denied
   </div>
-  console.log(flaggedComments)
   return <ClientSideOnly><ModerationPage flaggedComments={flaggedComments} /></ClientSideOnly>
 }
 

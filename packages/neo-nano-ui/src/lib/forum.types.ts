@@ -23,7 +23,6 @@ export type Topic = {
 export type Category = {
     id:string
     title: string
-    topics: Topic[]
 }
 
 export type Profile = {

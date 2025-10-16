@@ -26,7 +26,6 @@ describe('<ThreadPage />', () => {
       category: {
         title: 'Some Category',
         id: 'some-category-id',
-        topics: [],
       },
       topic: {
         id: 'some-topic-id',

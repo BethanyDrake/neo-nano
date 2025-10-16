@@ -1,4 +1,4 @@
-import { differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays, addDays } from 'date-fns'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
@@ -6,7 +6,7 @@ import { BasicButton } from '../buttons/BasicButton'
 import { Column, Row } from '../layout'
 import './UpdateWordCount.css'
 import { changeAtIndex, toCumulative } from './recordUtils'
-import { Record } from '../forum.types'
+import { Goal, Record } from '../forum.types'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -16,36 +16,32 @@ type ValuePiece = Date | null
 
 type Value = ValuePiece | [ValuePiece, ValuePiece]
 
-const startDate = new Date('2025-11-01')
 export const UpdateWordCount = ({
   records,
   setRecords,
   onSave,
   onCancel,
   isCumulative,
+  startDate,
+  lengthDays
 }: {
-  records: Record[]
   setRecords: (newRecords: Record[]) => void
   onSave: () => void
   onCancel: () => void
   isCumulative: boolean
-}) => {
-  const [value, onChange] = useState<Value>(startDate)
-  console.log(value)
+  }
+ & Pick<Goal, 'records' | 'startDate' | 'lengthDays'>) => {
+  const [value, onChange] = useState<Value>(new Date())
   const calendarRef = useRef(null)
   const cumulativeRecords = useMemo(() => {
     return toCumulative(records)
   }, [records])
-  console.log({ records })
-  console.log({ cumulativeRecords })
-  console.log("AAA", calendarRef)
 
   const updateRecord = useCallback(
     (day: number, newValue: number) => {
       if (isNaN(newValue)) return
       if (isCumulative) {
         const difference = day === 0 ? newValue : newValue - (cumulativeRecords[day - 1] ?? 0)
-        console.log({difference})
         setRecords(changeAtIndex(records, day, difference))
       } else {
         setRecords(changeAtIndex(records, day, newValue))
@@ -62,7 +58,6 @@ export const UpdateWordCount = ({
       
 
       const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) => {
-        console.log('onSubmit')
         updateRecord(challengeDay, target.valueAsNumber)
       }
 
@@ -70,7 +65,6 @@ export const UpdateWordCount = ({
 
       if (view === 'month') {
         if (isSelected) {
-          console.log({ wordCount })
           return (
             <input
               autoFocus
@@ -90,15 +84,15 @@ export const UpdateWordCount = ({
         return <div>{wordCount}</div>
       }
     },
-    [value, updateRecord, isCumulative, cumulativeRecords, records],
+    [value, startDate, isCumulative, cumulativeRecords, records, updateRecord],
   )
 
   return (
     <Column>
       <Calendar
         tileContent={renderTile}
-        minDate={new Date('2025-11-01')}
-        maxDate={new Date('2025-11-30')}
+        minDate={new Date(startDate)}
+        maxDate={addDays(new Date(startDate), lengthDays)}
         onChange={onChange}
         value={value}
         inputRef={calendarRef}

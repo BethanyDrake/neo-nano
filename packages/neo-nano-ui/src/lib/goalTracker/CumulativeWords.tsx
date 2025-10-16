@@ -6,9 +6,10 @@ import {Record} from '@/lib/forum.types'
 type Props = {
   title: string
   cumulativeWordCount: Record[]
+  lengthDays: number
 }
 
-export const CumulativeWords = ({ title, cumulativeWordCount }: Props) => {
+export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays }: Props) => {
   const data = cumulativeWordCount.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
@@ -31,7 +32,7 @@ export const CumulativeWords = ({ title, cumulativeWordCount }: Props) => {
           <YAxis>
             <Label value="word count" position="top" angle={0} offset={24} />
           </YAxis>
-          <XAxis dataKey={'day'} domain={[1, 30]}>
+          <XAxis dataKey={'day'} domain={[1, lengthDays]}>
             <Label value="day" position="bottom" />
           </XAxis>
 

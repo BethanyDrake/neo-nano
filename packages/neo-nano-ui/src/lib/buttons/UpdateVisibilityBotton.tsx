@@ -16,5 +16,5 @@ export const UpdateVisibilityButton = ({visibility, onClick}: {visibility: Visib
  const text = visibility === 'private' ? 'make public' : 'make private'
 
   const icon = visibility === 'private' ? faEyeSlash : faEye;
- return <SmallIconButton  isLoading={isLoading} onClick={_onClick} icon={icon} text={text}/>
+ return <SmallIconButton  id="visibility" isLoading={isLoading} onClick={_onClick} icon={icon} text={text}/>
 }

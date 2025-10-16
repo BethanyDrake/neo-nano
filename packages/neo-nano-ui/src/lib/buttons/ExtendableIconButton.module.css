@@ -33,6 +33,11 @@
 
 
 .small-icon-button {
+
+    &.angry {
+        background-color: var(--angry-light);
+    }
+
     width: 35px;
     height: 35px;
     border-radius: 35px;

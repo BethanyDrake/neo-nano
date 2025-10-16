@@ -22,7 +22,6 @@ export const createThread = async ({title, topic, commentText, commentRichText}:
         RETURNING id`
 
     const result = await getThreads(topic)
-    console.log('create thread done', result)
     return result
 
 }
