@@ -19,6 +19,7 @@ import classNames from './goalTracker.module.css'
 import { toCumulative } from './recordUtils'
 import { StatsCard } from './StatsCard'
 import { UpdateWordCount } from './UpdateWordCount'
+import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 type GoalProps = {
   id: string
   title: string
@@ -51,12 +52,13 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
     const updatedGoals = await setGoalVisibility({ id, visibility: newVisibility })
     setGoals(updatedGoals)
   }
-  const _deleteGaol = async () => {
-    deleteGoal(id).then(setGoals)
-  }
+
+  const {onClick: _deleteGaol, isLoading: isDeleteGoalLoading} = useLoadableOnClick( () => {
+    return deleteGoal(id).then(setGoals)
+  })
+
   const total = getTotal(cumulativeRecords)
   const challengeDay = differenceInCalendarDays(new Date(), startDate)
-  console.log(challengeDay)
   const dailyTarget = Math.round(target / lengthDays)
   const todaysProgress = records[challengeDay] ?? 0
 
@@ -77,7 +79,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
             }}
           />
         </Row>
-        <SmallIconButton id="delete" onClick={_deleteGaol} icon={faTrash} text="delete goal" variant="angry" />
+        <SmallIconButton id="delete" onClick={_deleteGaol} isLoading={isDeleteGoalLoading} icon={faTrash} text="delete goal" variant="angry" />
       </Row>
       <Row>
         <StatsCard title="Today" total={todaysProgress} target={dailyTarget}></StatsCard>
