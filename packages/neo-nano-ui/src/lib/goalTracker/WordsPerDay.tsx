@@ -6,13 +6,17 @@ import { Record } from '../forum.types'
 type Props = {
   title: string
   wordCountPerDay: Record[]
+  lengthDays: number
+  target: number
 }
 
-export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
+export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target }: Props) => {
   const data = wordCountPerDay.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
   }))
+
+  const dailyTarget = target/lengthDays
 
   return (
       <ResponsiveContainer height={400}>
@@ -31,12 +35,12 @@ export const WordsPerDay = ({ title, wordCountPerDay }: Props) => {
           <YAxis>
             <Label value="word count" position="top" angle={0} offset={24} />
           </YAxis>
-          <XAxis dataKey={'day'} domain={[1, 30]}>
+          <XAxis dataKey={'day'} domain={[1, lengthDays]}>
             <Label value="day" position="bottom" />
           </XAxis>
 
           <Bar dataKey="wordCount" fill="#1ab394" />
-          <ReferenceLine y={1667} stroke="#5e53a5ff" strokeDasharray="3 3" />
+          <ReferenceLine y={dailyTarget} stroke="#5e53a5ff" strokeDasharray="3 3" />
         </BarChart>
       </ResponsiveContainer>
   )

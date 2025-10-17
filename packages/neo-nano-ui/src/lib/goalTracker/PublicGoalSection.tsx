@@ -4,8 +4,8 @@ import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered } from '@/lib/layout'
 import classNames from './goalTracker.module.css'
 
-export const PublicGoalSection = ({ goal }: { goal: Pick<Goal, 'title' | 'records'> }) => {
-  const { title, records } = goal
+export const PublicGoalSection = ({ goal }: { goal: Pick<Goal, 'title' | 'records' |'lengthDays' | 'target'> }) => {
+  const { title, records, lengthDays, target } = goal
   return (
     <div style={{ padding: '16px' }}>
       <Centered>
@@ -13,7 +13,7 @@ export const PublicGoalSection = ({ goal }: { goal: Pick<Goal, 'title' | 'record
       </Centered>
       <ClientSideOnly>
         <div className={classNames['goal-row']}>
-          <WordsPerDay title={title} wordCountPerDay={records} />
+          <WordsPerDay title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} />
         </div>
       </ClientSideOnly>
     </div>

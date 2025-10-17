@@ -25,8 +25,6 @@ export async function getThreads(topicId: string, currentPage: number = 1){
     text: _thread.comment_text,
     totalComments: parseInt(_thread.count)
   })) as ThreadSummary[]
-
-  console.log(threadSummaries)
   const totalThreads = (await sql` SELECT count(*) FROM threads
     WHERE threads.topic=${topicId}`)[0].count
 
