@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { BasicButton } from '../buttons/BasicButton'
-import { useProfileContext } from '../context/ProfileContext'
 import formClasses from '../form.module.css'
 import { Goal, Visibility } from '../forum.types'
 import { Column, Row } from '../layout'
@@ -16,22 +16,24 @@ type Inputs = {
 
 export type GoalDetails = Pick<Goal, "title" | "target" | "lengthDays" | "startDate" | 'visibility'>
 
-export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mode: 'add' | 'edit', defaultValues: Inputs, closeModal: () => void , onSave: (goalDetails: GoalDetails) => void}) => {
+export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mode: 'add' | 'edit', defaultValues: Inputs, closeModal: () => void , onSave: (goalDetails: GoalDetails) => Promise<void>}) => {
   const {
     register,
     handleSubmit,
   } = useForm<Inputs>({defaultValues
   })
-  const { isLoading } = useProfileContext()
+  const [isLoading, setIsLoading] = useState(false)
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    setIsLoading(true)
     const body = {
       ...data,
         lengthDays: parseInt(data.lengthDays),
         target: parseInt(data.target),
     
     }
-    onSave(body)
+    await onSave(body)
+    setIsLoading(false)
   }
 
   return (

@@ -11,11 +11,10 @@ export const EditGoalModal = ({ initialGoal }: { initialGoal: GoalDetails & Pick
   const [isOpen, setIsOpen] = useState(false)
 
   const { setGoals } = useProfileContext()
-  const onSave = (goalDetails: GoalDetails) => {
-    updateGoal(initialGoal.id, goalDetails).then((response) => {
-      setGoals(response)
-      setIsOpen(false)
-    })
+  const onSave = async (goalDetails: GoalDetails) => {
+    const response = await updateGoal(initialGoal.id, goalDetails)
+    setGoals(response)
+    setIsOpen(false)
   }
   return (
     <>
