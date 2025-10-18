@@ -5,6 +5,7 @@ import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction"
 import { auth0 } from "@/lib/auth0"
 
 export const getUserId = async () => {
+  await auth0.getAccessToken()
   const session = await auth0.getSession()
   const sql = getQueryFunction()
   return getUserIdFromSession(session, sql)

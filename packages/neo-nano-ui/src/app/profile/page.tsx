@@ -3,16 +3,10 @@ import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { ProfileContextProvider } from '@/lib/context/ProfileContext'
 import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
-import { redirect } from 'next/navigation'
 import { ProfilePageInner } from './ProfilePage'
 import { ModalContextProvider } from '@/lib/modals/ModalContext'
 
 const ProfilePage = async () => {
-  const session = await auth0.getSession()
-  if (!session) {
-    return redirect(`${process.env.APP_BASE_URL}/auth/login?returnTo=${process.env.APP_BASE_URL}/profile`)
-  }
-
   const initalProfile = await getMyProfile()
   const initialGoals = await getMyGoals()
 
@@ -26,5 +20,5 @@ const ProfilePage = async () => {
     </ClientSideOnly>
   )
 }
+export default auth0.withPageAuthRequired(ProfilePage, { returnTo: "/profile" }) as () => Promise<React.JSX.Element>
 
-export default ProfilePage
