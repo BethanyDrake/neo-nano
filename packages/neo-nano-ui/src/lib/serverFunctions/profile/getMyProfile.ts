@@ -6,6 +6,7 @@ import { getSingle } from '../_utils/getSingle'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 
 export const getMyProfile = async (): Promise<Profile> => {
+  await auth0.getAccessToken()
   const session = await auth0.getSession()
   const sql = getQueryFunction()
   const external_id = session?.user.sub

@@ -13,13 +13,11 @@ export const AddGoalModal = () => {
   const isOpen = openModal === ADD_GOAL_MODAL
  
   const { setGoals } = useProfileContext()
-  const onSave = (goalDetails: GoalDetails) => {
-    createGoal(goalDetails).then((response) => {
-      setGoals(response)
-      closeModal()
-    })
+  const onSave = async (goalDetails: GoalDetails) => {
+    const response = await createGoal(goalDetails)
+    setGoals(response)
+    closeModal()
   }
-
 
   return (
     <>
