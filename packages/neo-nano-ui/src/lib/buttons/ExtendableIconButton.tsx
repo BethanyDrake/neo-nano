@@ -1,4 +1,4 @@
-import { DOMAttributes, useCallback, useState } from "react"
+import { DOMAttributes } from "react"
 import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome"
 import styles from './ExtendableIconButton.module.css'
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner"
