@@ -9,14 +9,16 @@ import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { sendGTMEvent } from '@next/third-parties/google'
 import classNames from './profile.module.css'
+import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals } = useProfileContext()
   const {setOpenModal} = useModalContext()
-  const joinChallenge = () => {
+
+  const {onClick: joinChallenge, isLoading: isJoinChallengeLoading} = useLoadableOnClick(() => {
     sendGTMEvent({ event: 'sign_up', send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' })
     return joinCurrentChallenge().then(setGoals)
-  }
+  })
 
   return (
     <div style={{ padding: '24px' }}>
@@ -36,7 +38,7 @@ export const ProfilePageInner = () => {
         <div className={classNames.noGoalsContainer}>
           <Column style={{ alignItems: 'center' }}>
             <div>No goals so far.</div>
-            <BasicButton buttonProps={{ onClick: joinChallenge }}>Join Novel November</BasicButton> or{' '}
+            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>Join Novel November</BasicButton> or{' '}
             <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
           </Column>
         </div>
