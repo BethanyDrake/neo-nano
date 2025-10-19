@@ -13,7 +13,7 @@ import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 import styles from '@/lib/styles/forum.module.css'
 import { ThreadCard } from '@/lib/ThreadCard'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import { redirect, usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import { useCallback, useState } from 'react'
@@ -96,6 +96,7 @@ const TopicPage = ({
     setCreateThreadFormIsOpen(false)
   }, [])
   const pathname = usePathname()
+  const router = useRouter()
 
   const breadcrumbItems = [{href: '/forum', text: category.title}, {text: topic.title} ]
   return (
@@ -113,7 +114,7 @@ const TopicPage = ({
       </Row>
         <p>{topic.description}</p>
         <ExtendableIconButton icon={faAdd} onClick={() => 
-          isLoggedIn? setCreateThreadFormIsOpen(true) : redirect(`/auth/login?returnTo=${pathname}`)
+          isLoggedIn? setCreateThreadFormIsOpen(true) : router.push(`/auth/login?returnTo=${pathname}`)
         } text="Create Thread" />
         {createThreadFormIsOpen && <CreateThreadForm onSubmit={onCreateThread} />}
         <Column>

@@ -3,9 +3,16 @@ import { SessionData } from "@auth0/nextjs-auth0/types"
 import { NeonQueryFunction } from "@neondatabase/serverless"
 import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction"
 import { auth0 } from "@/lib/auth0"
+import { redirect } from "next/navigation"
 
 export const getUserId = async () => {
   const session = await auth0.getSession()
+
+  if (!session) {
+    console.warn("No session found. Redirecting to login.")
+    redirect('/auth/login')
+  }
+  console.log("session", session)
   const sql = getQueryFunction()
   return getUserIdFromSession(session, sql)
 }

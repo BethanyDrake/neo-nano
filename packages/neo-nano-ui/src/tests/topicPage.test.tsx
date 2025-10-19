@@ -10,6 +10,12 @@ import axios from 'axios'
 import { buildThreadSummary } from '@/lib/forum.builders'
 
 jest.spyOn(axios, 'post')
+jest.mock('next/navigation', () => ({
+  usePathname: () => '',
+  useRouter: () => ({
+    push: () => {}
+  })
+}))
 jest.mock('@/lib/useRequireLogin')
 jest.mock('@/lib/serverFunctions/forum/getThreads')
 jest.mock('@/lib/serverFunctions/forum/getTopic')
