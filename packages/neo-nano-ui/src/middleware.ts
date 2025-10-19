@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   const response = await auth0.middleware(request);
   if (request.nextUrl.pathname ==='/profile' || request.nextUrl.pathname ==='/moderation') {
     try {
-      await auth0.getAccessToken(request, response, {refresh: true})
+      await auth0.getAccessToken(request, response)
     } catch (error) {
       console.warn(error)
       return NextResponse.redirect(new URL('/', request.url))
