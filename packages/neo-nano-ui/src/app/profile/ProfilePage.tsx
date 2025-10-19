@@ -10,10 +10,12 @@ import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentCha
 import { sendGTMEvent } from '@next/third-parties/google'
 import classNames from './profile.module.css'
 import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
+import { useRequireLogin } from '@/lib/useRequireLogin'
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals } = useProfileContext()
   const {setOpenModal} = useModalContext()
+  useRequireLogin()
 
   const {onClick: joinChallenge, isLoading: isJoinChallengeLoading} = useLoadableOnClick(() => {
     sendGTMEvent({ event: 'sign_up', send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' })

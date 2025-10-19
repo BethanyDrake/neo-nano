@@ -11,6 +11,7 @@ jest.mock('@/lib/auth0', () => ({
     getSession: jest.fn(),
   },
 }))
+jest.mock('@/lib/useRequireLogin')
 jest.mock('next/navigation')
 jest.mock('@/lib/goalTracker/UpdateWordCount')
 jest.mock('@/lib/serverFunctions/profile/getMyProfile')
