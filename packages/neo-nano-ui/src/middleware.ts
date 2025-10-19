@@ -5,12 +5,10 @@ export async function middleware(request: NextRequest) {
 
   const response = await auth0.middleware(request);
   if (request.nextUrl.pathname ==='/profile' || request.nextUrl.pathname ==='/moderation') {
-    try {
-      await auth0.getAccessToken(request, response)
-    } catch (error) {
-      console.warn(error)
-      return NextResponse.redirect(new URL('/', request.url))
-    }
+      const session =  await auth0.getSession(request)
+      if (!session){
+        return NextResponse.redirect(new URL('/', request.url))
+      }
   }
 
   return response
