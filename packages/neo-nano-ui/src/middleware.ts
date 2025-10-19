@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
       await auth0.getAccessToken(request, response, {refresh: true})
     } catch (error) {
       console.warn(error)
-      return NextResponse.redirect(new URL(`/auth/login?returnTo=${request.url}`, request.url))
+      return NextResponse.redirect(new URL('/', request.url))
     }
   }
 
