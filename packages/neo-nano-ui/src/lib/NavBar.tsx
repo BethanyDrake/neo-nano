@@ -10,10 +10,10 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
   if (isLoggedIn)
     return (
   <Row>
-      <Link style={{color: 'white', alignSelf: 'center'}} href="/auth/logout">
+      <Link prefetch={false}  style={{color: 'white', alignSelf: 'center'}} href="/auth/logout">
         Log out
       </Link>
-      <Link prefetch={false} href="/forum">
+      <Link href="/forum">
         <BasicButton>Browse Forum</BasicButton>
       </Link>
        <Link href="/profile">
