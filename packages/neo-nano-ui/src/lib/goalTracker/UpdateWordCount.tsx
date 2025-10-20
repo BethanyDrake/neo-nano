@@ -7,6 +7,7 @@ import { Column } from '../layout'
 import './UpdateWordCount.css'
 import { changeAtIndex, toCumulative } from './recordUtils'
 import { Goal, Record } from '../forum.types'
+import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -19,35 +20,47 @@ type Value = ValuePiece | [ValuePiece, ValuePiece]
 export const UpdateWordCount = ({
   records,
   setRecords,
-  onSave,
-  onCancel,
   isCumulative,
   startDate,
-  lengthDays
+  lengthDays,
+  id,
 }: {
   setRecords: (newRecords: Record[]) => void
-  onSave: () => void
-  onCancel: () => void
   isCumulative: boolean
-  }
- & Pick<Goal, 'records' | 'startDate' | 'lengthDays'>) => {
+} & Pick<Goal, 'id' | 'records' | 'startDate' | 'lengthDays'>) => {
   const [value, onChange] = useState<Value>(new Date())
   const calendarRef = useRef(null)
   const cumulativeRecords = useMemo(() => {
     return toCumulative(records)
   }, [records])
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  const _updateGoalProgress = useCallback(
+    async (newRecords: Record[]) => {
+      setIsLoading(true)
+      await updateGoalProgress({ id, records: newRecords })
+      setIsLoading(false)
+    },
+    [id],
+  )
+
   const updateRecord = useCallback(
     (day: number, newValue: number) => {
       const sanitisedValue = isNaN(newValue) ? 0 : newValue
+      let newRecords
       if (isCumulative) {
         const difference = day === 0 ? sanitisedValue : sanitisedValue - (cumulativeRecords[day - 1] ?? 0)
-        setRecords(changeAtIndex(records, day, difference))
+        newRecords = changeAtIndex(records, day, difference)
       } else {
-        setRecords(changeAtIndex(records, day, sanitisedValue))
+        newRecords = changeAtIndex(records, day, sanitisedValue)
+      }
+      if (newRecords[day] !== records[day]) {
+        setRecords(newRecords)
+        _updateGoalProgress(newRecords)
       }
     },
-    [cumulativeRecords, isCumulative, records, setRecords],
+    [_updateGoalProgress, cumulativeRecords, isCumulative, records, setRecords],
   )
 
   const renderTile = useCallback<TileContentFunc>(
@@ -55,7 +68,6 @@ export const UpdateWordCount = ({
       if (view !== 'month' || !(value instanceof Date)) return
       const isSelected = isSameDay(date, value)
       const challengeDay = differenceInCalendarDays(date, startDate)
-      
 
       const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) => {
         updateRecord(challengeDay, target.valueAsNumber)
@@ -69,7 +81,7 @@ export const UpdateWordCount = ({
             <input
               autoFocus
               defaultValue={wordCount ?? undefined}
-              name={`wordcount for ${date}${isCumulative? ' (cumulative)': ''}`}
+              name={`wordcount for ${date}${isCumulative ? ' (cumulative)' : ''}`}
               onBlur={onSubmit}
               onKeyDown={({ target, key }) => {
                 if (key === 'Enter') {
@@ -97,8 +109,12 @@ export const UpdateWordCount = ({
         value={value}
         inputRef={calendarRef}
       />
-        <BasicButton buttonProps={{ onClick: onSave, style: { width: '100%' } }}>Save</BasicButton>
-
+      <BasicButton
+        isLoading={isLoading}
+        buttonProps={{ onClick: () => _updateGoalProgress(records), style: { width: '100%' } }}
+      >
+        Save
+      </BasicButton>
     </Column>
   )
 }
