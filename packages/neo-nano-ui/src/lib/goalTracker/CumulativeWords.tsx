@@ -22,7 +22,7 @@ export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays }: Prop
           accessibilityLayer
           data={data}
           margin={{
-            bottom: 0,
+            bottom: 24,
             left: 16,
             right: 24,
             top: 48,
@@ -33,7 +33,7 @@ export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays }: Prop
             <Label value="word count" position="top" angle={0} offset={24} />
           </YAxis>
           <XAxis dataKey={'day'} domain={[1, lengthDays]}>
-            <Label value="day" position="bottom" />
+             <Label value="challenge day" position="bottom" />
           </XAxis>
 
           <Line dataKey="wordCount" fill="#1ab394" />
