@@ -13,6 +13,9 @@
 
   --shadow-1: 0 3px 10px rgb(0 0 0 / 0.2);
   --shadow-2: 0 3px 20px rgb(0 0 0 / 0.2);
+
+  --shadow-glow-1: 0 0px 5px #C0E5C888;
+  --shadow-glow-2: 0 0px 10px #C0E5C8DD;
 }
 
 main {

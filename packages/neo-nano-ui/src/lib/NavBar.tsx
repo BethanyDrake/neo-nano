@@ -4,6 +4,8 @@ import { ClientSideOnly } from './ClientSideOnly'
 import { BasicButton } from './buttons/BasicButton';
 import { Row } from './layout';
 import { NavMenu } from './NavMenu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoading: boolean }) => {
   if (isLoading) return null
@@ -14,10 +16,10 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
         Log out
       </Link>
       <Link href="/forum">
-        <BasicButton>Browse Forum</BasicButton>
+        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faComment}/> Browse Forum</button>
       </Link>
        <Link href="/profile">
-        <BasicButton>Update Progess</BasicButton>
+        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faEdit}/> Update Progess</button>
       </Link>
       </Row>
     )
