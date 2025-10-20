@@ -4,7 +4,6 @@ import { usePathname, useRouter } from "next/navigation"
 export const useRequireLogin = () => {
   const { user, isLoading } = useUser()
   const pathname = usePathname()
-  console.log("useRequireLogin", pathname)
 
   const router = useRouter()
   if (!isLoading && !user) {
