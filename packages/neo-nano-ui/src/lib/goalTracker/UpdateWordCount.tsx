@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { BasicButton } from '../buttons/BasicButton'
-import { Column, Row } from '../layout'
+import { Column } from '../layout'
 import './UpdateWordCount.css'
 import { changeAtIndex, toCumulative } from './recordUtils'
 import { Goal, Record } from '../forum.types'
@@ -39,12 +39,12 @@ export const UpdateWordCount = ({
 
   const updateRecord = useCallback(
     (day: number, newValue: number) => {
-      if (isNaN(newValue)) return
+      const sanitisedValue = isNaN(newValue) ? 0 : newValue
       if (isCumulative) {
-        const difference = day === 0 ? newValue : newValue - (cumulativeRecords[day - 1] ?? 0)
+        const difference = day === 0 ? sanitisedValue : sanitisedValue - (cumulativeRecords[day - 1] ?? 0)
         setRecords(changeAtIndex(records, day, difference))
       } else {
-        setRecords(changeAtIndex(records, day, newValue))
+        setRecords(changeAtIndex(records, day, sanitisedValue))
       }
     },
     [cumulativeRecords, isCumulative, records, setRecords],
@@ -97,10 +97,8 @@ export const UpdateWordCount = ({
         value={value}
         inputRef={calendarRef}
       />
-      <Row>
-        <BasicButton buttonProps={{ onClick: onSave, style: { width: '50%' } }}>Save</BasicButton>
-        <BasicButton buttonProps={{ onClick: onCancel, style: { width: '50%' } }}>Cancel</BasicButton>
-      </Row>
+        <BasicButton buttonProps={{ onClick: onSave, style: { width: '100%' } }}>Save</BasicButton>
+
     </Column>
   )
 }
