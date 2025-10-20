@@ -16,9 +16,7 @@ export const truncateText = (text: string) => {
 
 export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId: string }) => {
   const { id, title, text, totalComments } = thread
-  return (
-    <Link href={`/forum/${topicId}/${thread.id}`} className={styles['thread']} key={id}>
-        <Row justifyContent='space-between'>
+  return <Link href={`/forum/${topicId}/${id}`} className={styles['thread']}><Row justifyContent='space-between'>
         <Column>
       <h3 className={styles['forum-item-title']}>{title}</h3>
       <p style={{ paddingBottom: '12px' }}>
@@ -26,7 +24,5 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
       </p>
       </Column>
       <div style={{color:'var(--primary-vibrant)', minWidth: '50px'}}>{totalComments} <FontAwesomeIcon icon={faComment}/></div>
-      </Row>
-    </Link>
-  )
+      </Row></Link>
 }
