@@ -23,7 +23,7 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
   if (hasConfirmedFlag) {
     return (
       <div className={classNames.card}>
-        <p className={classNames.confirmedInnapropriateMessage}>This comment has been removed.</p>
+        <p className={classNames.confirmedInappropriateMessage}>This comment has been removed.</p>
       </div>
     )
   }
@@ -32,7 +32,7 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
     return (
       <div className={classNames.card}>
         <p className={classNames.flaggedCommentMessage}>
-          This comment has been flagged as potentially innapropriate, and has been hidden while pending manual review.
+          This comment has been flagged as potentially inappropriate, and has been hidden while pending manual review.
         </p>
       </div>
     )

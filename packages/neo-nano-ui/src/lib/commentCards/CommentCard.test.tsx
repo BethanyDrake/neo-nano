@@ -26,7 +26,7 @@ describe('<CommentCard />', () => {
     const { findByText, queryByText } = render(
       <CommentCard comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }} author={{ id: '2', displayName: 'Some Name' }} flags={[flag]} />,
     )
-    expect(await findByText(/This comment has been flagged as potentially innapropriate, and has been hidden while pending manual review./)).toBeInTheDocument()
+    expect(await findByText(/This comment has been flagged as potentially inappropriate, and has been hidden while pending manual review./)).toBeInTheDocument()
     expect(queryByText(/Some text/)).not.toBeInTheDocument()
   
   })
@@ -65,7 +65,7 @@ describe('<CommentCard />', () => {
     expect(queryByText(/Some text/)).not.toBeInTheDocument()
   })
 
-  test('flag a comment as innapropriate', async () => {
+  test('flag a comment as inappropriate', async () => {
     const { getByRole } = render(
       <CommentCard comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }} author={{ id: '2', displayName: '' }} flags={[]}/>,
     )
