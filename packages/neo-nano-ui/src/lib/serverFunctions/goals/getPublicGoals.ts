@@ -9,6 +9,6 @@ export const getPublicGoals = async (userId: string) => {
     FROM goals
     WHERE user_id=${userId}
     AND visibility='public'
-    ORDER BY start_date DESC`
+    ORDER BY start_date DESC id ASC`
   return camelcaseKeys(goals) as Goal[]
 }

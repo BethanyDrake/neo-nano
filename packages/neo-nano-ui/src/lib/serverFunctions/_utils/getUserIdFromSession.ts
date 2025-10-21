@@ -12,7 +12,6 @@ export const getUserId = async () => {
     console.warn("No session found. Redirecting to login.")
     redirect('/auth/login')
   }
-  console.log("session", session)
   const sql = getQueryFunction()
   return getUserIdFromSession(session, sql)
 }

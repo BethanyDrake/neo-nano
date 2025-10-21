@@ -5,7 +5,6 @@ import { Record, Visibility } from '@/lib/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered, Column, Row } from '@/lib/layout'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
-import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgress'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Switch } from '@headlessui/react'
 import { differenceInCalendarDays } from 'date-fns'
@@ -40,13 +39,6 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
   const [isCumulative, setIsCumulative] = useState(false)
   const cumulativeRecords = toCumulative(records)
   const { setGoals } = useProfileContext()
-  const onCancel = () => {
-    setRecords(initialRecords)
-  }
-  const onSave = async () => {
-    await updateGoalProgress({ id, records })
-    console.log('Successfuly updated!')
-  }
 
   const _updateGoalVisibility = async (newVisibility: Visibility) => {
     const updatedGoals = await setGoalVisibility({ id, visibility: newVisibility })
@@ -96,8 +88,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
         <UpdateWordCount
           key={`${isCumulative ? 'cumulative' : 'per day'}`}
           isCumulative={isCumulative}
-          onCancel={onCancel}
-          onSave={onSave}
+          id={id}
           records={records}
           setRecords={setRecords}
           startDate={startDate}

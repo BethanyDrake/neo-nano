@@ -1,57 +1,17 @@
 'use client'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
-import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { CommentCard } from '@/lib/commentCards/CommentCard'
 import { useThreadContext } from '@/lib/context/ThreadContext'
-import formClasses from '@/lib/form.module.css'
+import { ExpandableAddCommentForm } from '@/lib/expandableForms/AddCommentForm'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
-import RichTextEditor from '@/lib/richText/RichTextEditor'
 import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import { redirect, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
-import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-
-type Inputs = {
-  commentText: string
-}
-
-const AddCommentForm = () => {
-  const { handleSubmit, reset } = useForm<Inputs>()
-  const { isLoading, postComment } = useThreadContext()
-
-  const [richText, setRichText] = useState('')
-  const [plainText, setPlainText] = useState('')
-  const [errorText, setErrorText] = useState('')
-  const _onSubmit: SubmitHandler<Inputs> = async () => {
-    if (plainText.trim()) {
-      await postComment(plainText, richText)
-      reset()
-      setRichText('')
-      setPlainText('')
-    } else {
-      setErrorText("Can't post an empty comment.")
-    }
-  }
-
-  return (
-    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
-      <Column>
-        {errorText && <span>{errorText}</span>}
-        <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
-
-        <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
-          Post!
-        </BasicButton>
-      </Column>
-    </form>
-  )
-}
 
 export const ThreadPage = ({
   thread,
@@ -64,15 +24,12 @@ export const ThreadPage = ({
   category: Category
   isLoggedIn: boolean
 }) => {
-  const [createThreadFormIsOpen, setCreateThreadFormIsOpen] = useState(false)
 
   const breadcrumbItems = [
     { href: '/forum', text: category.title },
     { href: `/forum/${topic.id}`, text: topic.title },
     { text: thread.title },
   ]
-
-  const pathname = usePathname()
 
   const { commentsData, onPageChange, currentPage, totalComments, isLoading } = useThreadContext()
   return (
@@ -105,12 +62,10 @@ export const ThreadPage = ({
           />
         </Row>
 
-        <ExtendableIconButton
-          icon={faAdd}
-          onClick={() => (isLoggedIn ? setCreateThreadFormIsOpen(true) : redirect(`/auth/login?returnTo=${pathname}`))}
-          text="Add Comment"
-        />
-        {createThreadFormIsOpen && <AddCommentForm />}
+          {
+        isLoggedIn ? <ExpandableAddCommentForm /> :
+        <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}/${thread.id}`}><ExtendableIconButton text="Log in to comment" icon={faAdd}/></Link> 
+      }
       </Column>
     </div>
   )

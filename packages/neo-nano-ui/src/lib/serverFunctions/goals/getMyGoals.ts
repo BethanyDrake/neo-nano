@@ -10,6 +10,6 @@ export const getMyGoals = async () => {
   const goals = await sql`SELECT id, title, target, start_date, length_days, records, visibility
     FROM goals
     WHERE user_id=${userId}
-    ORDER BY start_date DESC`
+    ORDER BY start_date DESC, id ASC`
   return camelcaseKeys(goals) as Goal[]
 }
