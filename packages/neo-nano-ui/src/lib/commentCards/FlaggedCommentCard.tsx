@@ -26,12 +26,20 @@ export const FlaggedCommentCard = ({ comment, flag }: CommentFlag) => {
             <span className={classNames['label']}>Details:</span> <span>{flag.details || '(none)'}</span>
           </div>
         </div>
+        {flag.reviewOutcome ? 
+          <div>
+            {flag.reviewOutcome} by {flag.reviewedBy}
+          </div>
+
+        :
         <LeftRow>
           <LoadingButton onClick={() => refuteFlag(flag.id)}>Okay</LoadingButton>
           <LoadingButton onClick={() => confirmFlag(flag.id)} variant="angry">
             Inappropriate
           </LoadingButton>
         </LeftRow>
+        }
+        
       </Column>
     </div>
   )
