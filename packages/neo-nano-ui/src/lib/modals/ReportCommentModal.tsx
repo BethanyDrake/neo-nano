@@ -10,6 +10,7 @@ import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAweso
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { useThreadContext } from '../context/ThreadContext'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
+import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 
 type Inputs = Pick<Flag, 'reason' | 'details'>
 
@@ -27,17 +28,19 @@ const ReportCommentForm = ({
     formState: { errors },
   } = useForm<Inputs>()
 
-  const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     await flagComment({
       ...data,
       comment: comment.id,
     })
-    updateCommentsData()
+    await updateCommentsData()
     closeModal()
   }
 
+  const {onClick: _onSubmit_withLoading, isLoading} = useLoadableOnClick(handleSubmit(_onSubmit))
+ 
   return (
-    <form className={[formClasses.form, formClasses.angry].join(' ')} onSubmit={handleSubmit(_onSubmit)}>
+    <form className={[formClasses.form, formClasses.angry].join(' ')} onSubmit={_onSubmit_withLoading}>
       <Column>
         <h2>Report Comment as Inappropriate</h2>
         <p className={classNames['comment']}>{comment.text}</p>
@@ -85,7 +88,7 @@ const ReportCommentForm = ({
           <BasicButton variant="angry" buttonProps={{ onClick: closeModal }}>
             Cancel
           </BasicButton>{' '}
-          <BasicButton variant="angry" buttonProps={{ type: 'submit' }}>
+          <BasicButton isLoading={isLoading} variant="angry" buttonProps={{ type: 'submit' }}>
             Save
           </BasicButton>
         </Row>
