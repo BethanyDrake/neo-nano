@@ -37,7 +37,7 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   ORDER BY comments.created_at
   LIMIT ${COMMENTS_PER_PAGE}
   OFFSET ${(currentPage - 1) * COMMENTS_PER_PAGE}
-  `
+  ` 
 
   const totalComments = parseInt(
     (

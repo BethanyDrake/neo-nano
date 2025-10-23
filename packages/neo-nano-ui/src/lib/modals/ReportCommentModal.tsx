@@ -10,8 +10,6 @@ import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAweso
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { useThreadContext } from '../context/ThreadContext'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
-import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
-
 type Inputs = Pick<Flag, 'reason' | 'details'>
 
 const ReportCommentForm = ({
@@ -28,19 +26,21 @@ const ReportCommentForm = ({
     formState: { errors },
   } = useForm<Inputs>()
 
+  const [isLoading, setIsloading] = useState(false)
+
    const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    setIsloading(true)
     await flagComment({
       ...data,
       comment: comment.id,
     })
     await updateCommentsData()
+    setIsloading(false)
     closeModal()
   }
-
-  const {onClick: _onSubmit_withLoading, isLoading} = useLoadableOnClick(handleSubmit(_onSubmit))
  
   return (
-    <form className={[formClasses.form, formClasses.angry].join(' ')} onSubmit={_onSubmit_withLoading}>
+    <form className={[formClasses.form, formClasses.angry].join(' ')} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
         <h2>Report Comment as Inappropriate</h2>
         <p className={classNames['comment']}>{comment.text}</p>

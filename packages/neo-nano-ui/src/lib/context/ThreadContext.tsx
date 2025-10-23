@@ -64,7 +64,7 @@ export const ThreadContextProvider = ({
 
 
   const updateComments = useCallback(async () => {
-    _update(currentPage)
+    return _update(currentPage)
   }, [_update, currentPage])
 
   const value = useMemo(() => {
