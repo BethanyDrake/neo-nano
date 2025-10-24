@@ -1,4 +1,4 @@
-import { getTopicIds } from '@/lib/serverFunctions/forum/sitemapHelpers'
+import { getHotThreads, getTopicIds } from '@/lib/serverFunctions/forum/sitemapHelpers'
 import type { MetadataRoute } from 'next'
  
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -6,6 +6,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `https://www.novel-november.com/forum/${id}`,
     changeFrequency: 'daily',
     priority: 0.8
+  }))
+
+  const threadEntries: MetadataRoute.Sitemap = (await getHotThreads()).map(({threadId, topicId}) => ({
+    url: `https://www.novel-november.com/forum/${topicId}/${threadId}`,
   }))
 
   return [
@@ -19,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 1,
     },
-   ...topicEntries
+   ...topicEntries,
+   ...threadEntries
   ]
 }
