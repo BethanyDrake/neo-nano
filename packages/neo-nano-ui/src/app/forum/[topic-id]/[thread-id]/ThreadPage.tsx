@@ -45,7 +45,6 @@ export const ThreadPage = ({
             disabled={isLoading}
           />
         </Row>
-
         <div>
           {commentsData &&
             commentsData.map(({ comment, author, flags }) => (
