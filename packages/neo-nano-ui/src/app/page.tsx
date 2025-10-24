@@ -1,7 +1,6 @@
 import { auth0 } from '@/lib/auth0'
 import styles from './page.module.css'
 import { JSX } from 'react'
-import bg from './pexels-technobulka-2908984.jpg'
 import { Column, Row } from '@/lib/layout'
 import Link from 'next/link'
 import { BasicButton } from '@/lib/buttons/BasicButton'
@@ -64,7 +63,7 @@ export default async function Home() {
   const isLoggedIn = !!session
 
   return (
-    <div className={styles.background} style={{ backgroundImage: `url(${bg.src})`, backgroundSize: '1000px' }}>
+    <div className={styles.background} style={{ backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/pexels-technobulka-2908984.jpg)', backgroundSize: '1000px' }}>
       <main className={styles.main}>
         <h1 className={styles.h1}>Novel November</h1>
         <Column gap="3em">
