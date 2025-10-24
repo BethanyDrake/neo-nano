@@ -8,7 +8,7 @@ import Link from 'next/link'
 export const NavMenu = ({isModerator}: {isModerator: boolean}) => {
   return (
     <Menu>
-      <MenuButton className={styles['nav-bar-button']}><FontAwesomeIcon color="white" icon={faBars} /></MenuButton>
+      <MenuButton title={'open navigation menu'} className={styles['nav-bar-button']}><FontAwesomeIcon color="white" icon={faBars} /></MenuButton>
       <MenuItems anchor="bottom" className={styles["menu-items"]}>
       <MenuItem>
           <Link className={styles["menu-item"]} href="/">

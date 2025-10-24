@@ -4,8 +4,8 @@ import styles from './ExtendableIconButton.module.css'
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner"
 
 export const ExtendableIconButton = ({text, onClick, icon, isLoading}: {text:string, isLoading?: boolean} & Pick<DOMAttributes<HTMLButtonElement>, 'onClick'> & Pick<FontAwesomeIconProps, 'icon'>) => {
-    if (isLoading) return <button className={styles["icon-button"]}><FontAwesomeIcon spin icon={faSpinner} /><span>{text}</span></button>
-    return <button className={styles["icon-button"]} onClick={onClick}><FontAwesomeIcon icon={icon} /><span>{text}</span></button>
+    if (isLoading) return <button title={text} className={styles["icon-button"]}><FontAwesomeIcon spin icon={faSpinner} /><span>{text}</span></button>
+    return <button title={text} className={styles["icon-button"]} onClick={onClick}><FontAwesomeIcon icon={icon} /><span>{text}</span></button>
 }
 
 type SmallIconButtonProps = 
