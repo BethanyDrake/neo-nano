@@ -3,6 +3,10 @@
     border-bottom:  solid var(--grey-light);
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .datetime {
     font-size: small;
     color: var(--grey-dark);

@@ -2,8 +2,6 @@ require('dotenv').config({ path: `.env.${process.env.DOTENV_PATH}`})
 const { neon } = require('@neondatabase/serverless')
 import('@faker-js/faker').then(({faker}) => {
   
-
-
 require('./validate-environment')
 
 const sql = neon(process.env.DATABASE_URL)
@@ -22,11 +20,11 @@ const createUsers = async () => {
 
 const createThreads = async () => {
   const users = await sql`SELECT id FROM users`
-  const topics = await sql`SELECT id FROM topics`
+  const topics = await sql`SELECT id FROM topics limit 5`
   console.log(users, topics)
   console.log('initThreads start')
 
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 3; i++) {
     const userId = users[faker.number.int(users.length - 1)].id
     const createdThread = await sql`insert into threads (title, author, topic) values 
             (${faker.book.title()}, ${userId}, 'introductions')
@@ -46,26 +44,28 @@ const createThreads = async () => {
 const createComments = async () => {
   const users = await sql`SELECT id FROM users`
   const topics = await sql`SELECT id FROM topics`
+  const threads = await sql`SELECT id FROM threads`
   console.log(users, topics)
   console.log('initThreads start')
 
   for (let i = 0; i < 30; i++) {
     const commentText = faker.lorem.paragraph()
     const userId = users[faker.number.int(users.length - 1)].id
+    const threadId = threads[faker.number.int(threads.length - 1)].id
     await sql`insert into comments (comment_text, rich_text, author, thread) values
-          (${commentText}, ${commentText} , ${userId}, '1')
+          (${commentText}, ${commentText} , ${userId}, ${threadId})
         `
   }
 
-  const threads = await sql`SELECT * FROM threads`
+  const comments = await sql`SELECT * FROM comments`
 
-  console.log('created topics', threads)
+  console.log('created comments', comments)
 }
 
 const fillDb = async () => {
-  // await createUsers()
+  await createUsers()
   await createThreads()
-  // await createComments()
+  await createComments()
 }
 
 fillDb().then(() => process.exit(0))

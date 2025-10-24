@@ -44,8 +44,7 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
        <Link className={classNames.authorLink} href={`/profile/${author.id}`}>{author.displayName}:</Link>
         <ReportCommentModal comment={comment} />
       </Row>
-
-      <div style={{ height: '16px', visibility: 'hidden' }}>{comment.text}</div>
+      <div className={classNames.hidden}>{comment.text}</div>
       <ClientSideOnly>
         <RichTextDisplay value={comment.richText} />
         <Row justifyContent="right">
