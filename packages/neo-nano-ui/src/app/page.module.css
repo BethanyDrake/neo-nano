@@ -2,16 +2,15 @@
   max-width: 1000px;
   background-color: white;
   padding: 5em;
+  padding-top: 3em;
   border-left: 2px solid var(--off-black);
   border-right: 2px solid var(--off-black);
 }
 
 .h1 {
-  text-align: center;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  font-size: 3em;
+  font-size: xxx-large;
 }
+
 
 .background {
   display: flex;
