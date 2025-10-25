@@ -1,9 +1,11 @@
 import { auth0 } from '@/lib/auth0'
-import styles from './page.module.css'
-import { JSX } from 'react'
+import { BasicButton } from '@/lib/buttons/BasicButton'
+import { ChallengeCountDown } from '@/lib/ChallengeCountDown'
+import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { Column, Row } from '@/lib/layout'
 import Link from 'next/link'
-import { BasicButton } from '@/lib/buttons/BasicButton'
+import { JSX } from 'react'
+import styles from './page.module.css'
 const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
   return (
     <section>
@@ -46,10 +48,7 @@ const HistorySection = () => {
 
 const ContibutionSection = () => {
   const title = 'How to Contribute'
-//   const body =
-//     "This website is open source, and open to community contributions. For programmers wanting to pitch in, please head over to 
-    
-// "
+
   return <Section 
     title={title} 
     body={<>
@@ -65,7 +64,11 @@ export default async function Home() {
   return (
     <div className={styles.background} style={{ backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/pexels-technobulka-2908984.jpg)', backgroundSize: '1000px' }}>
       <main className={styles.main}>
+      
+      <Column gap={0} style={{textAlign: 'center', marginBottom: '1em', minHeight:'75px'}}>
         <h1 className={styles.h1}>Novel November</h1>
+        <ClientSideOnly><ChallengeCountDown/></ClientSideOnly>
+        </Column>
         <Column gap="3em">
           <HistorySection />
           <ChallengeSection />
