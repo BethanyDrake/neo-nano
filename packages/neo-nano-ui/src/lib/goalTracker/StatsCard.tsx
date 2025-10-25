@@ -6,7 +6,7 @@ export const StatsCard = ({ total, target, title }: { total: number; target: num
     <div className={classNames.statCard}>
       <Column>
         <Centered style={{ padding: '8px', borderBottom: '1px solid var(--grey-light)' }}>
-          <h3>{title}</h3>
+          <h4>{title}</h4>
         </Centered>
         <div>
           <strong>Goal:</strong> {target.toLocaleString()}

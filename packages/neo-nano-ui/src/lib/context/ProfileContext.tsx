@@ -2,6 +2,7 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { Goal, Profile } from '../forum.types'
 import { updateProfile as updateProfileServerSide } from '../serverFunctions/profile/updateProfile'
+import { UserAward } from '../profile.types'
 
 const ProfileContext = createContext<{
   updateProfile: (newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => Promise<void>
@@ -9,12 +10,14 @@ const ProfileContext = createContext<{
   isLoading: boolean
   goals: Goal[]
   setGoals: (goals: Goal[]) => void
+  awards: UserAward[]
 }>({
   updateProfile: () => Promise.resolve(),
   profile: { id: '', displayName: '', role: 'user' },
   isLoading: false,
   goals: [],
   setGoals: () => Promise.resolve(),
+  awards: []
 })
 
 export const useProfileContext = () => useContext(ProfileContext)
@@ -22,11 +25,13 @@ export const useProfileContext = () => useContext(ProfileContext)
 export const ProfileContextProvider = ({
   initialProfile,
   initialGoals,
+  initialAwards,
   children,
-}: PropsWithChildren & { initialProfile: Profile; initialGoals: Goal[] }) => {
+}: PropsWithChildren & { initialProfile: Profile; initialGoals: Goal[], initialAwards: UserAward[] }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [profile, setProfile] = useState(initialProfile)
   const [goals, setGoals] = useState<Goal[]>(initialGoals)
+   const [awards] = useState<UserAward[]>(initialAwards)
 
   const updateProfile = useCallback((newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => {
     setIsLoading(true)
@@ -36,8 +41,8 @@ export const ProfileContextProvider = ({
   }, [])
 
   const value = useMemo(() => {
-    return { isLoading, profile, updateProfile, goals, setGoals }
-  }, [isLoading, profile, updateProfile, goals, setGoals])
+    return { isLoading, profile, updateProfile, goals, setGoals, awards }
+  }, [isLoading, profile, updateProfile, goals, setGoals, awards])
 
   return <ProfileContext value={value}>{children}</ProfileContext>
 }

@@ -1,9 +1,9 @@
 import ProfilePage from '@/app/profile/page'
-import { render } from '@testing-library/react'
 import { auth0 } from '@/lib/auth0'
-import { SessionData } from '@auth0/nextjs-auth0/types'
-import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
+import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
+import { SessionData } from '@auth0/nextjs-auth0/types'
+import { render } from '@testing-library/react'
 
 jest.mock('@/lib/auth0', () => ({
   auth0: {
@@ -16,6 +16,9 @@ jest.mock('next/navigation')
 jest.mock('@/lib/goalTracker/UpdateWordCount')
 jest.mock('@/lib/serverFunctions/profile/getMyProfile')
 jest.mock('@/lib/serverFunctions/goals/getMyGoals')
+jest.mock('@/lib/serverFunctions/profile/getMyAwards', () => ({
+  getMyAwards: jest.fn().mockResolvedValue([]),
+}))
 describe('<ProfilePage />', () => {
   it('shows user details and goals', async () => {
     jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)

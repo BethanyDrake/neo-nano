@@ -11,13 +11,15 @@ import { sendGTMEvent } from '@next/third-parties/google'
 import classNames from './profile.module.css'
 import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
 import { useRequireLogin } from '@/lib/useRequireLogin'
+import { TrophyCase } from '@/lib/awards/TrophyCase'
+import { claimAward } from '@/lib/serverFunctions/profile/claimAward'
 
 export const ProfilePageInner = () => {
-  const { profile, goals, setGoals } = useProfileContext()
-  const {setOpenModal} = useModalContext()
+  const { profile, goals, setGoals, awards } = useProfileContext()
+  const { setOpenModal } = useModalContext()
   useRequireLogin()
 
-  const {onClick: joinChallenge, isLoading: isJoinChallengeLoading} = useLoadableOnClick(() => {
+  const { onClick: joinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
     sendGTMEvent({ event: 'sign_up', send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' })
     return joinCurrentChallenge().then(setGoals)
   })
@@ -31,16 +33,23 @@ export const ProfilePageInner = () => {
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p>{profile.aboutMe}</p>
 
+      <button onClick={() => claimAward('2')}>Claim award</button>
+
+      <TrophyCase awards={awards} />
+
       <Row alignItems="center">
         <h2>Goals</h2>
-        <AddGoalModal/>
+        <AddGoalModal />
       </Row>
 
       {goals.length === 0 && (
         <div className={classNames.noGoalsContainer}>
           <Column style={{ alignItems: 'center' }}>
             <div>No goals so far.</div>
-            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>Join Novel November</BasicButton> or{' '}
+            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>
+              Join Novel November
+            </BasicButton>{' '}
+            or{' '}
             <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
           </Column>
         </div>

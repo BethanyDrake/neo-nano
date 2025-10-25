@@ -58,7 +58,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
     <Column style={{ padding: '16px' }}>
       <Row justifyContent="space-between" style={{ padding: '1em 0' }}>
         <Row alignItems="center">
-          <h2>{title}</h2>
+          <h3>{title}</h3>
           <UpdateVisibilityButton onClick={_updateGoalVisibility} visibility={visibility} />
           <EditGoalModal
             initialGoal={{

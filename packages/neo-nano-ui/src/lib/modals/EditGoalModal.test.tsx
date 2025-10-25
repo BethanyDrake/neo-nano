@@ -9,7 +9,7 @@ describe('EditGoalModal', () => {
   test('update title', async () => {
     jest.mocked(updateGoal).mockResolvedValue([])
     const { getByRole, queryByRole } = render(
-      <ProfileContextProvider initialProfile={buildProfile()} initialGoals={[]}>
+      <ProfileContextProvider initialProfile={buildProfile()} initialGoals={[]} initialAwards={[]}>
         <EditGoalModal
           initialGoal={{
             id: 'goal-id',

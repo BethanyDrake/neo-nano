@@ -13,9 +13,9 @@ export const Row = ({children, gap, justifyContent, alignItems, style}: Props) =
   <div style={{display:"flex", flexDirection:"row", alignItems, justifyContent: justifyContent ?? "center", gap: gap ?? '1em', ...(style ?? {})}}>{children}</div>)
 }
 
-export const Column = ({children, gap, style}: Pick<Props, 'children' | 'gap' | 'style'>) => {
+export const Column = ({children, gap, style}: Pick<Props, 'children' | 'gap' | 'style'| 'alignItems'>) => {
   return (
-  <div style={{display:"flex", flexDirection:"column", justifyContent:"center", gap: gap ?? '1em', ...(style?? {})}}>{children}</div>)
+  <div style={{display:"flex", flexDirection:"column", justifyContent: "center", gap: gap ?? '1em', ...(style?? {})}}>{children}</div>)
 }
 
 export const Centered = ({children, style}: Pick<Props, 'children' | 'style'>) => {
