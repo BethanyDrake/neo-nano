@@ -14,6 +14,7 @@ const ProfilePage = async () => {
 
   return (
     <ClientSideOnly>
+      {/* <NewAwardModalContextProvider /> */}
       <ModalContextProvider>
       <ProfileContextProvider initialProfile={initalProfile} initialGoals={initialGoals} initialAwards={initialAwards}>
         <ProfilePageInner />

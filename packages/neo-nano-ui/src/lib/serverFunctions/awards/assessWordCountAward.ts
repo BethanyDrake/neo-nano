@@ -19,14 +19,10 @@ export const assessWordCountAward = ({award, goal}: WordCountAwardAssessmentInpu
     }
 
     const startChallengeDay = Math.max(dateToChallengeDay(goal.startDate, award.startDate), 0)
-    console.log({awardStartDate: award.startDate, startChallengeDay})
-
     const endChallengeDay = Math.min(dateToChallengeDay(goal.startDate, award.endDate) + 1, goal.lengthDays)
-    console.log({awardEndDate: award.endDate, endChallengeDay})
 
     const relevantRecords = goal.records.slice(startChallengeDay, endChallengeDay)
     const totalWords = _.sum(relevantRecords)
-    console.log({totalWords})
     return totalWords >= award.requirementValue
 
 

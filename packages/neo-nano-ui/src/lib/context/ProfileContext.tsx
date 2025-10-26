@@ -3,6 +3,7 @@ import { createContext, PropsWithChildren, useCallback, useContext, useMemo, use
 import { Goal, Profile } from '../forum.types'
 import { updateProfile as updateProfileServerSide } from '../serverFunctions/profile/updateProfile'
 import { UserAward } from '../profile.types'
+import { getMyAwards } from '../serverFunctions/profile/getMyAwards'
 
 const ProfileContext = createContext<{
   updateProfile: (newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => Promise<void>
@@ -11,13 +12,15 @@ const ProfileContext = createContext<{
   goals: Goal[]
   setGoals: (goals: Goal[]) => void
   awards: UserAward[]
+  refreshAwards: () => Promise<void>
 }>({
   updateProfile: () => Promise.resolve(),
   profile: { id: '', displayName: '', role: 'user' },
   isLoading: false,
   goals: [],
   setGoals: () => Promise.resolve(),
-  awards: []
+  awards: [],
+  refreshAwards: () => Promise.resolve()
 })
 
 export const useProfileContext = () => useContext(ProfileContext)
@@ -31,7 +34,7 @@ export const ProfileContextProvider = ({
   const [isLoading, setIsLoading] = useState(false)
   const [profile, setProfile] = useState(initialProfile)
   const [goals, setGoals] = useState<Goal[]>(initialGoals)
-   const [awards] = useState<UserAward[]>(initialAwards)
+   const [awards, setAwards] = useState<UserAward[]>(initialAwards)
 
   const updateProfile = useCallback((newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => {
     setIsLoading(true)
@@ -40,9 +43,14 @@ export const ProfileContextProvider = ({
       .then(() => setIsLoading(false))
   }, [])
 
+  const refreshAwards = useCallback(async () => {
+    const newAwards = await getMyAwards()
+    setAwards(newAwards)
+  }, [])
+
   const value = useMemo(() => {
-    return { isLoading, profile, updateProfile, goals, setGoals, awards }
-  }, [isLoading, profile, updateProfile, goals, setGoals, awards])
+    return { isLoading, profile, updateProfile, goals, setGoals, awards, refreshAwards }
+  }, [isLoading, profile, updateProfile, goals, setGoals, awards, refreshAwards])
 
   return <ProfileContext value={value}>{children}</ProfileContext>
 }

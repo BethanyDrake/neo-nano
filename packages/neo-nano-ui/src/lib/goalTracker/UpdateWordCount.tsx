@@ -8,6 +8,7 @@ import './UpdateWordCount.css'
 import { changeAtIndex, toCumulative } from './recordUtils'
 import { Goal, Record } from '../forum.types'
 import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
+import { useProfileContext } from '../context/ProfileContext'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -34,6 +35,7 @@ export const UpdateWordCount = ({
     return toCumulative(records)
   }, [records])
 
+  const {refreshAwards} = useProfileContext()
   const [isLoading, setIsLoading] = useState(false)
 
   const _updateGoalProgress = useCallback(
@@ -41,11 +43,11 @@ export const UpdateWordCount = ({
       setIsLoading(true)
       const {claimedAwards} = await updateGoalProgress({ id, records: newRecords })
       if (claimedAwards.length > 0) {
-        console.log("claimed award!")
+        refreshAwards()
       }
       setIsLoading(false)
     },
-    [id],
+    [id, refreshAwards],
   )
 
   const updateRecord = useCallback(
