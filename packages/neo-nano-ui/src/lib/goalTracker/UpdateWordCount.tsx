@@ -39,7 +39,10 @@ export const UpdateWordCount = ({
   const _updateGoalProgress = useCallback(
     async (newRecords: Record[]) => {
       setIsLoading(true)
-      await updateGoalProgress({ id, records: newRecords })
+      const {claimedAwards} = await updateGoalProgress({ id, records: newRecords })
+      if (claimedAwards.length > 0) {
+        console.log("claimed award!")
+      }
       setIsLoading(false)
     },
     [id],
