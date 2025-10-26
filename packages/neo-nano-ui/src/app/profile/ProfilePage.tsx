@@ -1,5 +1,8 @@
 'use client'
+import { NewAwardModal } from '@/lib/awards/NewAwardModal'
+import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { BasicButton } from '@/lib/buttons/BasicButton'
+import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
 import { useProfileContext } from '@/lib/context/ProfileContext'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { Column, Row } from '@/lib/layout'
@@ -7,12 +10,9 @@ import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { useRequireLogin } from '@/lib/useRequireLogin'
 import { sendGTMEvent } from '@next/third-parties/google'
 import classNames from './profile.module.css'
-import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
-import { useRequireLogin } from '@/lib/useRequireLogin'
-import { TrophyCase } from '@/lib/awards/TrophyCase'
-import { claimAward } from '@/lib/serverFunctions/profile/claimAward'
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals, awards } = useProfileContext()
@@ -32,8 +32,6 @@ export const ProfilePageInner = () => {
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p>{profile.aboutMe}</p>
-
-      <button onClick={() => claimAward('2')}>Claim award</button>
 
       <TrophyCase awards={awards} />
 
@@ -67,6 +65,8 @@ export const ProfilePageInner = () => {
           target={target}
         />
       ))}
+
+      <NewAwardModal />
     </div>
   )
 }
