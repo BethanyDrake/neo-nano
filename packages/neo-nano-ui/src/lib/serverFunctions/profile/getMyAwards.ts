@@ -12,6 +12,5 @@ export const getMyAwards = async () => {
     WHERE awarded_to=${userId}
     ORDER BY awarded_at DESC`
 
-
   return camelcaseKeys(user_awards) as UserAward[]
 }
