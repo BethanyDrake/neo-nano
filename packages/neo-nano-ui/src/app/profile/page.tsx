@@ -5,18 +5,23 @@ import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { ProfilePageInner } from './ProfilePage'
 import { ModalContextProvider } from '@/lib/modals/ModalContext'
+import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
+import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 
 const ProfilePage = async () => {
   const initalProfile = await getMyProfile()
   const initialGoals = await getMyGoals()
+  const initialAwards = await getMyAwards()
 
   return (
     <ClientSideOnly>
+      <NewAwardModalProvider>
       <ModalContextProvider>
-      <ProfileContextProvider initialProfile={initalProfile} initialGoals={initialGoals}>
+      <ProfileContextProvider initialProfile={initalProfile} initialGoals={initialGoals} initialAwards={initialAwards}>
         <ProfilePageInner />
       </ProfileContextProvider>
       </ModalContextProvider>
+      </NewAwardModalProvider>
     </ClientSideOnly>
   )
 }

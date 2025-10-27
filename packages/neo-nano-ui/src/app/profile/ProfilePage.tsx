@@ -1,5 +1,8 @@
 'use client'
+import { NewAwardModal } from '@/lib/awards/NewAwardModal'
+import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { BasicButton } from '@/lib/buttons/BasicButton'
+import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
 import { useProfileContext } from '@/lib/context/ProfileContext'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { Column, Row } from '@/lib/layout'
@@ -7,17 +10,16 @@ import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { useRequireLogin } from '@/lib/useRequireLogin'
 import { sendGTMEvent } from '@next/third-parties/google'
 import classNames from './profile.module.css'
-import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
-import { useRequireLogin } from '@/lib/useRequireLogin'
 
 export const ProfilePageInner = () => {
-  const { profile, goals, setGoals } = useProfileContext()
-  const {setOpenModal} = useModalContext()
+  const { profile, goals, setGoals, awards } = useProfileContext()
+  const { setOpenModal } = useModalContext()
   useRequireLogin()
 
-  const {onClick: joinChallenge, isLoading: isJoinChallengeLoading} = useLoadableOnClick(() => {
+  const { onClick: joinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
     sendGTMEvent({ event: 'sign_up', send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' })
     return joinCurrentChallenge().then(setGoals)
   })
@@ -31,16 +33,21 @@ export const ProfilePageInner = () => {
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p>{profile.aboutMe}</p>
 
+      <TrophyCase awards={awards} />
+
       <Row alignItems="center">
         <h2>Goals</h2>
-        <AddGoalModal/>
+        <AddGoalModal />
       </Row>
 
       {goals.length === 0 && (
         <div className={classNames.noGoalsContainer}>
           <Column style={{ alignItems: 'center' }}>
             <div>No goals so far.</div>
-            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>Join Novel November</BasicButton> or{' '}
+            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>
+              Join Novel November
+            </BasicButton>{' '}
+            or{' '}
             <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
           </Column>
         </div>
@@ -58,6 +65,8 @@ export const ProfilePageInner = () => {
           target={target}
         />
       ))}
+
+      <NewAwardModal />
     </div>
   )
 }

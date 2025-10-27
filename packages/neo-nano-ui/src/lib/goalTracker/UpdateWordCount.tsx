@@ -1,5 +1,5 @@
 import { differenceInCalendarDays, addDays } from 'date-fns'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { BasicButton } from '../buttons/BasicButton'
@@ -8,6 +8,8 @@ import './UpdateWordCount.css'
 import { changeAtIndex, toCumulative } from './recordUtils'
 import { Goal, Record } from '../forum.types'
 import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
+import { useProfileContext } from '../context/ProfileContext'
+import { NewAwardModalContext } from '../awards/NewAwardModal'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -34,15 +36,21 @@ export const UpdateWordCount = ({
     return toCumulative(records)
   }, [records])
 
+   const {displayNewAward} = useContext(NewAwardModalContext)
+  const {refreshAwards} = useProfileContext()
   const [isLoading, setIsLoading] = useState(false)
 
   const _updateGoalProgress = useCallback(
     async (newRecords: Record[]) => {
       setIsLoading(true)
-      await updateGoalProgress({ id, records: newRecords })
+      const {claimedAwards} = await updateGoalProgress({ id, records: newRecords })
+      if (claimedAwards.length > 0) {
+        refreshAwards()
+        displayNewAward(claimedAwards[0])
+      }
       setIsLoading(false)
     },
-    [id],
+    [displayNewAward, id, refreshAwards],
   )
 
   const updateRecord = useCallback(

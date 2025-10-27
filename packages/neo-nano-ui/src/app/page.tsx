@@ -6,6 +6,7 @@ import { Column, Row } from '@/lib/layout'
 import Link from 'next/link'
 import { JSX } from 'react'
 import styles from './page.module.css'
+import Image from 'next/image'
 const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
   return (
     <section>
@@ -65,10 +66,13 @@ export default async function Home() {
     <div className={styles.background} style={{ backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/pexels-technobulka-2908984.jpg)', backgroundSize: '1000px' }}>
       <main className={styles.main}>
       
-      <Column gap={0} style={{textAlign: 'center', marginBottom: '1em', minHeight:'75px'}}>
+      <div style={{textAlign: 'center', minHeight:'75px'}}>
+   
         <h1 className={styles.h1}>Novel November</h1>
         <ClientSideOnly><ChallengeCountDown/></ClientSideOnly>
-        </Column>
+           <Image alt="Novel November" width={300} height={300} src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/favicon-v3.svg"/>
+      
+        </div>
         <Column gap="3em">
           <HistorySection />
           <ChallengeSection />
