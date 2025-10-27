@@ -8,8 +8,20 @@
     text-transform: uppercase;
     box-shadow: var(--shadow-1);
 
+    @media (max-width: 800px) {
+    min-width: 100px;
+  }
+
     &:hover {
         box-shadow: var(--shadow-2); 
+    }
+
+    &.glow:hover {
+        box-shadow: var(--shadow-glow-1); 
+    }
+
+    &.glow:active {
+        box-shadow: var(--shadow-glow-2); 
     }
 
     &:active {
