@@ -25,12 +25,12 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
     )
 
   return (
-     <Row>
+     <Row style={{maxWidth: '100%', paddingRight: '8px'}}>
       <Link prefetch={false}  href="/auth/login?screen_hint=signup">
-        <BasicButton>Sign up</BasicButton>
+        <BasicButton variant='glow'>Sign up</BasicButton>
       </Link>
       <Link  prefetch={false} href="/auth/login">
-        <BasicButton>Log in</BasicButton>
+        <BasicButton variant='glow'>Log in</BasicButton>
       </Link>
     </Row>
   )
