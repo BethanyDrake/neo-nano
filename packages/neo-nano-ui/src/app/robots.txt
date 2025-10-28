@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+Disallow: /profile/
+Sitemap: https://novel-november.com/sitemap.xml
