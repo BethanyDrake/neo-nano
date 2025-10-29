@@ -9,6 +9,7 @@ jest.mock('./ActiveGoalContext')
 const today = getDateAsString(new Date())
 const yesterday = getDateAsString(subDays(new Date(), 1))
 
+
 describe('<QuickUpdateModal/>', () => {
 
   describe('initial state', () => {
@@ -17,11 +18,13 @@ describe('<QuickUpdateModal/>', () => {
         jest.mocked(useActiveGoal).mockReturnValue({
           activeGoal: { records: [100, 200, 400], startDate: yesterday } as Goal,
           updateActiveGoal,
+            isRefreshing: false,
+        refresh: jest.fn()
         })
         const { getByRole } = render(<QuickUpdateModal />)
 
         fireEvent.click(getByRole('button'))
-        
+
         expect(getByRole('spinbutton', { name: /today/i })).toHaveValue(200)
         fireEvent.click(getByRole('switch'))
         expect(getByRole('spinbutton', { name: /total/i })).toHaveValue(300)
@@ -36,6 +39,8 @@ describe('<QuickUpdateModal/>', () => {
       jest.mocked(useActiveGoal).mockReturnValue({
         activeGoal: { records: [0], startDate: today } as Goal,
         updateActiveGoal,
+          isRefreshing: false,
+        refresh: jest.fn()
       })
       const { getByRole } = render(<QuickUpdateModal />)
       fireEvent.click(getByRole('button'), {name: /quick update/i})
@@ -52,6 +57,8 @@ describe('<QuickUpdateModal/>', () => {
       jest.mocked(useActiveGoal).mockReturnValue({
         activeGoal: { records: [100, 0], startDate: yesterday } as Goal,
         updateActiveGoal,
+        isRefreshing: false,
+        refresh: jest.fn()
       })
       const { getByRole } = render(<QuickUpdateModal />)
       fireEvent.click(getByRole('button'))
@@ -69,8 +76,10 @@ describe('<QuickUpdateModal/>', () => {
       test('first day', async () => {
         const updateActiveGoal = jest.fn()
         jest.mocked(useActiveGoal).mockReturnValue({
-          activeGoal: { records: [0], startDate: today }as Goal,
+          activeGoal: { records: [0], startDate: today } as Goal,
           updateActiveGoal,
+          isRefreshing: false,
+          refresh: jest.fn()
         })
         const { getByRole } = render(<QuickUpdateModal />)
 
@@ -92,6 +101,8 @@ describe('<QuickUpdateModal/>', () => {
             startDate: yesterday,
           } as Goal,
           updateActiveGoal,
+            isRefreshing: false,
+        refresh: jest.fn()
         })
         const { getByRole } = render(<QuickUpdateModal />)
         fireEvent.click(getByRole('button'))
@@ -113,6 +124,8 @@ describe('<QuickUpdateModal/>', () => {
             startDate: yesterday,
           } as Goal,
           updateActiveGoal,
+            isRefreshing: false,
+        refresh: jest.fn()
         })
         const { getByRole } = render(<QuickUpdateModal />)
         fireEvent.click(getByRole('button'))
