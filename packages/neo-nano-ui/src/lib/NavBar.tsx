@@ -1,10 +1,8 @@
-import { faComment, faPerson } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { BasicButton } from './buttons/BasicButton';
 import { ClientSideOnly } from './ClientSideOnly';
 import { Row } from './layout';
-import { QuickUpdateModal } from './goalTracker/quickUpdate/QuickUpdateModal';
+import { LoggedInNavBarButtons } from './LoggedInNavBarButtons';
 import styles from './NavBar.module.css';
 import { NavMenu } from './NavMenu';
 
@@ -13,19 +11,7 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
 
   if (isLoggedIn)
     return (
-  <Row>
-      <Link prefetch={false}  style={{color: 'white', alignSelf: 'center'}} href="/auth/logout">
-        Log out
-      </Link>
-      <Link href="/forum">
-        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faComment}/>Browse Forum</button>
-      </Link>
-       <Link href="/profile">
-        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faPerson}/>My Profile</button>
-      </Link>
-        <QuickUpdateModal/>
-        
-      </Row>
+  <LoggedInNavBarButtons/>
     )
 
   return (

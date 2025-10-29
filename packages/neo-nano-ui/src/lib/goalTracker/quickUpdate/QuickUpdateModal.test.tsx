@@ -3,10 +3,11 @@ import { QuickUpdateModal } from './QuickUpdateModal'
 import { useActiveGoal } from './ActiveGoalContext'
 import { Goal } from '@/lib/forum.types'
 import { subDays } from 'date-fns'
+import { getDateAsString } from '@/lib/misc'
 jest.mock('./ActiveGoalContext')
 
-const today = new Date().toLocaleDateString().slice(0, 10) 
-const yesterday = subDays(new Date(), 1).toLocaleDateString().slice(0, 10)
+const today = getDateAsString(new Date())
+const yesterday = getDateAsString(subDays(new Date(), 1))
 
 describe('<QuickUpdateModal/>', () => {
 
