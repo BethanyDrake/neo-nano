@@ -1,15 +1,16 @@
-import { differenceInCalendarDays, addDays } from 'date-fns'
+import { addDays, differenceInCalendarDays } from 'date-fns'
 import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-import { BasicButton } from '../buttons/BasicButton'
-import { Column } from '../layout'
-import './UpdateWordCount.css'
-import { changeAtIndex, toCumulative } from './recordUtils'
-import { Goal, Record } from '../forum.types'
-import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
-import { useProfileContext } from '../context/ProfileContext'
 import { NewAwardModalContext } from '../awards/NewAwardModal'
+import { BasicButton } from '../buttons/BasicButton'
+import { useProfileContext } from '../context/ProfileContext'
+import { Goal, Record } from '../forum.types'
+import { Column } from '../layout'
+import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
+import './UpdateWordCount.css'
+import { toCumulative } from './recordUtils'
+import { updateRecordsUtil } from './updateRecordsUtil'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -56,19 +57,13 @@ export const UpdateWordCount = ({
   const updateRecord = useCallback(
     (day: number, newValue: number) => {
       const sanitisedValue = isNaN(newValue) ? 0 : newValue
-      let newRecords
-      if (isCumulative) {
-        const difference = day === 0 ? sanitisedValue : sanitisedValue - (cumulativeRecords[day - 1] ?? 0)
-        newRecords = changeAtIndex(records, day, difference)
-      } else {
-        newRecords = changeAtIndex(records, day, sanitisedValue)
-      }
+      const newRecords = updateRecordsUtil(day, sanitisedValue, records, isCumulative )
       if (newRecords[day] !== records[day]) {
         setRecords(newRecords)
         _updateGoalProgress(newRecords)
       }
     },
-    [_updateGoalProgress, cumulativeRecords, isCumulative, records, setRecords],
+    [_updateGoalProgress, isCumulative, records, setRecords],
   )
 
   const renderTile = useCallback<TileContentFunc>(

@@ -6,8 +6,15 @@ import { getUserId } from "../_utils/getUserIdFromSession"
 import { getUnclaimedAwards } from "../awards/getUnclaimedAwards"
 import { assessConsistencyAward, assessWordCountAward } from "../awards/assessAwards"
 import { claimAward } from "../profile/claimAward"
+import { UserAward } from "@/lib/profile.types"
 
-export async function updateGoalProgress(goal: Pick<Goal, 'id' | 'records'>) {
+export type UpdatedGoalProgressReturn = {
+  updatedGoal: Goal,
+  claimedAwards: UserAward[]
+
+}
+
+export async function updateGoalProgress(goal: Pick<Goal, 'id' | 'records'>): Promise<UpdatedGoalProgressReturn> {
   const user_id = await getUserId()
   const sql = getQueryFunction()
 

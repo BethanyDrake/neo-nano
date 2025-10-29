@@ -1,14 +1,16 @@
-import Link from 'next/link'
-import styles from './NavBar.module.css'
-import { ClientSideOnly } from './ClientSideOnly'
-import { BasicButton } from './buttons/BasicButton';
-import { Row } from './layout';
-import { NavMenu } from './NavMenu';
+import { faComment, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faEdit } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
+import { BasicButton } from './buttons/BasicButton';
+import { ClientSideOnly } from './ClientSideOnly';
+import { Row } from './layout';
+import { QuickUpdateModal } from './goalTracker/quickUpdate/QuickUpdateModal';
+import styles from './NavBar.module.css';
+import { NavMenu } from './NavMenu';
 
 const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoading: boolean }) => {
   if (isLoading) return null
+
   if (isLoggedIn)
     return (
   <Row>
@@ -16,11 +18,13 @@ const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoadi
         Log out
       </Link>
       <Link href="/forum">
-        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faComment}/> Browse Forum</button>
+        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faComment}/>Browse Forum</button>
       </Link>
        <Link href="/profile">
-        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faEdit}/> Update Progess</button>
+        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faPerson}/>My Profile</button>
       </Link>
+        <QuickUpdateModal/>
+        
       </Row>
     )
 
