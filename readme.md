@@ -10,7 +10,7 @@ To provide an integrated goal tracking tool and community forum centered on the 
 ## Deployments:
 
 - [staging](https://neo-nano.vercel.app/)
-- [staging](https://www.novel-november.com/)
+- [production](https://www.novel-november.com/)
 
 ## Run Locally
 
