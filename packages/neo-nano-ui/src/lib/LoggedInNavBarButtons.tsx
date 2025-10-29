@@ -7,6 +7,7 @@ import { QuickUpdateModal } from './goalTracker/quickUpdate/QuickUpdateModal';
 import { Row } from './layout';
 import styles from './NavBar.module.css';
 import { ActiveGoalProvider } from './goalTracker/quickUpdate/ActiveGoalContext';
+import { NewAwardModal, NewAwardModalProvider } from './awards/NewAwardModal';
 
 
 export const LoggedInNavBarButtons = () => {
@@ -21,8 +22,11 @@ export const LoggedInNavBarButtons = () => {
        <Link href="/profile">
         <button className={styles.responsiveButton}><FontAwesomeIcon icon={faPerson}/>My Profile</button>
       </Link>
+      <NewAwardModalProvider>
       <ActiveGoalProvider>
         <QuickUpdateModal/>
+        <NewAwardModal />
         </ActiveGoalProvider>
+        </NewAwardModalProvider>
       </Row>)
 }
