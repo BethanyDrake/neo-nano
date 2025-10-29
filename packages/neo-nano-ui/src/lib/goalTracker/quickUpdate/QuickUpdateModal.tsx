@@ -115,7 +115,7 @@ export const QuickUpdateModal = () => {
         <>
           <div style={{ width: 'unset' }} className={classNames['modal']}>
             {isRefreshing && <FontAwesomeIcon spin icon={faSpinner}/>}
-            {activeGoal &&  <QuickUpdateModalForm closeModal={() => setIsOpen(false)} />}
+            {!isRefreshing && activeGoal &&  <QuickUpdateModalForm closeModal={() => setIsOpen(false)} />}
             {!isRefreshing && !activeGoal &&
             (
               <div style={{minWidth: '200px'}}>
