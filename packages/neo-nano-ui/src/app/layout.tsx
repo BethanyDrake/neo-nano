@@ -26,7 +26,11 @@ export default async function RootLayout({
   const isLoggedIn = !!session
   return (
     <html lang="en">
-      <GoogleTagManager gtmId="AW-17636227789" />
+      <head>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+        <GoogleTagManager gtmId="AW-17636227789" />
+      </head>
+
       <body>
         <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} isModerator={isModerator} />
         <main>{children}</main>
