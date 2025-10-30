@@ -99,9 +99,9 @@ export const QuickUpdateModal = () => {
 
   useEffect(() => {
     refresh()
-  }, [isOpen, refresh])
+  }, [pathname, refresh])
 
-  if (pathname==='/profile') {
+  if (pathname==='/profile' || !activeGoal) {
     return null
   }
 
