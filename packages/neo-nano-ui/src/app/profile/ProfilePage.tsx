@@ -20,7 +20,7 @@ export const ProfilePageInner = () => {
   useRequireLogin()
 
   const { onClick: joinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
-    sendGTMEvent({ event: 'sign_up', send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB' })
+    sendGTMEvent({ event: 'conversion', value: {send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB'}})
     return joinCurrentChallenge().then(setGoals)
   })
 
