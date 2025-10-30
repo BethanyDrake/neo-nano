@@ -1,7 +1,7 @@
 import { Goal } from "@/lib/forum.types"
 import { Award } from "@/lib/profile.types"
-import { differenceInCalendarDays } from "date-fns"
 import _ from 'lodash'
+import { dateToChallengeDay } from "../goals/goalUtils"
 
 
 export type GoalAssessmentInput = {
@@ -9,9 +9,7 @@ export type GoalAssessmentInput = {
     goal: Pick<Goal,  'startDate' | 'lengthDays' | 'records'>
 }
 
-const dateToChallengeDay = (goalStartDate: string, date: string) => {
-    return differenceInCalendarDays( new Date(date), new Date(goalStartDate),)
-}
+
 
 const getRelevantRecords = ({award, goal}: GoalAssessmentInput) => {
     const startChallengeDay = Math.max(dateToChallengeDay(goal.startDate, award.startDate), 0)

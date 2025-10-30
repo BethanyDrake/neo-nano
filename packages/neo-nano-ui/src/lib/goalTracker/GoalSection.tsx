@@ -6,7 +6,6 @@ import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered, Column, Row } from '@/lib/layout'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { Switch } from '@headlessui/react'
 import { differenceInCalendarDays } from 'date-fns'
 import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
@@ -19,6 +18,7 @@ import { toCumulative } from './recordUtils'
 import { StatsCard } from './StatsCard'
 import { UpdateWordCount } from './UpdateWordCount'
 import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
+import { CumulativeSwitch } from './CumulativeSwitch'
 type GoalProps = {
   id: string
   title: string
@@ -77,12 +77,8 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
         <StatsCard title="Today" total={todaysProgress} target={dailyTarget}></StatsCard>
         <StatsCard title="Total" total={total} target={target}></StatsCard>
       </Row>
-      <Centered>
-        <Switch checked={isCumulative} className={classNames.switchContainer} onChange={setIsCumulative}>
-          <span className={isCumulative ? classNames.inactiveMode : classNames.activeMode}>Words Per Day</span>
-          <span> • </span>
-          <span className={isCumulative ? classNames.activeMode : classNames.inactiveMode}>Cumulative</span>
-        </Switch>
+      <Centered style={{padding: '16px'}}>
+        <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative}/>
       </Centered>
       <div className={classNames['goal-row']}>
         <UpdateWordCount

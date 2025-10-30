@@ -1,27 +1,17 @@
-import Link from 'next/link'
-import styles from './NavBar.module.css'
-import { ClientSideOnly } from './ClientSideOnly'
+import Link from 'next/link';
 import { BasicButton } from './buttons/BasicButton';
+import { ClientSideOnly } from './ClientSideOnly';
 import { Row } from './layout';
+import { LoggedInNavBarButtons } from './LoggedInNavBarButtons';
+import styles from './NavBar.module.css';
 import { NavMenu } from './NavMenu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const NavBarButtons = ({ isLoggedIn, isLoading }: { isLoggedIn: boolean; isLoading: boolean }) => {
   if (isLoading) return null
+
   if (isLoggedIn)
     return (
-  <Row>
-      <Link prefetch={false}  style={{color: 'white', alignSelf: 'center'}} href="/auth/logout">
-        Log out
-      </Link>
-      <Link href="/forum">
-        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faComment}/> Browse Forum</button>
-      </Link>
-       <Link href="/profile">
-        <button className={styles.responsiveButton}><FontAwesomeIcon icon={faEdit}/> Update Progess</button>
-      </Link>
-      </Row>
+  <LoggedInNavBarButtons/>
     )
 
   return (
