@@ -22,12 +22,14 @@ exports.onExecutePostLogin = async (event, api) => {
       ON CONFLICT (external_id) DO NOTHING
       RETURNING id`
 
-    userId=createdUsers[0].id
+    userId=createdUsers[0]?.id
   } else {
-    userId= existingUsers[0].id
+    userId= existingUsers[0]?.id
   }
 
-  api.user.setUserMetadata('user_id', userId)
+  if (userId) {
+    api.user.setUserMetadata('user_id', userId)
+  }
 };
 
 
