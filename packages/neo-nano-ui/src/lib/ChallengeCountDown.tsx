@@ -13,7 +13,7 @@ export const ChallengeCountDown = () => {
   if (isBefore(today, novemberFirst)) {
     return (
       <div style={{ fontStyle: 'italic' }}>
-        {duration.days} days, {duration.hours} hours until the challenge begins.
+        {duration.days ?? 0} days, {duration.hours ?? 0} hours until the challenge begins.
       </div>
     )
   } else {
