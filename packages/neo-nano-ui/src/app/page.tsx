@@ -129,7 +129,7 @@ export default async function Home() {
     <div
       className={styles.background}
       style={{
-        backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/pexels-technobulka-2908984.jpg)',
+        backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/bookcase-small.jpg)',
         backgroundSize: '1000px',
       }}
     >
