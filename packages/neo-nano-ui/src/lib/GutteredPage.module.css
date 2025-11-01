@@ -1,6 +1,6 @@
 .main {
   max-width: 1000px;
-  background-color: white;
+  background-color: var(--background-colour);
   padding: 5em;
   padding-top: 3em;
   border-left: 2px solid var(--off-black);
@@ -27,9 +27,6 @@ p {
   padding : 0.5em 0;
 }
 }
-
-
-
 
 .background {
   display: flex;

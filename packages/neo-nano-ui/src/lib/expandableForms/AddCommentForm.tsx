@@ -5,6 +5,7 @@ import { BasicButton } from '../buttons/BasicButton'
 import RichTextEditor from '../richText/RichTextEditor'
 import { Column } from '../layout'
 import formClasses from '@/lib/form.module.css'
+import styles from './expandableForm.module.css'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useThreadContext } from '../context/ThreadContext'
 type Inputs = {
@@ -30,16 +31,19 @@ const AddCommentForm = ({ afterSubmit }: { afterSubmit: () => void }) => {
   }
 
   return (
-    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
-      <Column>
-        {errorText && <span>{errorText}</span>}
-        <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
-
-        <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
-          Post!
-        </BasicButton>
-      </Column>
-    </form>
+    <div className={styles.container}>
+      <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
+        <Column>
+          {errorText && <span>{errorText}</span>}
+          <div className={styles.richTextEditor}>
+            <RichTextEditor setValue={setRichText} value={richText} setPlainText={setPlainText} />
+          </div>
+          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+            Post!
+          </BasicButton>
+        </Column>
+      </form>
+    </div>
   )
 }
 

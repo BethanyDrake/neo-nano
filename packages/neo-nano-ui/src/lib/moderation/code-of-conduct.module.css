@@ -1,0 +1,20 @@
+.message {
+  width: 100%;
+  font-size: 1.2em;
+  color: var(--text-colour-2);
+  text-align: center;
+  margin-top: 1em;
+  padding: 1em;
+  border-radius: 8px;
+  background-color: var(--background-colour-2);
+}
+
+.image {
+  padding: 1em;
+  border-radius: 8px;
+  
+  @media (prefers-color-scheme: dark) {
+     filter:  invert(75%);
+  }
+ 
+}

@@ -5,6 +5,7 @@
     width: 200px;
     box-sizing: content-box;
     border-radius: 16px;
+    background-color: var(--background-colour-2);
 }
 
 .modal {

@@ -39,7 +39,7 @@ const ForumItem = ({
         </Row>
         <div style={{display:'flex', minWidth:'50px', flexDirection:'column', gap:'1em'}}>
         <div style={{color:'var(--primary-vibrant)'}}>{totalThreads} <FontAwesomeIcon icon={Icons.faWorm}/></div>
-        <div style={{color:'var(--grey-dark)'}}>{totalComments} <FontAwesomeIcon icon={Icons.faComment}/></div>
+        <div className={styles['forum-sub-title']}>{totalComments} <FontAwesomeIcon icon={Icons.faComment}/></div>
         </div>
       </Row>
     </div>

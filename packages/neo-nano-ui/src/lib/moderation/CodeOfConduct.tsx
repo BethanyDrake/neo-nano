@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { GutteredPage } from '../GutteredPage'
-import { Centered, Column } from '../layout'
+import { Centered } from '../layout'
 import Link from 'next/link'
+import styles from './code-of-conduct.module.css'
 
 export const CodeOfConduct = () => {
   return (
@@ -43,6 +44,7 @@ export const CodeOfConduct = () => {
 
       <Centered style={{ marginTop: '4em' }}>
         <Image
+        className={styles.image}
           width={150}
           height={150}
           alt="The hammer of jugdement landing on a rule-breaker."
@@ -81,21 +83,12 @@ export const CodeOfConduct = () => {
         }
       </p>
 
-      <Column
-        style={{
-          width: '100%',
-          fontSize: '1.2em',
-          color: 'var(--primary-dark)',
-          textAlign: 'center',
-          marginTop: '2em',
-        }}
-      >
-        <p>
+        <p className={styles.message}>
           All of the above is subject to change pending community feedback or emergent situations. If you have further
           concerns or ideas on how to ensure ongoing safety, please voice your suggestions in a <Link href={'/forum/meta/'}>meta thread</Link>, or
           contact <i>bethany@novel-november.com</i>
         </p>
-      </Column>
+
     </GutteredPage>
   )
 }
