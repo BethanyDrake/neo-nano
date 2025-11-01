@@ -22,7 +22,12 @@ export const NavMenu = ({isModerator}: {isModerator: boolean}) => {
         </MenuItem>
         <MenuItem>
           <Link className={styles["menu-item"]} href="/profile">
-            My Progress
+            My Profile
+          </Link>
+        </MenuItem>
+        <MenuItem>
+          <Link className={styles["menu-item"]}href="/moderation/code-of-conduct">
+            Code of Conduct
           </Link>
         </MenuItem>
         {isModerator &&
