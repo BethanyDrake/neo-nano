@@ -14,17 +14,19 @@
   padding: 16px;
   border-radius: 4px;
   box-shadow: var(--shadow-1);
+  background-color: var(--background-colour-2);
 }
 
 .switchContainer {
   border: none;
   background-color: transparent;
+  color: var(--text-colour-2);
 }
 
 .inactiveMode {
-  color: val(--grey);
+  color: var(--text-colour-2);
 }
 .activeMode {
-  color: black;
+  color: var(--text-colour);
   font-weight: bold;
 }

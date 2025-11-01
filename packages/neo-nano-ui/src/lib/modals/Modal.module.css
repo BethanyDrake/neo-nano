@@ -7,14 +7,22 @@
   max-height: 100%;
   max-width: 100%;
   z-index: 999;
-  background-color: white;
+  background-color: var(--background-colour-2);
   padding: 24px;
   border-radius: 10px;
   border: 4px solid var(--primary-light);
+
+  @media (prefers-color-scheme: dark) {
+    border-color: var(--primary-dark);
+  }
 }
 
 .modal.angry {
   border: 4px solid var(--angry-vibrant);
+
+    @media (prefers-color-scheme: dark) {
+    border-color: var(--angry-dark);
+  }
 
 }
 
@@ -37,6 +45,7 @@
 .flag {
     border: none;
     background-color: transparent;
+    color: var(--text-colour);
 
     &:hover {
         color: red;

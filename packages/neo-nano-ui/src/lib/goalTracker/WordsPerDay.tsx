@@ -32,10 +32,10 @@ export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target }: Prop
           }}
           syncMethod="index"
         >
-          <YAxis>
+          <YAxis stroke='var(--text-colour-2)'>
             <Label value="word count" position="top" angle={0} offset={24} />
           </YAxis>
-          <XAxis dataKey={'day'} domain={[1, lengthDays]}>
+          <XAxis stroke='var(--text-colour-2)' dataKey={'day'} domain={[1, lengthDays]}>
             <Label value="challenge day" position="bottom" />
           </XAxis>
 

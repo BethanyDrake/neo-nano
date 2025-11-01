@@ -17,6 +17,33 @@
 
   --shadow-glow-1: 0 0px 5px #c0e5c888;
   --shadow-glow-2: 0 0px 10px #c0e5c8dd;
+
+  --background-colour: white;
+  --background-colour-2: white;
+  --text-colour: black;
+  --text-colour-2: var(--grey-dark);
+  @media (prefers-color-scheme: dark) {
+
+    --background-colour: #121212;
+    --background-colour-2: #2a2f2f;
+    --text-colour: white;
+    --text-colour-2: var(--grey-light);
+  }
+}
+
+a {
+  color: var(--primary-vibrant);
+  &:hover {
+     color: var(--primary-dark);
+  };
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--primary-light);
+     &:hover {
+     color: var(--secondary-light);
+  };
+
+  }
 }
 
 main {
@@ -31,8 +58,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
+  background-color: var(--background-colour);
+  color: var(--text-colour);
+}
 button {
   cursor: pointer;
 }

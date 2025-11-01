@@ -33,7 +33,7 @@ export const AddGoalModal = () => {
               visibility: 'private',
               startDate: '2025-11-01',
             }}
-            closeModal={close}
+            closeModal={closeModal}
             onSave={onSave}
           />
         </div>

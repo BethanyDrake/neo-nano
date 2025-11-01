@@ -98,7 +98,7 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
         </Row>
 
         <Row>
-          <BasicButton buttonProps={{ onClick: closeModal }}>Cancel</BasicButton>{' '}
+          <BasicButton buttonProps={{ type: 'button', onClick: closeModal }}>Cancel</BasicButton>{' '}
           <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
             Save
           </BasicButton>

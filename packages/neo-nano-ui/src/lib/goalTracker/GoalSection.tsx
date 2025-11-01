@@ -77,7 +77,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
         <StatsCard title="Today" total={todaysProgress} target={dailyTarget}></StatsCard>
         <StatsCard title="Total" total={total} target={target}></StatsCard>
       </Row>
-      <Centered style={{padding: '16px'}}>
+      <Centered>
         <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative}/>
       </Centered>
       <div className={classNames['goal-row']}>

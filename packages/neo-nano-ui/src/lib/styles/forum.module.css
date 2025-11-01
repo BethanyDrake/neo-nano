@@ -6,10 +6,12 @@
 
 .forum-container {
   padding: 30px;
-  background-color: white;
 }
 .forum-item .forum-sub-title {
    color: var(--grey-dark);
+   @media (prefers-color-scheme: dark) {
+       color: var(--grey-light);
+   }
 }
 
 .forum-icon {
@@ -31,7 +33,7 @@ a.forum-item-title:hover {
 .forum-icon .fa {
   font-size: 30px;
   margin-top: 8px;
-  color: var(--grey-dark)
+  color: var(--grey-dark);
 }
 .forum-item.active .fa {
   color:  var(--primary-vibrant);
@@ -42,9 +44,9 @@ a.forum-item-title:hover {
 
 
 .thread {
-  color: black;
   text-decoration: none;
-  background-color: white;
+  color: var(--text-colour);
+
   border-bottom: 1px solid var(--grey-light);
 
   &:hover {

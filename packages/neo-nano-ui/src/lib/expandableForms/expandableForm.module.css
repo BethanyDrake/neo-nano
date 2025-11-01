@@ -1,0 +1,14 @@
+.container {
+    background-color: var(--background-colour-2);
+    color: var(--text-colour);
+    padding: 1em;
+    margin: 1em;
+    border-radius: 8px;
+
+}
+
+.richTextEditor {
+    color: black;
+    background-color: white;
+    filter: sepia()
+}
