@@ -99,28 +99,6 @@ const HistorySection = () => {
   return <Section title={title} body={<p>{body}</p>} />
 }
 
-const ContibutionSection = () => {
-  const title = 'How to Contribute'
-
-  return (
-    <Section
-      title={title}
-      body={
-        <>
-          <p>
-            This website is open source, and open to community contributions. For programmers wanting to pitch in,
-            please head over to <Link href="https://github.com/BethanyDrake/neo-nano">github</Link> and check out the
-            readme for further details. For everyone else, take a look at the{' '}
-            <Link href="https://github.com/BethanyDrake/neo-nano/issues">issues tab</Link> to see upcoming features,
-            make formal bug reports, and discuss future development. Not every suggestion will be implemented, but all
-            discussion is valued and helps to make this project the best version of itself.
-          </p>
-        </>
-      }
-    />
-  )
-}
-
 export default async function Home() {
   const session = await auth0.getSession()
   const isLoggedIn = !!session
@@ -151,8 +129,6 @@ export default async function Home() {
             <HistorySection />
             <ChallengeSection />
             <FeaturesSection />
-
-            <ContibutionSection />
 
             <section>
               <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
