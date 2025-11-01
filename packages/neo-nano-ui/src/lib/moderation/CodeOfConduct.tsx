@@ -77,7 +77,7 @@ export const CodeOfConduct = () => {
       <h3>3. Open Source Code</h3>
       <p>
         {
-          "This last one is more on the technical side. I've made all the code for the website publicly available on github. This means that I, and any other contributors, are subject to public scrutiny. Any changes to the site are public knowledge, so no-one can sneak in malicious software or set up hidden features."
+          "This last one is more on the technical side. I've made all the code for the website "}<Link href={'https://github.com/BethanyDrake/neo-nano'}>publicly available</Link>{". This means that I, and any other contributors, are subject to public scrutiny. Any changes to the site are public knowledge, so no-one can sneak in malicious software or set up hidden features."
         }
       </p>
 
