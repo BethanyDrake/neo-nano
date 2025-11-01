@@ -23,6 +23,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 1,
     },
+     {
+      url: 'https://www.novel-november.com/moderation/code-of-conduct',
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
    ...topicEntries,
    ...threadEntries
   ]

@@ -1,7 +1,7 @@
 import { ClientSideOnly } from "@/lib/ClientSideOnly"
 import { getFlaggedComments } from "@/lib/serverFunctions/moderation/getFlaggedComments"
 import { getIsModerator } from "@/lib/serverFunctions/moderation/getIsModerator"
-import {ModerationPage} from "./ModerationPage"
+import {ModerationPage} from "../../lib/moderation/ModerationPage"
 import { auth0 } from "@/lib/auth0"
 
 const Page = async () => {

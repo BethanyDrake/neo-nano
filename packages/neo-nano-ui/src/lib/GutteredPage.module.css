@@ -1,0 +1,38 @@
+.main {
+  max-width: 1000px;
+  background-color: white;
+  padding: 5em;
+  padding-top: 3em;
+  border-left: 2px solid var(--off-black);
+  border-right: 2px solid var(--off-black);
+
+  @media (width<500px) {
+    padding: 1em;
+  }
+
+
+  h1 {
+  font-size: xxx-large;
+}
+
+  h2 {
+  padding-top: 0.5em; 
+   padding-bottom: 0.5em;
+}
+h3 {
+  padding:  0.5em 0;
+}
+
+p {
+  padding : 0.5em 0;
+}
+}
+
+
+
+
+.background {
+  display: flex;
+  justify-content: center;
+  background-color: var(--primary-light)
+}
