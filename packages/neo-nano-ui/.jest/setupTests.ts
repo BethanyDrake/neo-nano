@@ -18,5 +18,8 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 export const server = setupServer();
 
 beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+    server.resetHandlers()
+    window.localStorage.clear()
+});
 afterAll(() => server.close());
