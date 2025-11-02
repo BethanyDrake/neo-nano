@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { getIsModerator } from '@/lib/serverFunctions/moderation/getIsModerator';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 config.autoAddCss = false;  
 export const metadata: Metadata = {
   title: 'Novel November',
@@ -31,6 +32,7 @@ export default async function RootLayout({
         <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} isModerator={isModerator} />
         <main>{children}</main>
         <SpeedInsights/>
+        <Analytics />
       </body>
     </html>
   )
