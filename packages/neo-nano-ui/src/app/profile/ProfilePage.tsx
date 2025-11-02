@@ -11,7 +11,6 @@ import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useRequireLogin } from '@/lib/useRequireLogin'
-import { sendGTMEvent } from '@next/third-parties/google'
 import classNames from './profile.module.css'
 
 export const ProfilePageInner = () => {
@@ -20,7 +19,6 @@ export const ProfilePageInner = () => {
   useRequireLogin()
 
   const { onClick: joinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
-    sendGTMEvent({ event: 'conversion', value: {send_to: 'AW-17636227789/2FVrCNqSj6sbEM31zdlB'}})
     return joinCurrentChallenge().then(setGoals)
   })
 
