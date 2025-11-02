@@ -8,8 +8,8 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { getIsModerator } from '@/lib/serverFunctions/moderation/getIsModerator';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 config.autoAddCss = false;  
-
 export const metadata: Metadata = {
   title: 'Novel November',
   description: 'Write a novel this November!',
@@ -30,6 +30,7 @@ export default async function RootLayout({
       <body>
         <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} isModerator={isModerator} />
         <main>{children}</main>
+        <SpeedInsights/>
       </body>
     </html>
   )
