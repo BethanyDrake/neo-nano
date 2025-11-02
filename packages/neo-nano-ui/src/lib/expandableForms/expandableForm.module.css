@@ -10,5 +10,8 @@
 .richTextEditor {
     color: black;
     background-color: white;
-    filter: sepia()
+
+    @media (prefers-color-scheme: dark) {
+           filter: sepia()
+    }
 }
