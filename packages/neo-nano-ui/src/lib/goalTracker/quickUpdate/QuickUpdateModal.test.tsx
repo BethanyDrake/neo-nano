@@ -8,10 +8,7 @@ jest.mock('./ActiveGoalContext')
 
 const today = getDateAsString(new Date())
 const yesterday = getDateAsString(subDays(new Date(), 1))
-
-
 describe('<QuickUpdateModal/>', () => {
-
   describe('initial state', () => {
      test('middle day, with later days filled', () => {
         const updateActiveGoal = jest.fn()
