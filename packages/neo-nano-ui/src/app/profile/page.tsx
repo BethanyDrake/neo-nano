@@ -9,9 +9,7 @@ import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 
 const ProfilePage = async () => {
-  const initalProfile = await getMyProfile()
-  const initialGoals = await getMyGoals()
-  const initialAwards = await getMyAwards()
+  const [initalProfile, initialGoals, initialAwards] = await Promise.all([getMyProfile(), getMyGoals(), getMyAwards()])
 
   return (
     <ClientSideOnly>
