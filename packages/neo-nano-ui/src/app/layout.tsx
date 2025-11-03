@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: '30 days, 50K words. Can you beat the challenge?',
     url: 'https://www.novel-november.com',
     siteName: 'Novel November',
-    images: [{ url: 'https://www.novel-november.com/icon0.svg' }],
+    images: [{ url: 'https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/opengraph-image.png' }],
   },
 }
 
