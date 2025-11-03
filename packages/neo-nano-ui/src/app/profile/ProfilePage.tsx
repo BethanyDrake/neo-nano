@@ -4,7 +4,6 @@ import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
 import { useProfileContext } from '@/lib/context/ProfileContext'
-import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { Column, Row } from '@/lib/layout'
 import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
@@ -12,6 +11,12 @@ import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useRequireLogin } from '@/lib/useRequireLogin'
 import classNames from './profile.module.css'
+import dynamic from 'next/dynamic'
+
+const GoalSection = dynamic(() =>
+  import('@/lib/goalTracker/GoalSection').then((mod) => mod.GoalSection), {ssr: false}
+)
+
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals, awards } = useProfileContext()
