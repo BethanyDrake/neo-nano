@@ -82,7 +82,6 @@ export const UpdateWordCount = ({
         if (isSelected) {
           return (
             <input
-              autoFocus
               defaultValue={wordCount ?? undefined}
               name={`wordcount for ${date}${isCumulative ? ' (cumulative)' : ''}`}
               onBlur={onSubmit}
