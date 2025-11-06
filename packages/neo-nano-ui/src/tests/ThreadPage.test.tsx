@@ -3,6 +3,7 @@ import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWith
 import { render } from '@testing-library/react'
 
 jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
+jest.mock('@/lib/serverFunctions/forum/getThreadReactions', () => ({getThreadReactions: () => Promise.resolve({})}))
 
 describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {

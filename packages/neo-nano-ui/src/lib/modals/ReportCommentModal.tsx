@@ -1,15 +1,16 @@
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAwesomeFlag'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { BasicButton } from '../buttons/BasicButton'
+import { SmallIconButton } from '../buttons/ExtendableIconButton'
+import { useThreadContext } from '../context/ThreadContext'
 import formClasses from '../form.module.css'
 import { Comment, Flag } from '../forum.types'
 import { Column, LeftRow, Row } from '../layout'
-import classNames from './Modal.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAwesomeFlag'
-import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import { useThreadContext } from '../context/ThreadContext'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
+import classNames from './Modal.module.css'
 type Inputs = Pick<Flag, 'reason' | 'details'>
 
 const ReportCommentForm = ({
@@ -87,7 +88,7 @@ const ReportCommentForm = ({
         <Row>
           <BasicButton variant="angry" buttonProps={{ onClick: closeModal }}>
             Cancel
-          </BasicButton>{' '}
+          </BasicButton>
           <BasicButton isLoading={isLoading} variant="angry" buttonProps={{ type: 'submit' }}>
             Save
           </BasicButton>
@@ -101,15 +102,7 @@ export const ReportCommentModal = ({ comment }: { comment: Pick<Comment, 'id' | 
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
-      <button
-        title="Report comment as inappropriate"
-        onClick={() => {
-          setIsOpen(true)
-        }}
-        className={classNames.flag}
-      >
-        <FontAwesomeIcon icon={faFontAwesomeFlag} />
-      </button>
+    <SmallIconButton onClick={() => setIsOpen(true)} id={'report'} text={'Report comment as inappropriate'} variant="angry" icon={faFontAwesomeFlag} />
       {isOpen && (
         <div className={[classNames['modal'], classNames['angry']].join(' ')}>
           <ReportCommentForm comment={comment} closeModal={() => setIsOpen(false)} />

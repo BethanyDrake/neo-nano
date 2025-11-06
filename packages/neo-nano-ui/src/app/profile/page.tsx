@@ -10,6 +10,7 @@ import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 
 const ProfilePage = async () => {
   const [initalProfile, initialGoals, initialAwards] = await Promise.all([getMyProfile(), getMyGoals(), getMyAwards()])
+  if (!initalProfile) throw Error("No profile found for ProfilePage.")
 
   return (
     <ClientSideOnly>

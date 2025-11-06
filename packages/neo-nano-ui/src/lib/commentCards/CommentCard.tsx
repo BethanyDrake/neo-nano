@@ -1,11 +1,12 @@
 'use client'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { ClientSideOnly } from '../ClientSideOnly'
-import classNames from './CommentCard.module.css'
 import { Comment, Flag, Profile } from '../forum.types'
 import { Row } from '../layout'
 import { ReportCommentModal } from '../modals/ReportCommentModal'
-import Link from 'next/link'
+import classNames from './CommentCard.module.css'
+import { LikeButton } from './LikeButton'
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
@@ -40,9 +41,15 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
 
   return (
     <div className={classNames.card}>
-      <Row justifyContent="space-between">
-       <Link className={classNames.authorLink} href={`/profile/${author.id}`}>{author.displayName}:</Link>
-        <ReportCommentModal comment={comment} />
+      <Row justifyContent="space-between" alignItems="center" style={{ padding: '1em 0' }}>
+        <Link className={classNames.authorLink} href={`/profile/${author.id}`}>
+          {author.displayName}:
+        </Link>
+
+        <Row>
+          <LikeButton commentId={comment.id} />
+          <ReportCommentModal comment={comment} />
+        </Row>
       </Row>
       <div className={classNames.hidden}>{comment.text}</div>
       <ClientSideOnly>

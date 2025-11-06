@@ -46,3 +46,14 @@
         color: var(--primary-light);
     }
 }
+
+.likeButtonContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.likeButtonText {
+    color: var(--secondary-light);
+    font-size: 24px;
+}
