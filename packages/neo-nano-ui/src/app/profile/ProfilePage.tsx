@@ -11,12 +11,7 @@ import { useModalContext } from '@/lib/modals/ModalContext'
 import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useRequireLogin } from '@/lib/useRequireLogin'
 import classNames from './profile.module.css'
-import dynamic from 'next/dynamic'
-
-const GoalSection = dynamic(() =>
-  import('@/lib/goalTracker/GoalSection').then((mod) => mod.GoalSection), {ssr: false}
-)
-
+import { GoalSection } from '@/lib/goalTracker/GoalSection'
 
 export const ProfilePageInner = () => {
   const { profile, goals, setGoals, awards } = useProfileContext()
