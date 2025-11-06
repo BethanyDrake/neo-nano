@@ -1,59 +1,63 @@
 .card {
-    padding: 16px;
-    border-bottom:  solid var(--grey-light);
+  padding: 16px;
+  border-bottom: solid var(--grey-light);
 }
 
 .hidden {
-    visibility: hidden;
-    height: 0;
+  visibility: hidden;
+  height: 0;
 }
 
 .datetime {
-    font-size: small;
-    color: var(--text-colour-2);
+  font-size: small;
+  color: var(--text-colour-2);
 }
 
 .flaggedCommentMessage {
-    color: var(--warning-dark);
-    font-style: italic;
+  color: var(--warning-dark);
+  font-style: italic;
 }
 
 .confirmedInappropriateMessage {
-    color: var(--angry-dark);
-    font-style: italic;
+  color: var(--angry-dark);
+  font-style: italic;
 }
 
 .label {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .angryPaper {
-   background-color: rgba(0, 0, 0, 0.1);
-   padding: 8px;
-   border-radius: 4px;
-   margin: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  margin: 8px;
 }
 
 .authorLink {
-    font-weight: bold;
-    color: var(--off-black);
-    text-decoration: none;
-    &:hover {
-        color: var(--primary-vibrant);
-    }
+  font-weight: bold;
+  color: var(--off-black);
+  text-decoration: none;
+  &:hover {
+    color: var(--primary-vibrant);
+  }
 
-    @media (prefers-color-scheme: dark) {
-        color: var(--primary-light);
-    }
+  @media (prefers-color-scheme: dark) {
+    color: var(--primary-light);
+  }
 }
 
 .likeButtonContainer {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .likeButtonText {
+  color: var(--secondary-vibrant);
+  font-size: 24px;
+
+  @media (prefers-color-scheme: dark) {
     color: var(--secondary-light);
-    font-size: 24px;
+  }
 }

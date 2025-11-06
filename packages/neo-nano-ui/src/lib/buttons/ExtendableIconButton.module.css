@@ -89,8 +89,12 @@
 
     &.isActive {
       > svg {
-        color: var(--secondary-light);
+        color: var(--secondary-vibrant);
         filter: drop-shadow(var(--shadow-1));
+
+        @media (prefers-color-scheme: dark) {
+          color: var(--secondary-light);
+        }
       }
     }
   }
