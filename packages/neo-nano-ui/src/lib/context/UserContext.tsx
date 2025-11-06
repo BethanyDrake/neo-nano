@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, PropsWithChildren, useEffect, useState } from "react"
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { Profile } from "../forum.types"
 import { getMyProfile } from "../serverFunctions/profile/getMyProfile"
 
@@ -14,5 +14,10 @@ export const UserContextProvider = ({children}: PropsWithChildren) => {
   },[])
 
     return <UserContext.Provider value={profile}>{children}</UserContext.Provider>
+}
+
+export const useIsLoggedIn = () => {
+  const me = useContext(UserContext)
+  return !!me
 }
 

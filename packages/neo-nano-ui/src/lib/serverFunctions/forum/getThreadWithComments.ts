@@ -1,6 +1,5 @@
 'use server'
 
-import { getSingle } from '@/lib/serverFunctions/_utils/getSingle'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { CommentCardDataEntry } from '@/lib/commentCards/CommentCard'
 import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
@@ -28,8 +27,7 @@ const mapFlag = ({ id, comment, reported_by, created_at, reason, details, review
 
 export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   const sql = getQueryFunction()
-  const _comments =
-    await sql`SELECT comment_text, rich_text, author, comments.created_at, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
+  const _commentsPromise = sql`SELECT comment_text, rich_text, author, comments.created_at, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
     FROM comments JOIN users on comments.author=users.id
     LEFT OUTER JOIN  flags on flags.comment = comments.id
   WHERE thread=${threadId}
@@ -37,26 +35,29 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   ORDER BY comments.created_at
   LIMIT ${COMMENTS_PER_PAGE}
   OFFSET ${(currentPage - 1) * COMMENTS_PER_PAGE}
-  ` 
+  `
 
-  const totalComments = parseInt(
-    (
-      await sql`SELECT count(comments.id), pg_typeof(count(comments.id)) FROM comments 
+  const totalCommentsPromise = await sql`SELECT count(comments.id), pg_typeof(count(comments.id)) FROM comments 
   WHERE thread=${threadId}`
-    )[0].count,
-  )
 
-  const threadDetails = await getSingle(
-    'thread',
-    sql`SELECT title, author, id, topic FROM threads
-  WHERE id=${threadId}`,
-  )
+  const breadcrumbPromise = sql`select 
+    jsonb_agg_strict(threads.*) as thread,
+    jsonb_agg_strict(topics.*) as topic, 
+    jsonb_agg_strict(categories.*) as category
+    from threads join topics on threads.topic=topics.id
+    join categories on topics.category=categories.id
+    where threads.id=${threadId}
+    group by categories.id, threads.id, topics.id
+`
 
-  const topic = await getSingle(
-    'topic',
-    sql`SELECT id, title, description, icon, category FROM topics where id=${threadDetails.topic} LIMIT 1`,
-  )
-  const category = await getSingle('category', sql`SELECT id, title FROM categories where id=${topic.category} LIMIT 1`)
+  const [_comments, totalCommentsData, breadcrumbData] = await Promise.all([
+    _commentsPromise,
+    totalCommentsPromise,
+    breadcrumbPromise,
+  ])
+
+  const totalComments = parseInt(totalCommentsData[0].count)
+  const { thread, topic, category } = breadcrumbData[0]
 
   const commentCardDataEntries = _comments.map(
     ({ created_at, comment_text, rich_text, author, id, display_name, flags }) => ({
@@ -77,8 +78,8 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   return {
     totalComments,
     commentCardDataEntries,
-    thread: threadDetails as Thread,
-    category: category as Category,
-    topic: topic as Topic,
+    thread: thread[0] as Thread,
+    category: category[0] as Category,
+    topic: topic[0] as Topic,
   }
 }
