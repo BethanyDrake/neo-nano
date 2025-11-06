@@ -3,6 +3,7 @@ import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { CommentCard } from '@/lib/commentCards/CommentCard'
 import { useThreadContext } from '@/lib/context/ThreadContext'
+import { useIsLoggedIn } from '@/lib/context/UserContext'
 import { ExpandableAddCommentForm } from '@/lib/expandableForms/AddCommentForm'
 import { Category, Thread, Topic } from '@/lib/forum.types'
 import { Column, Row } from '@/lib/layout'
@@ -17,12 +18,10 @@ export const ThreadPage = ({
   thread,
   topic,
   category,
-  isLoggedIn,
 }: {
   thread: Thread
   topic: Topic
   category: Category
-  isLoggedIn: boolean
 }) => {
 
   const breadcrumbItems = [
@@ -30,6 +29,8 @@ export const ThreadPage = ({
     { href: `/forum/${topic.id}`, text: topic.title },
     { text: thread.title },
   ]
+
+  const isLoggedIn = useIsLoggedIn()
 
   const { commentsData, onPageChange, currentPage, totalComments, isLoading } = useThreadContext()
   return (

@@ -1,4 +1,3 @@
-import { mockQueryFunction } from '@/tests/utils/mockQueryFunction'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getThreadWithComments } from './getThreadWithComments'
 jest.mock('../_utils/getQueryFunction')
@@ -9,7 +8,7 @@ describe('getThreadWithComments', () => {
     const comments = [
       {
         comment_text: 'comment text',
-        rich_text: "<p>comment text</p>",
+        rich_text: '<p>comment text</p>',
         created_at: someDate,
         author: '1',
         id: '2',
@@ -19,81 +18,79 @@ describe('getThreadWithComments', () => {
       },
     ]
 
-    const threads = [{ title: 'Thread Title', author: '4', id: '5', topic: '6' }]
-    const topics = [
+    const thread = [{ title: 'Thread Title', author: '4', id: '5', topic: '6' }]
+    const topic = [
       { id: '6', title: 'Topic Title', description: 'Topic description.', icon: 'fasLightning', category: '7' },
     ]
-    const categories = [{ id: '7', title: 'Category Title' }]
+    const category = [{ id: '7', title: 'Category Title' }]
 
-    mockQueryFunction(jest.mocked(getQueryFunction), {
-      comments,
-      threads,
-      topics,
-      categories,
-    }, {
-      'select count.* from comments': [{count: '1'}]
-    })
+    const sql = jest.fn()
 
-    expect(await getThreadWithComments('6')).toEqual({
-      commentCardDataEntries: [
-        {
-          comment: {
-            text: 'comment text',
-            id: '2',
-            createdAt: someDate,
-            richText: '<p>comment text</p>'
+    // @ts-expect-error test
+    jest.mocked(getQueryFunction).mockReturnValue(sql)
+    sql.mockResolvedValueOnce(comments)
+    sql.mockResolvedValueOnce([{ count: 1 }])
+    sql.mockResolvedValueOnce([{ thread, topic, category }])
+
+    expect(await getThreadWithComments('6')).toEqual(
+      expect.objectContaining({
+        commentCardDataEntries: [
+          {
+            comment: {
+              text: 'comment text',
+              id: '2',
+              createdAt: someDate,
+              richText: '<p>comment text</p>',
+            },
+            author: {
+              id: '1',
+              displayName: 'Author Name',
+            },
+            flags: [],
           },
-          author: {
-            id: '1',
-            displayName: 'Author Name',
-          },
-          flags: [],
+        ],
+        category: {
+          id: '7',
+          title: 'Category Title',
         },
-      ],
-      category: {
-        id: '7',
-        title: 'Category Title',
-      },
-      thread: {
-        author: '4',
-        id: '5',
-        title: 'Thread Title',
-        topic: '6',
-      },
-      topic: {
-        category: '7',
-        description: 'Topic description.',
-        icon: 'fasLightning',
-        id: '6',
-        title: 'Topic Title',
-      },
-      totalComments: 1
-    })
+        thread: {
+          author: '4',
+          id: '5',
+          title: 'Thread Title',
+          topic: '6',
+        },
+        topic: {
+          category: '7',
+          description: 'Topic description.',
+          icon: 'fasLightning',
+          id: '6',
+          title: 'Topic Title',
+        },
+        totalComments: 1,
+      }),
+    )
   })
 
   test('comment with multiple flags', async () => {
-    const comments =
-      [
-        {
-          comment_text: 'comment text',
-          author: '1',
-          id: '2',
-          thread: '5',
-          display_name: 'Author Name',
-          reason: 'harrasment',
-          flags: [{ reason: 'harrassment' }, { reason: 'sexual-content' }],
-        },
-      ]
-    const threads =  [{ title: 'Thread Title', author: '4', id: '5', topic: '6' }]
-    const topics=  [{ id: '6', title: 'Topic Title', description: 'Topic description.', icon: 'fasLightning', category: '7' }]
-    const categories =  [{ id: '7', title: 'Category Title' }]
+    const comments = [
+      {
+        comment_text: 'comment text',
+        author: '1',
+        id: '2',
+        thread: '5',
+        display_name: 'Author Name',
+        reason: 'harrasment',
+        flags: [{ reason: 'harrassment' }, { reason: 'sexual-content' }],
+      },
+    ]
 
-    mockQueryFunction(jest.mocked(getQueryFunction), {
-      comments,
-      threads,
-      topics,
-      categories,
-    })
+    const sql = jest.fn()
+    // @ts-expect-error test
+    jest.mocked(getQueryFunction).mockReturnValue(sql)
+    sql.mockResolvedValueOnce(comments)
+    sql.mockResolvedValueOnce([{ count: 1 }])
+    sql.mockResolvedValueOnce([{ thread: [{}], topic: [{}], category: [{}] }])
+
     expect((await getThreadWithComments('6')).commentCardDataEntries).toEqual([
       {
         comment: {

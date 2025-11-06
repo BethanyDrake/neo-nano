@@ -39,7 +39,7 @@ export const ProfileContextProvider = ({
   const updateProfile = useCallback((newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => {
     setIsLoading(true)
     return updateProfileServerSide(newProfile)
-      .then(setProfile)
+      .then((updatedProfile) => updatedProfile && setProfile(updatedProfile))
       .then(() => setIsLoading(false))
   }, [])
 

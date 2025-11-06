@@ -5,8 +5,9 @@ import camelcaseKeys from 'camelcase-keys'
 import { getSingle } from '../_utils/getSingle'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 
-export const getMyProfile = async (): Promise<Profile> => {
+export const getMyProfile = async (): Promise<Profile | null> => {
   const session = await auth0.getSession()
+  if (!session) return null
   const sql = getQueryFunction()
   const external_id = session?.user.sub
 
