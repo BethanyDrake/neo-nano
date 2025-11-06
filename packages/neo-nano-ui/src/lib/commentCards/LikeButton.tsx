@@ -8,7 +8,7 @@ import { ReactionButton } from '../buttons/ExtendableIconButton'
 
 export const LikeButton = ({ commentId }: { commentId: string }) => {
   const me = useContext(UserContext)
-  const { likes, refresh } = useCommentLikes(commentId)
+  const { likes, refresh, initialLoad } = useCommentLikes(commentId)
 
   const isLiked = me && likes.includes(me?.id)
 
@@ -20,6 +20,10 @@ export const LikeButton = ({ commentId }: { commentId: string }) => {
     }
     await refresh()
   })
+
+  if (initialLoad) {
+    return null
+  }
   return (
     <div className={classNames.likeButtonContainer}>
       <span className={classNames.likeButtonText}>{likes.length > 0 ? likes.length : ''}</span>

@@ -28,7 +28,7 @@ describe('<LikeButton />', () => {
   test('like a comment', async () => {
     jest.mocked(getThreadReactions).mockResolvedValue({})
     jest.mocked(getMyProfile).mockResolvedValue({ id: 'my-id' } as Profile)
-    const { getByRole } = render(
+    const { findByRole } = render(
       <UserContextProvider>
         <ReactionContextProvider threadId={'thread-id'}>
           <LikeButton commentId="comment-id" />
@@ -36,7 +36,7 @@ describe('<LikeButton />', () => {
       </UserContextProvider>,
     )
 
-    const likeButton = getByRole('button', { name: 'like' })
+    const likeButton = await findByRole('button', { name: 'like' })
     await waitFor(() => {
       expect(likeButton).toBeEnabled()
     })
@@ -50,7 +50,7 @@ describe('<LikeButton />', () => {
   test('like a comment', async () => {
     jest.mocked(getThreadReactions).mockResolvedValue({ ['comment-id']: { like: ['my-id'] } })
     jest.mocked(getMyProfile).mockResolvedValue({ id: 'my-id' } as Profile)
-    const { getByRole } = render(
+    const { findByRole } = render(
       <UserContextProvider>
         <ReactionContextProvider threadId={'thread-id'}>
           <LikeButton commentId="comment-id" />
@@ -58,7 +58,7 @@ describe('<LikeButton />', () => {
       </UserContextProvider>,
     )
 
-    const likeButton = getByRole('button', { name: 'like' })
+    const likeButton = await findByRole('button', { name: 'like' })
     await waitFor(() => {
       expect(likeButton).toBeEnabled()
     })
