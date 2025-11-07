@@ -5,6 +5,7 @@ import { getSingle } from '../_utils/getSingle'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 
 export const getPublicProfile = async (userId: string): Promise<Profile> => {
+  console.log('getPublicProfile')
   const sql = getQueryFunction()
   const myProfile = await getSingle(
     'user',

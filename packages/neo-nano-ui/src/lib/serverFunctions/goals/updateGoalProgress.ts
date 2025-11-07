@@ -18,13 +18,12 @@ export async function updateGoalProgress(goal: Pick<Goal, 'id' | 'records'>): Pr
   const user_id = await getUserId()
   const sql = getQueryFunction()
 
-  const updatedGoals = await sql`UPDATE goals set records=${goal.records}
+  const [updatedGoals, unclaimedAwards] = await Promise.all([await sql`UPDATE goals set records=${goal.records}
        where user_id=${user_id}
        and id=${goal.id}
-       returning goals.*`
+       returning goals.*`, getUnclaimedAwards(user_id)])
   const updatedGoal = camelcaseKeys(updatedGoals[0]) as Goal
 
-  const unclaimedAwards = await getUnclaimedAwards(user_id)
   const claimableAwards = unclaimedAwards.filter((award) => assessWordCountAward({award, goal: updatedGoal}) || assessConsistencyAward({award, goal: updatedGoal}))
   const claimedAwards = await Promise.all(claimableAwards.map(({id}) => claimAward(id)))
 

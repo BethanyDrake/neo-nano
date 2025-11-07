@@ -5,6 +5,7 @@ import { getExternalId } from '../_utils/getUserIdFromSession'
 import { UserAward } from '@/lib/profile.types'
 
 export const getMyAwards = async () => {
+  console.log('getMyAwards')
   const sql = getQueryFunction()
   const external_id = await getExternalId()
   const user_awards = await sql`SELECT awards.*, user_awards.*

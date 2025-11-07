@@ -6,6 +6,7 @@ import { getUserId } from '../_utils/getUserIdFromSession'
 import camelcaseKeys from 'camelcase-keys'
 
 export const claimAward = async (awardId: string) => {
+  console.log('claimAward', awardId)
   const sql = getQueryFunction()
   const userId = await getUserId()
   await sql`INSERT into user_awards (awarded_to, award) 

@@ -6,6 +6,7 @@ import { getUserId } from '../_utils/getUserIdFromSession'
 import { getMyGoals } from './getMyGoals'
 
 export const createGoal = async ({title, target, lengthDays, startDate}: Pick<Goal, 'title' | 'target' | 'lengthDays' | 'startDate'>) => {
+  console.log('create goal')
   const user_id = await getUserId()
   const records = new Array(lengthDays).fill(null)
   const sql = getQueryFunction()

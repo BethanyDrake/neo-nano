@@ -8,6 +8,7 @@ export type CategorySummary = Category & {
 }
 
 export const getForumTopics = async ():Promise<CategorySummary[]> => {
+  console.log('getForumTopics')
   const sql = getQueryFunction()
   const categories = await sql`
 SELECT categories.*,

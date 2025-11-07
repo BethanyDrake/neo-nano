@@ -8,6 +8,7 @@ export type GetTopicReturn = {
 }
 
 export async function getTopic(id: string): Promise<GetTopicReturn> {
+  console.log('getTopic', id)
   const sql = getQueryFunction()
   const [_topic, _category] = await Promise.all([
     sql`SELECT id, title, description, icon, category FROM topics where id=${id} LIMIT 1`,
