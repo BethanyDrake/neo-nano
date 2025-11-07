@@ -9,6 +9,7 @@ comment: Pick<Comment, 'id' | 'text' | 'richText'>,
 }
 
 export const getFlaggedComments = async ():Promise<CommentFlag[]> => {
+  console.log('getFlaggedComments')
   const sql = getDbConnection()
 
   const _flags = await sql`select 

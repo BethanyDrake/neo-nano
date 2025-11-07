@@ -35,6 +35,7 @@ const getTotalThreads = async (sql: NeonQueryFunction<false, false>, topicId: st
 }
 
 export async function getThreads(topicId: string, currentPage: number = 1){
+  console.log('getThreads', topicId )
   const sql = getQueryFunction()
   const [threadSummaries, totalThreads] = await Promise.all([getThreadSummaries(sql, topicId, currentPage), getTotalThreads(sql, topicId)])
 

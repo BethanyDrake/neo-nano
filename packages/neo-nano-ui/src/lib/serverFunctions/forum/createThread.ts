@@ -8,6 +8,7 @@ import { getUserId } from "../_utils/getUserIdFromSession"
 export type CreateThreadPayload = Pick<Thread, 'title'> & {topic: string, commentText: string, commentRichText: string }
 
 export const createThread = async ({title, topic, commentText, commentRichText}: CreateThreadPayload) => {
+    console.log('createThread', title)
     const sql = getQueryFunction()
     const userId = await getUserId()
 

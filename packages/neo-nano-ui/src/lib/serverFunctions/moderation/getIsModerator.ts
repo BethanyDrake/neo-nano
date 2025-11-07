@@ -6,13 +6,11 @@ import { Profile } from '@/lib/forum.types'
 import { getSingle } from '../_utils/getSingle'
 
 export const getIsModerator = async () => {
+  console.log('getIsModerator')
   const session = await auth0.getSession()
   if (!session) return false
   const sql = getQueryFunction()
   const external_id = session?.user.sub
-
-  await sql`select role from users where external_id=${external_id}
-  ;`
 
   try {
   const { role } = (await getSingle(

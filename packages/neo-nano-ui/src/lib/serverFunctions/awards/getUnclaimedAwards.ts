@@ -4,6 +4,7 @@ import { getQueryFunction } from '../_utils/getQueryFunction'
 import camelcaseKeys from 'camelcase-keys'
 
 export async function getUnclaimedAwards(user_id: string): Promise<Award[]> {
+  console.log('getUnclaimedAwards')
   const sql = getQueryFunction()
 
   const awards = await sql`SELECT * from awards

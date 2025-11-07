@@ -5,6 +5,7 @@ import { getUserId } from '../_utils/getUserIdFromSession'
 import { getMyGoals } from './getMyGoals'
 
 export const deleteGoal = async (id: string) => {
+  console.log('deleteGoal')
   const sql = getQueryFunction()
   const user_id = await getUserId()
 
