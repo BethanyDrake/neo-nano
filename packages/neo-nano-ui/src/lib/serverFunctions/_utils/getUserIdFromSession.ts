@@ -5,6 +5,16 @@ import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction"
 import { auth0 } from "@/lib/auth0"
 import { redirect } from "next/navigation"
 
+export const getExternalId = async () => {
+  const session = await auth0.getSession()
+
+  if (!session) {
+    console.warn("No session found. Redirecting to login.")
+    redirect('/auth/login')
+  }
+  return session.user.sub
+}
+
 export const getUserId = async () => {
   const session = await auth0.getSession()
 

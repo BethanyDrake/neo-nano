@@ -3,12 +3,12 @@
 import { Comment, Thread } from '@/lib/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { THREADS_PER_PAGE } from '@/lib/misc'
+import { NeonQueryFunction } from '@neondatabase/serverless'
 
 export type ThreadSummary = Thread & Pick<Comment, 'text'> & {totalComments: number}
 
-export async function getThreads(topicId: string, currentPage: number = 1){
-  const sql = getQueryFunction()
-  const _threads = await sql`
+const getThreadSummaries = async (sql: NeonQueryFunction<false, false>, topicId: string, currentPage: number) => {
+ const _threads = await sql`
     SELECT * FROM threads, 
       LATERAL (SELECT comment_text FROM comments WHERE comments.thread=threads.id LIMIT 1),
       LATERAL (SELECT COUNT(comments.id), MAX(comments.created_at) as latest FROM comments
@@ -25,8 +25,18 @@ export async function getThreads(topicId: string, currentPage: number = 1){
     text: _thread.comment_text,
     totalComments: parseInt(_thread.count)
   })) as ThreadSummary[]
-  const totalThreads = (await sql` SELECT count(*) FROM threads
+
+  return threadSummaries
+}
+
+const getTotalThreads = async (sql: NeonQueryFunction<false, false>, topicId: string) => {
+  return (await sql` SELECT count(*) FROM threads
     WHERE threads.topic=${topicId}`)[0].count
+}
+
+export async function getThreads(topicId: string, currentPage: number = 1){
+  const sql = getQueryFunction()
+  const [threadSummaries, totalThreads] = await Promise.all([getThreadSummaries(sql, topicId, currentPage), getTotalThreads(sql, topicId)])
 
 
   return {
