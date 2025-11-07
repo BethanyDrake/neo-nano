@@ -10,12 +10,12 @@ export default async function Page({
 }: {
   params: Promise<{ "topic-id": string }>
 }) {
-  
-  const session = await auth0.getSession()
   const topicId = (await params)['topic-id'] as string
-  const { topic, category } = await getTopic(topicId)
-
-  const response = await getThreads(topicId)
+  const [session,{topic, category}, response ] = await Promise.all([
+    auth0.getSession(),
+    getTopic(topicId),
+    getThreads(topicId)
+  ])
 
   return <TopicContextProvider initialThreads={response.threadSummaries} initialTotalThreads={response.totalThreads} topicId={topicId}> <TopicPage topic={topic} category={category} isLoggedIn={!!session} /></TopicContextProvider>
 }
