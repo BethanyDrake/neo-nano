@@ -5,11 +5,10 @@ const ReactQuill = dynamic(() => import('react-quill-new'), {
   ssr: false,
 })
 
-const formats = ['header', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'link']
+const formats = ['bold', 'italic', 'underline', 'strike', 'blockquote', 'link']
 
 const modules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote', 'link'],
     ['clean'],
   ],
