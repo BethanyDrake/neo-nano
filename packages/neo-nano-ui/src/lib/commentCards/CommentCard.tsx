@@ -7,6 +7,9 @@ import { Row } from '../layout'
 import { ReportCommentModal } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
+import { useIsLoggedIn } from '../context/UserContext'
+import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
+
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
@@ -20,6 +23,7 @@ export type CommentCardDataEntry = {
 export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) => {
   const hasUnreviewedFlag = flags.some(({ reviewOutcome }) => !reviewOutcome)
   const hasConfirmedFlag = flags.some(({ reviewOutcome }) => reviewOutcome === 'confirmed')
+  const isLoggedIn = useIsLoggedIn()
 
   if (hasConfirmedFlag) {
     return (
@@ -48,7 +52,8 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
 
         <Row>
           <LikeButton commentId={comment.id} />
-          <ReportCommentModal comment={comment} />
+          {isLoggedIn && <ReplyToCommentForm comment={comment} author={author} />}
+          {isLoggedIn && <ReportCommentModal comment={comment} />}
         </Row>
       </Row>
       <div className={classNames.hidden}>{comment.text}</div>
