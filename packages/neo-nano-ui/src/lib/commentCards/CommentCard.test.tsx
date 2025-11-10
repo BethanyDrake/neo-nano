@@ -2,8 +2,10 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { CommentCard } from './CommentCard'
 import { flagComment } from '@/lib/serverFunctions/moderation/flagComment'
 import { Flag } from '../forum.types'
+import { useIsLoggedIn } from '@/lib/context/UserContext'
 
 jest.mock('@/lib/serverFunctions/moderation/flagComment')
+jest.mock('@/lib/context/UserContext')
 
 describe('<CommentCard />', () => {
   test('no flags', async () => {
@@ -66,6 +68,7 @@ describe('<CommentCard />', () => {
   })
 
   test('flag a comment as inappropriate', async () => {
+    jest.mocked(useIsLoggedIn).mockReturnValue(true)
     const { getByRole } = render(
       <CommentCard comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }} author={{ id: '2', displayName: '' }} flags={[]}/>,
     )
