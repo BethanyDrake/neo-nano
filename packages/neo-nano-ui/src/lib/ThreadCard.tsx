@@ -4,15 +4,7 @@ import styles from '@/lib/styles/forum.module.css'
 import { Column, Row } from './layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
-
-export const truncateText = (text: string) => {
-  const targetLength = 100
-    if(text.length <= targetLength) {
-        return text
-    }
-    
-    return `${text.slice(0, targetLength)}...`
-}
+import { truncateText } from './misc';
 
 export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId: string }) => {
   const { id, title, text, totalComments } = thread
