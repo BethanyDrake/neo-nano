@@ -1,4 +1,4 @@
-import { addDays, differenceInCalendarDays } from 'date-fns'
+import { addDays, differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'
 import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
@@ -31,7 +31,7 @@ export const UpdateWordCount = ({
   setRecords: (newRecords: Record[]) => void
   isCumulative: boolean
 } & Pick<Goal, 'id' | 'records' | 'startDate' | 'lengthDays'>) => {
-  const [value, onChange] = useState<Value>(new Date())
+  const [value, onChange] = useState<Value>(startOfToday())
   const calendarRef = useRef(null)
   const cumulativeRecords = useMemo(() => {
     return toCumulative(records)
@@ -70,7 +70,7 @@ export const UpdateWordCount = ({
     ({ date, view }) => {
       if (view !== 'month' || !(value instanceof Date)) return
       const isSelected = isSameDay(date, value)
-      const challengeDay = differenceInCalendarDays(date, startDate)
+      const challengeDay = differenceInCalendarDays(date, parseISO(startDate))
 
       const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) => {
         updateRecord(challengeDay, target.valueAsNumber)
@@ -105,8 +105,8 @@ export const UpdateWordCount = ({
     <Column>
       <Calendar
         tileContent={renderTile}
-        minDate={new Date(startDate)}
-        maxDate={addDays(new Date(startDate), lengthDays)}
+        minDate={parseISO(startDate)}
+        maxDate={addDays(parseISO(startDate), lengthDays)}
         onChange={onChange}
         value={value}
         inputRef={calendarRef}

@@ -6,7 +6,7 @@ import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered, Column, Row } from '@/lib/layout'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'
 import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { useProfileContext } from '../context/ProfileContext'
@@ -50,7 +50,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
   })
 
   const total = getTotal(cumulativeRecords)
-  const challengeDay = differenceInCalendarDays(new Date(), startDate)
+  const challengeDay = differenceInCalendarDays(startOfToday(), parseISO(startDate))
   const dailyTarget = Math.round(target / lengthDays)
   const todaysProgress = records[challengeDay] ?? 0
 

@@ -3,6 +3,7 @@ import { Goal } from "@/lib/forum.types";
 import { getDateAsString } from "@/lib/misc";
 import { getActiveGoal } from "@/lib/serverFunctions/goals/getActiveGoal";
 import { updateGoalProgress } from "@/lib/serverFunctions/goals/updateGoalProgress";
+import { startOfToday } from "date-fns";
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react";
 
 const ActiveGoalContext = createContext<{
@@ -24,7 +25,7 @@ export const ActiveGoalProvider = ({children}: PropsWithChildren) => {
     const {displayNewAward} = useContext(NewAwardModalContext)
    const refresh = useCallback(async () => {
     setIsRefreshing(true)
-    const today = getDateAsString(new Date())
+    const today = getDateAsString(startOfToday())
     console.log({ today })
     await getActiveGoal(today).then(setActiveGoal)
     setIsRefreshing(false)
