@@ -15,11 +15,12 @@ import { updateRecordsUtil } from '../updateRecordsUtil'
 import { useActiveGoal } from './ActiveGoalContext'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { startOfToday } from 'date-fns'
 
 const QuickUpdateModalForm = ({ closeModal }: { closeModal: () => void }) => {
   const [isCumulative, setIsCumulative] = useState(false)
   const { activeGoal, updateActiveGoal } = useActiveGoal()
-  const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, new Date()) : -1
+  const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, startOfToday()) : -1
   const [localRecords, setLocalRecords] = useState(activeGoal?.records ?? [])
   const { onClick, isLoading } = useLoadableOnClick(async () => {
     await updateActiveGoal(localRecords)
