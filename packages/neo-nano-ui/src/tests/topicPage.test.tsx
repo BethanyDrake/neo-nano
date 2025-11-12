@@ -30,7 +30,7 @@ describe('<TopicPage />', () => {
     jest.mocked(getThreads).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 })
   it('displays existing threads', async () => {
-    jest.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[{ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text', totalComments: 7 }]})
+    jest.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[buildThreadSummary({ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text', totalComments: 7 })]})
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
     expect(getByText('Existing Topic 1')).toBeInTheDocument()

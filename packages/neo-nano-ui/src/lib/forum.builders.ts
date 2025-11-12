@@ -16,6 +16,7 @@ export const buildThreadSummary = (threadSummary: Partial<ThreadSummary> = {}) =
   author: '',
   totalComments: 0,
   text: '',
+  topic: '',
   ...threadSummary,
 })
 
