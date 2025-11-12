@@ -19,11 +19,10 @@
   align-items: center;
   position: fixed;
   width: 100vw;
-  height: 5em;
+  height:  var(--nav-bar-height);
 
   @media (max-width: 800px) {
     padding: 8px 8px;
-    height: unset;
   }
   
 }
