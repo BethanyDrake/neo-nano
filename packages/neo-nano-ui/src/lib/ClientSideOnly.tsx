@@ -1,13 +1,13 @@
 
 "use client"
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { PropsWithChildren, ReactNode, useEffect, useState } from 'react'
 
-export const ClientSideOnly = ({children}: PropsWithChildren)  => {
+export const ClientSideOnly = ({children, fallback}: PropsWithChildren & {fallback?: ReactNode})  => {
   const [isInitialRender, setIsInitialRender] = useState(true)
   useEffect(() => {
     setIsInitialRender(false)
   }, [])
 
-  if (isInitialRender) return null;
+  if (isInitialRender) return fallback ?? null;
   return children
 }

@@ -1,5 +1,5 @@
 
-const RichTextDisplay = ({value}: {value: string}) => {
-    return <div>{value}</div>
+const RichTextDisplay = ({richText}: {richText: string}) => {
+    return <div>RichTextDisplay: {richText}</div>
 }
 export default RichTextDisplay

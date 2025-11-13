@@ -9,7 +9,6 @@ import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
 import { useIsLoggedIn } from '../context/UserContext'
 import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
-
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
@@ -49,22 +48,20 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
         <Link className={classNames.authorLink} href={`/profile/${author.id}`}>
           {author.displayName}:
         </Link>
-
         <Row>
           <LikeButton commentId={comment.id} />
           {isLoggedIn && <ReplyToCommentForm comment={comment} author={author} />}
           {isLoggedIn && <ReportCommentModal comment={comment} />}
         </Row>
       </Row>
-      <div className={classNames.hidden}>{comment.text}</div>
-      <ClientSideOnly>
-        <RichTextDisplay value={comment.richText} />
+      <ClientSideOnly fallback={<p>{comment.text}</p>}>
+        <RichTextDisplay richText={comment.richText}/>
+        </ClientSideOnly>
         <Row justifyContent="right">
-          <span style={{ paddingTop: '16px' }} className={classNames.datetime}>
-            {comment.createdAt.toLocaleString()}
+          <span suppressHydrationWarning style={{ paddingTop: '16px' }} className={classNames.datetime}>
+              {comment.createdAt.toLocaleString()}
           </span>
         </Row>
-      </ClientSideOnly>
     </div>
   )
 }
