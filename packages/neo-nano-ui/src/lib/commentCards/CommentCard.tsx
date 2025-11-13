@@ -58,9 +58,11 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
         <RichTextDisplay richText={comment.richText}/>
         </ClientSideOnly>
         <Row justifyContent="right">
-          <span suppressHydrationWarning style={{ paddingTop: '16px' }} className={classNames.datetime}>
+          <ClientSideOnly>
+          <span style={{ paddingTop: '16px' }} className={classNames.datetime}>
               {comment.createdAt.toLocaleString()}
           </span>
+          </ClientSideOnly>
         </Row>
     </div>
   )
