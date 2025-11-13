@@ -14,7 +14,7 @@ FROM threads JOIN users ON threads.author=users.id,
     FROM comments join users on comments.author=users.id
     WHERE comments.thread=threads.id order by comments.created_at desc LIMIT 1) as comment_details,
   LATERAL (
-    SELECT COUNT(comments.id), MIN(comments.created_at) as latest 
+    SELECT COUNT(comments.id), MAX(comments.created_at) as latest 
     FROM comments
     WHERE comments.thread = threads.id
     GROUP BY threads.id) as comment_data
