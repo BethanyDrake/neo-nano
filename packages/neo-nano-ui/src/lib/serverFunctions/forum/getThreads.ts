@@ -3,14 +3,14 @@
 import { Comment, Thread } from '@/lib/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { THREADS_PER_PAGE } from '@/lib/misc'
-import { NeonQueryFunction } from '@neondatabase/serverless'
 
-export type ThreadSummary = Thread & Pick<Comment, 'text'> & {totalComments: number}
+export type ThreadSummary = Thread & Pick<Comment, 'text'> & {totalComments: number} & {authorDisplayName: string}
 
-const getThreadSummaries = async (sql: NeonQueryFunction<false, false>, topicId: string, currentPage: number) => {
+const getThreadSummaries = async (topicId: string, currentPage: number) => {
+  const sql = getQueryFunction()
  const _threads = await sql`
     SELECT * FROM threads, 
-      LATERAL (SELECT comment_text FROM comments WHERE comments.thread=threads.id LIMIT 1),
+      LATERAL (SELECT comments.comment_text, users.display_name FROM comments join users on comments.author=users.id WHERE comments.thread=threads.id order by comments.created_at asc LIMIT 1),
       LATERAL (SELECT COUNT(comments.id), MAX(comments.created_at) as latest FROM comments
         WHERE comments.thread = threads.id
         GROUP BY threads.id)
@@ -22,6 +22,7 @@ const getThreadSummaries = async (sql: NeonQueryFunction<false, false>, topicId:
 
   const threadSummaries = _threads.map((_thread) => ({
     ..._thread,
+        authorDisplayName: _thread.display_name,
     text: _thread.comment_text,
     totalComments: parseInt(_thread.count)
   })) as ThreadSummary[]
@@ -29,15 +30,16 @@ const getThreadSummaries = async (sql: NeonQueryFunction<false, false>, topicId:
   return threadSummaries
 }
 
-const getTotalThreads = async (sql: NeonQueryFunction<false, false>, topicId: string) => {
+const getTotalThreads = async (topicId: string) => {
+  const sql = getQueryFunction()
   return (await sql` SELECT count(*) FROM threads
     WHERE threads.topic=${topicId}`)[0].count
 }
 
 export async function getThreads(topicId: string, currentPage: number = 1){
   console.log('getThreads', topicId )
-  const sql = getQueryFunction()
-  const [threadSummaries, totalThreads] = await Promise.all([getThreadSummaries(sql, topicId, currentPage), getTotalThreads(sql, topicId)])
+  
+  const [threadSummaries, totalThreads] = await Promise.all([getThreadSummaries(topicId, currentPage), getTotalThreads( topicId)])
 
 
   return {

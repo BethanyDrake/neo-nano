@@ -2,12 +2,17 @@
   margin: 10px 0;
   padding: 10px 0 20px;
   border-bottom: 1px solid var(--grey-light);
+  color: inherit;
+
+  &:hover {
+    color: var(--primary-vibrant)
+  }
 }
 
 .forum-container {
   padding: 30px;
 }
-.forum-item .forum-sub-title {
+.forum-sub-title {
    color: var(--grey-dark);
    @media (prefers-color-scheme: dark) {
        color: var(--grey-light);
@@ -28,7 +33,7 @@ a.forum-item-title {
   font-weight: 600;
 }
 a.forum-item-title:hover {
-  color: inherit;
+  color:  var(--primary-vibrant);
 }
 .forum-icon .fa {
   font-size: 30px;

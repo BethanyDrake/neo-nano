@@ -10,6 +10,7 @@ export type Thread = {
     id: string
     title: string
     author: string
+    topic: string
 }
 
 export type Topic = {

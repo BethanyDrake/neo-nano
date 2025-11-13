@@ -1,11 +1,34 @@
-import { Column, Row } from '@/lib/layout'
+import { Column, LeftRow, Row } from '@/lib/layout'
 import styles from '@/lib/styles/forum.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
+import Link from 'next/link'
 
-const ForumItem = ({
+const RecentDiscussionsLink = () => {
+  return (
+
+    <div  className={styles['forum-item']}>
+    <Link href={`forum/recent`} style={{color: 'inherit', textDecoration: 'none'}}>
+        <LeftRow>
+        <Column>
+          <div className={styles['forum-icon']}>
+            <FontAwesomeIcon icon={Icons.faClock} />
+          </div>
+        </Column>
+        <Column>
+          <h3 className={styles['forum-item-title']} style={{textDecoration: 'none'}}>
+            Recent activity
+          </h3>
+        </Column>
+        </LeftRow>
+    </Link>
+    </div>
+  )
+}
+
+const TopicCard = ({
   topicId,
   title,
   icon,
@@ -51,12 +74,14 @@ const Forum = async () => {
  
   return (
     <div className={styles['forum-container']}>
+       <h2>Quick Links</h2>
+      <RecentDiscussionsLink />
       {categories.map(({ id, title, topics }) => {
         return (
           <div key={id}>
             <h2>{title}</h2>
             {topics?.map(({ id, title, description, icon, total_threads, total_comments }) => {
-              return <ForumItem 
+              return <TopicCard 
                 key={id} 
                 topicId={id} 
                 title={title} 

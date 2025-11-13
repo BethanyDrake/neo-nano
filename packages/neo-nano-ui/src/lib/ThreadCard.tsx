@@ -12,7 +12,7 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
         <Column>
       <h3 className={styles['forum-item-title']}>{title}</h3>
       <p style={{ paddingBottom: '12px' }}>
-        {truncateText(text)}
+        {thread.authorDisplayName}: {truncateText(text)}
       </p>
       </Column>
       <div style={{color:'var(--primary-vibrant)', minWidth: '50px'}}>{totalComments} <FontAwesomeIcon icon={faComment}/></div>

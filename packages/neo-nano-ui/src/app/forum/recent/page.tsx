@@ -1,0 +1,19 @@
+import { getRecentlyUpdatedThreads } from "@/lib/serverFunctions/forum/getRecentlyUpdatedThreads"
+import { ThreadCard } from "@/lib/ThreadCard"
+import styles from '@/lib/styles/forum.module.css'
+import { Column } from "@/lib/layout"
+import { Breadcrumbs } from "@/lib/Breadcrumbs"
+
+
+export default async function Page() {
+  const recentlyUpdatedThreads = await getRecentlyUpdatedThreads()
+      const breadcrumbItems = [
+    { href: '/forum', text: 'Forum'},
+    {  text: 'Recent' },
+  ]
+  return  <div className={styles['forum-container']}>
+    
+    
+    <Column> <Breadcrumbs breadcrumbItems={breadcrumbItems} />{recentlyUpdatedThreads.map((recentlyUpdatedThreads) => <ThreadCard key={recentlyUpdatedThreads.id} thread={recentlyUpdatedThreads} topicId={recentlyUpdatedThreads.topic}/>)}</Column></div>
+}
+

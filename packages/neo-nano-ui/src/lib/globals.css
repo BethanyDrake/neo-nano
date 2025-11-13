@@ -22,12 +22,19 @@
   --background-colour-2: white;
   --text-colour: black;
   --text-colour-2: var(--grey-dark);
+
+  --nav-bar-height: 5em;
+
   @media (prefers-color-scheme: dark) {
 
     --background-colour: #121212;
     --background-colour-2: #2a2f2f;
     --text-colour: white;
     --text-colour-2: var(--grey-light);
+  }
+
+  @media (max-width: 800px)  {
+    --nav-bar-height: 4em;
   }
 }
 
@@ -47,7 +54,7 @@ a {
 }
 
 main {
-  padding-top: 5em;
+  padding-top: var( --nav-bar-height);
 }
 
 p {

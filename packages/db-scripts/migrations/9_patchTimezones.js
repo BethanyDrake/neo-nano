@@ -18,7 +18,7 @@ const doMigration = async () => {
   const novemberGoals = goals.filter(({ start_date, length_days}) => start_date === '2025-11-01' && length_days >= 2)
   console.log("novemberGoals", getStats(novemberGoals))
 
-  const potentials = novemberGoals.filter(({records}) => records[0] === null && records[1] !==null)
+  const potentials = novemberGoals.filter(({records}) => !records[0] && records[1] !==null)
   console.log("potentials", getStats(potentials))
 
   const updated = potentials.map(({id, records}) => ({
@@ -26,9 +26,10 @@ const doMigration = async () => {
   }))
   console.log("updated", getStats(updated))
 
-  await Promise.all(updated.map(({id, records}) => {
-    return sql`update goals set records=${records} where id=${id} `
-  }))
+  for (let i=0; i<updated.length; i++) {
+    const {records, id} = updated[i]
+    await sql`update goals set records=${records} where id=${id} `
+  }
 
   const allUpdatedGoals = await sql`select * from goals`;
   console.log("allUpdatedGoals", getStats(allUpdatedGoals))
