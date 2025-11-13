@@ -14,6 +14,8 @@ export default async function Page() {
   return  <div className={styles['forum-container']}>
     
     
-    <Column> <Breadcrumbs breadcrumbItems={breadcrumbItems} />{recentlyUpdatedThreads.map((thread) => <ThreadCard key={thread.id} thread={thread} topicId={thread.topic}/>)}</Column></div>
+    <Column> <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+    {recentlyUpdatedThreads.map((thread) => <ThreadCard key={thread.id} thread={thread} topicId={thread.topic}/>)}
+    </Column></div>
 }
 
