@@ -6,20 +6,20 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 import Link from 'next/link'
 
-const RecentDiscussionsLink = () => {
+const QuickLink = ({title, icon, href}: {title: string, icon: IconProp, href:string}) => {
   return (
 
     <div  className={styles['forum-item']}>
-    <Link href={`forum/recent`} style={{color: 'inherit', textDecoration: 'none'}}>
+    <Link href={href} style={{color: 'inherit', textDecoration: 'none'}}>
         <LeftRow>
         <Column>
           <div className={styles['forum-icon']}>
-            <FontAwesomeIcon icon={Icons.faClock} />
+            <FontAwesomeIcon icon={icon} />
           </div>
         </Column>
         <Column>
           <h3 className={styles['forum-item-title']} style={{textDecoration: 'none'}}>
-            Recent activity
+            {title}
           </h3>
         </Column>
         </LeftRow>
@@ -75,7 +75,8 @@ const Forum = async () => {
   return (
     <div className={styles['forum-container']}>
        <h2>Quick Links</h2>
-      <RecentDiscussionsLink />
+      <QuickLink title={'Recent activity'} icon={Icons.faClock} href={'forum/recent'} />
+      <QuickLink title={'My Threads'} icon={Icons.faUser} href={'forum/my-threads'}/>
       {categories.map(({ id, title, topics }) => {
         return (
           <div key={id}>
