@@ -9,7 +9,7 @@ export const getRecentlyUpdatedThreads = async () => {
       LATERAL (SELECT comments.comment_text, users.display_name 
         FROM comments join users on comments.author=users.id
   WHERE comments.thread=threads.id order by comments.created_at desc LIMIT 1),
-      LATERAL (SELECT COUNT(comments.id), MIN(comments.created_at) as latest FROM comments
+      LATERAL (SELECT COUNT(comments.id), MAX(comments.created_at) as latest FROM comments
         WHERE comments.thread = threads.id
         GROUP BY threads.id)
     ORDER BY latest DESC
