@@ -1,4 +1,5 @@
 User-Agent: *
 Allow: /
 Disallow: /profile/
+Disallow: /forum/my-threads
 Sitemap: https://novel-november.com/sitemap.xml
