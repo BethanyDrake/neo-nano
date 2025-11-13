@@ -16,7 +16,7 @@ export const FlaggedCommentCard = ({ comment, flag }: CommentFlag) => {
               #{comment.id}-{flag.id}
             </span>
             <div className={classNames['angryPaper']}>
-              <RichTextDisplay value={comment.richText} />
+              <RichTextDisplay richText={comment.richText} />
             </div>
           </div>
           <div>

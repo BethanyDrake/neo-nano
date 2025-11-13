@@ -9,7 +9,7 @@ import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
 import { useIsLoggedIn } from '../context/UserContext'
 import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
-
+import { useLayoutEffect, useRef, useState } from 'react'
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
@@ -24,6 +24,15 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
   const hasUnreviewedFlag = flags.some(({ reviewOutcome }) => !reviewOutcome)
   const hasConfirmedFlag = flags.some(({ reviewOutcome }) => reviewOutcome === 'confirmed')
   const isLoggedIn = useIsLoggedIn()
+
+  const [minHeight, setMinHeight] = useState<number>()
+  const cardContainerRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    if(cardContainerRef.current) {
+      setMinHeight(cardContainerRef.current.offsetHeight)
+    }
+  }, [])
 
   if (hasConfirmedFlag) {
     return (
@@ -44,27 +53,27 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
   }
 
   return (
-    <div className={classNames.card}>
+    <div style={{minHeight: minHeight}} ref={cardContainerRef} className={classNames.card}>
       <Row justifyContent="space-between" alignItems="center" style={{ padding: '1em 0' }}>
         <Link className={classNames.authorLink} href={`/profile/${author.id}`}>
           {author.displayName}:
         </Link>
-
         <Row>
           <LikeButton commentId={comment.id} />
           {isLoggedIn && <ReplyToCommentForm comment={comment} author={author} />}
           {isLoggedIn && <ReportCommentModal comment={comment} />}
         </Row>
       </Row>
-      <div className={classNames.hidden}>{comment.text}</div>
-      <ClientSideOnly>
-        <RichTextDisplay value={comment.richText} />
+      <ClientSideOnly fallback={<p>{comment.text}</p>}>
+        <RichTextDisplay richText={comment.richText}/>
+        </ClientSideOnly>
         <Row justifyContent="right">
+          <ClientSideOnly>
           <span style={{ paddingTop: '16px' }} className={classNames.datetime}>
-            {comment.createdAt.toLocaleString()}
+              {comment.createdAt.toLocaleString()}
           </span>
+          </ClientSideOnly>
         </Row>
-      </ClientSideOnly>
     </div>
   )
 }

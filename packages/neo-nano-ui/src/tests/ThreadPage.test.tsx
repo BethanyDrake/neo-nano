@@ -40,7 +40,7 @@ describe('<ThreadPage />', () => {
     })
     const { findByText } = render(await Page({ params: Promise.resolve({ 'thread-id': 'some-thread-id' }) }))
 
-    expect(await findByText(/some comment text/)).toBeInTheDocument()
+    expect(await findByText(/some rich text/)).toBeInTheDocument()
     expect(await findByText(/Some Name/)).toBeInTheDocument()
   })
 })
