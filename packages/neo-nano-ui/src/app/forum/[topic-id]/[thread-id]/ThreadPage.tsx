@@ -13,17 +13,9 @@ import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
+import enUS from 'rc-pagination/lib/locale/en_US'
 
-export const ThreadPage = ({
-  thread,
-  topic,
-  category,
-}: {
-  thread: Thread
-  topic: Topic
-  category: Category
-}) => {
-
+export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic: Topic; category: Category }) => {
   const breadcrumbItems = [
     { href: '/forum', text: category.title },
     { href: `/forum/${topic.id}`, text: topic.title },
@@ -39,6 +31,7 @@ export const ThreadPage = ({
         <Row justifyContent="space-between">
           <Breadcrumbs breadcrumbItems={breadcrumbItems} />
           <Pagination
+            locale={enUS}
             pageSize={COMMENTS_PER_PAGE}
             onChange={onPageChange}
             current={currentPage}
@@ -62,10 +55,13 @@ export const ThreadPage = ({
           />
         </Row>
 
-          {
-        isLoggedIn ? <ExpandableAddCommentForm /> :
-        <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}/${thread.id}`}><ExtendableIconButton text="Log in to comment" icon={faAdd}/></Link> 
-      }
+        {isLoggedIn ? (
+          <ExpandableAddCommentForm />
+        ) : (
+          <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}/${thread.id}`}>
+            <ExtendableIconButton text="Log in to comment" icon={faAdd} />
+          </Link>
+        )}
       </Column>
     </div>
   )
