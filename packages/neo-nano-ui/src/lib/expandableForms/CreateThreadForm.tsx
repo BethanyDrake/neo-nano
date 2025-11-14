@@ -28,6 +28,7 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
   const { createThread, isLoading } = useTopicContext()
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    if (isLoading) return
     if (!plainText.trim()) {
       setErrorText("Can't post an empty comment.")
       return
