@@ -39,9 +39,9 @@
 }
 
 a {
-  color: var(--primary-vibrant);
+  color: var(--primary-dark);;
   &:hover {
-     color: var(--primary-dark);
+     color: var(--primary-vibrant);
   };
 
   @media (prefers-color-scheme: dark) {

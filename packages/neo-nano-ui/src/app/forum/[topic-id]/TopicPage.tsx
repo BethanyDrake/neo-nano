@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { useTopicContext } from '@/lib/context/TopicContext'
@@ -13,6 +13,7 @@ import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
+import enUS from 'rc-pagination/lib/locale/en_US'
 
 type Topic = {
   id: string
@@ -20,42 +21,37 @@ type Topic = {
   description: string
 }
 
-const TopicPage = ({
-  topic,
-  category,
-  isLoggedIn
-}: {
-  topic: Topic
-  category: Category
-  isLoggedIn: boolean
-}) => {
- 
+const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Category; isLoggedIn: boolean }) => {
   const { threadsData: threads, onPageChange, currentPage, totalThreads, isLoading } = useTopicContext()
 
-  const breadcrumbItems = [{href: '/forum', text: category.title}, {text: topic.title} ]
+  const breadcrumbItems = [{ href: '/forum', text: category.title }, { text: topic.title }]
   return (
     <div className={styles['forum-container']}>
       <Column>
-      <Row justifyContent="space-between">
-      <Breadcrumbs breadcrumbItems={breadcrumbItems} />
-       <Pagination
+        <Row justifyContent="space-between">
+          <Breadcrumbs breadcrumbItems={breadcrumbItems} />
+          <Pagination
+            locale={enUS}
             pageSize={THREADS_PER_PAGE}
             onChange={onPageChange}
             current={currentPage}
             total={totalThreads}
             disabled={isLoading}
           />
-      </Row>
+        </Row>
         <p>{topic.description}</p>
-      {
-        isLoggedIn ? <CreateThreadExtendableForm /> :
-        <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}`}><ExtendableIconButton text="Log in to start a thread" icon={faAdd}/></Link> 
-      }
-       
+        {isLoggedIn ? (
+          <CreateThreadExtendableForm />
+        ) : (
+          <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}`}>
+            <ExtendableIconButton text="Log in to start a thread" icon={faAdd} />
+          </Link>
+        )}
+
         <Column>
           <h2>Threads:</h2>
-           {threads &&
-            threads.map((thread: ThreadSummary) => <ThreadCard key={thread.id} topicId={topic.id} thread={thread}/>)} 
+          {threads &&
+            threads.map((thread: ThreadSummary) => <ThreadCard key={thread.id} topicId={topic.id} thread={thread} />)}
         </Column>
       </Column>
     </div>
