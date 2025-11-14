@@ -29,6 +29,7 @@ const AddCommentForm = ({
   const [plainText, setPlainText] = useState(initialPlainText ?? '')
   const [errorText, setErrorText] = useState('')
   const _onSubmit: SubmitHandler<Inputs> = async () => {
+    if (isLoading) return
     if (plainText.trim()) {
       await postComment(plainText, richText)
       reset()
