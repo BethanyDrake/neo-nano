@@ -8,12 +8,11 @@ jest.mock('@/lib/serverFunctions/moderation/flagComment')
 jest.mock('@/lib/context/UserContext')
 
 describe('<CommentCard />', () => {
-  test.only('no flags', async () => {
+  test('no flags', async () => {
     const { findByText } = render(
       <CommentCard comment={{ id: '1', text: 'Plain text', richText: '<p>some rich text</p>', createdAt: new Date() }} author={{ id: '2', displayName: 'Some Name' }} flags={[]} />,
     )
     expect(await findByText(/Some Name/)).toBeInTheDocument()
-
     expect(await findByText(/some rich text/)).toBeInTheDocument()
 
   })
@@ -48,7 +47,7 @@ describe('<CommentCard />', () => {
     const { findByText } = render(
       <CommentCard comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }} author={{ id: '2', displayName: 'Some Name' }} flags={[flag]} />,
     )
-    expect(await findByText(/Some text./)).toBeInTheDocument()
+    expect(await findByText(/some comment text/)).toBeInTheDocument()
   })
 
     test('flagged comment, confirmed by moderator', async () => {
