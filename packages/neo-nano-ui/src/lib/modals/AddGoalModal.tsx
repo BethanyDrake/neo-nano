@@ -1,10 +1,10 @@
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
-import { useProfileContext } from '../context/ProfileContext'
 import { createGoal } from '../serverFunctions/goals/createGoal'
 import { AddEditGoalForm, GoalDetails } from './AddEditGoalForm'
 import classNames from './Modal.module.css'
 import { useModalContext } from './ModalContext'
+import { useMyGoalContext } from '../context/MyGoalsContext'
 
 export const ADD_GOAL_MODAL = 'ADD_GOAL_MODAL'
 
@@ -12,7 +12,7 @@ export const AddGoalModal = () => {
   const {openModal, setOpenModal, closeModal} = useModalContext()
   const isOpen = openModal === ADD_GOAL_MODAL
  
-  const { setGoals } = useProfileContext()
+  const { setGoals } = useMyGoalContext()
   const onSave = async (goalDetails: GoalDetails) => {
     const response = await createGoal(goalDetails)
     setGoals(response)

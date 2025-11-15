@@ -9,7 +9,6 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'
 import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
-import { useProfileContext } from '../context/ProfileContext'
 import { EditGoalModal } from '../modals/EditGoalModal'
 import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 import { CumulativeWords } from './CumulativeWords'
@@ -19,6 +18,7 @@ import { StatsCard } from './StatsCard'
 import { UpdateWordCount } from './UpdateWordCount'
 import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 import { CumulativeSwitch } from './CumulativeSwitch'
+import { useMyGoalContext } from '../context/MyGoalsContext'
 type GoalProps = {
   id: string
   title: string
@@ -38,7 +38,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
   const [records, setRecords] = useState<(number | null)[]>(initialRecords)
   const [isCumulative, setIsCumulative] = useState(false)
   const cumulativeRecords = toCumulative(records)
-  const { setGoals } = useProfileContext()
+  const { setGoals } = useMyGoalContext()
 
   const _updateGoalVisibility = async (newVisibility: Visibility) => {
     const updatedGoals = await setGoalVisibility({ id, visibility: newVisibility })

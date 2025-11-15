@@ -11,7 +11,7 @@ describe('<EditProfileModal />', () => {
     const { getByRole } = render(
       <ProfileContextProvider
         initialProfile={buildProfile()}
-        initialGoals={[]} initialAwards={[]}      >
+        initialAwards={[]}      >
         <EditProfileModal />
       </ProfileContextProvider>,
     )
