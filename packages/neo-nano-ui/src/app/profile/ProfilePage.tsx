@@ -12,9 +12,13 @@ import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentCha
 import { useRequireLogin } from '@/lib/useRequireLogin'
 import classNames from './profile.module.css'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
+import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
 
 export const ProfilePageInner = () => {
-  const { profile, goals, setGoals, awards } = useProfileContext()
+  const { profile,  awards } = useProfileContext()
+  const{ goals, setGoals, isLoading: isLoadingGoals } = useMyGoalContext()
+
+  console.log(goals,setGoals,isLoadingGoals)
   const { setOpenModal } = useModalContext()
   useRequireLogin()
 
@@ -38,7 +42,7 @@ export const ProfilePageInner = () => {
         <AddGoalModal />
       </Row>
 
-      {goals.length === 0 && (
+      {goals.length === 0 && !isLoadingGoals && (
         <div className={classNames.noGoalsContainer}>
           <Column style={{ alignItems: 'center' }}>
             <div>No goals so far.</div>

@@ -1,6 +1,4 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { ProfileContextProvider } from '../context/ProfileContext'
-import { buildProfile } from '../forum.builders'
 import { updateGoal } from '../serverFunctions/goals/updateGoal'
 import { EditGoalModal } from './EditGoalModal'
 jest.mock('../serverFunctions/goals/updateGoal')
@@ -9,7 +7,6 @@ describe('EditGoalModal', () => {
   test('update title', async () => {
     jest.mocked(updateGoal).mockResolvedValue([])
     const { getByRole, queryByRole } = render(
-      <ProfileContextProvider initialProfile={buildProfile()} initialGoals={[]} initialAwards={[]}>
         <EditGoalModal
           initialGoal={{
             id: 'goal-id',
@@ -20,7 +17,6 @@ describe('EditGoalModal', () => {
             startDate: '2025-11-01',
           }}
         />
-      </ProfileContextProvider>,
     )
     fireEvent.click(getByRole('button', { name: 'edit goal' }))
     expect(getByRole('heading', { name: 'Update Goal' })).toBeInTheDocument()
