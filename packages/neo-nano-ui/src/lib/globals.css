@@ -55,6 +55,7 @@ a {
 
 main {
   padding-top: var( --nav-bar-height);
+  min-width: 100vw;
 }
 
 p {
