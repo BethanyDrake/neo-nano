@@ -1,15 +1,13 @@
-import { auth0 } from '@/lib/auth0'
-import { BasicButton } from '@/lib/buttons/BasicButton'
 import { ChallengeCountDown } from '@/lib/ChallengeCountDown'
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { Column, Row } from '@/lib/layout'
-import Link from 'next/link'
-import { JSX } from 'react'
-import styles from './page.module.css'
-import Image from 'next/image'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Image from 'next/image'
+import { JSX } from 'react'
+import styles from '@/lib/landingPage/page.module.css'
+import { GetStartedSection } from '@/lib/landingPage/GetStartedSection'
 const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
   return (
     <section>
@@ -99,10 +97,7 @@ const HistorySection = () => {
   return <Section title={title} body={<p>{body}</p>} />
 }
 
-export default async function Home() {
-  const session = await auth0.getSession()
-  const isLoggedIn = !!session
-
+export default function Home() {
   return (
     <div
       className={styles.background}
@@ -129,39 +124,7 @@ export default async function Home() {
             <HistorySection />
             <ChallengeSection />
             <FeaturesSection />
-
-            <section>
-              <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
-                Get Started
-              </h2>
-
-              {isLoggedIn ? (
-                <Row>
-                  <Link href="/forum">
-                    <BasicButton>Browse Forum</BasicButton>
-                  </Link>
-                  <Link href="/profile">
-                    <BasicButton>Update Progress</BasicButton>
-                  </Link>
-                </Row>
-              ) : (
-                <Column>
-                  <Row>
-                    <Link href="/auth/login?screen_hint=signup">
-                      <BasicButton>Sign up</BasicButton>
-                    </Link>
-                    <Link href="/auth/login">
-                      <BasicButton>Log in</BasicButton>
-                    </Link>
-                  </Row>
-                  <Row>
-                    <Link className={styles['text-link']} href="/forum">
-                      Browse forums as guest
-                    </Link>
-                  </Row>
-                </Column>
-              )}
-            </section>
+            <GetStartedSection />
           </Column>
         </div>
       </div>
