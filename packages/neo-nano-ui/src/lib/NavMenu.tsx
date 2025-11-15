@@ -4,8 +4,9 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
+import { ModeratorOnly } from './moderation/ModeratorOnly'
 
-export const NavMenu = ({isModerator}: {isModerator: boolean}) => {
+export const NavMenu = () => {
   return (
     <Menu>
       <MenuButton title={'open navigation menu'} className={styles['nav-bar-button']}><FontAwesomeIcon color="white" icon={faBars} /></MenuButton>
@@ -30,13 +31,13 @@ export const NavMenu = ({isModerator}: {isModerator: boolean}) => {
             Code of Conduct
           </Link>
         </MenuItem>
-        {isModerator &&
+        <ModeratorOnly>
         <MenuItem>
           <Link className={styles["menu-item"]}href="/moderation">
             Moderation
           </Link>
         </MenuItem>
-}
+        </ModeratorOnly>
       </MenuItems>
     </Menu>
   )

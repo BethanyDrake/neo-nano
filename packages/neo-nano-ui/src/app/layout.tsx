@@ -5,7 +5,6 @@ import type { Metadata } from 'next'
 // where the icons flash from a very large icon down to a properly sized one:
 import '@fortawesome/fontawesome-svg-core/styles.css'
 // Prevent fontawesome from adding its CSS since we did it manually above:
-import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -27,14 +26,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const profile = await getMyProfile()
-  const isLoggedIn = !!profile
   return (
     <html lang="en">
       <head />
 
       <body>
-        <NavBar isLoading={false} isLoggedIn={!!isLoggedIn} isModerator={profile?.role==='moderator'} />
+        <NavBar/>
         <main>{children}</main>
         <SpeedInsights />
         <Analytics />
