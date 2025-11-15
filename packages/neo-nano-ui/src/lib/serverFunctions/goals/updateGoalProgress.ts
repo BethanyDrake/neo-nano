@@ -15,10 +15,11 @@ export type UpdatedGoalProgressReturn = {
 }
 
 export async function updateGoalProgress(goal: Pick<Goal, 'id' | 'records'>): Promise<UpdatedGoalProgressReturn> {
+  console.log('updateGoalProgress')
   const user_id = await getUserId()
   const sql = getQueryFunction()
 
-  const [updatedGoals, unclaimedAwards] = await Promise.all([await sql`UPDATE goals set records=${goal.records}
+  const [updatedGoals, unclaimedAwards] = await Promise.all([sql`UPDATE goals set records=${goal.records}
        where user_id=${user_id}
        and id=${goal.id}
        returning goals.*`, getUnclaimedAwards(user_id)])
