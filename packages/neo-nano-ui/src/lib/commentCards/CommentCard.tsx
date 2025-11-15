@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { ClientSideOnly } from '../ClientSideOnly'
 import { Comment, Flag, Profile } from '../forum.types'
-import { Row } from '../layout'
+import { Column, Row } from '../layout'
 import { ReportCommentModal } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
@@ -54,7 +54,8 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
 
   return (
     <div style={{minHeight: minHeight}} ref={cardContainerRef} className={classNames.card}>
-      <Row justifyContent="space-between" alignItems="center" style={{ padding: '1em 0' }}>
+      <Column>
+      <Row justifyContent="space-between" alignItems="center" style={{ height: '1em' }}>
         <Link className={classNames.authorLink} href={`/profile/${author.id}`}>
           {author.displayName}:
         </Link>
@@ -68,12 +69,12 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
         <RichTextDisplay richText={comment.richText}/>
         </ClientSideOnly>
         <Row justifyContent="right">
-          <ClientSideOnly>
-          <span style={{ paddingTop: '16px' }} className={classNames.datetime}>
-              {comment.createdAt.toLocaleString()}
-          </span>
-          </ClientSideOnly>
+          
+          <time style={{height:'1em' }} className={classNames.datetime}>
+              <ClientSideOnly>{comment.createdAt.toLocaleString()}</ClientSideOnly>
+          </time>
         </Row>
+        </Column>
     </div>
   )
 }
