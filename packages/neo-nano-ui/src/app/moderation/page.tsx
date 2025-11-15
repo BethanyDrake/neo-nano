@@ -1,16 +1,13 @@
-import { ClientSideOnly } from "@/lib/ClientSideOnly"
-import { getFlaggedComments } from "@/lib/serverFunctions/moderation/getFlaggedComments"
-import { getIsModerator } from "@/lib/serverFunctions/moderation/getIsModerator"
-import {ModerationPage} from "../../lib/moderation/ModerationPage"
 import { auth0 } from "@/lib/auth0"
+import { ModeratorOnly } from "@/lib/moderation/ModeratorOnly"
+import { getFlaggedComments } from "@/lib/serverFunctions/moderation/getFlaggedComments"
+import { ModerationPage } from "../../lib/moderation/ModerationPage"
 
 const Page = async () => {
-  const isModerator = await getIsModerator()
   const flaggedComments = await getFlaggedComments()
-  if (!isModerator) return <div>
+  return <ModeratorOnly fallback={<div>
     Access Denied
-  </div>
-  return <ClientSideOnly><ModerationPage flaggedComments={flaggedComments} /></ClientSideOnly>
+  </div>}><ModerationPage flaggedComments={flaggedComments} /></ModeratorOnly>
 }
 
 export default auth0.withPageAuthRequired(Page, {returnTo: '/moderation'}) as () => Promise<React.JSX.Element>

@@ -1,5 +1,5 @@
 import '@/lib/globals.css'
-import { NavBar } from '@/lib/NavBar'
+import { NavBar } from '@/lib/navbar/NavBar'
 import type { Metadata } from 'next'
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:

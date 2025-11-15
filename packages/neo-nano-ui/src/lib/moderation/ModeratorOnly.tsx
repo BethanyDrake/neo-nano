@@ -1,7 +1,7 @@
 
 "use client"
 import { PropsWithChildren, ReactNode, useEffect, useState } from 'react'
-import { getIsModerator } from '../serverFunctions/moderation/getIsModerator'
+import { getIsModerator } from '@/lib/serverFunctions/moderation/getIsModerator'
 
 export const ModeratorOnly = ({children, fallback}: PropsWithChildren & {fallback?: ReactNode})  => {
   const [isModerator, setIsModerator] = useState(false)
@@ -9,6 +9,9 @@ export const ModeratorOnly = ({children, fallback}: PropsWithChildren & {fallbac
     getIsModerator().then(setIsModerator)
   }, [])
 
-  if (isModerator) return fallback ?? null;
-  return children
+  if (isModerator) {
+    return children
+  }
+
+  return fallback ?? null;
 }

@@ -4,7 +4,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
-import { ModeratorOnly } from './moderation/ModeratorOnly'
+import { ModeratorOnly } from '../moderation/ModeratorOnly'
 
 export const NavMenu = () => {
   return (

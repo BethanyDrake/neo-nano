@@ -1,7 +1,7 @@
 'use client'
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from 'next/link';
-import { LoggedInNavBarButtons } from "../LoggedInNavBarButtons";
+import { LoggedInNavBarButtons } from "./LoggedInNavBarButtons";
 import { Row } from "../layout";
 import { BasicButton } from "../buttons/BasicButton";
 

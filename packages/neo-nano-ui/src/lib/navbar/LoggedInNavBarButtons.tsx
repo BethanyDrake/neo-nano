@@ -3,12 +3,11 @@
 import { faComment, faPerson } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { QuickUpdateModal } from './goalTracker/quickUpdate/QuickUpdateModal';
-import { Row } from './layout';
+import { QuickUpdateModal } from '../goalTracker/quickUpdate/QuickUpdateModal';
+import { Row } from '../layout';
 import styles from './NavBar.module.css';
-import { ActiveGoalProvider } from './goalTracker/quickUpdate/ActiveGoalContext';
-import { NewAwardModal, NewAwardModalProvider } from './awards/NewAwardModal';
-
+import { ActiveGoalProvider } from '../goalTracker/quickUpdate/ActiveGoalContext';
+import { NewAwardModal, NewAwardModalProvider } from '../awards/NewAwardModal';
 
 export const LoggedInNavBarButtons = () => {
     return (

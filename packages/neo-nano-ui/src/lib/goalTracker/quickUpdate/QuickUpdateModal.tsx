@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import classNames from '@/lib/modals/Modal.module.css'
 import formStyles from '@/lib/form.module.css'
-import navbarStyles from '@/lib/NavBar.module.css'
+import navbarStyles from '@/lib/navbar/NavBar.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { CumulativeSwitch } from '../CumulativeSwitch'
