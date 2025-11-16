@@ -99,7 +99,7 @@ const AboutPage = () => {
         />
 
         <TeamMember
-          fullName={'You?'}
+          fullName={'Rahma • You?'}
           role={'Testers'}
           description={
             <>
