@@ -31,6 +31,11 @@ export const NavMenu = () => {
             Code of Conduct
           </Link>
         </MenuItem>
+        <MenuItem>
+          <Link className={styles["menu-item"]}href="/about">
+            About
+          </Link>
+        </MenuItem>
         <ModeratorOnly>
         <MenuItem>
           <Link className={styles["menu-item"]}href="/moderation">
