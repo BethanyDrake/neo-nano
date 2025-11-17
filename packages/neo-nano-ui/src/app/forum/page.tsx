@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
+import { connection } from 'next/server'
 import Link from 'next/link'
 
 const QuickLink = ({title, icon, href}: {title: string, icon: IconProp, href:string}) => {
@@ -70,6 +71,7 @@ const TopicCard = ({
 }
 
 const Forum = async () => {
+  await connection()
   const categories = await getForumTopics()
  
   return (
