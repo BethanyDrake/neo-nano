@@ -53,6 +53,12 @@ a {
   }
 }
 
+.darkmode-invert {
+  @media (prefers-color-scheme: dark) {
+   filter: invert(1)
+  }
+}
+
 main {
   padding-top: var( --nav-bar-height);
   min-width: 100vw;
