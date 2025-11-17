@@ -56,10 +56,9 @@ const TechnologyItem = ({
 }) => {
   return (
     <LeftRow style={{ flexWrap: 'wrap' }}>
-      <Image src={picture} alt={fullName} width={100} height={100} />
+      <Image className="darkmode-invert" src={picture} alt={fullName} width={100} height={100} />
 
       <div style={{ minWidth: '250px', maxWidth: '650px' }}>
-        {' '}
         <Name>{fullName}</Name>
         <Role>{role}</Role>
         <p>{description}</p>
@@ -99,7 +98,7 @@ const AboutPage = () => {
         />
 
         <TeamMember
-          fullName={'You?'}
+          fullName={'Rahma • You?'}
           role={'Testers'}
           description={
             <>
