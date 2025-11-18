@@ -23,7 +23,6 @@ const SettingsForm = ({
   const { closeModal } = useModalContext()
 
   const { onSubmit, isLoading: isSubmitting } = useFormSubmission<EmailPreferences>(async (data) => {
-    console.log(data)
     await updateEmailPreferences(data)
     setInitialFormState(data)
     closeModal()
