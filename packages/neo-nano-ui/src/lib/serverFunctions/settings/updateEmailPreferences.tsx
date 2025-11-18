@@ -2,7 +2,7 @@
 import { auth0 } from '@/lib/auth0'
 import axios from 'axios'
 
-type EmailPreferences = {
+export type EmailPreferences = {
   recieveChallengeReminders: boolean
   revieveEncouragmentEmails: boolean
 }

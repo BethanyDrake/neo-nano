@@ -2,16 +2,25 @@ import { updateEmailPreferences } from '@/lib/serverFunctions/settings/updateEma
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { ModalContextProvider } from './ModalContext'
 import { SettingsModal } from './SettingsModal'
+import { getEmailPreferences } from '../serverFunctions/settings/getEmailPreferences'
 
 jest.mock('@/lib/serverFunctions/settings/updateEmailPreferences')
+jest.mock('@/lib/serverFunctions/settings/getEmailPreferences')
 describe('<SettingsModal />', () => {
   test('update email preferences', async () => {
     jest.mocked(updateEmailPreferences).mockResolvedValue()
-    const { getByRole } = render(
-        <ModalContextProvider>
+    jest
+      .mocked(getEmailPreferences)
+      .mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
+    const { getByRole, queryByRole } = render(
+      <ModalContextProvider>
         <SettingsModal />
-        </ModalContextProvider>
+      </ModalContextProvider>,
     )
+
+    await waitFor(() => {
+      expect(getByRole('button', { name: 'settings' })).toBeEnabled()
+    })
     fireEvent.click(getByRole('button', { name: 'settings' }))
     expect(getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
 
@@ -23,8 +32,12 @@ describe('<SettingsModal />', () => {
     await waitFor(() => {
       expect(updateEmailPreferences).toHaveBeenCalledWith({
         recieveChallengeReminders: true,
-        revieveEncouragmentEmails: true
+        revieveEncouragmentEmails: true,
       })
+    })
+
+    await waitFor(() => {
+      expect(queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument()
     })
   })
 })
