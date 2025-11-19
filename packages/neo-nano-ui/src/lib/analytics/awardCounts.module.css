@@ -1,0 +1,10 @@
+.trophyCounts {
+    .trophyTitle {
+        padding: 0;
+    }
+    .trophyDescription {
+        padding: 0;
+        color: var(--text-colour-2)
+    }
+}
+
