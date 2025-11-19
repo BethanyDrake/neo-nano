@@ -26,7 +26,6 @@ export const ActiveGoalProvider = ({children}: PropsWithChildren) => {
    const refresh = useCallback(async () => {
     setIsRefreshing(true)
     const today = getDateAsString(startOfToday())
-    console.log({ today })
     await getActiveGoal(today).then(setActiveGoal)
     setIsRefreshing(false)
   }, [])

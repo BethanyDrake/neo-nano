@@ -26,6 +26,15 @@
 
 }
 
+.modal.secondary {
+  border: 4px solid var(--secondary-light);
+
+    @media (prefers-color-scheme: dark) {
+    border-color: var(--secondary-vibrant);
+  }
+
+}
+
 .modal-overlay {
   z-index: 998;
 

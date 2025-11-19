@@ -19,6 +19,10 @@ jest.mock('@/lib/serverFunctions/goals/getMyGoals')
 jest.mock('@/lib/serverFunctions/profile/getMyAwards', () => ({
   getMyAwards: jest.fn().mockResolvedValue([]),
 }))
+
+jest.mock('@/lib/serverFunctions/settings/getEmailPreferences', () => ({
+  getEmailPreferences: jest.fn().mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
+}))
 describe('<ProfilePage />', () => {
   it('shows user details and goals', async () => {
     jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)

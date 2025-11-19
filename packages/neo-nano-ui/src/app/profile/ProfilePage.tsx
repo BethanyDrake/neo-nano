@@ -13,12 +13,12 @@ import { useRequireLogin } from '@/lib/useRequireLogin'
 import classNames from './profile.module.css'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
+import { SettingsModal } from '@/lib/modals/SettingsModal'
 
 export const ProfilePageInner = () => {
   const { profile,  awards } = useProfileContext()
   const{ goals, setGoals, isLoading: isLoadingGoals } = useMyGoalContext()
 
-  console.log(goals,setGoals,isLoadingGoals)
   const { setOpenModal } = useModalContext()
   useRequireLogin()
 
@@ -29,7 +29,7 @@ export const ProfilePageInner = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Row alignItems="center">
-        <h1>My Profile</h1> <EditProfileModal />
+        <h1>My Profile</h1> <EditProfileModal /> {profile.role === 'moderator' && <SettingsModal /> }
       </Row>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
