@@ -29,7 +29,7 @@ export const ProfilePageInner = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Row alignItems="center">
-        <h1>My Profile</h1> <EditProfileModal /> {profile.role === 'moderator' && <SettingsModal /> }
+        <h1>My Profile</h1> <EditProfileModal /> <SettingsModal />
       </Row>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
