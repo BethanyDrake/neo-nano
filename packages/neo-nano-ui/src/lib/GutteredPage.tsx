@@ -5,6 +5,7 @@ export const GutteredPage = ({children}: PropsWithChildren) => {
   return ( <div
       className={styles.background}
       style={{
+        minHeight: "100vh",
         backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/bookcase-small.jpg)',
         backgroundSize: '1000px',
       }}
