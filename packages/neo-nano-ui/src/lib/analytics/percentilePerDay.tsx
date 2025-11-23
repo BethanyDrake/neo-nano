@@ -9,8 +9,6 @@ const numberise = (userRecords: Record[][]): number[][] => {
 
 const arrayPercentile =(a:number[], percentile: number) => {
     const b = sort(a, 'asc')
-    console.log(b)
-    console.log((b.length * percentile) / (100))
     const index = Math.ceil((b.length * percentile) / (100)) - 1
     
     return b[index]
