@@ -4,7 +4,8 @@ import { FunnelTrapezoidItem } from 'recharts/types/cartesian/Funnel';
 import { PyramidEntry } from './getPyramidOfProgressData';
 import { use } from 'react';
 
-const colours = ['#8884d8', '#83a6ed', '#8dd1e1', '#82ca9d', '#a4de6c']
+const colours = ['#6e1ab3', '#667CB9', '#5FD5BE', '#B4DA7E', '#EDDD53']
+
 
 const FunnelWithDimensions = (props: FunnelTrapezoidItem) => {
   return (
