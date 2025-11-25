@@ -1,7 +1,7 @@
 'use client'
 
 import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
-import { Record } from '../forum.types'
+import { Record } from '@/lib/types/forum.types'
 
 type Props = {
   title: string

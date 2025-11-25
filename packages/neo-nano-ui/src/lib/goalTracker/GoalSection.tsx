@@ -1,7 +1,7 @@
 'use client'
 
 import { UpdateVisibilityButton } from '@/lib/buttons/UpdateVisibilityBotton'
-import { Record, Visibility } from '@/lib/forum.types'
+import { Record, Visibility } from '@/lib/types/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'

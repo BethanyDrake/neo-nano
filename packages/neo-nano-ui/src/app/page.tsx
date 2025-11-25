@@ -1,4 +1,4 @@
-import { ChallengeCountDown } from '@/lib/ChallengeCountDown'
+import { ChallengeCountDown } from '@/lib/landingPage/ChallengeCountDown'
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'

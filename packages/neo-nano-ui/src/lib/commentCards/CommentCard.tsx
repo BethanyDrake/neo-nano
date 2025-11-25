@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { ClientSideOnly } from '../ClientSideOnly'
-import { Comment, Flag, Profile } from '../forum.types'
+import { Comment, Flag, Profile } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import { ReportCommentModal } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'

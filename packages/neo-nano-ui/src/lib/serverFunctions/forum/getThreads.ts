@@ -1,6 +1,6 @@
 
 'use server'
-import { Comment, Thread } from '@/lib/forum.types'
+import { Comment, Thread } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { THREADS_PER_PAGE } from '@/lib/misc'
 

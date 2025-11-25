@@ -1,5 +1,5 @@
-import { Goal } from "@/lib/forum.types"
-import { Award } from "@/lib/profile.types"
+import { Goal } from "@/lib/types/forum.types"
+import { Award } from "@/lib/types/profile.types"
 import _ from 'lodash'
 import { dateToChallengeDay } from "../goals/goalUtils"
 

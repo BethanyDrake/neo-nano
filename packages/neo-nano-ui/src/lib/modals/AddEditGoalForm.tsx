@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { BasicButton } from '../buttons/BasicButton'
-import formClasses from '../form.module.css'
-import { Goal, Visibility } from '../forum.types'
+import formClasses from '@/lib/expandableForms/form.module.css'
+import { Goal, Visibility } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
 
 type Inputs = {

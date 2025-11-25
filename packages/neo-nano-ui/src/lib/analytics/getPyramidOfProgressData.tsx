@@ -1,5 +1,5 @@
 import { sum } from "lodash";
-import { Record } from "../forum.types";
+import { Record } from "@/lib/types/forum.types";
 
 export type PyramidEntry = 
 {

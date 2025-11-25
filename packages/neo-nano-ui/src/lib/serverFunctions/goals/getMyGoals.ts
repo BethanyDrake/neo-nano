@@ -1,5 +1,5 @@
 'use server'
-import { Goal } from '@/lib/forum.types'
+import { Goal } from '@/lib/types/forum.types'
 import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getExternalId } from '../_utils/getUserIdFromSession'

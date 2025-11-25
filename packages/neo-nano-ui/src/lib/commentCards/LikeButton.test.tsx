@@ -4,7 +4,7 @@ import { UserContextProvider } from '../context/UserContext'
 import { ReactionContextProvider } from '../context/ReactionContext'
 import { getThreadReactions } from '@/lib/serverFunctions/forum/getThreadReactions'
 import { getMyProfile } from '../serverFunctions/profile/getMyProfile'
-import { Profile } from '../forum.types'
+import { Profile } from '@/lib/types/forum.types'
 import { likeComment, unlikeComment } from '../serverFunctions/forum/likeComment'
 
 jest.mock('@/lib/serverFunctions/forum/getThreadReactions')

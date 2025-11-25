@@ -2,7 +2,7 @@
 
 import { Label, Line, LineChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
-import {Record} from '@/lib/forum.types'
+import {Record} from '@/lib/types/forum.types'
 type Props = {
   title: string
   cumulativeWordCount: Record[]

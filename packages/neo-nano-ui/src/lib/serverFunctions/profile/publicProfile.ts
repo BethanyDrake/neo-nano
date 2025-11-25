@@ -1,5 +1,5 @@
 'use server'
-import { Profile } from '@/lib/forum.types'
+import { Profile } from '@/lib/types/forum.types'
 import camelcaseKeys from 'camelcase-keys'
 import { getSingle } from '../_utils/getSingle'
 import { getQueryFunction } from '../_utils/getQueryFunction'

@@ -1,5 +1,5 @@
 import { NewAwardModalContext } from "@/lib/awards/NewAwardModal";
-import { Goal } from "@/lib/forum.types";
+import { Goal } from "@/lib/types/forum.types";
 import { getDateAsString } from "@/lib/misc";
 import { getActiveGoal } from "@/lib/serverFunctions/goals/getActiveGoal";
 import { updateGoalProgress } from "@/lib/serverFunctions/goals/updateGoalProgress";

@@ -2,7 +2,7 @@
 
 import { auth0 } from '@/lib/auth0'
 import { getQueryFunction } from '../_utils/getQueryFunction'
-import { Profile } from '@/lib/forum.types'
+import { Profile } from '@/lib/types/forum.types'
 import { getSingle } from '../_utils/getSingle'
 
 export const getIsModerator = async () => {

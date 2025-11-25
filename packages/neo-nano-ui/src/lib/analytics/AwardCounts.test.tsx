@@ -1,6 +1,6 @@
 import { act, render } from '@testing-library/react'
 import { Suspense } from 'react'
-import { buildAward } from '../profile.types.builders'
+import { buildAward } from '@/lib/types/profile.types.builders'
 import { TrophyCounts } from './AwardCounts'
 
 describe('<AwardCounts />', () => {

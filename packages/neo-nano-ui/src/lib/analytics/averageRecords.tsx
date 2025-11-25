@@ -1,4 +1,4 @@
-import { Record } from "../forum.types";
+import { Record } from "@/lib/types/forum.types";
 import { Matrix, matrix, multiply} from "mathjs"
 
 const numberise = (userRecords: Record[][]): number[][] => {

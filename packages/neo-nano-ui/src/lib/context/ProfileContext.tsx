@@ -1,8 +1,8 @@
 'use client'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
-import { Profile } from '../forum.types'
+import { Profile } from '@/lib/types/forum.types'
 import { updateProfile as updateProfileServerSide } from '../serverFunctions/profile/updateProfile'
-import { UserAward } from '../profile.types'
+import { UserAward } from '@/lib/types/profile.types'
 import { getMyAwards } from '../serverFunctions/profile/getMyAwards'
 
 const ProfileContext = createContext<{

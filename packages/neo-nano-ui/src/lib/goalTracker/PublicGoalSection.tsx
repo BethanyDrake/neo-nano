@@ -1,5 +1,5 @@
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
-import { Goal } from '@/lib/forum.types'
+import { Goal } from '@/lib/types/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered } from '@/lib/layoutElements/flexLayouts'
 import classNames from './goalTracker.module.css'

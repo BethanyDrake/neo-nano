@@ -1,7 +1,7 @@
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
-import { Goal } from '../forum.types'
+import { Goal } from '@/lib/types/forum.types'
 import { updateGoal } from '../serverFunctions/goals/updateGoal'
 import { AddEditGoalForm, GoalDetails } from './AddEditGoalForm'
 import classNames from './Modal.module.css'

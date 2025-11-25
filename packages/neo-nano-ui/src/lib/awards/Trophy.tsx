@@ -1,4 +1,4 @@
-import { UserAward } from '@/lib/profile.types'
+import { UserAward } from '@/lib/types/profile.types'
 import { Column } from '../layoutElements/flexLayouts'
 import Image from 'next/image'
 
