@@ -4,6 +4,7 @@ import { BasicButton } from '../buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
 import { Goal, Visibility } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
+import { hoursToMinutes } from 'date-fns'
 
 type Inputs = {
     title: string
@@ -12,9 +13,10 @@ type Inputs = {
     lengthDays: string
     target: string
     visibility: Visibility
+    metric: 'words' | 'hours'
 }
 
-export type GoalDetails = Pick<Goal, "title" | "target" | "lengthDays" | "startDate" | 'visibility'>
+export type GoalDetails = Pick<Goal, "title" | "target" | "lengthDays" | "startDate" | 'visibility' | 'metric'>
 
 export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mode: 'add' | 'edit', defaultValues: Inputs, closeModal: () => void , onSave: (goalDetails: GoalDetails) => Promise<void>}) => {
   const {
@@ -26,10 +28,15 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     setIsLoading(true)
+    const targetInput = parseInt(data.target);
+    const target = data.metric === 'hours' ? hoursToMinutes(targetInput) : targetInput
+    const metric: Goal["metric"] = data.metric === 'hours' ? 'minutes' : data.metric
     const body = {
       ...data,
         lengthDays: parseInt(data.lengthDays),
-        target: parseInt(data.target),
+        target,
+        metric,
+        
     
     }
     await onSave(body)
@@ -63,7 +70,7 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
         </Row>
 
         <Row alignItems="center" justifyContent="start">
-          <label htmlFor="target">Target Word Count:</label>
+          <label htmlFor="target">Target:</label>
           <input
             type="number"
             min={1}
@@ -71,7 +78,14 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
             placeholder="50000"
             {...register('target', { required: true })}
           />{' '}
-          <span>words</span>
+           <select disabled={mode === 'edit'} aria-label='progress unit' id="metric"  {...register('metric', { required: true })}>
+            <option key="private" value="words">
+              words
+            </option>
+            <option key="public" value="hours">
+              hours
+            </option>
+          </select>
         </Row>
 
         <Row alignItems="center" justifyContent="start">

@@ -22,9 +22,26 @@ describe('<GoalSection />', () => {
         lengthDays={0}
         startDate={''}
         target={0}
+        metric={'words'}
       />,
     )
     expect(getByText('Goal Title')).toBeInTheDocument()
+  })
+
+  it('displays time-based goal', () => {
+    const { queryByText } = render(
+      <GoalSection
+        id="1"
+        initialRecords={[]}
+        visibility="private"
+        title="Goal Title"
+        lengthDays={0}
+        startDate={''}
+        target={180}
+        metric={'minutes'}
+      />,
+    )
+    expect(queryByText(/words/)).not.toBeInTheDocument()
   })
 
   it('displays total words', () => {
@@ -37,6 +54,7 @@ describe('<GoalSection />', () => {
         lengthDays={2}
         startDate={''}
         target={0}
+        metric={'words'}
       />,
     )
     expect(getByText('Goal Title')).toBeInTheDocument()
@@ -53,11 +71,13 @@ describe('<GoalSection />', () => {
         lengthDays={0}
         startDate={''}
         target={0}
+        metric={'words'}
       />,
     )
     fireEvent.click(getByRole('button', { name: 'make public' }))
     expect(setGoalVisibility).toHaveBeenCalledWith({ id: 'goal-id', visibility: 'public' })
-    rerender(<GoalSection
+    rerender(
+      <GoalSection
         id="goal-id"
         initialRecords={[]}
         visibility="public"
@@ -65,7 +85,9 @@ describe('<GoalSection />', () => {
         lengthDays={0}
         startDate={''}
         target={0}
-      />)
+        metric={'words'}
+      />,
+    )
     expect(await findByRole('button', { name: 'make private' })).toBeInTheDocument()
   })
 
@@ -79,6 +101,7 @@ describe('<GoalSection />', () => {
         lengthDays={0}
         startDate={''}
         target={0}
+        metric={'words'}
       />,
     )
     fireEvent.click(getByRole('switch', { name: 'Words Per Day • Cumulative' }))
@@ -94,6 +117,7 @@ describe('<GoalSection />', () => {
         lengthDays={0}
         startDate={''}
         target={0}
+        metric={'words'}
       />,
     )
     fireEvent.click(getByRole('button', { name: /delete/i }))

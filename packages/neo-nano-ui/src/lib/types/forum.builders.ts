@@ -38,5 +38,6 @@ export const buildGoal = (goal: Partial<Goal> = {}): Goal => ({
   userId: '',
   target: 0,
   visibility: 'private',
+  metric: 'words',
   ...goal
 })

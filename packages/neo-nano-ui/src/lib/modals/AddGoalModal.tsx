@@ -32,6 +32,7 @@ export const AddGoalModal = () => {
               target: '50000',
               visibility: 'private',
               startDate: '2025-11-01',
+              metric: 'words'
             }}
             closeModal={closeModal}
             onSave={onSave}

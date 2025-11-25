@@ -55,7 +55,7 @@ export const ProfilePageInner = () => {
         </div>
       )}
 
-      {goals.map(({ id, title, records, visibility, target, lengthDays, startDate }) => (
+      {goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
         <GoalSection
           id={id}
           key={id}
@@ -65,6 +65,7 @@ export const ProfilePageInner = () => {
           lengthDays={lengthDays}
           startDate={startDate}
           target={target}
+          metric={metric}
         />
       ))}
 

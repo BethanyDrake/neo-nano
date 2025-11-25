@@ -41,6 +41,7 @@ describe('<ProfilePage />', () => {
         startDate: '2025-11-01',
         lengthDays: 30,
         visibility: 'private',
+        metric: 'words'
       },
     ])
     const { findByText } = render(await ProfilePage())
