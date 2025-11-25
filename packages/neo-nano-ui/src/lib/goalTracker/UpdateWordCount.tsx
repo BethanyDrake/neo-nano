@@ -1,4 +1,4 @@
-import { addDays, differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'
+import { addDays, differenceInCalendarDays, endOfDay, parseISO, startOfToday } from 'date-fns'
 import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import Calendar, { TileContentFunc } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
@@ -106,7 +106,7 @@ export const UpdateWordCount = ({
       <Calendar
         tileContent={renderTile}
         minDate={parseISO(startDate)}
-        maxDate={addDays(parseISO(startDate), lengthDays)}
+        maxDate={endOfDay(addDays(parseISO(startDate), lengthDays-1))}
         onChange={onChange}
         value={value}
         inputRef={calendarRef}
