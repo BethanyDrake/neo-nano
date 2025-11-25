@@ -1,22 +1,54 @@
 'use client'
-import { intervalToDuration, isBefore, parseISO } from 'date-fns'
+import { faScissors } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { endOfDay, startOfDay, intervalToDuration, isBefore, parseISO } from 'date-fns'
+import { Column } from '../layoutElements/flexLayouts'
+
+const currentChallengeEndDate = '2025-11-30'
+const nextChallengeStartDate = '2026-01-01'
 
 export const ChallengeCountDown = () => {
   const now = Date.now()
-  const novemberFirst = parseISO('2025-11-01')
+  const challengeEnd = endOfDay(parseISO(currentChallengeEndDate)) 
+  const nextChallengeStart = startOfDay(parseISO(nextChallengeStartDate))
 
-  const duration = intervalToDuration({
+
+  if (isBefore(now, challengeEnd)) {
+    const timeLeft = intervalToDuration({
     start: now,
-    end: novemberFirst,
+    end: challengeEnd,
   })
-
-  if (isBefore(now, novemberFirst)) {
-    return (
-      <div style={{ fontStyle: 'italic' }}>
-        {duration.days ?? 0} days, {duration.hours ?? 0} hours until the challenge begins.
-      </div>
-    )
-  } else {
-    return <div style={{ fontStyle: 'italic' }}>The challenge has begun!</div>
+  return (
+     <div style={{ fontStyle: 'italic' }}>
+        {timeLeft.days ?? 0} days, {timeLeft.hours ?? 0} hours remaining
+      </div>)
   }
+  if (isBefore(now, nextChallengeStart)) {
+const timeLeft = intervalToDuration({
+    start: now,
+    end: nextChallengeStart,
+  })
+    return (<Column>
+    <p style={{ fontStyle: 'italic' }}>November is over, the challenge is complete! Time to bask in your success and take a breather.</p>
+    
+    <div>
+    <p>Join us in January and Febuary for...</p>
+    <p style={{fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large'}}>
+      <FontAwesomeIcon icon={faScissors}/>
+      The Eighty Hour Edit
+      <FontAwesomeIcon icon={faScissors} flip="horizontal"/>
+      </p>
+    <p>{"Commit to spending 80 hours (4,800 minutes) revising your novel."}</p>
+
+    <p><span style={{fontWeight: 'bold'}}>Start date: </span><span>January 1st</span></p>
+    <p><span style={{fontWeight: 'bold'}}>End date: </span><span>Febuary 28th</span></p>
+
+    </div>
+ <div style={{ fontStyle: 'italic' }}>
+        {timeLeft.months ?? 0} month, {timeLeft.days ?? 0} days, {timeLeft.hours ?? 0} hours until the challenge begins.
+      </div>
+      </Column>)
+  }
+
+  return null
 }
