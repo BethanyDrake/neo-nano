@@ -13,8 +13,6 @@ export const TrophyCounts = ({
   const awardCounts = use(awardCountsPromise)
 
   return (
-    <div className={styles.trophyCounts}>
-      <h2>Trophies Awarded:</h2>
       <Column>
         {awardCounts.map(({ imageUrl, title, description, count, id }) => (
           <div key={id}>
@@ -31,6 +29,5 @@ export const TrophyCounts = ({
           </div>
         ))}
       </Column>
-    </div>
   )
 }
