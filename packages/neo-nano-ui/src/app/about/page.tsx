@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { GutteredPage } from '@/lib/GutteredPage'
-import { Centered, Column, LeftRow } from '@/lib/layout'
+import { Centered, Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
 import Link from 'next/link'
 import { PropsWithChildren, ReactNode } from 'react'
 

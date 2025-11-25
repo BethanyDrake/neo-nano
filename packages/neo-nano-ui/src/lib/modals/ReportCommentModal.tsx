@@ -8,7 +8,7 @@ import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { useThreadContext } from '../context/ThreadContext'
 import formClasses from '../form.module.css'
 import { Comment, Flag } from '../forum.types'
-import { Column, LeftRow, Row } from '../layout'
+import { Column, LeftRow, Row } from '../layoutElements/flexLayouts'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
 import classNames from './Modal.module.css'
 type Inputs = Pick<Flag, 'reason' | 'details'>

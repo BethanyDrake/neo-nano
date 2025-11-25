@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import classNames from './Modal.module.css'
 import { BasicButton } from '../buttons/BasicButton'
-import { Column, Row } from '../layout'
+import { Column, Row } from '../layoutElements/flexLayouts'
 import { useEffect, useState } from 'react'
 import { Profile } from '../forum.types'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'

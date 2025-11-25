@@ -3,7 +3,7 @@
 import { UpdateVisibilityButton } from '@/lib/buttons/UpdateVisibilityBotton'
 import { Record, Visibility } from '@/lib/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
-import { Centered, Column, Row } from '@/lib/layout'
+import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'

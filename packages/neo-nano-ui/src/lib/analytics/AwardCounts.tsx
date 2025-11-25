@@ -1,7 +1,7 @@
 'use client'
 import { use } from 'react'
 import { Award } from '../profile.types'
-import { Column, Row } from '../layout'
+import { Column, Row } from '../layoutElements/flexLayouts'
 import Image from 'next/image'
 import styles from './awardCounts.module.css'
 

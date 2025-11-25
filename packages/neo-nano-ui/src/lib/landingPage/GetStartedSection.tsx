@@ -1,7 +1,7 @@
 'use client'
 
 import { BasicButton } from '@/lib/buttons/BasicButton'
-import { Column, Row } from '@/lib/layout'
+import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import Link from 'next/link'
 import styles from './page.module.css'
 import { useUser } from '@auth0/nextjs-auth0'

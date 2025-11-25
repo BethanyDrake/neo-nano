@@ -1,6 +1,6 @@
 import { ChallengeCountDown } from '@/lib/ChallengeCountDown'
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
-import { Column, Row } from '@/lib/layout'
+import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

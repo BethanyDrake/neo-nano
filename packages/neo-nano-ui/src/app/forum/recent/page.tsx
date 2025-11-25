@@ -1,7 +1,7 @@
 import { getRecentlyUpdatedThreads } from "@/lib/serverFunctions/forum/getRecentlyUpdatedThreads"
 import { ThreadCard } from "@/lib/ThreadCard"
 import styles from '@/lib/styles/forum.module.css'
-import { Column } from "@/lib/layout"
+import { Column } from "@/lib/layoutElements/flexLayouts"
 import { Breadcrumbs } from "@/lib/Breadcrumbs"
 import { connection } from "next/server"
 

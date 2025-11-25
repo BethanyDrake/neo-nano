@@ -3,7 +3,7 @@ import { ExtendableIconButton, SmallIconButton } from '../buttons/ExtendableIcon
 import { faAdd, faReply } from '@fortawesome/free-solid-svg-icons'
 import { BasicButton } from '../buttons/BasicButton'
 import RichTextEditor from '../richText/RichTextEditor'
-import { Column } from '../layout'
+import { Column } from '../layoutElements/flexLayouts'
 import formClasses from '@/lib/form.module.css'
 import styles from './expandableForm.module.css'
 import { SubmitHandler, useForm } from 'react-hook-form'

@@ -1,5 +1,5 @@
 import { LoadingButton } from '../buttons/BasicButton'
-import { Column, LeftRow } from '../layout'
+import { Column, LeftRow } from '../layoutElements/flexLayouts'
 import RichTextDisplay from '../richText/RichTextDisplay'
 import { CommentFlag } from '../serverFunctions/moderation/getFlaggedComments'
 import { confirmFlag, refuteFlag } from '../serverFunctions/moderation/reviewFlaggedComment'

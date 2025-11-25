@@ -1,5 +1,5 @@
 import { UserAward } from '@/lib/profile.types'
-import { Column } from '../layout'
+import { Column } from '../layoutElements/flexLayouts'
 import Image from 'next/image'
 
 export const Trophy = ({ award }: { award: UserAward }) => {

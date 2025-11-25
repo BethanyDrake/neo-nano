@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { BasicButton } from '../buttons/BasicButton'
 import formClasses from '../form.module.css'
 import { Goal, Visibility } from '../forum.types'
-import { Column, Row } from '../layout'
+import { Column, Row } from '../layoutElements/flexLayouts'
 
 type Inputs = {
     title: string

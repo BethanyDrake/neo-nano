@@ -1,5 +1,5 @@
 import ProgressBar from '@ramonak/react-progress-bar'
-import { Centered, Column } from '../layout'
+import { Centered, Column } from '../layoutElements/flexLayouts'
 import classNames from './goalTracker.module.css'
 export const StatsCard = ({ total, target, title }: { total: number; target: number; title: string }) => {
   return (

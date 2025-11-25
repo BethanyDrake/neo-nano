@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTopicContext } from '../context/TopicContext'
-import { Column, Row } from '../layout'
+import { Column, Row } from '../layoutElements/flexLayouts'
 import RichTextEditor from '../richText/RichTextEditor'
 import { BasicButton } from '../buttons/BasicButton'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'

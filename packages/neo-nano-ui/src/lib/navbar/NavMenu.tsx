@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faChartColumn, faComment, faPerson } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { ModeratorOnly } from '../moderation/ModeratorOnly'
-import { Row } from '../layout'
+import { Row } from '../layoutElements/flexLayouts'
 
 export const NavMenu = () => {
   return (

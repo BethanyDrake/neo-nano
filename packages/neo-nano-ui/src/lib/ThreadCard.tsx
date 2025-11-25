@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ThreadSummary } from './serverFunctions/forum/getThreads'
 import styles from '@/lib/styles/forum.module.css'
-import { Column, Row } from './layout';
+import { Column, Row } from './layoutElements/flexLayouts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { truncateText } from './misc';

@@ -1,7 +1,7 @@
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { Goal } from '@/lib/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
-import { Centered } from '@/lib/layout'
+import { Centered } from '@/lib/layoutElements/flexLayouts'
 import classNames from './goalTracker.module.css'
 
 export const PublicGoalSection = ({ goal }: { goal: Pick<Goal, 'title' | 'records' |'lengthDays' | 'target'> }) => {
