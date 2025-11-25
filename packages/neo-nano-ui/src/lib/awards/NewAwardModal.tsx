@@ -2,8 +2,8 @@
 import confetti from 'canvas-confetti'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { BasicButton } from '../buttons/BasicButton'
-import { Column } from '../layout'
-import { UserAward } from '../profile.types'
+import { Column } from '../layoutElements/flexLayouts'
+import { UserAward } from '@/lib/types/profile.types'
 import classNames from './awards.module.css'
 import { Trophy } from './Trophy'
 

@@ -21,6 +21,7 @@ describe('AddGoalModal', () => {
       target: 50000,
       title: 'November 2025',
       visibility: 'private',
+      metric: 'words'
     })
   })
 
@@ -32,7 +33,7 @@ describe('AddGoalModal', () => {
 
     fireEvent.change(getByRole('textbox', { name: /Title/ }), { target: { value: 'Some Title' } })
     fireEvent.change(getByRole('spinbutton', { name: /Duration/ }), { target: { value: '10' } })
-    fireEvent.change(getByRole('spinbutton', { name: /Target Word Count/ }), { target: { value: '25000' } })
+    fireEvent.change(getByRole('spinbutton', { name: /Target/ }), { target: { value: '25000' } })
     fireEvent.change(getByLabelText(/Start Date/), { target: { value: '2000-01-15' } })
     fireEvent.change(getByRole('combobox', { name: /Visibility/ }), { target: { value: 'public' } })
 
@@ -47,6 +48,7 @@ describe('AddGoalModal', () => {
       target: 25000,
       title: 'Some Title',
       visibility: 'public',
+      metric: 'words'
     })
   })
 })

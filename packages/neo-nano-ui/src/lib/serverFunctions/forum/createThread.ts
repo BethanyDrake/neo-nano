@@ -1,6 +1,6 @@
 'use server'
 
-import { Thread } from "../../forum.types"
+import { Thread } from "@/lib/types/forum.types"
 import { getQueryFunction } from "../_utils/getQueryFunction"
 import { getThreads } from "./getThreads"
 import { getUserId } from "../_utils/getUserIdFromSession"

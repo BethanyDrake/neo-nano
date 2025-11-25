@@ -2,7 +2,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { EditProfileModal } from './EditProfileModal'
 import { ProfileContextProvider } from '../context/ProfileContext'
 import { updateProfile } from '../serverFunctions/profile/updateProfile'
-import { buildProfile } from '../forum.builders'
+import { buildProfile } from '@/lib/types/forum.builders'
 
 jest.mock('../serverFunctions/profile/updateProfile')
 describe('<EditProfileModal />', () => {

@@ -1,9 +1,9 @@
 'use client'
 
 import { UpdateVisibilityButton } from '@/lib/buttons/UpdateVisibilityBotton'
-import { Record, Visibility } from '@/lib/forum.types'
+import { Goal, Record, Visibility } from '@/lib/types/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
-import { Centered, Column, Row } from '@/lib/layout'
+import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'
@@ -27,6 +27,7 @@ type GoalProps = {
   lengthDays: number
   startDate: string
   target: number
+  metric: Goal["metric"]
 }
 
 const getTotal = (cumulativeRecords: Record[]) => {
@@ -34,7 +35,7 @@ const getTotal = (cumulativeRecords: Record[]) => {
   return cumulativeRecords[cumulativeRecords.length - 1] ?? 0
 }
 
-export const GoalSection = ({ id, title, target, lengthDays, startDate, initialRecords, visibility }: GoalProps) => {
+export const GoalSection = ({ id, title, target, lengthDays, startDate, initialRecords, visibility, metric }: GoalProps) => {
   const [records, setRecords] = useState<(number | null)[]>(initialRecords)
   const [isCumulative, setIsCumulative] = useState(false)
   const cumulativeRecords = toCumulative(records)
@@ -68,14 +69,15 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
               lengthDays,
               startDate,
               visibility,
+              metric
             }}
           />
         </Row>
         <SmallIconButton id="delete" onClick={_deleteGaol} isLoading={isDeleteGoalLoading} icon={faTrash} text="delete goal" variant="angry" />
       </Row>
       <Row>
-        <StatsCard title="Today" total={todaysProgress} target={dailyTarget}></StatsCard>
-        <StatsCard title="Total" total={total} target={target}></StatsCard>
+        <StatsCard title="Today" total={todaysProgress} target={dailyTarget} metric={metric}></StatsCard>
+        <StatsCard title="Total" total={total} target={target} metric={metric}></StatsCard>
       </Row>
       <Centered>
         <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative}/>
@@ -93,7 +95,7 @@ export const GoalSection = ({ id, title, target, lengthDays, startDate, initialR
         {isCumulative ? (
           <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords} lengthDays={lengthDays} />
         ) : (
-          <WordsPerDay title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} />
+          <WordsPerDay title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} metric={metric}/>
         )}
       </div>
     </Column>

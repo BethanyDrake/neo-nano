@@ -1,6 +1,6 @@
 'use server'
 
-import { Profile } from "../../forum.types"
+import { Profile } from "@/lib/types/forum.types"
 import { getMyProfile } from "./getMyProfile"
 import { getQueryFunction } from "../_utils/getQueryFunction"
 import { getExternalId } from "../_utils/getUserIdFromSession"

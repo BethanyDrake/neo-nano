@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { CommentCard } from './CommentCard'
 import { flagComment } from '@/lib/serverFunctions/moderation/flagComment'
-import { Flag } from '../forum.types'
+import { Flag } from '@/lib/types/forum.types'
 import { useIsLoggedIn } from '@/lib/context/UserContext'
 
 jest.mock('@/lib/serverFunctions/moderation/flagComment')

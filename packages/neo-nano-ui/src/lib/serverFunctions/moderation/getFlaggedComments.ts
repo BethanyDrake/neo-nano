@@ -1,6 +1,6 @@
 'use server'
 
-import { Comment, Flag } from '@/lib/forum.types'
+import { Comment, Flag } from '@/lib/types/forum.types'
 import { getDbConnection } from '../_utils/getDbConnection'
 
 export type CommentFlag = {

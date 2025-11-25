@@ -1,5 +1,5 @@
 import { Comment, Goal, Profile } from './forum.types'
-import { ThreadSummary } from './serverFunctions/forum/getThreads'
+import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 
 export const buildComment = (comment: Partial<Comment> = {}) => ({
   id: '',
@@ -38,5 +38,6 @@ export const buildGoal = (goal: Partial<Goal> = {}): Goal => ({
   userId: '',
   target: 0,
   visibility: 'private',
+  metric: 'words',
   ...goal
 })

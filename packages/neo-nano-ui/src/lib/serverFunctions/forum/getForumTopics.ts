@@ -1,5 +1,5 @@
 'use server'
-import { Category, Topic } from '@/lib/forum.types'
+import { Category, Topic } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 
 

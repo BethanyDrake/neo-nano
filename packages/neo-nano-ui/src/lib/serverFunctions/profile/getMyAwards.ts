@@ -2,7 +2,7 @@
 import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getExternalId } from '../_utils/getUserIdFromSession'
-import { UserAward } from '@/lib/profile.types'
+import { UserAward } from '@/lib/types/profile.types'
 
 export const getMyAwards = async () => {
   console.log('getMyAwards')

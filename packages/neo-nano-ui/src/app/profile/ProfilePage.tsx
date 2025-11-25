@@ -4,7 +4,7 @@ import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
 import { useProfileContext } from '@/lib/context/ProfileContext'
-import { Column, Row } from '@/lib/layout'
+import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { useModalContext } from '@/lib/modals/ModalContext'
@@ -55,7 +55,7 @@ export const ProfilePageInner = () => {
         </div>
       )}
 
-      {goals.map(({ id, title, records, visibility, target, lengthDays, startDate }) => (
+      {goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
         <GoalSection
           id={id}
           key={id}
@@ -65,6 +65,7 @@ export const ProfilePageInner = () => {
           lengthDays={lengthDays}
           startDate={startDate}
           target={target}
+          metric={metric}
         />
       ))}
 

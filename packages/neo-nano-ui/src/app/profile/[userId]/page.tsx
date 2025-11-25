@@ -1,6 +1,6 @@
-import { Goal, Profile } from '@/lib/forum.types'
+import { Goal, Profile } from '@/lib/types/forum.types'
 import { PublicGoalSection } from '@/lib/goalTracker/PublicGoalSection'
-import { Centered } from '@/lib/layout'
+import { Centered } from '@/lib/layoutElements/flexLayouts'
 import { getPublicGoals } from '@/lib/serverFunctions/goals/getPublicGoals'
 import { getPublicProfile } from '@/lib/serverFunctions/profile/publicProfile'
 

@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import classNames from './Modal.module.css'
 import { BasicButton } from '../buttons/BasicButton'
-import { Column, Row } from '../layout'
+import { Column, Row } from '../layoutElements/flexLayouts'
 import { useEffect, useState } from 'react'
-import { Profile } from '../forum.types'
+import { Profile } from '@/lib/types/forum.types'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
-import formClasses from '../form.module.css'
+import formClasses from '@/lib/expandableForms/form.module.css'
 import { useProfileContext } from '../context/ProfileContext'
 
 type Inputs = Pick<Profile, 'displayName' | 'aboutMe'>

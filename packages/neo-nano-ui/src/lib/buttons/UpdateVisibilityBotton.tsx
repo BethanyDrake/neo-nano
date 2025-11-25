@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { Visibility } from "../forum.types"
+import { Visibility } from "@/lib/types/forum.types"
 import { SmallIconButton } from "./ExtendableIconButton"
 
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'

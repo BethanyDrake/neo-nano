@@ -1,6 +1,6 @@
 'use server'
 
-import { Category, Thread, Topic } from '@/lib/forum.types'
+import { Category, Thread, Topic } from '@/lib/types/forum.types'
 import { CommentCardDataEntry } from '@/lib/commentCards/CommentCard'
 import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'

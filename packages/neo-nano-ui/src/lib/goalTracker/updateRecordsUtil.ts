@@ -1,4 +1,4 @@
-import { Goal } from "../forum.types"
+import { Goal } from "@/lib/types/forum.types"
 import { changeAtIndex } from "./recordUtils"
 import _ from 'lodash'
 

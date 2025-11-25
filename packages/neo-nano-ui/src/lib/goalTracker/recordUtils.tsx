@@ -1,4 +1,4 @@
-import { Record } from "../forum.types"
+import { Record } from "@/lib/types/forum.types"
 
 export const toCumulative = (perDay: Record[]) => {
   const cumulative: Array<number> = []

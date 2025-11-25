@@ -3,11 +3,11 @@ import { createThread } from '@/lib/serverFunctions/forum/createThread'
 import { getThreads } from "@/lib/serverFunctions/forum/getThreads"
 import { getTopic } from "@/lib/serverFunctions/forum/getTopic"
 import { auth0 } from "@/lib/auth0"
-import { Category, Topic } from '@/lib/forum.types'
+import { Category, Topic } from '@/lib/types/forum.types'
 import { SessionData } from '@auth0/nextjs-auth0/types'
 import { fireEvent, render } from '@testing-library/react'
 import axios from 'axios'
-import { buildThreadSummary } from '@/lib/forum.builders'
+import { buildThreadSummary } from '@/lib/types/forum.builders'
 
 jest.spyOn(axios, 'post')
 jest.mock('next/navigation', () => ({

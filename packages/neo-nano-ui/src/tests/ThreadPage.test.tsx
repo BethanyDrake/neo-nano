@@ -1,5 +1,5 @@
 import Page from '@/app/forum/[topic-id]/[thread-id]/page'
-import { buildThreadSummary } from '@/lib/forum.builders'
+import { buildThreadSummary } from '@/lib/types/forum.builders'
 import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWithComments'
 import { render } from '@testing-library/react'
 

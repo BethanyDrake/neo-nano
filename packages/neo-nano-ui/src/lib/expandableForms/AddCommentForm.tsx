@@ -3,12 +3,12 @@ import { ExtendableIconButton, SmallIconButton } from '../buttons/ExtendableIcon
 import { faAdd, faReply } from '@fortawesome/free-solid-svg-icons'
 import { BasicButton } from '../buttons/BasicButton'
 import RichTextEditor from '../richText/RichTextEditor'
-import { Column } from '../layout'
-import formClasses from '@/lib/form.module.css'
+import { Column } from '../layoutElements/flexLayouts'
+import formClasses from '@/lib/expandableForms/form.module.css'
 import styles from './expandableForm.module.css'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useThreadContext } from '../context/ThreadContext'
-import { Comment, Profile } from '../forum.types'
+import { Comment, Profile } from '@/lib/types/forum.types'
 import { truncateText } from '../misc'
 type Inputs = {
   commentText: string

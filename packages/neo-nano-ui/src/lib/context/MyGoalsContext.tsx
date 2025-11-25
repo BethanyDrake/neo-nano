@@ -1,6 +1,6 @@
 'use client'
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
-import { Goal } from '../forum.types'
+import { Goal } from '@/lib/types/forum.types'
 import { getMyGoals } from '../serverFunctions/goals/getMyGoals'
 
 const MyGoalContext = createContext<{

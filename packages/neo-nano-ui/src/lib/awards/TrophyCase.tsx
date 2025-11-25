@@ -1,5 +1,5 @@
-import { UserAward } from '@/lib/profile.types'
-import { Centered, Row } from '../layout'
+import { UserAward } from '@/lib/types/profile.types'
+import { Centered, Row } from '../layoutElements/flexLayouts'
 import classNames from './awards.module.css'
 import { Trophy } from './Trophy'
 

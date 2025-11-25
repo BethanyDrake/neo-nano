@@ -1,6 +1,6 @@
 import { ThreadCard } from '@/lib/ThreadCard'
 import styles from '@/lib/styles/forum.module.css'
-import { Centered, Column } from '@/lib/layout'
+import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { getMyThreads } from '@/lib/serverFunctions/forum/getMyThreads'
 import { BasicButton } from '@/lib/buttons/BasicButton'

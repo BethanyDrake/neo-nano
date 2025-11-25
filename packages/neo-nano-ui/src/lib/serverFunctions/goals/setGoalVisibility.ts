@@ -1,5 +1,5 @@
 'use server'
-import { Goal } from '../../forum.types'
+import { Goal } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { getMyGoals } from './getMyGoals'

@@ -1,5 +1,5 @@
 'use server'
-import { UserAward } from '@/lib/profile.types'
+import { UserAward } from '@/lib/types/profile.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getSingle } from '../_utils/getSingle'
 import { getUserId } from '../_utils/getUserIdFromSession'

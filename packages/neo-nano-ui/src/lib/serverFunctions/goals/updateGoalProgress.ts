@@ -1,12 +1,12 @@
 'use server'
 import camelcaseKeys from "camelcase-keys"
-import { Goal } from "../../forum.types"
+import { Goal } from "@/lib/types/forum.types"
 import { getQueryFunction } from "../_utils/getQueryFunction"
 import { getUserId } from "../_utils/getUserIdFromSession"
 import { getUnclaimedAwards } from "../awards/getUnclaimedAwards"
 import { assessConsistencyAward, assessWordCountAward } from "../awards/assessAwards"
 import { claimAward } from "../profile/claimAward"
-import { UserAward } from "@/lib/profile.types"
+import { UserAward } from "@/lib/types/profile.types"
 
 export type UpdatedGoalProgressReturn = {
   updatedGoal: Goal,

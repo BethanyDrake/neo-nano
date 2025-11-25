@@ -2,12 +2,12 @@
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTopicContext } from '../context/TopicContext'
-import { Column, Row } from '../layout'
+import { Column, Row } from '../layoutElements/flexLayouts'
 import RichTextEditor from '../richText/RichTextEditor'
 import { BasicButton } from '../buttons/BasicButton'
 import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
-import formClasses from '@/lib/form.module.css'
+import formClasses from '@/lib/expandableForms/form.module.css'
 import styles from './expandableForm.module.css'
 type Inputs = {
   title: string

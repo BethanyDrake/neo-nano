@@ -1,4 +1,4 @@
-import { Award } from '@/lib/profile.types'
+import { Award } from '@/lib/types/profile.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import camelcaseKeys from 'camelcase-keys'
 

@@ -1,6 +1,6 @@
 'use server'
 
-import { Flag } from '@/lib/forum.types'
+import { Flag } from '@/lib/types/forum.types'
 import { getDbConnection } from '../_utils/getDbConnection'
 import { getUserId } from '../_utils/getUserIdFromSession'
 

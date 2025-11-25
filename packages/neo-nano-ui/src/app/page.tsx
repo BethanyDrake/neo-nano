@@ -1,21 +1,13 @@
-import { ChallengeCountDown } from '@/lib/ChallengeCountDown'
+import { ChallengeCountDown } from '@/lib/landingPage/ChallengeCountDown'
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
-import { Column, Row } from '@/lib/layout'
+import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
-import { JSX } from 'react'
 import styles from '@/lib/landingPage/page.module.css'
 import { GetStartedSection } from '@/lib/landingPage/GetStartedSection'
-const Section = ({ title, body }: { title: string; body: string | JSX.Element }) => {
-  return (
-    <section>
-      <h2 className={styles['section-header']}>{title}</h2>
-      {body}
-    </section>
-  )
-}
+import { Section } from '@/lib/layoutElements/Section'
 
 const FeatureCard = ({
   title,
@@ -63,7 +55,7 @@ const FeaturesSection = () => {
   )
 
   const title = 'Features'
-  return <Section title={title} body={body} />
+  return <Section title={title}>{body}</Section>
 }
 
 const ChallengeBody = () => {
@@ -87,14 +79,14 @@ const ChallengeBody = () => {
 const ChallengeSection = () => {
   const title = 'The Challenge'
   const body = <ChallengeBody />
-  return <Section title={title} body={body} />
+  return <Section title={title}>{body}</Section>
 }
 
 const HistorySection = () => {
   const title = 'History'
   const body =
     "Previously, 'National Novel Writing Month' (NaNoWriMo) was a world-wide writing challenge run by a non-profit organisation. The official website and forums shut down in March 2025, but the challenge lives on."
-  return <Section title={title} body={<p>{body}</p>} />
+  return <Section title={title}><p>{body}</p></Section>
 }
 
 export default function Home() {
@@ -120,7 +112,7 @@ export default function Home() {
               src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/favicon-v3.svg"
             />
           </div>
-          <Column gap="3em">
+          <Column>
             <HistorySection />
             <ChallengeSection />
             <FeaturesSection />

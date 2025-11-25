@@ -1,4 +1,4 @@
-import '@/lib/globals.css'
+import '@/lib/styles/globals.css'
 import { NavBar } from '@/lib/navbar/NavBar'
 import type { Metadata } from 'next'
 // The following import prevents a Font Awesome icon server-side rendering bug,

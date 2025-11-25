@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import { GutteredPage } from '../GutteredPage'
-import { Centered } from '../layout'
+import { GutteredPage } from '../layoutElements/GutteredPage'
+import { Centered } from '../layoutElements/flexLayouts'
 import Link from 'next/link'
 import styles from './code-of-conduct.module.css'
 

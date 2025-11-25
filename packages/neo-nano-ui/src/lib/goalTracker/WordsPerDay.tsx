@@ -1,16 +1,17 @@
 'use client'
 
 import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
-import { Record } from '../forum.types'
+import { Goal, Record } from '@/lib/types/forum.types'
 
 type Props = {
   title: string
   wordCountPerDay: Record[]
   lengthDays: number
   target: number
+  metric: Goal['metric']
 }
 
-export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target }: Props) => {
+export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target, metric }: Props) => {
   const data = wordCountPerDay.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
@@ -33,7 +34,7 @@ export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target }: Prop
           syncMethod="index"
         >
           <YAxis stroke='var(--text-colour-2)'>
-            <Label value="word count" position="top" angle={0} offset={24} />
+            <Label value={metric} position="top" angle={0} offset={24} />
           </YAxis>
           <XAxis stroke='var(--text-colour-2)' dataKey={'day'} domain={[1, lengthDays]}>
             <Label value="challenge day" position="bottom" />

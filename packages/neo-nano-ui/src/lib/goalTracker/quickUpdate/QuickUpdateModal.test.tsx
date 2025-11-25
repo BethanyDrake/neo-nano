@@ -1,7 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { QuickUpdateModal } from './QuickUpdateModal'
 import { useActiveGoal } from './ActiveGoalContext'
-import { Goal } from '@/lib/forum.types'
+import { Goal } from '@/lib/types/forum.types'
 import { subDays } from 'date-fns'
 import { getDateAsString } from '@/lib/misc'
 jest.mock('./ActiveGoalContext')

@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react"
-import { Profile } from "../forum.types"
+import { Profile } from "@/lib/types/forum.types"
 import { getMyProfile } from "../serverFunctions/profile/getMyProfile"
 
 export const UserContext = createContext<Pick<Profile, 'id' | 'role'> | null>(null)

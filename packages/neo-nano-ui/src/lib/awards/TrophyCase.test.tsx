@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { TrophyCase } from './TrophyCase'
-import { UserAward } from '../profile.types'
+import { UserAward } from '@/lib/types/profile.types'
 
 describe('<TrophyCase />', () => {
   it('displays award trophies', () => {

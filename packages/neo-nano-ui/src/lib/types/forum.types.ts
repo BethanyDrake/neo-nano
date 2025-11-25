@@ -45,6 +45,7 @@ export type Goal = {
     records: Record[]
     userId: string
     target: number
+    metric: 'words' | 'minutes'
     visibility: Visibility
 }
 
