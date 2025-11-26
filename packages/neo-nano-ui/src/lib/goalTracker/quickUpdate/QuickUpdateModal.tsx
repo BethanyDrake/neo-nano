@@ -50,45 +50,47 @@ const QuickUpdateModalForm = ({ closeModal }: { closeModal: () => void }) => {
       }}
     >
       <Column>
-  <h2 style={{textAlign: 'center'}}>{activeGoal?.title} </h2>
-      <Row alignItems='center'>
-        {isCumulative ? (
-          <>
-            <label   style={{width: '40px'}} id="total">Total:</label>
-            <input
-            
-              aria-labelledby="total"
-              onChange={(event) => {
-                updateCumulativeWordCount(event.target.valueAsNumber)
-              }}
-              value={_.sum(localRecords.slice(0, challengeDay + 1))}
-              type="number"
-              disabled={!isCumulative}
-            ></input>
-          </>
-        ) : (
-          <>
-            <label       style={{width: '40px'}} id="today">Today:</label>
-            <input
-              aria-labelledby="today"
-              onChange={(event) => {
-                updateTodaysWordCount(event.target.valueAsNumber)
-              }}
-              value={localRecords[challengeDay] || ''}
-              type="number"
-              disabled={isCumulative}
-            ></input>
-          </>
-        )}
-      </Row>
+        <h2 style={{ textAlign: 'center' }}>{activeGoal?.title} </h2>
+        <Row alignItems="center">
+          {isCumulative ? (
+            <>
+              <label style={{ width: '40px' }} id="total">
+                Total:
+              </label>
+              <input
+                aria-labelledby="total"
+                onChange={(event) => {
+                  updateCumulativeWordCount(event.target.valueAsNumber)
+                }}
+                value={_.sum(localRecords.slice(0, challengeDay + 1)) ?? 0}
+                type="number"
+              ></input>
+              <span>{activeGoal?.metric}</span>
+            </>
+          ) : (
+            <>
+              <label style={{ width: '40px' }} id="today">
+                Today:
+              </label>
+              <input
+                aria-labelledby="today"
+                onChange={(event) => {
+                  updateTodaysWordCount(event.target.valueAsNumber)
+                }}
+                value={localRecords[challengeDay] ?? 0}
+                type="number"
+              ></input>
+              <span>{activeGoal?.metric}</span>
+            </>
+          )}
+        </Row>
 
-    
         <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
           Save
         </BasicButton>
 
-            <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative} />
-  </Column>
+        <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative} />
+      </Column>
     </form>
   )
 }
@@ -102,7 +104,7 @@ export const QuickUpdateModal = () => {
     refresh()
   }, [pathname, refresh])
 
-  if (pathname==='/profile' || !activeGoal) {
+  if (pathname === '/profile' || !activeGoal) {
     return null
   }
 
@@ -115,11 +117,10 @@ export const QuickUpdateModal = () => {
       {isOpen && (
         <>
           <div style={{ width: 'unset' }} className={classNames['modal']}>
-            {isRefreshing && <FontAwesomeIcon spin icon={faSpinner}/>}
-            {!isRefreshing && activeGoal &&  <QuickUpdateModalForm closeModal={() => setIsOpen(false)} />}
-            {!isRefreshing && !activeGoal &&
-            (
-              <div style={{minWidth: '200px'}}>
+            {isRefreshing && <FontAwesomeIcon spin icon={faSpinner} />}
+            {!isRefreshing && activeGoal && <QuickUpdateModalForm closeModal={() => setIsOpen(false)} />}
+            {!isRefreshing && !activeGoal && (
+              <div style={{ minWidth: '200px' }}>
                 <p>
                   No active goals at the momemt. Try creating one in{' '}
                   <Link onClick={() => setIsOpen(false)} href="/profile">
