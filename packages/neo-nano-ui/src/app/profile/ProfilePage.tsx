@@ -39,7 +39,7 @@ export const ProfilePageInner = () => {
 
       <Row alignItems="center">
         <h2>Goals</h2>
-        <AddGoalModal />
+        <AddGoalModal/>
       </Row>
 
       {goals.length === 0 && !isLoadingGoals && (
