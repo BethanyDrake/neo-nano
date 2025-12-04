@@ -95,7 +95,6 @@
 }
 
 .responsiveButton {
-    
     background-color: white;
     padding: 0.5em;
     border: none;
@@ -110,6 +109,12 @@
 
     &:active {
         background-color: var(--primary-light);
+    }
+
+    &:disabled {
+      box-shadow: none;
+      background-color: white;
+      cursor: auto;
     }
 
     @media (width<500px) {

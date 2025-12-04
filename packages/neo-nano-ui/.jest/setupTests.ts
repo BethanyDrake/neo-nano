@@ -7,6 +7,7 @@ jest.mock('@neondatabase/serverless')
 jest.mock('@neondatabase/serverless')
 jest.mock('@/lib/richText/RichTextEditor', () => jest.requireActual('./MockRichTextEditor'))
 jest.mock('@/lib/richText/RichTextDisplay', () => jest.requireActual('./MockRichTextDisplay'))
+
 process.env.DATABASE_URL = 'DATABASE_URL'
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({

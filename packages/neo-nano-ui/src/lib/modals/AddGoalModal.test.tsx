@@ -2,6 +2,10 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { createGoal } from '../serverFunctions/goals/createGoal'
 import { AddGoalModal } from './AddGoalModal'
 import { ModalContextProvider } from './ModalContext'
+import {  ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+jest.mock('next/navigation', () => ({
+  useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
+}))
 jest.mock('../serverFunctions/goals/createGoal')
 
 describe('AddGoalModal', () => {
@@ -51,4 +55,11 @@ describe('AddGoalModal', () => {
       metric: 'words'
     })
   })
+
+  it('opens by default using pathname action', () => {
+    jest.mocked(useSearchParams).mockReturnValue({get: () => 'createGoal'} as unknown as ReadonlyURLSearchParams)
+    const { getByRole } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
+     expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
+  })
+
 })

@@ -4,11 +4,43 @@ import { useActiveGoal } from './ActiveGoalContext'
 import { Goal } from '@/lib/types/forum.types'
 import { subDays } from 'date-fns'
 import { getDateAsString } from '@/lib/misc'
+import { usePathname } from 'next/navigation'
+import { buildGoal } from '@/lib/types/forum.builders'
 jest.mock('./ActiveGoalContext')
+jest.mock('next/navigation')
 
 const today = getDateAsString(new Date())
 const yesterday = getDateAsString(subDays(new Date(), 1))
 describe('<QuickUpdateModal/>', () => {
+  beforeEach(() => {
+    jest.mocked(usePathname).mockReturnValue('')
+  })
+
+  test('disabled on profile page', () => {
+    jest.mocked(useActiveGoal).mockReturnValue({
+        activeGoal: buildGoal(),
+        updateActiveGoal: jest.fn(),
+        isRefreshing: false,
+        refresh: jest.fn(),
+      })
+    jest.mocked(usePathname).mockReturnValue('/profile')
+    const { getByRole } = render(<QuickUpdateModal />)
+    const button = getByRole('button', {name: "Quick Update"})
+    expect(button).toBeDisabled()
+  })
+
+   test('disabled when there is no active goal', () => {
+    jest.mocked(useActiveGoal).mockReturnValue({
+        activeGoal: null,
+        updateActiveGoal: jest.fn(),
+        isRefreshing: false,
+        refresh: jest.fn(),
+      })
+    const { getByRole } = render(<QuickUpdateModal />)
+    const button = getByRole('button', {name: "Quick Update"})
+    expect(button).toBeDisabled()
+  })
+
   describe('initial state', () => {
     test('middle day, with later days filled', () => {
       const updateActiveGoal = jest.fn()

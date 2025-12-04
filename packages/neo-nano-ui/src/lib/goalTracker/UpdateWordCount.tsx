@@ -11,6 +11,7 @@ import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
 import './UpdateWordCount.css'
 import { toCumulative } from './recordUtils'
 import { updateRecordsUtil } from './updateRecordsUtil'
+import { getChallengeEndDate } from '../serverFunctions/goals/goalUtils'
 
 const isSameDay = (a: Date, b: Date) => {
   return differenceInCalendarDays(a, b) === 0
@@ -106,7 +107,7 @@ export const UpdateWordCount = ({
       <Calendar
         tileContent={renderTile}
         minDate={parseISO(startDate)}
-        maxDate={endOfDay(addDays(parseISO(startDate), lengthDays-1))}
+        maxDate={getChallengeEndDate(startDate, lengthDays)}
         onChange={onChange}
         value={value}
         inputRef={calendarRef}

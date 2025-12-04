@@ -17,7 +17,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { startOfToday } from 'date-fns'
 
-const QuickUpdateModalForm = ({ closeModal }: { closeModal: () => void }) => {
+const QuickUpdateModalForm = ({ closeModal, }: { closeModal: () => void }) => {
   const [isCumulative, setIsCumulative] = useState(false)
   const { activeGoal, updateActiveGoal } = useActiveGoal()
   const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, startOfToday()) : -1
@@ -104,13 +104,11 @@ export const QuickUpdateModal = () => {
     refresh()
   }, [pathname, refresh])
 
-  if (pathname === '/profile' || !activeGoal) {
-    return null
-  }
+  const isDisabled = (pathname === '/profile' || !activeGoal)
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className={navbarStyles.responsiveButton}>
+      <button disabled={isDisabled} onClick={() => setIsOpen(true)} className={navbarStyles.responsiveButton}>
         <FontAwesomeIcon icon={faPencil} />
         Quick Update
       </button>

@@ -4,6 +4,9 @@ import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { SessionData } from '@auth0/nextjs-auth0/types'
 import { render } from '@testing-library/react'
+jest.mock('next/navigation', () => ({
+  useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
+}))
 
 jest.mock('@/lib/auth0', () => ({
   auth0: {
@@ -12,7 +15,6 @@ jest.mock('@/lib/auth0', () => ({
   },
 }))
 jest.mock('@/lib/useRequireLogin')
-jest.mock('next/navigation')
 jest.mock('@/lib/goalTracker/UpdateWordCount')
 jest.mock('@/lib/serverFunctions/profile/getMyProfile')
 jest.mock('@/lib/serverFunctions/goals/getMyGoals')
