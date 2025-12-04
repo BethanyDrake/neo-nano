@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, parseISO } from 'date-fns'
+import { addDays, differenceInCalendarDays, endOfDay, parseISO } from 'date-fns'
 
 export const dateToChallengeDay = (goalStartDate: string, date: string | Date) => {
   const _date = typeof date === 'string' ? parseISO(date) : date
@@ -10,4 +10,8 @@ export const isActive = (startDate: string, length_days: number, date: string): 
     const challengeDay = dateToChallengeDay(startDate, date)
 
     return challengeDay >= 0 && challengeDay < length_days
+}
+
+export const getChallengeEndDate = (startDate: string, lengthDays: number): Date => {
+  return endOfDay(addDays(parseISO(startDate), lengthDays-1))
 }
