@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { auth0 } from "./lib/auth0";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const authResponse = await auth0.middleware(request)
 
   // if path starts with /auth, let the auth middleware handle it
