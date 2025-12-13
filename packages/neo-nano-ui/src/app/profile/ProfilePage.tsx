@@ -8,12 +8,13 @@ import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { useModalContext } from '@/lib/modals/ModalContext'
-import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useRequireLogin } from '@/lib/useRequireLogin'
 import classNames from './profile.module.css'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
+import { getCurrentChallenge } from '@/lib/challenges'
 
 export const ProfilePageInner = () => {
   const { profile,  awards } = useProfileContext()
@@ -21,10 +22,13 @@ export const ProfilePageInner = () => {
 
   const { setOpenModal } = useModalContext()
   useRequireLogin()
+  const challengeToJoin = getCurrentChallenge()
 
-  const { onClick: joinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
-    return joinCurrentChallenge().then(setGoals)
+  const { onClick: onClickJoinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
+    if (!challengeToJoin) throw Error()
+    return joinChallenge(challengeToJoin.id).then(setGoals)
   })
+
 
   return (
     <div style={{ padding: '24px' }}>
@@ -46,10 +50,14 @@ export const ProfilePageInner = () => {
         <div className={classNames.noGoalsContainer}>
           <Column style={{ alignItems: 'center' }}>
             <div>No goals so far.</div>
-            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>
-              Join Novel November
+            { challengeToJoin && 
+            <>
+            <BasicButton buttonProps={{ onClick: onClickJoinChallenge }} isLoading={isJoinChallengeLoading}>
+              Join {challengeToJoin?.title}
             </BasicButton>{' '}
             or{' '}
+            </>
+}
             <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
           </Column>
         </div>

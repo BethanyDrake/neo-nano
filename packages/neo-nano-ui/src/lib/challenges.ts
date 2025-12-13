@@ -2,7 +2,9 @@ import { hoursToMinutes, isFuture, isPast, parseISO } from 'date-fns'
 import { getChallengeEndDate } from './serverFunctions/goals/goalUtils'
 import { Goal } from './types/forum.types'
 
-export type Challenge = Pick<Goal, 'title' | 'startDate' | 'lengthDays' | 'target' | 'metric'>
+export type Challenge = Pick<Goal, 'title' | 'startDate' | 'lengthDays' | 'target' | 'metric'> & {
+  id: string
+}
 
 // listed in order of start date
 const challenges: Challenge[] = [
@@ -12,16 +14,19 @@ const challenges: Challenge[] = [
     lengthDays: 30,
     target: 50000,
     metric: 'words',
+    id: 'novel-november-2025'
   },
-
   {
     title: 'The Eighty Hour Edit',
     startDate: '2026-01-01',
     lengthDays: 60,
     target: hoursToMinutes(80),
     metric: 'minutes',
+     id: '80h-edit-2026'
   },
 ]
+
+export const getChallengeById = (id: string) => challenges.find((challenge) => challenge.id === id)
 
 export const getCurrentChallenge = () => {
   return challenges.find((challenge) => {

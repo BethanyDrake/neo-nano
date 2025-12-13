@@ -3,6 +3,7 @@ import { ChallengeCountDown } from "./ChallengeCountDown"
 import { getCurrentChallenge, getPreviousChallenge, getUpcomingChallenge } from "../challenges"
 import { hoursToMinutes } from "date-fns"
 import { buildGoal } from "../types/forum.builders"
+import { buildChallenge } from "../types/challenge.builders"
 
 jest.mock('../challenges')
 
@@ -12,13 +13,13 @@ describe('<ChallengeCountDown />', () => {
   })
 
     it.only('displays info for the of the active challenge', () => {
-    jest.mocked(getCurrentChallenge).mockReturnValue({
+    jest.mocked(getCurrentChallenge).mockReturnValue(buildChallenge({
         title: 'Current Challenge',
         startDate: '2026-01-01',
         lengthDays: 20,
         target: 100,
         metric: 'words'
-      })
+      }))
 
     const {getByText} =  render(<ChallengeCountDown/>)
     // TODO
@@ -27,13 +28,13 @@ describe('<ChallengeCountDown />', () => {
   })
 
   it('displays info for the of the upcoming challenge', () => {
-    jest.mocked(getUpcomingChallenge).mockReturnValue({
+    jest.mocked(getUpcomingChallenge).mockReturnValue(buildChallenge({
         title: 'The 80h Edit',
         startDate: '2026-01-01',
         lengthDays: 60,
         target: hoursToMinutes(80),
         metric: 'minutes'
-      })
+      }))
 
     const {getByText} =  render(<ChallengeCountDown/>)
     expect(getByText('The 80h Edit')).toBeInTheDocument()
