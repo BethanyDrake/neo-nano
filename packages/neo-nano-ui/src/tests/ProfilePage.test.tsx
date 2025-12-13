@@ -1,9 +1,12 @@
 import ProfilePage from '@/app/profile/page'
 import { auth0 } from '@/lib/auth0'
+import { getCurrentChallenge } from '@/lib/challenges'
 import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
+import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
+import { buildChallenge } from '@/lib/types/challenge.builders'
 import { SessionData } from '@auth0/nextjs-auth0/types'
-import { render } from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
 }))
@@ -25,6 +28,9 @@ jest.mock('@/lib/serverFunctions/profile/getMyAwards', () => ({
 jest.mock('@/lib/serverFunctions/settings/getEmailPreferences', () => ({
   getEmailPreferences: jest.fn().mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
 }))
+
+jest.mock('@/lib/challenges')
+jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
 describe('<ProfilePage />', () => {
   it('shows user details and goals', async () => {
     jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
@@ -51,16 +57,24 @@ describe('<ProfilePage />', () => {
     expect(await findByText('Goal Title')).toBeInTheDocument()
   })
 
-  test('invites users without a goal to join the challenge', async () => {
+  test('invites users without a goal to join the current challenge', async () => {
     jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    jest.mocked(getCurrentChallenge).mockReturnValue(buildChallenge({title: 'Current Challenge', id: 'current-challenge-id'}))
     jest.mocked(getMyProfile).mockResolvedValue({
       displayName: 'Some Name',
       id: '1',
       role: 'user',
     })
     jest.mocked(getMyGoals).mockResolvedValue([])
+    jest.mocked(joinChallenge).mockResolvedValue([])
     const { findByRole } = render(await ProfilePage())
-    expect(await findByRole('button', { name: 'Join Novel November' })).toBeInTheDocument()
+
+    const joinChallengeButton = await findByRole('button', { name: 'Join Current Challenge' })
+   
+    fireEvent.click(joinChallengeButton)
+    await waitFor(() => {
+      expect(joinChallenge).toHaveBeenCalledWith('current-challenge-id')
+    })
   })
 
   test('moderators have a label on their profile', async () => {
