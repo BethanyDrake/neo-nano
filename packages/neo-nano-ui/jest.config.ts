@@ -103,6 +103,7 @@ const config: Config = {
         '^react-calendar(/(.*)|$)': '<rootDir>/.jest/mockModule.js',
         '^snakecase-keys(/(.*)|$)': '<rootDir>/.jest/mockModule.js',
         '^camelcase-keys(/(.*)|$)': '<rootDir>/.jest/mockModule.js',
+        '@auth0/nextjs-auth0/server(/(.*)|$)':'<rootDir>/.jest/mockModule.js',
 
     },
 
