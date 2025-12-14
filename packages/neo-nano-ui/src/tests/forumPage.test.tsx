@@ -3,6 +3,7 @@ import Forum from '@/app/forum/page'
 import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 
 jest.mock('@/lib/serverFunctions/forum/getForumTopics')
+jest.mock('next/server')
 
 describe('<Forum />', () => {
   it('displays categories and topics', async () => {

@@ -5,6 +5,7 @@ import { startOfDay, intervalToDuration, parseISO, formatDuration, Duration, for
 import { Column } from '../layoutElements/flexLayouts'
 import { Challenge, getCurrentChallenge, getPreviousChallenge, getUpcomingChallenge } from '../challenges'
 import { getChallengeEndDate } from '../serverFunctions/goals/goalUtils'
+import { useState } from 'react'
 
 const formatTimeLeft = (timeLeft: Duration) =>
   formatDuration(timeLeft, { format: ['months', 'days', 'hours'], delimiter: ', ' })
@@ -18,7 +19,7 @@ const PreviousChallengeWrapup = ({ title }: Pick<Challenge, 'title'>) => {
 }
 
 const CurrentChallengeInfo = ({ challenge }: { challenge: Challenge }) => {
-  const now = Date.now()
+  const [now] = useState(() => Date.now())
   const timeLeft = intervalToDuration({
     start: now,
     end: getChallengeEndDate(challenge.startDate, challenge.lengthDays),
@@ -29,7 +30,8 @@ const CurrentChallengeInfo = ({ challenge }: { challenge: Challenge }) => {
 export const NextChallengeAnnouncement = ({ challenge }: { challenge: Challenge }) => {
   const { title, startDate, lengthDays } = challenge
   const nextChallengeStart = startOfDay(parseISO(challenge.startDate))
-  const now = Date.now()
+
+  const [now] = useState(() => Date.now())
 
   const timeLeft = intervalToDuration({
     start: now,

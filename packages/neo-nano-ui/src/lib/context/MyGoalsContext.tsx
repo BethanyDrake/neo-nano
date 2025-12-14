@@ -22,7 +22,6 @@ export const MyGoalContextProvider = ({
   const [goals, setGoals] = useState<Goal[]>([])
 
   useEffect(() => {
-    setIsLoading(true)
     getMyGoals().then(setGoals).then(() => setIsLoading(false))
   }, [])
 

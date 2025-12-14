@@ -1,30 +1,21 @@
 'use client'
 import { NewAwardModal } from '@/lib/awards/NewAwardModal'
 import { TrophyCase } from '@/lib/awards/TrophyCase'
-import { BasicButton } from '@/lib/buttons/BasicButton'
-import { useLoadableOnClick } from '@/lib/buttons/usLoadableOnClick'
-import { useProfileContext } from '@/lib/context/ProfileContext'
-import { Column, Row } from '@/lib/layoutElements/flexLayouts'
-import { ADD_GOAL_MODAL, AddGoalModal } from '@/lib/modals/AddGoalModal'
-import { EditProfileModal } from '@/lib/modals/EditProfileModal'
-import { useModalContext } from '@/lib/modals/ModalContext'
-import { joinCurrentChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
-import { useRequireLogin } from '@/lib/useRequireLogin'
-import classNames from './profile.module.css'
-import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
+import { useProfileContext } from '@/lib/context/ProfileContext'
+import { GoalSection } from '@/lib/goalTracker/GoalSection'
+import { NoGoalsOnProfile } from '@/lib/goalTracker/NoGoalsOnProfile'
+import { Row } from '@/lib/layoutElements/flexLayouts'
+import { AddGoalModal } from '@/lib/modals/AddGoalModal'
+import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
+import { useRequireLogin } from '@/lib/useRequireLogin'
 
 export const ProfilePageInner = () => {
   const { profile,  awards } = useProfileContext()
-  const{ goals, setGoals, isLoading: isLoadingGoals } = useMyGoalContext()
+  const{ goals, isLoading: isLoadingGoals } = useMyGoalContext()
 
-  const { setOpenModal } = useModalContext()
   useRequireLogin()
-
-  const { onClick: joinChallenge, isLoading: isJoinChallengeLoading } = useLoadableOnClick(() => {
-    return joinCurrentChallenge().then(setGoals)
-  })
 
   return (
     <div style={{ padding: '24px' }}>
@@ -43,16 +34,7 @@ export const ProfilePageInner = () => {
       </Row>
 
       {goals.length === 0 && !isLoadingGoals && (
-        <div className={classNames.noGoalsContainer}>
-          <Column style={{ alignItems: 'center' }}>
-            <div>No goals so far.</div>
-            <BasicButton buttonProps={{ onClick: joinChallenge }} isLoading={isJoinChallengeLoading}>
-              Join Novel November
-            </BasicButton>{' '}
-            or{' '}
-            <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
-          </Column>
-        </div>
+       <NoGoalsOnProfile/>
       )}
 
       {goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
