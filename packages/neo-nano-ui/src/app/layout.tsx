@@ -8,6 +8,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { GoogleTagManager } from '@next/third-parties/google'
 config.autoAddCss = false
 export const metadata: Metadata = {
   title: 'Novel November',
@@ -28,7 +29,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head />
+      <GoogleTagManager gtmId="GTM-KRXL28V4" />
 
       <body>
         <NavBar/>
