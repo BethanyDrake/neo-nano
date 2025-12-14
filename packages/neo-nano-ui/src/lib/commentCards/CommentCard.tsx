@@ -10,6 +10,7 @@ import { LikeButton } from './LikeButton'
 import { useIsLoggedIn } from '../context/UserContext'
 import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
 import { useLayoutEffect, useRef, useState } from 'react'
+
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })

@@ -16,10 +16,11 @@ import { useActiveGoal } from './ActiveGoalContext'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { startOfToday } from 'date-fns'
+import { Goal } from '@/lib/types/forum.types'
 
-const QuickUpdateModalForm = ({ closeModal, }: { closeModal: () => void }) => {
+const QuickUpdateModalForm = ({ closeModal,  activeGoal}: { closeModal: () => void , activeGoal: Goal}) => {
   const [isCumulative, setIsCumulative] = useState(false)
-  const { activeGoal, updateActiveGoal } = useActiveGoal()
+  const { updateActiveGoal } = useActiveGoal()
   const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, startOfToday()) : -1
   const [localRecords, setLocalRecords] = useState(activeGoal?.records ?? [])
   const { onClick, isLoading } = useLoadableOnClick(async () => {
@@ -27,10 +28,6 @@ const QuickUpdateModalForm = ({ closeModal, }: { closeModal: () => void }) => {
 
     closeModal()
   })
-
-  useEffect(() => {
-    setLocalRecords(activeGoal?.records ?? [])
-  }, [activeGoal])
 
   const updateTodaysWordCount = (newValue: number) => {
     const sanitisedValue = isNaN(newValue) ? 0 : newValue
@@ -116,7 +113,7 @@ export const QuickUpdateModal = () => {
         <>
           <div style={{ width: 'unset' }} className={classNames['modal']}>
             {isRefreshing && <FontAwesomeIcon spin icon={faSpinner} />}
-            {!isRefreshing && activeGoal && <QuickUpdateModalForm closeModal={() => setIsOpen(false)} />}
+            {!isRefreshing && activeGoal && <QuickUpdateModalForm key={activeGoal.id} activeGoal={activeGoal} closeModal={() => setIsOpen(false)} />}
             {!isRefreshing && !activeGoal && (
               <div style={{ minWidth: '200px' }}>
                 <p>

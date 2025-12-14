@@ -45,7 +45,7 @@ export const ProfileContextProvider = ({
 
   const value = useMemo(() => {
     return { isLoading, profile, updateProfile,  awards, refreshAwards }
-  }, [isLoading, profile, updateProfile,, awards, refreshAwards])
+  }, [isLoading, profile, updateProfile, awards, refreshAwards])
 
   return <ProfileContext value={value}>{children}</ProfileContext>
 }

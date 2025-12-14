@@ -3,7 +3,7 @@ import { TrophyCase } from './TrophyCase'
 import { UserAward } from '@/lib/types/profile.types'
 
 describe('<TrophyCase />', () => {
-  it('displays award trophies', () => {
+  it('displays award trophies', async () => {
     const trophies: UserAward[] = [
       {
         id: 'award-1',
@@ -21,8 +21,8 @@ describe('<TrophyCase />', () => {
       },
     ]
 
-    const { getByText } = render(<TrophyCase awards={trophies} />)
-    expect(getByText('Some Title')).toBeInTheDocument()
-    expect(getByText('Some description.')).toBeInTheDocument()
+    const { findByText } = render(<TrophyCase awards={trophies} />)
+    expect(await findByText('Some Title')).toBeInTheDocument()
+    expect(await findByText('Some description.')).toBeInTheDocument()
   })
 })
