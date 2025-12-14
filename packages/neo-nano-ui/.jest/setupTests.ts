@@ -2,8 +2,9 @@ import '@testing-library/jest-dom'
 import 'whatwg-fetch';
 import { setupServer } from 'msw/node';
 
-jest.mock('@auth0/nextjs-auth0/server')
-jest.mock('@neondatabase/serverless')
+jest.mock('@auth0/nextjs-auth0/server', () => ({
+    Auth0Client: class { public getSession = jest.fn()}
+}))
 jest.mock('@neondatabase/serverless')
 jest.mock('@/lib/richText/RichTextEditor', () => jest.requireActual('./MockRichTextEditor'))
 jest.mock('@/lib/richText/RichTextDisplay', () => jest.requireActual('./MockRichTextDisplay'))
