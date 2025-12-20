@@ -1,6 +1,7 @@
 .react-calendar {
-    min-width: 350px;
+    max-width: 500px;
     border: unset;
+    width: unset;
     box-shadow: var(--shadow-1);
 }
 
