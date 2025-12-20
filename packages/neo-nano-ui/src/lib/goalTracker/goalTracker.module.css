@@ -61,3 +61,22 @@
   }
 
 }
+
+@keyframes slide-open {
+  0% {
+    max-height: 0
+  }
+  99% {
+    max-height: 100vh
+  }
+  100% {
+    max-height: fit-content
+  }
+}
+
+.DisclosurePanel {
+  overflow: hidden;
+  animation-duration: .4s;
+  animation-name: slide-open;
+
+}
