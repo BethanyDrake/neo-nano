@@ -5,7 +5,7 @@ import { Goal, Record, Visibility } from '@/lib/types/forum.types'
 import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCaretRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { differenceInCalendarDays, parseISO, startOfToday } from 'date-fns'
 import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
@@ -21,6 +21,7 @@ import { CumulativeSwitch } from './CumulativeSwitch'
 import { useMyGoalContext } from '../context/MyGoalsContext'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { isActive } from '../serverFunctions/goals/goalUtils'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 type GoalProps = {
   id: string
   title: string
@@ -70,7 +71,7 @@ export const GoalSection = ({
   return (
     <Disclosure defaultOpen={defaultOpen}>
       <DisclosureButton className={classNames.DisclosureButton}>
-        <h3>{title}</h3>
+        <FontAwesomeIcon icon={faCaretRight}/> <h3>{title}</h3>
       </DisclosureButton>
       <DisclosurePanel className={classNames.DisclosurePanel}>
         <Row style={{ paddingTop: '1em' }} justifyContent="space-between" alignItems="center">

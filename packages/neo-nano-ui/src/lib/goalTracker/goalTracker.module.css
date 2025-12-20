@@ -46,8 +46,18 @@
   padding-left: 0;
   text-align: left;
 
+  &[data-open] {
+    svg {
+      rotate: 90deg;
+    }
+  }
+
   h3 {
     font-size: 1.5em;
+    display: inline;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
 }
