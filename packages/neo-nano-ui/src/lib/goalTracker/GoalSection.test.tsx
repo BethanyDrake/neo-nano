@@ -10,6 +10,10 @@ jest.mock('@/lib/serverFunctions/goals/setGoalVisibility', () => ({
 jest.mock('@/lib/serverFunctions/goals/deleteGoal', () => ({
   deleteGoal: jest.fn().mockResolvedValue([]),
 }))
+jest.mock('../serverFunctions/goals/goalUtils', () => ({
+  isActive: jest.fn().mockReturnValue(true)
+}))
+
 
 describe('<GoalSection />', () => {
   it('displays goal', () => {

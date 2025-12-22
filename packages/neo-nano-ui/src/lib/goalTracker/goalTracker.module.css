@@ -37,3 +37,46 @@
     width: fit-content;
     margin: 24px auto;
 }
+
+.DisclosureButton {
+  width:100%;
+  border:none;
+  background-color: unset;
+  padding: 16px;
+  padding-left: 0;
+  text-align: left;
+
+  &[data-open] {
+    svg {
+      rotate: 90deg;
+    }
+  }
+
+  h3 {
+    font-size: 1.5em;
+    display: inline;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+}
+
+@keyframes slide-open {
+  0% {
+    max-height: 0
+  }
+  99% {
+    max-height: 100vh
+  }
+  100% {
+    max-height: fit-content
+  }
+}
+
+.DisclosurePanel {
+  overflow: hidden;
+  animation-duration: .4s;
+  animation-name: slide-open;
+
+}
