@@ -13,7 +13,7 @@ const getChallengeToJoin = () => {
   return currentChallenge || getUpcomingChallenge()
 }
 
-export const NoGoalsOnProfile = () => {
+export const SuggestNextGoal = () => {
   const { setGoals } = useMyGoalContext()
   const { setOpenModal } = useModalContext()
   const challengeToJoin = getChallengeToJoin()
@@ -26,7 +26,7 @@ export const NoGoalsOnProfile = () => {
   return (
     <div className={classNames.noGoalsContainer}>
       <Column style={{ alignItems: 'center' }}>
-        <div>No goals so far.</div>
+        <div>Need a new goal?</div>
         {challengeToJoin && (
           <>
             <BasicButton buttonProps={{ onClick: onClickJoinChallenge }} isLoading={isJoinChallengeLoading}>

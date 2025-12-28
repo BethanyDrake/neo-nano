@@ -4,12 +4,20 @@ import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
 import { useProfileContext } from '@/lib/context/ProfileContext'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
-import { NoGoalsOnProfile } from '@/lib/goalTracker/NoGoalsOnProfile'
+import { SuggestNextGoal } from '@/lib/goalTracker/SuggestNextGoal'
 import { Row } from '@/lib/layoutElements/flexLayouts'
 import { AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
+import { getChallengeEndDate } from '@/lib/serverFunctions/goals/goalUtils'
+import { Goal } from '@/lib/types/forum.types'
 import { useRequireLogin } from '@/lib/useRequireLogin'
+import { isFuture } from 'date-fns'
+
+export const isActiveOrUpcoming = (goal: Goal):boolean => {
+  const endDate = getChallengeEndDate(goal.startDate, goal.lengthDays)
+  return isFuture(endDate)
+}
 
 export const ProfilePageInner = () => {
   const { profile,  awards } = useProfileContext()
@@ -33,8 +41,8 @@ export const ProfilePageInner = () => {
         <AddGoalModal/>
       </Row>
 
-      {goals.length === 0 && !isLoadingGoals && (
-       <NoGoalsOnProfile/>
+      {goals.filter(isActiveOrUpcoming).length === 0 && !isLoadingGoals && (
+       <SuggestNextGoal/>
       )}
 
       {goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
