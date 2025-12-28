@@ -3,14 +3,25 @@ import { createGoal } from '../serverFunctions/goals/createGoal'
 import { AddGoalModal } from './AddGoalModal'
 import { ModalContextProvider } from './ModalContext'
 import {  ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { getCurrentChallenge } from '../challenges'
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
 }))
 jest.mock('../serverFunctions/goals/createGoal')
 
+jest.mock('../challenges')
+
 describe('AddGoalModal', () => {
   test('add default goal', async () => {
     jest.mocked(createGoal).mockResolvedValue([])
+    jest.mocked(getCurrentChallenge).mockReturnValue({
+      lengthDays: 30,
+      startDate: '2025-11-01',
+      target: 50000,
+      title: 'November 2025',
+      metric: 'words',
+      id: 'challenge-id'
+    })
     const { getByRole, queryByRole } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
     fireEvent.click(getByRole('button', { name: 'add goal' }))
     expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
