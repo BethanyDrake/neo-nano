@@ -4,40 +4,59 @@ import { BasicButton } from '../buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
 import { Goal, Visibility } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
-import { hoursToMinutes } from 'date-fns'
+import { hoursToMinutes, minutesToHours } from 'date-fns'
+import { Challenge } from '../challenges'
 
 type Inputs = {
-    title: string
-    // yyyy-MM-dd
-    startDate: string
-    lengthDays: string
-    target: string
-    visibility: Visibility
-    metric: 'words' | 'hours'
+  title: string
+  // yyyy-MM-dd
+  startDate: string
+  lengthDays: string
+  target: string
+  visibility: Visibility
+  metric: 'words' | 'hours'
 }
 
-export type GoalDetails = Pick<Goal, "title" | "target" | "lengthDays" | "startDate" | 'visibility' | 'metric'>
+export const challengeToInputs = (challenge: Challenge, visibility: Visibility): Inputs => {
+  const metric = challenge.metric === 'minutes' ? 'hours' : challenge.metric
+  const target = challenge.metric === 'minutes' ? minutesToHours(challenge.target) : challenge.target
 
-export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mode: 'add' | 'edit', defaultValues: Inputs, closeModal: () => void , onSave: (goalDetails: GoalDetails) => Promise<void>}) => {
-  const {
-    register,
-    handleSubmit,
-  } = useForm<Inputs>({defaultValues
-  })
+  return {
+    title: challenge.title,
+    startDate: challenge.startDate,
+    lengthDays: `${challenge.lengthDays}`,
+    target: `${target}`,
+    metric,
+    visibility,
+  }
+}
+
+export type GoalDetails = Pick<Goal, 'title' | 'target' | 'lengthDays' | 'startDate' | 'visibility' | 'metric'>
+
+export const AddEditGoalForm = ({
+  defaultValues,
+  closeModal,
+  mode,
+  onSave,
+}: {
+  mode: 'add' | 'edit'
+  defaultValues: Inputs
+  closeModal: () => void
+  onSave: (goalDetails: GoalDetails) => Promise<void>
+}) => {
+  const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
   const [isLoading, setIsLoading] = useState(false)
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     setIsLoading(true)
-    const targetInput = parseInt(data.target);
+    const targetInput = parseInt(data.target)
     const target = data.metric === 'hours' ? hoursToMinutes(targetInput) : targetInput
-    const metric: Goal["metric"] = data.metric === 'hours' ? 'minutes' : data.metric
+    const metric: Goal['metric'] = data.metric === 'hours' ? 'minutes' : data.metric
     const body = {
       ...data,
-        lengthDays: parseInt(data.lengthDays),
-        target,
-        metric,
-        
-    
+      lengthDays: parseInt(data.lengthDays),
+      target,
+      metric,
     }
     await onSave(body)
     setIsLoading(false)
@@ -49,17 +68,13 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
         <h2>{mode === 'add' ? 'Add Goal' : 'Update Goal'}</h2>
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="title">Title:</label>
-          <input
-            id="title"
-            placeholder="Title"
-            {...register('title', { required: true })}
-          />
+          <input id="title" placeholder="Title" {...register('title', { required: true })} />
         </Row>
 
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="length">Duration:</label>
           <input
-          disabled={mode==='edit'}
+            disabled={mode === 'edit'}
             type="number"
             min={1}
             id="length"
@@ -78,7 +93,12 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
             placeholder="50000"
             {...register('target', { required: true })}
           />{' '}
-           <select disabled={mode === 'edit'} aria-label='progress unit' id="metric"  {...register('metric', { required: true })}>
+          <select
+            disabled={mode === 'edit'}
+            aria-label="progress unit"
+            id="metric"
+            {...register('metric', { required: true })}
+          >
             <option key="private" value="words">
               words
             </option>
@@ -92,7 +112,7 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
           <label htmlFor="startDate">Start Date:</label>
           <input
             type="date"
-      disabled={mode==='edit'}
+            disabled={mode === 'edit'}
             id="startDate"
             placeholder="start date"
             {...register('startDate', { required: true })}
@@ -101,7 +121,7 @@ export const AddEditGoalForm = ({ defaultValues, closeModal, mode, onSave }: {mo
 
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="visibility">Visibility:</label>
-          <select id="visibility"  {...register('visibility', { required: true })}>
+          <select id="visibility" {...register('visibility', { required: true })}>
             <option key="private" value="private">
               private
             </option>
