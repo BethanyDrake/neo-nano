@@ -1,5 +1,5 @@
 import { fireEvent, waitFor } from '@testing-library/dom'
-import { NoGoalsOnProfile } from './NoGoalsOnProfile'
+import { SuggestNextGoal } from './SuggestNextGoal'
 import { joinChallenge } from '../serverFunctions/goals/joinCurrentChallenge'
 import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
 import { buildChallenge } from '../types/challenge.builders'
@@ -11,7 +11,7 @@ jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
 jest.mock('@/lib/modals/ModalContext', () => ({
   useModalContext: jest.fn().mockReturnValue({}),
 }))
-describe('NoGoalsOnProfile', () => {
+describe('SuggestNextGoal', () => {
   test('if there is no current or upcoming challenge, just make a custom goal', () => {
     const mockOpenModal = jest.fn()
 
@@ -21,7 +21,7 @@ describe('NoGoalsOnProfile', () => {
 
     jest.mocked(getUpcomingChallenge).mockReturnValue(undefined)
 
-    const { getAllByRole, getByRole } = render(<NoGoalsOnProfile />)
+    const { getAllByRole, getByRole } = render(<SuggestNextGoal />)
     const buttons = getAllByRole('button')
 
     expect(buttons).toHaveLength(1)
@@ -38,7 +38,7 @@ describe('NoGoalsOnProfile', () => {
       .mocked(getUpcomingChallenge)
       .mockReturnValue(buildChallenge({ title: 'Some Upcoming Challenge', id: 'upcoming-challenge-id' }))
     jest.mocked(joinChallenge).mockResolvedValue([])
-    const { getByRole } = render(<NoGoalsOnProfile />)
+    const { getByRole } = render(<SuggestNextGoal />)
 
     const joinChallengeButton = getByRole('button', { name: 'Join Some Upcoming Challenge' })
 
@@ -52,7 +52,7 @@ describe('NoGoalsOnProfile', () => {
       .mocked(getCurrentChallenge)
       .mockReturnValue(buildChallenge({ title: 'Current Challenge', id: 'current-challenge-id' }))
     jest.mocked(joinChallenge).mockResolvedValue([])
-    const { getByRole } = render(<NoGoalsOnProfile />)
+    const { getByRole } = render(<SuggestNextGoal />)
 
     const joinChallengeButton = getByRole('button', { name: 'Join Current Challenge' })
 
