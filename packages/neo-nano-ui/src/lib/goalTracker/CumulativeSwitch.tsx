@@ -5,9 +5,11 @@ import { useEffect } from 'react'
 export const CumulativeSwitch = ({
   isCumulative,
   setIsCumulative,
+  metric
 }: {
   isCumulative: boolean
   setIsCumulative: (value: boolean) => void
+  metric: string
 }) => {
   useEffect(() => {
     const storedIsCumulative = window.localStorage.getItem('isCumulative')
@@ -21,7 +23,7 @@ export const CumulativeSwitch = ({
 
   return (
     <Switch checked={isCumulative} className={classNames.switchContainer} onChange={onChange}>
-      <span className={isCumulative ? classNames.inactiveMode : classNames.activeMode}>Words Per Day</span>
+      <span className={isCumulative ? classNames.inactiveMode : classNames.activeMode}>{metric} Per Day</span>
       <span> • </span>
       <span className={isCumulative ? classNames.activeMode : classNames.inactiveMode}>Cumulative</span>
     </Switch>

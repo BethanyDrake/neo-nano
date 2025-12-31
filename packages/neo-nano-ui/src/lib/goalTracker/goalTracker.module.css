@@ -21,6 +21,7 @@
   border: none;
   background-color: transparent;
   color: var(--text-colour-2);
+  text-transform: capitalize;
 }
 
 .inactiveMode {

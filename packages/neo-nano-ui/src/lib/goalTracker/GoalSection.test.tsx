@@ -108,7 +108,7 @@ describe('<GoalSection />', () => {
         metric={'words'}
       />,
     )
-    fireEvent.click(getByRole('switch', { name: 'Words Per Day • Cumulative' }))
+    fireEvent.click(getByRole('switch', { name: /Words Per Day • Cumulative/i }))
   })
 
   test('delete goal', async () => {
