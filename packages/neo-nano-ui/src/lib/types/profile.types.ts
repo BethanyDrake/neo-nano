@@ -2,7 +2,7 @@ export type Award = {
     id: string,
     title: string,
     description: string,
-    requirementUnit: 'words' | 'days' | 'comments',
+    requirementUnit: 'words' | 'days' | 'comments' | 'minutes',
     requirementValue: number,
     imageUrl: string,
     // yyyy-MM-dd
