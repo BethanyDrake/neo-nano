@@ -109,7 +109,7 @@ export const GoalSection = ({
 
           <h4 style={{ paddingTop: '1em' }}>Tracker:</h4>
           <Centered>
-            <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative} />
+            <CumulativeSwitch metric={metric} isCumulative={isCumulative} setIsCumulative={setIsCumulative} />
           </Centered>
           <div className={classNames['goal-row']}>
             <UpdateWordCount

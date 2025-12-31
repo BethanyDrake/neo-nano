@@ -86,7 +86,7 @@ const QuickUpdateModalForm = ({ closeModal,  activeGoal}: { closeModal: () => vo
           Save
         </BasicButton>
 
-        <CumulativeSwitch isCumulative={isCumulative} setIsCumulative={setIsCumulative} />
+        <CumulativeSwitch metric={activeGoal.metric} isCumulative={isCumulative} setIsCumulative={setIsCumulative} />
       </Column>
     </form>
   )
