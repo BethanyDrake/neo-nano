@@ -24,7 +24,28 @@ const CurrentChallengeInfo = ({ challenge }: { challenge: Challenge }) => {
     start: now,
     end: getChallengeEndDate(challenge.startDate, challenge.lengthDays),
   })
-  return <div style={{ fontStyle: 'italic' }}>{formatTimeLeft(timeLeft)} remaining</div>
+  return  (<>
+      <div>
+        <p>Join us in January and Febuary for...</p>
+        <p style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
+          <FontAwesomeIcon icon={faScissors} />
+          {challenge.title}
+          <FontAwesomeIcon icon={faScissors} flip="horizontal" />
+        </p>
+        <p>{'Commit to spending 80 hours (4,800 minutes) revising your novel.'}</p>
+
+        <p>
+          <span style={{ fontWeight: 'bold' }}>Start date: </span>
+          <span>{format(challenge.startDate, 'MMMM do')}</span>
+        </p>
+        <p>
+          <span style={{ fontWeight: 'bold' }}>End date: </span>
+          <span>{format(getChallengeEndDate(challenge.startDate, challenge.lengthDays), 'MMMM do')}</span>
+        </p>
+      </div>
+      <div style={{ fontStyle: 'italic' }}>{formatTimeLeft(timeLeft)} remaining</div>
+    </>
+)
 }
 
 export const NextChallengeAnnouncement = ({ challenge }: { challenge: Challenge }) => {
