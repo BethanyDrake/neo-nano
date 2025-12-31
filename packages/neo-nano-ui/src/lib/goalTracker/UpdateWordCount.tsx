@@ -74,6 +74,7 @@ export const UpdateWordCount = ({
       const challengeDay = differenceInCalendarDays(date, parseISO(startDate))
 
       const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) => {
+        console.log('onsubmit')
         updateRecord(challengeDay, target.valueAsNumber)
       }
 

@@ -14,7 +14,6 @@ export type GoalAssessmentInput = {
 const getRelevantRecords = ({award, goal}: GoalAssessmentInput) => {
     const startChallengeDay = Math.max(dateToChallengeDay(goal.startDate, award.startDate), 0)
     const endChallengeDay = Math.min(dateToChallengeDay(goal.startDate, award.endDate) + 1, goal.lengthDays)
-
     return goal.records.slice(startChallengeDay, endChallengeDay)
 }
 
@@ -25,6 +24,15 @@ export const assessWordCountAward = ({award, goal}: GoalAssessmentInput): boolea
     const relevantRecords = getRelevantRecords({award, goal})
     const totalWords = _.sum(relevantRecords)
     return totalWords >= award.requirementValue
+}
+
+export const assessMinutesAward = ({award, goal}: GoalAssessmentInput): boolean => {
+    if (award.requirementUnit !== 'minutes') {
+        return false
+    }
+    const relevantRecords = getRelevantRecords({award, goal})
+    const totalMinutes = _.sum(relevantRecords)
+    return totalMinutes >= award.requirementValue
 }
 
 export const assessConsistencyAward = ({award, goal}: GoalAssessmentInput): boolean => {

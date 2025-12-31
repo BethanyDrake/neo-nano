@@ -4,7 +4,7 @@ import { Goal } from "@/lib/types/forum.types"
 import { getQueryFunction } from "../_utils/getQueryFunction"
 import { getUserId } from "../_utils/getUserIdFromSession"
 import { getUnclaimedAwards } from "../awards/getUnclaimedAwards"
-import { assessConsistencyAward, assessWordCountAward } from "../awards/assessAwards"
+import { assessConsistencyAward, assessMinutesAward, assessWordCountAward } from "../awards/assessAwards"
 import { claimAward } from "../profile/claimAward"
 import { UserAward } from "@/lib/types/profile.types"
 
@@ -25,7 +25,7 @@ export async function updateGoalProgress(goal: Pick<Goal, 'id' | 'records'>): Pr
        returning goals.*`, getUnclaimedAwards(user_id)])
   const updatedGoal = camelcaseKeys(updatedGoals[0]) as Goal
 
-  const claimableAwards = unclaimedAwards.filter((award) => assessWordCountAward({award, goal: updatedGoal}) || assessConsistencyAward({award, goal: updatedGoal}))
+  const claimableAwards = unclaimedAwards.filter((award) => assessWordCountAward({award, goal: updatedGoal}) || assessConsistencyAward({award, goal: updatedGoal}) || assessMinutesAward({award, goal: updatedGoal}))
   const claimedAwards = await Promise.all(claimableAwards.map(({id}) => claimAward(id)))
 
   return {
