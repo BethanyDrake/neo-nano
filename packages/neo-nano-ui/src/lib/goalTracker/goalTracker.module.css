@@ -32,13 +32,6 @@
   font-weight: bold;
 }
 
-.noGoalsContainer {
-    background-color: var(--background-colour-3);
-    padding: 24px 64px;
-    width: fit-content;
-    margin: 24px auto;
-}
-
 .DisclosureButton {
   width:100%;
   border:none;

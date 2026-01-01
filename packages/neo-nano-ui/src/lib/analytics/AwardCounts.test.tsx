@@ -5,8 +5,7 @@ import { TrophyCounts } from './AwardCounts'
 
 describe('<AwardCounts />', () => {
   it('renders', async () => {
-
-    const {findByText} = await act(() => {
+    const { findByText } = await act(async () => {
       const awardPromise = Promise.resolve([
         {
           ...buildAward({ id: '1', title: 'Some Title', description: 'Some award description', imageUrl: '/image' }),
@@ -19,7 +18,6 @@ describe('<AwardCounts />', () => {
         </Suspense>,
       )
     })
-    
 
     expect(await findByText('x700')).toBeInTheDocument()
   })

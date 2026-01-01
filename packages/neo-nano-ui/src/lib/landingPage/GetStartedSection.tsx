@@ -4,13 +4,61 @@ import { BasicButton } from '@/lib/buttons/BasicButton'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import Link from 'next/link'
 import styles from './page.module.css'
-import { useUser } from '@auth0/nextjs-auth0'
+import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
+import { useHasActiveOrUpcomingGoal } from '@/lib/hooks/useHasActiveOrUpcomingGoal'
+import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
+import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
+import { useRouter } from 'next/navigation'
+
+const getChallengeToJoin = () => {
+  const currentChallenge = getCurrentChallenge()
+  return currentChallenge || getUpcomingChallenge()
+}
+
+const JoinChallengeButton = () => {
+  const router = useRouter()
+  const challengeToJoin = getChallengeToJoin()
+
+  const { onClick, isLoading } = useLoadableOnClick(() => {
+    if (!challengeToJoin) throw Error()
+    return joinChallenge(challengeToJoin.id).then(() => {
+      router.push('/profile')
+    })
+  })
+  return (
+    <BasicButton buttonProps={{ onClick }} isLoading={isLoading}>
+      Join {challengeToJoin?.title}
+    </BasicButton>
+  )
+}
+
 const ActionButtons = () => {
-  const {user, isLoading} = useUser()
+  const { isLoggedIn, isLoading: l1 } = useIsLoggedIn()
+  const { hasActiveOrUpcomingGoal, isLoading: l2 } = useHasActiveOrUpcomingGoal()
 
+  if (l1 || l2) return null
 
-  if (isLoading) return null
-  if (user)
+  if (!isLoggedIn) {
+    return (
+      <Column>
+        <Row>
+          <Link prefetch={false} href="/auth/login?screen_hint=signup">
+            <BasicButton>Sign up</BasicButton>
+          </Link>
+          <Link prefetch={false} href="/auth/login">
+            <BasicButton>Log in</BasicButton>
+          </Link>
+        </Row>
+        <Row>
+          <Link className={styles['text-link']} href="/forum">
+            Browse forums as guest
+          </Link>
+        </Row>
+      </Column>
+    )
+  }
+  if (hasActiveOrUpcomingGoal)
     return (
       <Row>
         <Link href="/forum">
@@ -22,32 +70,27 @@ const ActionButtons = () => {
       </Row>
     )
   return (
-    <Column>
-      <Row>
-        <Link href="/auth/login?screen_hint=signup">
-          <BasicButton>Sign up</BasicButton>
-        </Link>
-        <Link href="/auth/login">
-          <BasicButton>Log in</BasicButton>
-        </Link>
-      </Row>
-      <Row>
-        <Link className={styles['text-link']} href="/forum">
-          Browse forums as guest
-        </Link>
-      </Row>
+    <Column alignItems="center">
+      <JoinChallengeButton />
+      or
+      <Link href="/forum">
+        <BasicButton>Browse Forum</BasicButton>
+      </Link>
     </Column>
   )
 }
 
 export const GetStartedSection = () => {
-  return (
-    <section>
-      <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
-        Get Started
-      </h2>
+  const { hasActiveOrUpcomingGoal } = useHasActiveOrUpcomingGoal()
 
-      <ActionButtons />
+  return (
+    <section className="paper">
+      <Column gap="16px">
+        <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
+          {hasActiveOrUpcomingGoal ? 'Welcome back!' : 'Get Started'}
+        </h2>
+        <ActionButtons />
+      </Column>
     </section>
   )
 }

@@ -6,7 +6,6 @@ import { Column } from '../layoutElements/flexLayouts'
 import { ADD_GOAL_MODAL } from '../modals/AddGoalModal'
 import { useModalContext } from '../modals/ModalContext'
 import { joinChallenge } from '../serverFunctions/goals/joinCurrentChallenge'
-import classNames from './goalTracker.module.css'
 
 const getChallengeToJoin = () => {
   const currentChallenge = getCurrentChallenge()
@@ -24,7 +23,7 @@ export const SuggestNextGoal = () => {
   })
 
   return (
-    <div className={classNames.noGoalsContainer}>
+    <div className="paper">
       <Column style={{ alignItems: 'center' }}>
         <div>Need a new goal?</div>
         {challengeToJoin && (
