@@ -1,49 +1,57 @@
-import { render } from "@testing-library/react"
-import { ChallengeCountDown } from "./ChallengeCountDown"
-import { getCurrentChallenge, getPreviousChallenge, getUpcomingChallenge } from "../challenges"
-import { hoursToMinutes } from "date-fns"
-import { buildGoal } from "../types/forum.builders"
-import { buildChallenge } from "../types/challenge.builders"
+import { render } from '@testing-library/react'
+import { ChallengeCountDown } from './ChallengeCountDown'
+import { getCurrentChallenge, getPreviousChallenge, getUpcomingChallenge } from '../challenges'
+import { hoursToMinutes } from 'date-fns'
+import { buildGoal } from '../types/forum.builders'
+import { buildChallenge } from '../types/challenge.builders'
 
 jest.mock('../challenges')
 
 describe('<ChallengeCountDown />', () => {
   it('does not explode', () => {
-    render(<ChallengeCountDown/>)
+    render(<ChallengeCountDown />)
   })
 
-    it.only('displays info for the of the active challenge', () => {
-    jest.mocked(getCurrentChallenge).mockReturnValue(buildChallenge({
+  it('displays info for the of the active challenge', () => {
+    jest.mocked(getCurrentChallenge).mockReturnValue(
+      buildChallenge({
         title: 'Current Challenge',
         startDate: '2026-01-01',
         lengthDays: 20,
         target: 100,
-        metric: 'words'
-      }))
+        metric: 'words',
+      }),
+    )
 
-    const {getByText} =  render(<ChallengeCountDown/>)
-    // TODO
-    // expect(getByText('Current Challenge')).toBeInTheDocument()
+    const { getByText } = render(<ChallengeCountDown />)
+    expect(getByText('Current Challenge')).toBeInTheDocument()
     expect(getByText(/remaining/)).toBeInTheDocument()
   })
 
   it('displays info for the of the upcoming challenge', () => {
-    jest.mocked(getUpcomingChallenge).mockReturnValue(buildChallenge({
+    jest.mocked(getCurrentChallenge).mockReturnValue(undefined)
+    jest.mocked(getUpcomingChallenge).mockReturnValue(
+      buildChallenge({
         title: 'The 80h Edit',
         startDate: '2026-01-01',
         lengthDays: 60,
         target: hoursToMinutes(80),
-        metric: 'minutes'
-      }))
+        metric: 'minutes',
+      }),
+    )
 
-    const {getByText} =  render(<ChallengeCountDown/>)
+    const { getByText } = render(<ChallengeCountDown />)
     expect(getByText('The 80h Edit')).toBeInTheDocument()
     expect(getByText(/until the challenge begins./)).toBeInTheDocument()
   })
 
   it('displays wrapup of previous challenge', () => {
-    jest.mocked(getPreviousChallenge).mockReturnValue(buildGoal({title: 'Previous Challenge'}))
-    const {getByText} =  render(<ChallengeCountDown/>)
-    expect(getByText('Previous Challenge is over, the challenge is complete! Time to bask in your success and take a breather.')).toBeInTheDocument()
+    jest.mocked(getPreviousChallenge).mockReturnValue(buildGoal({ title: 'Previous Challenge' }))
+    const { getByText } = render(<ChallengeCountDown />)
+    expect(
+      getByText(
+        'Previous Challenge is over, the challenge is complete! Time to bask in your success and take a breather.',
+      ),
+    ).toBeInTheDocument()
   })
 })
