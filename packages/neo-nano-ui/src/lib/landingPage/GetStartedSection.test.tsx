@@ -3,9 +3,11 @@ import { GetStartedSection } from './GetStartedSection'
 
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import { useHasActiveOrUpcomingGoal } from '@/lib/hooks/useHasActiveOrUpcomingGoal'
+import { getCurrentChallenge } from '../challenges'
+import { buildChallenge } from '../types/challenge.builders'
 
 jest.mock('@/lib/hooks/useIsLoggedIn')
-
+jest.mock('@/lib/challenges')
 jest.mock('@/lib/hooks/useHasActiveOrUpcomingGoal')
 describe('<GetStartedSection />', () => {
 
@@ -17,19 +19,20 @@ describe('<GetStartedSection />', () => {
   })
 
   test('logged in - no active or upcoming goals', () => {
+    jest.mocked(getCurrentChallenge).mockReturnValue(buildChallenge({title: 'Current Challenge'}))
     jest.mocked(useIsLoggedIn).mockReturnValue({ isLoading: false, isLoggedIn: true })
         jest.mocked(useHasActiveOrUpcomingGoal).mockReturnValue({ isLoading: false, hasActiveOrUpcomingGoal: false })
     const { getByText, getByRole } = render(<GetStartedSection />)
     expect(getByText('Get Started')).toBeInTheDocument()
     expect(getByRole('button', { name: 'Browse Forum' })).toBeInTheDocument()
-    expect(getByRole('button', { name: 'Join The Challenge' })).toBeInTheDocument()
+    expect(getByRole('button', { name: 'Join Current Challenge' })).toBeInTheDocument()
   })
 
     test('logged in - already joined challenge', () => {
     jest.mocked(useIsLoggedIn).mockReturnValue({ isLoading: false, isLoggedIn: true })
         jest.mocked(useHasActiveOrUpcomingGoal).mockReturnValue({ isLoading: false, hasActiveOrUpcomingGoal: true })
     const { getByText, getByRole } = render(<GetStartedSection />)
-    expect(getByText('Get Started')).toBeInTheDocument()
+    expect(getByText(/Welcome back/gi)).toBeInTheDocument()
     expect(getByRole('button', { name: 'Browse Forum' })).toBeInTheDocument()
     expect(getByRole('button', { name: 'Update Progress' })).toBeInTheDocument()
   })
