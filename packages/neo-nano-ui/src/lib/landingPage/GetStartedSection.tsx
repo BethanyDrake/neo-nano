@@ -4,30 +4,24 @@ import { BasicButton } from '@/lib/buttons/BasicButton'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import Link from 'next/link'
 import styles from './page.module.css'
-import { useUser } from '@auth0/nextjs-auth0'
+import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
+import { useHasActiveOrUpcomingGoal } from '@/lib/hooks/useHasActiveOrUpcomingGoal'
+
 const ActionButtons = () => {
-  const {user, isLoading} = useUser()
+  const {isLoggedIn, isLoading: l1} = useIsLoggedIn()
+  const {hasActiveOrUpcomingGoal, isLoading: l2} = useHasActiveOrUpcomingGoal()
 
 
-  if (isLoading) return null
-  if (user)
-    return (
-      <Row>
-        <Link href="/forum">
-          <BasicButton>Browse Forum</BasicButton>
-        </Link>
-        <Link href="/profile">
-          <BasicButton>Update Progress</BasicButton>
-        </Link>
-      </Row>
-    )
-  return (
+  if (l1|| l2) return null
+
+  if (!isLoggedIn) {
+return (
     <Column>
       <Row>
-        <Link href="/auth/login?screen_hint=signup">
+        <Link prefetch={false} href="/auth/login?screen_hint=signup">
           <BasicButton>Sign up</BasicButton>
         </Link>
-        <Link href="/auth/login">
+        <Link prefetch={false} href="/auth/login">
           <BasicButton>Log in</BasicButton>
         </Link>
       </Row>
@@ -38,16 +32,36 @@ const ActionButtons = () => {
       </Row>
     </Column>
   )
+  }
+  if(hasActiveOrUpcomingGoal)
+    return (
+      <Row>
+        <Link href="/forum">
+          <BasicButton>Browse Forum</BasicButton>
+        </Link>
+        <Link href="/profile">
+          <BasicButton>Update Progress</BasicButton>
+        </Link>
+      </Row>
+    )
+  return  <Row>
+        <Link href="/forum">
+          <BasicButton>Browse Forum</BasicButton>
+        </Link>
+        <Link href="/profile">
+          <BasicButton>Join The Challenge</BasicButton>
+        </Link>
+      </Row>
 }
 
 export const GetStartedSection = () => {
+
   return (
     <section>
       <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
         Get Started
       </h2>
-
-      <ActionButtons />
+      <ActionButtons/>
     </section>
   )
 }

@@ -86,7 +86,11 @@ const HistorySection = () => {
   const title = 'History'
   const body =
     "Previously, 'National Novel Writing Month' (NaNoWriMo) was a world-wide writing challenge run by a non-profit organisation. The official website and forums shut down in March 2025, but the challenge lives on."
-  return <Section title={title}><p>{body}</p></Section>
+  return (
+    <Section title={title}>
+      <p>{body}</p>
+    </Section>
+  )
 }
 
 export default function Home() {
@@ -106,6 +110,7 @@ export default function Home() {
               <ChallengeCountDown />
             </ClientSideOnly>
             <Image
+              loading="eager"
               alt="Novel November"
               width={300}
               height={300}
