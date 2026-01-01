@@ -20,6 +20,7 @@
 
   --background-colour: white;
   --background-colour-2: white;
+  --background-colour-3: var(--grey-light);
   --text-colour: black;
   --text-colour-2: var(--grey-dark);
 
@@ -29,6 +30,7 @@
 
     --background-colour: #121212;
     --background-colour-2: #2a2f2f;
+    --background-colour-3: #157474;
     --text-colour: white;
     --text-colour-2: var(--grey-light);
   }

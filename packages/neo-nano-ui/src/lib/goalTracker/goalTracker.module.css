@@ -33,7 +33,7 @@
 }
 
 .noGoalsContainer {
-    background-color: var(--grey-light);
+    background-color: var(--background-colour-3);
     padding: 24px 64px;
     width: fit-content;
     margin: 24px auto;
@@ -43,6 +43,7 @@
   width:100%;
   border:none;
   background-color: unset;
+  color: var(--text-colour);
   padding: 16px;
   padding-left: 0;
   text-align: left;
