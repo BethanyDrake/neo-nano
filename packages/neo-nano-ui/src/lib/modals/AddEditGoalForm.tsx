@@ -6,6 +6,7 @@ import { Goal, Visibility } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import { hoursToMinutes, minutesToHours } from 'date-fns'
 import { Challenge } from '../challenges'
+import { useModalContext } from './ModalContext'
 
 type Inputs = {
   title: string
@@ -35,18 +36,16 @@ export type GoalDetails = Pick<Goal, 'title' | 'target' | 'lengthDays' | 'startD
 
 export const AddEditGoalForm = ({
   defaultValues,
-  closeModal,
   mode,
   onSave,
 }: {
   mode: 'add' | 'edit'
   defaultValues: Inputs
-  closeModal: () => void
   onSave: (goalDetails: GoalDetails) => Promise<void>
 }) => {
   const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
   const [isLoading, setIsLoading] = useState(false)
-
+  const { closeModal } = useModalContext()
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     setIsLoading(true)
     const targetInput = parseInt(data.target)

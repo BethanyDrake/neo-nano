@@ -1,6 +1,7 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { updateGoal } from '../serverFunctions/goals/updateGoal'
 import { EditGoalModal } from './EditGoalModal'
+import { ModalContextProvider } from './ModalContext'
 jest.mock('../serverFunctions/goals/updateGoal')
 
 describe('EditGoalModal', () => {
@@ -17,7 +18,7 @@ describe('EditGoalModal', () => {
             startDate: '2025-11-01',
             metric: 'words'
           }}
-        />
+        />, {wrapper: ModalContextProvider}
     )
     fireEvent.click(getByRole('button', { name: 'edit goal' }))
     expect(getByRole('heading', { name: 'Update Goal' })).toBeInTheDocument()
@@ -52,7 +53,7 @@ describe('EditGoalModal', () => {
             startDate: '2025-11-01',
             metric: 'minutes'
           }}
-        />
+        />, {wrapper: ModalContextProvider}
     )
     fireEvent.click(getByRole('button', { name: 'edit goal' }))
     expect(getByRole('heading', { name: 'Update Goal' })).toBeInTheDocument()
