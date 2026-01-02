@@ -2,6 +2,7 @@ import { BasicButton } from '../buttons/BasicButton'
 import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
 import { useMyGoalContext } from '../context/MyGoalsContext'
+import { DotiContainer } from '../layoutElements/dotiContainer'
 import { Column } from '../layoutElements/flexLayouts'
 import { ADD_GOAL_MODAL } from '../modals/AddGoalModal'
 import { useModalContext } from '../modals/ModalContext'
@@ -23,7 +24,7 @@ export const SuggestNextGoal = () => {
   })
 
   return (
-    <div className="paper">
+    <DotiContainer>
       <Column style={{ alignItems: 'center' }}>
         <div>Need a new goal?</div>
         {challengeToJoin && (
@@ -36,6 +37,6 @@ export const SuggestNextGoal = () => {
         )}
         <BasicButton buttonProps={{ onClick: () => setOpenModal(ADD_GOAL_MODAL) }}>Add a custom goal</BasicButton>
       </Column>
-    </div>
+    </DotiContainer>
   )
 }
