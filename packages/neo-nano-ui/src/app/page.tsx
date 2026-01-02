@@ -114,7 +114,7 @@ export default function Home() {
               alt="Novel November"
               width={300}
               height={300}
-              src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/favicon-v3.svg"
+              src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/logo-v4.png"
             />
           </div>
           <Column>
