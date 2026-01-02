@@ -1,6 +1,7 @@
 'use server'
 import { Category, Topic } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
+import { redirect } from 'next/navigation'
 
 export type GetTopicReturn = {
   topic: Topic
@@ -16,8 +17,10 @@ export async function getTopic(id: string): Promise<GetTopicReturn> {
     where topics.id=${id} LIMIT 1`,
   ])
 
-  if (_topic.length !== 1) throw Error('topic not found')
-  if (_category.length !== 1) throw Error('category not found')
+  if (_topic.length !== 1 || _category.length !== 1) {
+      console.warn(`Topic not found: ${id}`)
+      redirect('/forum')
+  }
 
   return { topic: _topic[0], category: _category[0] } as GetTopicReturn
 }
