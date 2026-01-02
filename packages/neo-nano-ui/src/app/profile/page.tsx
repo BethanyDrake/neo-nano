@@ -2,7 +2,6 @@ import { auth0 } from '@/lib/auth0'
 import { ProfileContextProvider } from '@/lib/context/ProfileContext'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { ProfilePageInner } from './ProfilePage'
-import { ModalContextProvider } from '@/lib/modals/ModalContext'
 import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { MyGoalContextProvider } from '@/lib/context/MyGoalsContext'
@@ -15,13 +14,11 @@ const ProfilePage = async () => {
   return (
     <ClientSideOnly>
       <NewAwardModalProvider>
-        <ModalContextProvider>
           <ProfileContextProvider initialProfile={initalProfile} initialAwards={initialAwards}>
             <MyGoalContextProvider>
               <ProfilePageInner />
             </MyGoalContextProvider>
           </ProfileContextProvider>
-        </ModalContextProvider>
       </NewAwardModalProvider>
     </ClientSideOnly>
   )

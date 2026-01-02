@@ -17,6 +17,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { startOfToday } from 'date-fns'
 import { Goal } from '@/lib/types/forum.types'
+import { ModalOverlay } from '@/lib/modals/ModalContext'
 
 const QuickUpdateModalForm = ({ closeModal,  activeGoal}: { closeModal: () => void , activeGoal: Goal}) => {
   const [isCumulative, setIsCumulative] = useState(false)
@@ -126,7 +127,7 @@ export const QuickUpdateModal = () => {
             )}
           </div>
 
-          <div onClick={() => setIsOpen(false)} className={classNames['modal-overlay']} />
+         <ModalOverlay/>
         </>
       )}
     </>

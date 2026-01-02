@@ -11,15 +11,16 @@ import { Comment, Flag } from '@/lib/types/forum.types'
 import { Column, LeftRow, Row } from '../layoutElements/flexLayouts'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
 import classNames from './Modal.module.css'
+import { useModalContext } from './ModalContext'
+import { Modal } from './Modal'
 type Inputs = Pick<Flag, 'reason' | 'details'>
 
 const ReportCommentForm = ({
-  closeModal,
   comment,
 }: {
-  closeModal: () => void
   comment: Pick<Comment, 'id' | 'text'>
 }) => {
+  const {closeModal } = useModalContext()
   const { updateCommentsData } = useThreadContext()
   const {
     register,
@@ -99,16 +100,15 @@ const ReportCommentForm = ({
 }
 
 export const ReportCommentModal = ({ comment }: { comment: Pick<Comment, 'id' | 'text'> }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const modalId = `ReportCommentModal-${comment.id}`
+   const { setOpenModal } = useModalContext()
+
   return (
     <>
-    <SmallIconButton onClick={() => setIsOpen(true)} id={'report'} text={'Report comment as inappropriate'} variant="angry" icon={faFontAwesomeFlag} />
-      {isOpen && (
-        <div className={[classNames['modal'], classNames['angry']].join(' ')}>
-          <ReportCommentForm comment={comment} closeModal={() => setIsOpen(false)} />
-        </div>
-      )}
-      {isOpen && <div className={[classNames['modal-overlay'], classNames.angry].join(' ')} />}
+    <SmallIconButton onClick={() => setOpenModal(modalId)} id={'report'} text={'Report comment as inappropriate'} variant="angry" icon={faFontAwesomeFlag} />
+      <Modal variant="angry" modalId={modalId}>
+          <ReportCommentForm comment={comment} />
+        </Modal>
     </>
   )
 }

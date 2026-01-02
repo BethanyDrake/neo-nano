@@ -5,10 +5,10 @@ import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { useFormSubmission } from '../buttons/usLoadableOnClick'
 import { Column, LeftRow, Row } from '../layoutElements/flexLayouts'
 import { EmailPreferences, updateEmailPreferences } from '../serverFunctions/settings/updateEmailPreferences'
-import modalStyles from './Modal.module.css'
-import { ModalOverlay, useModalContext } from './ModalContext'
+import { useModalContext } from './ModalContext'
 import { useState, useEffect } from 'react'
 import { getEmailPreferences } from '../serverFunctions/settings/getEmailPreferences'
+import { Modal } from './Modal'
 
 export const SETTINGS_MODAL = 'SETTINGS_MODAL'
 
@@ -60,8 +60,7 @@ const SettingsForm = ({
 }
 
 export const SettingsModal = () => {
-  const { openModal, setOpenModal } = useModalContext()
-  const isOpen = openModal === SETTINGS_MODAL
+  const { setOpenModal } = useModalContext()
   const [initialValues, setInitialValues] = useState<EmailPreferences>()
 
   useEffect(() => {
@@ -75,12 +74,11 @@ export const SettingsModal = () => {
         icon={faCog}
         onClick={() => setOpenModal(SETTINGS_MODAL)}
       />
-      {isOpen && initialValues && (
-        <div className={[modalStyles.modal, modalStyles.secondary].join(' ')}>
+      {initialValues && (
+        <Modal modalId={SETTINGS_MODAL} variant='secondary'>
           <SettingsForm setInitialFormState={setInitialValues} initialValues={initialValues} />
-        </div>
+        </Modal>
       )}
-      <ModalOverlay />
     </>
   )
 }

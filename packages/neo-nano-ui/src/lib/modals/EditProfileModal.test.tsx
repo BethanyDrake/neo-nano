@@ -3,17 +3,18 @@ import { EditProfileModal } from './EditProfileModal'
 import { ProfileContextProvider } from '../context/ProfileContext'
 import { updateProfile } from '../serverFunctions/profile/updateProfile'
 import { buildProfile } from '@/lib/types/forum.builders'
+import { ModalContextProvider } from './ModalContext'
 
 jest.mock('../serverFunctions/profile/updateProfile')
 describe('<EditProfileModal />', () => {
   test('update profile', async () => {
     jest.mocked(updateProfile).mockResolvedValue(buildProfile())
     const { getByRole } = render(
-      <ProfileContextProvider
-        initialProfile={buildProfile()}
-        initialAwards={[]}      >
-        <EditProfileModal />
-      </ProfileContextProvider>,
+      <ModalContextProvider>
+        <ProfileContextProvider initialProfile={buildProfile()} initialAwards={[]}>
+          <EditProfileModal />
+        </ProfileContextProvider>
+      </ModalContextProvider>,
     )
     fireEvent.click(getByRole('button', { name: 'edit profile' }))
     expect(getByRole('heading', { name: 'Update Profile Details' })).toBeInTheDocument()

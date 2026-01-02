@@ -1,17 +1,19 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
-import classNames from './Modal.module.css'
-import { BasicButton } from '../buttons/BasicButton'
-import { Column, Row } from '../layoutElements/flexLayouts'
-import { useEffect, useState } from 'react'
-import { Profile } from '@/lib/types/forum.types'
-import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import formClasses from '@/lib/expandableForms/form.module.css'
+import { Profile } from '@/lib/types/forum.types'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { useEffect } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { BasicButton } from '../buttons/BasicButton'
+import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
 import { useProfileContext } from '../context/ProfileContext'
+import { Column, Row } from '../layoutElements/flexLayouts'
+import { Modal } from './Modal'
+import { useModalContext } from './ModalContext'
 
 type Inputs = Pick<Profile, 'displayName' | 'aboutMe'>
+const EDIT_PROFILE_MODAL = 'edit-profile-modal'
 
-const EditProfileForm = ({ closeModal }: { closeModal: () => void }) => {
+const EditProfileForm = () => {
   const {
     register,
     handleSubmit,
@@ -19,6 +21,7 @@ const EditProfileForm = ({ closeModal }: { closeModal: () => void }) => {
     formState: { errors },
   } = useForm<Inputs>()
   const { updateProfile, isLoading, profile } = useProfileContext()
+  const {  closeModal } = useModalContext()
 
   useEffect(() => {
     setValue('displayName', profile.displayName)
@@ -61,16 +64,11 @@ const EditProfileForm = ({ closeModal }: { closeModal: () => void }) => {
 }
 
 export const EditProfileModal = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const { setOpenModal } = useModalContext()
   return (
     <>
-      <ExtendableIconButton onClick={() => setIsOpen(true)} text="edit profile" icon={faEdit} />
-      {isOpen && (
-        <div className={classNames['modal']}>
-          <EditProfileForm closeModal={() => setIsOpen(false)} />
-        </div>
-      )}
-      {isOpen && <div className={classNames['modal-overlay']} />}
+      <ExtendableIconButton onClick={() => setOpenModal(EDIT_PROFILE_MODAL)} text="edit profile" icon={faEdit} />
+      <Modal modalId={EDIT_PROFILE_MODAL}> <EditProfileForm/></Modal>
     </>
   )
 }
