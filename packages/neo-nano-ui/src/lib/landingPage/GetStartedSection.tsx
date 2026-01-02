@@ -10,6 +10,7 @@ import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
 import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 import { useRouter } from 'next/navigation'
+import { DotiContainer } from '../layoutElements/dotiContainer'
 
 const getChallengeToJoin = () => {
   const currentChallenge = getCurrentChallenge()
@@ -84,7 +85,8 @@ export const GetStartedSection = () => {
   const { hasActiveOrUpcomingGoal } = useHasActiveOrUpcomingGoal()
 
   return (
-    <section className="paper">
+    <DotiContainer>
+    <section>
       <Column gap="16px">
         <h2 className={styles['section-header']} style={{ textAlign: 'center' }}>
           {hasActiveOrUpcomingGoal ? 'Welcome back!' : 'Get Started'}
@@ -92,5 +94,6 @@ export const GetStartedSection = () => {
         <ActionButtons />
       </Column>
     </section>
+    </DotiContainer>
   )
 }
