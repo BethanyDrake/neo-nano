@@ -4,6 +4,7 @@ import { Category, Thread, Topic } from '@/lib/types/forum.types'
 import { CommentCardDataEntry } from '@/lib/commentCards/CommentCard'
 import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
+import { redirect } from 'next/navigation'
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
@@ -55,6 +56,11 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
     totalCommentsPromise,
     breadcrumbPromise,
   ])
+
+  if (totalCommentsData.length === 0 || breadcrumbData.length === 0) {
+      console.warn(`Comments or breadcumbs not found for thread: ${threadId}`)
+      redirect('/forum')
+  }
 
   const totalComments = parseInt(totalCommentsData[0].count)
   const { thread, topic, category } = breadcrumbData[0]
