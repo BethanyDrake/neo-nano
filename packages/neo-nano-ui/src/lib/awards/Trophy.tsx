@@ -1,6 +1,11 @@
 import { UserAward } from '@/lib/types/profile.types'
 import { Column } from '../layoutElements/flexLayouts'
 import Image from 'next/image'
+import { ClientSideOnly } from '../ClientSideOnly'
+
+const TextLinePlaceHolder = () => {
+  return (<div style={{visibility: 'hidden'}}>...</div>)
+}
 
 export const Trophy = ({ award }: { award: UserAward }) => {
   return (
@@ -9,11 +14,13 @@ export const Trophy = ({ award }: { award: UserAward }) => {
       <Image preload src={award.imageUrl} alt={award.title} width={200} height={200} />
       <p>{award.description}</p>
       <strong>
+         <ClientSideOnly fallback={<TextLinePlaceHolder/>}>
         {award.awardedAt.toLocaleString(undefined, {
           year: 'numeric',
           month: 'numeric',
           day: 'numeric',
         })}
+        </ClientSideOnly>
       </strong>
     </Column>
   )

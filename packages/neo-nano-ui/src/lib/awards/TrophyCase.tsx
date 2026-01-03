@@ -2,7 +2,6 @@ import { UserAward } from '@/lib/types/profile.types'
 import { Centered, Row } from '../layoutElements/flexLayouts'
 import classNames from './awards.module.css'
 import { Trophy } from './Trophy'
-import { ClientSideOnly } from '../ClientSideOnly'
 
 export const TrophyCard = ({ award }: { award: UserAward }) => {
   return (
@@ -18,13 +17,11 @@ export const TrophyCase = ({ awards }: { awards: UserAward[] }) => {
       <Centered>
         <h2>Trophy Case</h2>
       </Centered>
-      <ClientSideOnly>
       {awards.length > 0 ? (<Row style={{ padding: '16px', overflow: 'scroll' }} justifyContent="left">
         {awards.map((award) => (
           <TrophyCard key={award.id} award={award} />
         ))}
       </Row> ): <Centered><p style={{padding: '10px', fontStyle:'italic'}}>No trophies so far. Update your progress to earn awards!</p></Centered>}
-      </ClientSideOnly>
     </div>
   )
 }

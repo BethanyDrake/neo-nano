@@ -5,14 +5,12 @@ import { ProfilePageInner } from './ProfilePage'
 import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { MyGoalContextProvider } from '@/lib/context/MyGoalsContext'
-import { ClientSideOnly } from '@/lib/ClientSideOnly'
 
 const ProfilePage = async () => {
   const [initalProfile, initialAwards] = await Promise.all([getMyProfile(), getMyAwards()])
   if (!initalProfile) throw Error('No profile found for ProfilePage.')
 
   return (
-    <ClientSideOnly>
       <NewAwardModalProvider>
           <ProfileContextProvider initialProfile={initalProfile} initialAwards={initialAwards}>
             <MyGoalContextProvider>
@@ -20,7 +18,6 @@ const ProfilePage = async () => {
             </MyGoalContextProvider>
           </ProfileContextProvider>
       </NewAwardModalProvider>
-    </ClientSideOnly>
   )
 }
 export default auth0.withPageAuthRequired(ProfilePage, { returnTo: '/profile' }) as () => Promise<React.JSX.Element>
