@@ -16,6 +16,7 @@ describe('assessConsistencyAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -32,6 +33,7 @@ describe('assessConsistencyAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 0],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -50,6 +52,7 @@ describe('assessConsistencyAward', () => {
         startDate: '2000-01-01',
         lengthDays: 7,
         records: [100, 100, 0, 100, 0, 0, 0],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -65,6 +68,7 @@ describe('assessConsistencyAward', () => {
         startDate: '2000-01-01',
         lengthDays: 7,
         records: [100, 0, 0, 100, 0, 0, 0],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {

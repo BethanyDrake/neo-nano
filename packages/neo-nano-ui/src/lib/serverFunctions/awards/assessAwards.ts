@@ -6,7 +6,7 @@ import { dateToChallengeDay } from "../goals/goalUtils"
 
 export type GoalAssessmentInput = {
     award: Pick<Award, 'startDate' | 'endDate' | 'requirementUnit' | 'requirementValue'>,
-    goal: Pick<Goal,  'startDate' | 'lengthDays' | 'records'>
+    goal: Pick<Goal,  'startDate' | 'lengthDays' | 'records' |'metric'>
 }
 
 
@@ -18,7 +18,7 @@ const getRelevantRecords = ({award, goal}: GoalAssessmentInput) => {
 }
 
 export const assessWordCountAward = ({award, goal}: GoalAssessmentInput): boolean => {
-    if (award.requirementUnit !== 'words') {
+    if (award.requirementUnit !== 'words' || goal.metric != 'words') {
         return false
     }
     const relevantRecords = getRelevantRecords({award, goal})
@@ -27,7 +27,7 @@ export const assessWordCountAward = ({award, goal}: GoalAssessmentInput): boolea
 }
 
 export const assessMinutesAward = ({award, goal}: GoalAssessmentInput): boolean => {
-    if (award.requirementUnit !== 'minutes') {
+    if (award.requirementUnit !== 'minutes' || goal.metric != 'minutes') {
         return false
     }
     const relevantRecords = getRelevantRecords({award, goal})
