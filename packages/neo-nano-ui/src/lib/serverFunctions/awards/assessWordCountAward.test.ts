@@ -1,12 +1,37 @@
 import { assessWordCountAward, GoalAssessmentInput } from './assessAwards'
 
 describe('assessWordCountAward', () => {
-  it('returns false if goal is not of type wordCount', () => {
-    const goal = {} as GoalAssessmentInput['goal']
+  it('returns false if GOAL is not of type wordCount', () => {
+    const goal: GoalAssessmentInput['goal'] = {
+      startDate: '2000-01-01',
+      lengthDays: 3,
+      records: [100, 100, 100],
+      metric: 'minutes',
+    }
 
-    const award = {
-      requirementUnit: 'days',
-    } as GoalAssessmentInput['award']
+    const award: GoalAssessmentInput['award'] = {
+      startDate: '2000-01-01',
+      endDate: '2000-01-03',
+      requirementUnit: 'words',
+      requirementValue: 300,
+    }
+    expect(assessWordCountAward({ award, goal })).toEqual(false)
+  })
+
+  it('returns false if award is not of type wordCount', () => {
+    const goal: GoalAssessmentInput['goal'] = {
+      startDate: '2000-01-01',
+      lengthDays: 3,
+      records: [100, 100, 100],
+      metric: 'words',
+    }
+
+    const award: GoalAssessmentInput['award'] = {
+      startDate: '2000-01-01',
+      endDate: '2000-01-03',
+      requirementUnit: 'minutes',
+      requirementValue: 300,
+    }
     expect(assessWordCountAward({ award, goal })).toEqual(false)
   })
 
@@ -16,6 +41,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -32,6 +58,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 0],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -50,6 +77,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 5,
         records: [100, 100, 100, 100, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -66,6 +94,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 5,
         records: [100, 100, 100, 0, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -84,6 +113,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 400],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -100,6 +130,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -118,6 +149,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-02',
         lengthDays: 3,
         records: [100, 200, 0],
+        metric: 'words',
       }
 
       //award started 1 day before the goal
@@ -136,6 +168,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-02',
         lengthDays: 3,
         records: [100, 100, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -154,6 +187,7 @@ describe('assessWordCountAward', () => {
         startDate: '1999-01-01',
         lengthDays: 3,
         records: [4000, 4000, 4000],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
@@ -172,6 +206,7 @@ describe('assessWordCountAward', () => {
         startDate: '2000-01-01',
         lengthDays: 3,
         records: [100, 100, 100],
+        metric: 'words',
       }
 
       const award: GoalAssessmentInput['award'] = {
