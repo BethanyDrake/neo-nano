@@ -5,11 +5,10 @@ import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { Section } from '@/lib/layoutElements/Section'
 import { getPyramidData } from '@/lib/serverFunctions/analytics/getPyramidData'
 import { getTrophyCounts } from '@/lib/serverFunctions/analytics/getTrophyCounts'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Suspense } from 'react'
 
 const Page = async () => {
+  const awardCounts = await getTrophyCounts()
+  const milestoneUserCounts = await getPyramidData()
   return (
     <GutteredPage>
       <Column>
@@ -19,15 +18,11 @@ const Page = async () => {
       
       <Section title="Pyramid of Progress">
         <Centered>
-          <Suspense fallback={<FontAwesomeIcon spin icon={faSpinner} />}>
-            <FunnelSummaryChart milestoneUserCounts={getPyramidData()} />
-          </Suspense>
+            <FunnelSummaryChart milestoneUserCounts={milestoneUserCounts} />
         </Centered>
       </Section>
          <Section title="Trophies Awarded">
-      <Suspense fallback={<FontAwesomeIcon spin icon={faSpinner} />}>
-        <TrophyCounts awardCountsPromise={getTrophyCounts()} />
-      </Suspense>
+        <TrophyCounts awardCounts={awardCounts} />
       </Section>
       </Column>
     </GutteredPage>

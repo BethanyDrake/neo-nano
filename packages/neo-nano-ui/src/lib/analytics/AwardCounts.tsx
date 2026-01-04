@@ -1,16 +1,14 @@
 'use client'
-import { use } from 'react'
 import { Award } from '@/lib/types/profile.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import Image from 'next/image'
 import styles from './awardCounts.module.css'
 
 export const TrophyCounts = ({
-  awardCountsPromise,
+  awardCounts,
 }: {
-  awardCountsPromise: Promise<(Award & { count: number })[]>
+  awardCounts: (Award & { count: number })[]
 }) => {
-  const awardCounts = use(awardCountsPromise)
 
   return (
       <Column>
