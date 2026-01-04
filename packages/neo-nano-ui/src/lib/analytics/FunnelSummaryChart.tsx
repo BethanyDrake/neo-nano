@@ -2,7 +2,6 @@
 import { FunnelChart, Funnel, LabelList, Trapezoid, Label } from 'recharts';
 import { FunnelTrapezoidItem } from 'recharts/types/cartesian/Funnel';
 import { PyramidEntry } from './getPyramidOfProgressData';
-import { use } from 'react';
 
 const colours = ['#6e1ab3', '#667CB9', '#5FD5BE', '#B4DA7E', '#EDDD53']
 
@@ -18,19 +17,19 @@ const FunnelWithDimensions = (props: FunnelTrapezoidItem) => {
   );
 };
 
-const FunnelExample = ({ milestoneUserCounts }: { milestoneUserCounts: Promise<PyramidEntry[]> }) => {
-  const data = use(milestoneUserCounts).map(({milestone, writerCount}, index) => {
+const FunnelExample = ({ milestoneUserCounts }: { milestoneUserCounts: PyramidEntry[] }) => {
+  const data = milestoneUserCounts.map(({milestone, writerCount}, index) => {
     return {
       name: `${milestone/1000}K`,
       value: writerCount,
       fill: colours[index]
     }
-
     
   })
-  console.log({data})
   return (
     <FunnelChart
+      aria-label={data.map(({name, value}) => `${value} authors wrote at least ${name}.`).join(' ')}
+      role="figure"
       style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
       responsive
       margin={{
