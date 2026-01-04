@@ -28,6 +28,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    {
+      url: 'https://www.novel-november.com/about',
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
    ...topicEntries,
    ...threadEntries
   ]
