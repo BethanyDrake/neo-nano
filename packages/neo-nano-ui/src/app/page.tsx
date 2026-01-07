@@ -79,6 +79,7 @@ export default function Home() {
             </ClientSideOnly>
            
             <Image
+              fetchPriority="high"
               loading="eager"
               alt="Novel November"
               width={300}
