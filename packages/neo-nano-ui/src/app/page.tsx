@@ -3,6 +3,7 @@ import { ChallengeCountDown } from '@/lib/landingPage/ChallengeCountDown'
 import { GetStartedSection } from '@/lib/landingPage/GetStartedSection'
 import styles from '@/lib/landingPage/page.module.css'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
+import { TextLinePlaceHolder } from '@/lib/layoutElements/Placeholders'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faBullseye, faChartLine, faComment, faScissors, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -74,7 +75,7 @@ export default function Home() {
                       <FontAwesomeIcon icon={faScissors} flip="horizontal" />
                     </h1>
                     
-            <ClientSideOnly>
+            <ClientSideOnly fallback={<TextLinePlaceHolder />}>
               <ChallengeCountDown />
             </ClientSideOnly>
            
