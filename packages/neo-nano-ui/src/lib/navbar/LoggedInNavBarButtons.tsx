@@ -12,7 +12,7 @@ import { NewAwardModal, NewAwardModalProvider } from '../awards/NewAwardModal';
 export const LoggedInNavBarButtons = () => {
     return (
     <Row>
-      <Link prefetch={false}  style={{color: 'white', alignSelf: 'center'}} href="/auth/logout">
+      <Link prefetch={false}  style={{color: 'white', textShadow: "0px 0px 3px var(--off-black)",  alignSelf: 'center'}} href="/auth/logout">
         Log out
       </Link>
       <Link href="/forum">
