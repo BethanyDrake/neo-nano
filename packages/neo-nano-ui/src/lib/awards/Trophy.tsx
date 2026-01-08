@@ -2,10 +2,7 @@ import { UserAward } from '@/lib/types/profile.types'
 import { Column } from '../layoutElements/flexLayouts'
 import Image from 'next/image'
 import { ClientSideOnly } from '../ClientSideOnly'
-
-const TextLinePlaceHolder = () => {
-  return (<div style={{visibility: 'hidden'}}>...</div>)
-}
+import { TextLinePlaceHolder } from '../layoutElements/Placeholders'
 
 export const Trophy = ({ award }: { award: UserAward }) => {
   return (
