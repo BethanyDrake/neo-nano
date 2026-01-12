@@ -1,7 +1,7 @@
 import styles from './NavBar.module.css'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faChartColumn, faComment, faPerson } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faChartColumn, faComment, faHammer, faPerson, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { ModeratorOnly } from '../moderation/ModeratorOnly'
 import { Row } from '../layoutElements/flexLayouts'
@@ -46,7 +46,16 @@ export const NavMenu = () => {
         </MenuItem>
         <MenuItem>
           <Link className={styles['menu-item']} href="/about">
-            About
+        <Row justifyContent="space-between">
+              <span>About</span> <FontAwesomeIcon icon={faQuestion} />
+            </Row>
+          </Link>
+        </MenuItem>
+         <MenuItem>
+          <Link className={styles['menu-item']} href="/tools/timer">
+             <Row justifyContent="space-between">
+              <span>Tools</span> <FontAwesomeIcon icon={faHammer} />
+            </Row>
           </Link>
         </MenuItem>
         <ModeratorOnly>
