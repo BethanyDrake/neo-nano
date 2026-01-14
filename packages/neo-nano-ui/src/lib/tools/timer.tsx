@@ -1,13 +1,14 @@
 'use client'
-import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
-import Image from 'next/image'
-import formClasses from '@/lib/expandableForms/form.module.css'
 import { BasicButton } from '@/lib/buttons/BasicButton'
-import { useForm } from 'react-hook-form'
-import { minutesToSeconds } from 'date-fns'
-import { useEffect, useRef, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import formClasses from '@/lib/expandableForms/form.module.css'
+import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { faTools } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { minutesToSeconds, secondsToMinutes } from 'date-fns'
+import Image from 'next/image'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useStopwatch, useTimer } from 'react-timer-hook'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -44,24 +45,30 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
   )
 }
 
-const Timer_InProgress = ({ targetTime, onCancel }: { targetTime: number; onCancel: () => void }) => {
-  const [isRunning, setIsRunning] = useState(true)
-  const [timeLeft, setTimeLeft] = useState(targetTime)
-  const intervalIdRef = useRef<NodeJS.Timeout>(undefined)
+const getExpiryTimestamp = (seconds: number) => {
+  const time = new Date()
+  time.setSeconds(time.getSeconds() + seconds)
+  return time
+}
 
-  useEffect(() => {
-    if (isRunning) {
-      intervalIdRef.current = setInterval(() => setTimeLeft((prevTimeLeft) => prevTimeLeft - 1), 1000)
-    } else {
-      clearInterval(intervalIdRef.current)
-    }
-    return () => clearInterval(intervalIdRef.current)
-  }, [isRunning])
+const Timer_InProgress = ({
+  targetTime,
+  onCancel,
+  onFinished,
+}: {
+  targetTime: number
+  onCancel: () => void
+  onFinished: () => void
+}) => {
+  const { seconds, minutes, isRunning, pause, resume } = useTimer({
+    expiryTimestamp: getExpiryTimestamp(targetTime),
+    onExpire: onFinished,
+  })
 
   return (
     <div>
       <Centered>
-        <h1>Start a timer</h1>
+        <h1>The clock is ticking...</h1>
       </Centered>
       <Row>
         <Image
@@ -74,14 +81,66 @@ const Timer_InProgress = ({ targetTime, onCancel }: { targetTime: number; onCanc
         <div>
           <Column>
             <Row alignItems="baseline">
-              {timeLeft < 0 ? '+' : ''}
-              {Math.floor(Math.abs(timeLeft) / 60)}m {Math.abs(timeLeft) % 60}s
+              {minutes}m {seconds}s
             </Row>
             <Row>
-              <BasicButton buttonProps={{ onClick: () => setIsRunning(!isRunning) }}>
+              <BasicButton buttonProps={{ onClick: isRunning ? pause : resume }}>
                 {isRunning ? 'Pause' : 'Continue'}
               </BasicButton>{' '}
               <BasicButton buttonProps={{ onClick: onCancel }}>Cancel</BasicButton>
+            </Row>
+          </Column>
+        </div>
+      </Row>
+    </div>
+  )
+}
+
+const Timer_Finished = ({
+  targetTime,
+  onReset,
+  onRepeat,
+}: {
+  targetTime: number
+  onReset: () => void
+  onRepeat: () => void
+}) => {
+  const {  seconds, minutes, } = useStopwatch({
+    autoStart: true,
+  })
+
+  return (
+    <div>
+      <Centered>
+        <h1>Complete!</h1>
+      </Centered>
+      <Row>
+        <Image
+          alt="clock"
+          width={100}
+          height={100}
+          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+        />
+
+        <div>
+          <Column>
+            <Row alignItems="baseline">
+              +{minutes}m {seconds}s
+            </Row>
+
+            <Row>
+              <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
+                {`Add ${secondsToMinutes(targetTime)} minutes to today's goal`}
+              </BasicButton>
+              {minutes > 0 && (
+                <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
+                  {`Add ${secondsToMinutes(targetTime) + minutes} minutes to today's goal`}
+                </BasicButton>
+              )}
+            </Row>
+            <Row>
+              <BasicButton buttonProps={{ onClick: onRepeat }}>Repeat</BasicButton>
+              <BasicButton buttonProps={{ onClick: onReset }}>New target</BasicButton>
             </Row>
           </Column>
         </div>
@@ -108,9 +167,7 @@ export const Timer = () => {
         <h3>Upcoming changes:</h3>
         <ul style={{ paddingLeft: '20px' }}>
           <li>chime when timer reaches 0</li>
-          <li>fix accuracy for longer durations</li>
           <li>{"click to update today's progress"}</li>
-          <li>click to repeat the previous time</li>
         </ul>
       </div>
       {timerState === 'initial' && (
@@ -123,7 +180,19 @@ export const Timer = () => {
       )}
 
       {timerState === 'inProgress' && (
-        <Timer_InProgress onCancel={() => setTimerState('initial')} targetTime={targetTime} />
+        <Timer_InProgress
+          onCancel={() => setTimerState('initial')}
+          onFinished={() => setTimerState('finished')}
+          targetTime={targetTime}
+        />
+      )}
+
+      {timerState === 'finished' && (
+        <Timer_Finished
+          targetTime={targetTime}
+          onReset={() => setTimerState('initial')}
+          onRepeat={() => setTimerState('inProgress')}
+        />
       )}
     </>
   )
