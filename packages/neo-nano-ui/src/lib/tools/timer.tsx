@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
+import useSound from 'use-sound';
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -152,6 +153,8 @@ const Timer_Finished = ({
 export const Timer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
   const [timerState, setTimerState] = useState('initial')
+  const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
+
   return (
     <>
       <div style={{ backgroundColor: 'var(--secondary-light)', padding: '10px 20px' }}>
@@ -166,7 +169,6 @@ export const Timer = () => {
         </p>
         <h3>Upcoming changes:</h3>
         <ul style={{ paddingLeft: '20px' }}>
-          <li>chime when timer reaches 0</li>
           <li>{"click to update today's progress"}</li>
         </ul>
       </div>
@@ -182,7 +184,10 @@ export const Timer = () => {
       {timerState === 'inProgress' && (
         <Timer_InProgress
           onCancel={() => setTimerState('initial')}
-          onFinished={() => setTimerState('finished')}
+          onFinished={() => {
+            onCompletePlay()
+            setTimerState('finished')
+          }}
           targetTime={targetTime}
         />
       )}
