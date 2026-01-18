@@ -4,17 +4,14 @@ import formClasses from '@/lib/expandableForms/form.module.css'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { faTools } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
+import { minutesToSeconds, secondsToMinutes } from 'date-fns'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
-import useSound from 'use-sound';
-import {useQuery} from '@tanstack/react-query'
-import { getActiveTimeBasedGoal } from '../serverFunctions/goals/getActiveGoal'
-import { getDateAsString } from '../misc'
+import useSound from 'use-sound'
 import { Goal } from '../types/forum.types'
-import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
+import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -49,23 +46,6 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
       </Row>
     </div>
   )
-}
-
-const useActiveTimeBasedGoal = () => {
-
-  const {isLoggedIn, isLoading: isUserLoading} =  useIsLoggedIn()
-  const today = getDateAsString(startOfToday())
-  const queryKey = ['active-goal', 'time-based', today]
-
-  const shouldFetch = !isUserLoading && isLoggedIn
-
-
-  const {isLoading, data, error} = useQuery({ queryKey, queryFn: () => getActiveTimeBasedGoal(today), enabled: shouldFetch})
-  return {
-    isLoading,
-    goal: data,
-    error
-  }
 }
 
 
@@ -120,6 +100,22 @@ const Timer_InProgress = ({
   )
 }
 
+const UpdateActiveGoal = ({goal, targetMinutes, extraMinutes}: {goal: Goal, targetMinutes: number, extraMinutes: number}) => {
+  const {addMinutes} =useUpdateActiveTimeBasedGoal(goal)
+  return (<>
+<h3>Update {goal.title} </h3>
+            <Row>
+              <BasicButton buttonProps={{ onClick: () => addMinutes(targetMinutes)}}>
+                {`Add ${targetMinutes} minutes to today's goal`}
+              </BasicButton>
+              {extraMinutes > 0 && (
+                <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
+                  {`Add ${targetMinutes + extraMinutes} minutes to today's goal`}
+                </BasicButton>
+              )}
+            </Row></>)
+}
+
 export const Timer_Finished = ({
   targetTime,
   onReset,
@@ -155,16 +151,8 @@ export const Timer_Finished = ({
             </Row>
 
 {activeGoal && 
-            <Row>
-              <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
-                {`Add ${secondsToMinutes(targetTime)} minutes to today's goal`}
-              </BasicButton>
-              {minutes > 0 && (
-                <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
-                  {`Add ${secondsToMinutes(targetTime) + minutes} minutes to today's goal`}
-                </BasicButton>
-              )}
-            </Row>}
+<UpdateActiveGoal goal={activeGoal} targetMinutes={secondsToMinutes(targetTime)} extraMinutes={minutes}/>
+}
             <Row>
               <BasicButton buttonProps={{ onClick: onRepeat }}>Repeat</BasicButton>
               <BasicButton buttonProps={{ onClick: onReset }}>New target</BasicButton>
@@ -178,7 +166,7 @@ export const Timer_Finished = ({
 
 export const Timer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
-  const [timerState, setTimerState] = useState('initial')
+  const [timerState, setTimerState] = useState('finished')
   const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
   const {goal} = useActiveTimeBasedGoal()
 
