@@ -33,9 +33,9 @@ export default async function RootLayout({
       <GoogleTagManager gtmId="GTM-KRXL28V4" />
 
       <body>
-        <NavBar/>
         <ModalContextProvider>
-        <main>{children}</main>
+          <NavBar />
+          <main>{children}</main>
         </ModalContextProvider>
         <SpeedInsights />
         <Analytics />

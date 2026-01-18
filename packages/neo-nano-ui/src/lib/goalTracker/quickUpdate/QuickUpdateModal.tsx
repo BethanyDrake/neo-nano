@@ -17,9 +17,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { startOfToday } from 'date-fns'
 import { Goal } from '@/lib/types/forum.types'
-import { ModalOverlay } from '@/lib/modals/ModalContext'
+import { ModalOverlay, useModalContext } from '@/lib/modals/ModalContext'
 
-const QuickUpdateModalForm = ({ closeModal,  activeGoal}: { closeModal: () => void , activeGoal: Goal}) => {
+const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => void; activeGoal: Goal }) => {
   const [isCumulative, setIsCumulative] = useState(false)
   const { updateActiveGoal } = useActiveGoal()
   const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, startOfToday()) : -1
@@ -94,19 +94,23 @@ const QuickUpdateModalForm = ({ closeModal,  activeGoal}: { closeModal: () => vo
 }
 
 export const QuickUpdateModal = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const modalId = 'quick-update-modal'
+  const { openModal, setOpenModal, closeModal } = useModalContext()
   const { activeGoal, refresh, isRefreshing } = useActiveGoal()
   const pathname = usePathname()
+  const isOpen = openModal === modalId
+
+  console.log({ openModal, isOpen })
 
   useEffect(() => {
     refresh()
   }, [pathname, refresh])
 
-  const isDisabled = (pathname === '/profile' || !activeGoal)
+  const isDisabled = pathname === '/profile' || !activeGoal
 
   return (
     <>
-      <button disabled={isDisabled} onClick={() => setIsOpen(true)} className={navbarStyles.responsiveButton}>
+      <button disabled={isDisabled} onClick={() => setOpenModal(modalId)} className={navbarStyles.responsiveButton}>
         <FontAwesomeIcon icon={faPencil} />
         Quick Update
       </button>
@@ -114,12 +118,14 @@ export const QuickUpdateModal = () => {
         <>
           <div style={{ width: 'unset' }} className={classNames['modal']}>
             {isRefreshing && <FontAwesomeIcon spin icon={faSpinner} />}
-            {!isRefreshing && activeGoal && <QuickUpdateModalForm key={activeGoal.id} activeGoal={activeGoal} closeModal={() => setIsOpen(false)} />}
+            {!isRefreshing && activeGoal && (
+              <QuickUpdateModalForm key={activeGoal.id} activeGoal={activeGoal} closeModal={closeModal} />
+            )}
             {!isRefreshing && !activeGoal && (
               <div style={{ minWidth: '200px' }}>
                 <p>
                   No active goals at the momemt. Try creating one in{' '}
-                  <Link onClick={() => setIsOpen(false)} href="/profile">
+                  <Link onClick={closeModal} href="/profile">
                     your profile.
                   </Link>
                 </p>
@@ -127,7 +133,7 @@ export const QuickUpdateModal = () => {
             )}
           </div>
 
-         <ModalOverlay/>
+          <ModalOverlay />
         </>
       )}
     </>

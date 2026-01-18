@@ -6,6 +6,7 @@ import { subDays } from 'date-fns'
 import { getDateAsString } from '@/lib/misc'
 import { usePathname } from 'next/navigation'
 import { buildGoal } from '@/lib/types/forum.builders'
+import { ModalContextProvider } from '@/lib/modals/ModalContext'
 jest.mock('./ActiveGoalContext')
 jest.mock('next/navigation')
 
@@ -24,7 +25,7 @@ describe('<QuickUpdateModal/>', () => {
         refresh: jest.fn(),
       })
     jest.mocked(usePathname).mockReturnValue('/profile')
-    const { getByRole } = render(<QuickUpdateModal />)
+    const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
     const button = getByRole('button', {name: "Quick Update"})
     expect(button).toBeDisabled()
   })
@@ -36,7 +37,7 @@ describe('<QuickUpdateModal/>', () => {
         isRefreshing: false,
         refresh: jest.fn(),
       })
-    const { getByRole } = render(<QuickUpdateModal />)
+    const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
     const button = getByRole('button', {name: "Quick Update"})
     expect(button).toBeDisabled()
   })
@@ -50,7 +51,7 @@ describe('<QuickUpdateModal/>', () => {
         isRefreshing: false,
         refresh: jest.fn(),
       })
-      const { getByRole } = render(<QuickUpdateModal />)
+      const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
 
       fireEvent.click(getByRole('button'))
 
@@ -70,7 +71,7 @@ describe('<QuickUpdateModal/>', () => {
         refresh: jest.fn(),
       })
 
-      const { getByText, getByRole } = render(<QuickUpdateModal />)
+      const { getByText, getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
       fireEvent.click(getByRole('button'))
       expect(getByText('words')).toBeInTheDocument()
     })
@@ -82,7 +83,7 @@ describe('<QuickUpdateModal/>', () => {
         isRefreshing: false,
         refresh: jest.fn(),
       })
-      const { getByRole } = render(<QuickUpdateModal />)
+      const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
       fireEvent.click(getByRole('button'), { name: /quick update/i })
       fireEvent.input(getByRole('spinbutton', { name: /today/i }), { target: { value: '100' } })
       fireEvent.click(getByRole('button', { name: /save/i }))
@@ -100,7 +101,7 @@ describe('<QuickUpdateModal/>', () => {
         isRefreshing: false,
         refresh: jest.fn(),
       })
-      const { getByRole } = render(<QuickUpdateModal />)
+      const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
       fireEvent.click(getByRole('button'))
       fireEvent.input(getByRole('spinbutton', { name: /today/i }), { target: { value: '50' } })
       fireEvent.click(getByRole('button', { name: /save/i }))
@@ -120,7 +121,7 @@ describe('<QuickUpdateModal/>', () => {
           refresh: jest.fn(),
         })
 
-        const { getByText, getByRole } = render(<QuickUpdateModal />)
+        const { getByText, getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
         fireEvent.click(getByRole('button'))
         fireEvent.click(getByRole('switch'))
         expect(getByText('minutes')).toBeInTheDocument()
@@ -133,7 +134,7 @@ describe('<QuickUpdateModal/>', () => {
           isRefreshing: false,
           refresh: jest.fn(),
         })
-        const { getByRole } = render(<QuickUpdateModal />)
+        const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
 
         fireEvent.click(getByRole('button'))
         fireEvent.click(getByRole('switch'))
@@ -156,7 +157,7 @@ describe('<QuickUpdateModal/>', () => {
           isRefreshing: false,
           refresh: jest.fn(),
         })
-        const { getByRole } = render(<QuickUpdateModal />)
+        const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
         fireEvent.click(getByRole('button'))
         fireEvent.click(getByRole('switch'))
         fireEvent.input(getByRole('spinbutton', { name: /total/i }), { target: { value: '150' } })
@@ -178,7 +179,7 @@ describe('<QuickUpdateModal/>', () => {
           isRefreshing: false,
           refresh: jest.fn(),
         })
-        const { getByRole } = render(<QuickUpdateModal />)
+        const { getByRole } = render(<QuickUpdateModal />, {wrapper: ModalContextProvider})
         fireEvent.click(getByRole('button'))
         fireEvent.click(getByRole('switch'))
         fireEvent.input(getByRole('spinbutton', { name: /total/i }), { target: { value: '50' } })
