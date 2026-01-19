@@ -7,6 +7,23 @@ import { getChallengeEndDate, isActive } from './goalUtils'
 import { isAfter, parseISO } from 'date-fns'
 import { auth0 } from '@/lib/auth0'
 
+export const getActiveTimeBasedGoal = async (date: string) => {
+  console.log('getActiveTimeBasedGoal', date)
+  const sql = getQueryFunction()
+  const external_id = await getExternalId()
+  const startedGoals = await sql`SELECT goals.*
+    FROM goals
+    join users on users.id=goals.user_id
+    WHERE users.external_id=${external_id} and start_date <= ${date}
+    and goals.metric='minutes'
+    ORDER BY start_date DESC, id ASC`
+
+  const activeGoals = startedGoals.filter(({ start_date, length_days }) => isActive(start_date, length_days, date))
+  if (activeGoals.length === 0) return null
+
+  return camelcaseKeys(activeGoals[0]) as Goal
+}
+
 export const getActiveGoal = async (date: string) => {
   console.log('getActiveGoal', date)
   const sql = getQueryFunction()

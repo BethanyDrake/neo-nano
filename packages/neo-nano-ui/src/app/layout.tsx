@@ -1,15 +1,22 @@
-import '@/lib/styles/globals.css'
 import { NavBar } from '@/lib/navbar/NavBar'
+import '@/lib/styles/globals.css'
 import type { Metadata } from 'next'
+
+import { ModalContextProvider } from '@/lib/modals/ModalContext'
+import { config } from '@fortawesome/fontawesome-svg-core'
+import { GoogleTagManager } from '@next/third-parties/google'
+import {
+  HydrationBoundary
+} from '@tanstack/react-query'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import Providers from './providers'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 // Prevent fontawesome from adding its CSS since we did it manually above:
-import { config } from '@fortawesome/fontawesome-svg-core'
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { GoogleTagManager } from '@next/third-parties/google'
-import { ModalContextProvider } from '@/lib/modals/ModalContext'
 config.autoAddCss = false
 export const metadata: Metadata = {
   title: 'Novel November',
@@ -23,6 +30,7 @@ export const metadata: Metadata = {
   },
 }
 
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -33,12 +41,19 @@ export default async function RootLayout({
       <GoogleTagManager gtmId="GTM-KRXL28V4" />
 
       <body>
+        <Providers>
+        <HydrationBoundary state={null}>
+        <NavBar/>
         <ModalContextProvider>
           <NavBar />
           <main>{children}</main>
         </ModalContextProvider>
+        <ReactQueryDevtools/>
+        </HydrationBoundary>
+        </Providers>
         <SpeedInsights />
         <Analytics />
+ 
       </body>
     </html>
   )

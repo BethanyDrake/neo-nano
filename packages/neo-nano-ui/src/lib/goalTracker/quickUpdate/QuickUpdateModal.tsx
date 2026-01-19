@@ -100,8 +100,6 @@ export const QuickUpdateModal = () => {
   const pathname = usePathname()
   const isOpen = openModal === modalId
 
-  console.log({ openModal, isOpen })
-
   useEffect(() => {
     refresh()
   }, [pathname, refresh])

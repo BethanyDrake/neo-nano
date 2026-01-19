@@ -4,12 +4,17 @@ import formClasses from '@/lib/expandableForms/form.module.css'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { faTools } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { minutesToSeconds, secondsToMinutes } from 'date-fns'
+import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
-import useSound from 'use-sound';
+import useSound from 'use-sound'
+import { Goal } from '../types/forum.types'
+import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
+import { getDateAsString } from '../misc'
+import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
+import classNames from './timer.module.css'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -97,16 +102,83 @@ const Timer_InProgress = ({
   )
 }
 
-const Timer_Finished = ({
+const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
+  const today = getDateAsString(startOfToday())
+  const challengeDay = dateToChallengeDay(startDate, today)
+  return records[challengeDay] ?? 0
+}
+
+const UpdateActiveGoal = ({
+  goal,
+  targetMinutes,
+  extraMinutes,
+}: {
+  goal: Goal
+  targetMinutes: number
+  extraMinutes: number
+}) => {
+  const { addMinutes } = useUpdateActiveTimeBasedGoal(goal)
+
+  const [hasAddedTargetMinutes, setHasAddedTargetMinutes] = useState(false)
+  const [hasAddedExtraMinutes, setHasAddedExtraMinutes] = useState(false)
+  const [extraMinutesToAdd, setExtraMinutesToAdd] = useState(extraMinutes + targetMinutes)
+
+  return (
+    <div className={classNames.UpdateActiveGoal}>
+      <Column gap="5px">
+        <Centered>
+          <h3>Update {goal.title}</h3>
+        </Centered>
+        <Centered>
+          {' '}
+          <div>(so far today: {getTodaysProgress(goal)} minutes)</div>
+        </Centered>
+
+        <Row>
+          <BasicButton
+            buttonProps={{
+              onClick: () => {
+                setHasAddedTargetMinutes(true)
+                setExtraMinutesToAdd(extraMinutes)
+                addMinutes(targetMinutes)
+              },
+              disabled: hasAddedTargetMinutes,
+            }}
+          >
+            {`Add ${targetMinutes} minutes to today's goal`}
+          </BasicButton>
+          {extraMinutes > 0 && (
+            <BasicButton
+              buttonProps={{
+                onClick: () => {
+                  setHasAddedTargetMinutes(true)
+                  setHasAddedExtraMinutes(true)
+                  addMinutes(extraMinutesToAdd)
+                },
+                disabled: hasAddedExtraMinutes,
+              }}
+            >
+              {`Add ${extraMinutesToAdd} minutes to today's goal`}
+            </BasicButton>
+          )}
+        </Row>
+      </Column>
+    </div>
+  )
+}
+
+export const Timer_Finished = ({
   targetTime,
   onReset,
   onRepeat,
+  activeGoal,
 }: {
   targetTime: number
   onReset: () => void
   onRepeat: () => void
+  activeGoal?: Goal | null
 }) => {
-  const {  seconds, minutes, } = useStopwatch({
+  const { seconds, minutes } = useStopwatch({
     autoStart: true,
   })
 
@@ -130,30 +202,24 @@ const Timer_Finished = ({
             </Row>
 
             <Row>
-              <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
-                {`Add ${secondsToMinutes(targetTime)} minutes to today's goal`}
-              </BasicButton>
-              {minutes > 0 && (
-                <BasicButton buttonProps={{ onClick: () => window.alert('Not yet implemented.') }}>
-                  {`Add ${secondsToMinutes(targetTime) + minutes} minutes to today's goal`}
-                </BasicButton>
-              )}
-            </Row>
-            <Row>
               <BasicButton buttonProps={{ onClick: onRepeat }}>Repeat</BasicButton>
               <BasicButton buttonProps={{ onClick: onReset }}>New target</BasicButton>
             </Row>
           </Column>
         </div>
       </Row>
+      {activeGoal && (
+        <UpdateActiveGoal goal={activeGoal} targetMinutes={secondsToMinutes(targetTime)} extraMinutes={minutes} />
+      )}
     </div>
   )
 }
 
 export const Timer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
-  const [timerState, setTimerState] = useState('initial')
+  const [timerState, setTimerState] = useState('finished')
   const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
+  const { goal } = useActiveTimeBasedGoal()
 
   return (
     <>
@@ -170,6 +236,7 @@ export const Timer = () => {
         <h3>Upcoming changes:</h3>
         <ul style={{ paddingLeft: '20px' }}>
           <li>{"click to update today's progress"}</li>
+          <li>{'beautification'}</li>
         </ul>
       </div>
       {timerState === 'initial' && (
@@ -194,6 +261,7 @@ export const Timer = () => {
 
       {timerState === 'finished' && (
         <Timer_Finished
+          activeGoal={goal}
           targetTime={targetTime}
           onReset={() => setTimerState('initial')}
           onRepeat={() => setTimerState('inProgress')}
