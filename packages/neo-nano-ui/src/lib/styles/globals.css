@@ -21,6 +21,8 @@
   --background-colour: white;
   --background-colour-2: white;
   --background-colour-3: var(--grey-light);
+
+  --background-colour-secondary: #d1b1ec66;
   --text-colour: black;
   --text-colour-2: var(--grey-dark);
 

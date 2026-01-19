@@ -15,6 +15,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 // where the icons flash from a very large icon down to a properly sized one:
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import Providers from './providers'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
     images: [{ url: 'https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/opengraph-image.png' }],
   },
 }
+
 
 export default async function RootLayout({
   children,
@@ -46,10 +48,12 @@ export default async function RootLayout({
           <NavBar />
           <main>{children}</main>
         </ModalContextProvider>
+        <ReactQueryDevtools/>
         </HydrationBoundary>
         </Providers>
         <SpeedInsights />
         <Analytics />
+ 
       </body>
     </html>
   )

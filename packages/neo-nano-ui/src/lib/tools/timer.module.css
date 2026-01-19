@@ -1,0 +1,13 @@
+.UpdateActiveGoal {
+
+    margin:  32px 16px ;
+    padding: 24px 16px ;
+    background-color: var(--background-colour-secondary);
+    box-shadow: var(--shadow-1);
+    border-radius: 4px;
+    h3 {
+        padding: 0
+    }
+
+  
+}
