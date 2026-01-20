@@ -112,16 +112,18 @@ const UpdateActiveGoal = ({
   goal,
   targetMinutes,
   extraMinutes,
+  pauseTimer
 }: {
   goal: Goal
   targetMinutes: number
   extraMinutes: number
+  pauseTimer: () => void
 }) => {
   const { addMinutes } = useUpdateActiveTimeBasedGoal(goal)
 
   const [hasAddedTargetMinutes, setHasAddedTargetMinutes] = useState(false)
   const [hasAddedExtraMinutes, setHasAddedExtraMinutes] = useState(false)
-  const [extraMinutesToAdd, setExtraMinutesToAdd] = useState(extraMinutes + targetMinutes)
+  const extraMinutesToAdd = hasAddedTargetMinutes ? extraMinutes : extraMinutes + targetMinutes 
 
   return (
     <div className={classNames.UpdateActiveGoal}>
@@ -139,7 +141,6 @@ const UpdateActiveGoal = ({
             buttonProps={{
               onClick: () => {
                 setHasAddedTargetMinutes(true)
-                setExtraMinutesToAdd(extraMinutes)
                 addMinutes(targetMinutes)
               },
               disabled: hasAddedTargetMinutes,
@@ -151,9 +152,11 @@ const UpdateActiveGoal = ({
             <BasicButton
               buttonProps={{
                 onClick: () => {
+                  pauseTimer()
+                  addMinutes(extraMinutesToAdd)
                   setHasAddedTargetMinutes(true)
                   setHasAddedExtraMinutes(true)
-                  addMinutes(extraMinutesToAdd)
+                
                 },
                 disabled: hasAddedExtraMinutes,
               }}
@@ -178,7 +181,7 @@ export const Timer_Finished = ({
   onRepeat: () => void
   activeGoal?: Goal | null
 }) => {
-  const { seconds, minutes } = useStopwatch({
+  const { seconds, minutes, pause } = useStopwatch({
     autoStart: true,
   })
 
@@ -209,7 +212,7 @@ export const Timer_Finished = ({
         </div>
       </Row>
       {activeGoal && (
-        <UpdateActiveGoal goal={activeGoal} targetMinutes={secondsToMinutes(targetTime)} extraMinutes={minutes} />
+        <UpdateActiveGoal pauseTimer={pause} goal={activeGoal} targetMinutes={secondsToMinutes(targetTime)} extraMinutes={minutes} />
       )}
     </div>
   )
@@ -217,7 +220,7 @@ export const Timer_Finished = ({
 
 export const Timer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
-  const [timerState, setTimerState] = useState('finished')
+  const [timerState, setTimerState] = useState('initial')
   const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
   const { goal } = useActiveTimeBasedGoal()
 
