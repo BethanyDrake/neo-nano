@@ -2,8 +2,6 @@
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
-import { faTools } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -108,6 +106,8 @@ const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'start
   return records[challengeDay] ?? 0
 }
 
+const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes> 1 ? 's' : ''}`
+
 const UpdateActiveGoal = ({
   goal,
   targetMinutes,
@@ -146,7 +146,7 @@ const UpdateActiveGoal = ({
               disabled: hasAddedTargetMinutes,
             }}
           >
-            {`Add ${targetMinutes} minutes to today's goal`}
+            {formatAddMinutesText(targetMinutes)}
           </BasicButton>
           {extraMinutes > 0 && (
             <BasicButton
@@ -161,7 +161,7 @@ const UpdateActiveGoal = ({
                 disabled: hasAddedExtraMinutes,
               }}
             >
-              {`Add ${extraMinutesToAdd} minutes to today's goal`}
+              {formatAddMinutesText(extraMinutesToAdd)}
             </BasicButton>
           )}
         </Row>
@@ -226,22 +226,6 @@ export const Timer = () => {
 
   return (
     <>
-      <div style={{ backgroundColor: 'var(--secondary-light)', padding: '10px 20px' }}>
-        <Centered>
-          <h2>
-            <FontAwesomeIcon icon={faTools} /> In Progress <FontAwesomeIcon icon={faTools} />
-          </h2>
-        </Centered>
-        <p>
-          This tool is under development. Feel free to try it out, but it may not work very well! Expect frequent
-          tweaks.
-        </p>
-        <h3>Upcoming changes:</h3>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li>{"click to update today's progress"}</li>
-          <li>{'beautification'}</li>
-        </ul>
-      </div>
       {timerState === 'initial' && (
         <Timer_Initial
           startTimer={(durationSeconds) => {

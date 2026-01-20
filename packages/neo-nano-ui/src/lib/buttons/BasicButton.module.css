@@ -12,6 +12,7 @@
     min-width: 100px;
   }
 
+  &:enabled {
     &:hover {
         box-shadow: var(--shadow-2); 
     }
@@ -36,4 +37,9 @@
     &.angry:active {
         background-color: var(--angry-light);
     }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
