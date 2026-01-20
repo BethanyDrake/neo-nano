@@ -42,7 +42,7 @@ describe('timer', () => {
         />,
         { wrapper: Wrapper },
       )
-      expect(getByRole('button', { name: "Add 10 minutes to today's goal" })).toBeInTheDocument()
+      expect(getByRole('button', { name: "+10 minutes" })).toBeInTheDocument()
       expect(getAllByRole('button')).toHaveLength(3)
     })
 
@@ -58,7 +58,7 @@ describe('timer', () => {
         />,
         { wrapper: Wrapper },
       )
-      expect(getByRole('button', { name: "Add 15 minutes to today's goal" })).toBeInTheDocument()
+      expect(getByRole('button', { name: "+15 minutes" })).toBeInTheDocument()
       expect(getAllByRole('button')).toHaveLength(4)
     })
   })

@@ -3,6 +3,7 @@ import { ChallengeCountDown } from '@/lib/landingPage/ChallengeCountDown'
 import { GetStartedSection } from '@/lib/landingPage/GetStartedSection'
 import styles from '@/lib/landingPage/page.module.css'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
+import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { TextLinePlaceHolder } from '@/lib/layoutElements/Placeholders'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faBullseye, faChartLine, faComment, faScissors, faTrophy } from '@fortawesome/free-solid-svg-icons'
@@ -56,18 +57,9 @@ const FeaturesSection = () => {
   )
 }
 
-
 export default function Home() {
   return (
-    <div
-      className={styles.background}
-      style={{
-        backgroundImage: 'url(https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/bookcase-small.jpg)',
-        backgroundSize: '1000px',
-      }}
-    >
-      <div className={styles.main}>
-        <div style={{ maxWidth: '100vw', padding: '16px' }}>
+     <GutteredPage>
           <div style={{ textAlign: 'center', minHeight: '75px' }}>
                     <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
                       <FontAwesomeIcon icon={faScissors} />
@@ -117,8 +109,6 @@ export default function Home() {
             <FeaturesSection />
    
           </Column>
-        </div>
-      </div>
-    </div>
+    </GutteredPage>
   )
 }

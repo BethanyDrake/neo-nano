@@ -4,8 +4,13 @@
   background-color: var(--background-colour);
   padding: 5em;
   padding-top: 0;
-  border-left: 2px solid var(--off-black);
-  border-right: 2px solid var(--off-black);
+  border-left: 2px solid var(--primary-dark);
+  border-right: 2px solid var(--primary-dark);
+
+  border-color: var(--primary-dark);
+   @media (prefers-color-scheme: dark) {
+     border-color: var(--background-colour-2);
+  }
 
   @media (width<500px) {
     width: 100%;
