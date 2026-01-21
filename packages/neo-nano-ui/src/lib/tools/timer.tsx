@@ -1,7 +1,7 @@
 'use client'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
-import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
+import { Centered, Column, LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -31,16 +31,16 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         />
 
         <form
-          className={formClasses.form}
+          className={[formClasses.form, classNames.content].join(' ')}
           onSubmit={handleSubmit(({ minutes }) => {
             startTimer(minutesToSeconds(minutes))
           })}
         >
           <Column>
-            <Row alignItems="baseline">
+            <LeftRow alignItems="baseline">
               <input type="number" id="time" placeholder="20" {...register('minutes', { required: true })} />
               <label htmlFor="time">minutes</label>
-            </Row>
+            </LeftRow>
             <BasicButton>Start</BasicButton>
           </Column>
         </form>
@@ -74,7 +74,7 @@ const Timer_InProgress = ({
       <Centered>
         <h1>The clock is ticking...</h1>
       </Centered>
-      <Row>
+      <LeftRow style={{flexGrow: 1}}>
         <Image
           alt="clock"
           width={100}
@@ -93,8 +93,8 @@ const Timer_InProgress = ({
             </Row>
           </Column>
         </div>
-      </Row>
-    </div>
+      </LeftRow>
+      </div>
   )
 }
 
@@ -224,7 +224,7 @@ export const Timer = () => {
   const { goal } = useActiveTimeBasedGoal()
 
   return (
-    <>
+    <div className={classNames.Timer}>
       {timerState === 'initial' && (
         <Timer_Initial
           startTimer={(durationSeconds) => {
@@ -253,6 +253,6 @@ export const Timer = () => {
           onRepeat={() => setTimerState('inProgress')}
         />
       )}
-    </>
+    </div>
   )
 }
