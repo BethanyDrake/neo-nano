@@ -35,7 +35,7 @@ test('start a 5 minute timer, then cancel it', async () => {
   describe('Timer_Finished', () => {
     test('no active goal', () => {
       // @ts-expect-error test
-      jest.mocked(useStopwatch).mockReturnValue({ minutes: 0 })
+      jest.mocked(useStopwatch).mockReturnValue({ minutes: 0 , isRunning: true})
       const { getAllByRole, getByRole } = render(
         <Timer_Finished targetTime={0} onReset={jest.fn()} onRepeat={jest.fn()} />,
         { wrapper: Wrapper },
@@ -43,7 +43,8 @@ test('start a 5 minute timer, then cancel it', async () => {
 
       expect(getByRole('button', { name: 'Repeat' })).toBeInTheDocument()
       expect(getByRole('button', { name: 'New target' })).toBeInTheDocument()
-      expect(getAllByRole('button')).toHaveLength(2)
+       expect(getByRole('button', { name: 'pause' })).toBeInTheDocument()
+      expect(getAllByRole('button')).toHaveLength(3)
     })
 
     test('add target time to active goal', () => {
@@ -59,7 +60,7 @@ test('start a 5 minute timer, then cancel it', async () => {
         { wrapper: Wrapper },
       )
       expect(getByRole('button', { name: "+10 minutes" })).toBeInTheDocument()
-      expect(getAllByRole('button')).toHaveLength(3)
+      expect(getAllByRole('button')).toHaveLength(4)
     })
 
     test('add extra time to active goal', () => {
@@ -75,7 +76,7 @@ test('start a 5 minute timer, then cancel it', async () => {
         { wrapper: Wrapper },
       )
       expect(getByRole('button', { name: "+15 minutes" })).toBeInTheDocument()
-      expect(getAllByRole('button')).toHaveLength(4)
+      expect(getAllByRole('button')).toHaveLength(5)
     })
   })
 })

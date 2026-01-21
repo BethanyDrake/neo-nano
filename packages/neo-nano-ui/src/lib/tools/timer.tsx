@@ -13,6 +13,7 @@ import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiv
 import { getDateAsString } from '../misc'
 import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
 import classNames from './timer.module.css'
+import { PausePlayToggle } from './PausePlayToggle'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -83,13 +84,11 @@ const Timer_InProgress = ({
 
         <div>
           <Column>
-            <Row alignItems="baseline">
-              {minutes}m {seconds}s
+            <Row alignItems='center'>
+              <div>{minutes}m {seconds}s</div>
+              <PausePlayToggle pause={pause} resume={resume} isRunning={isRunning}/>
             </Row>
             <Row>
-              <BasicButton buttonProps={{ onClick: isRunning ? pause : resume }}>
-                {isRunning ? 'Pause' : 'Continue'}
-              </BasicButton>{' '}
               <BasicButton buttonProps={{ onClick: onCancel }}>Cancel</BasicButton>
             </Row>
           </Column>
@@ -180,7 +179,7 @@ export const Timer_Finished = ({
   onRepeat: () => void
   activeGoal?: Goal | null
 }) => {
-  const { seconds, minutes, pause } = useStopwatch({
+  const { seconds, minutes, pause, start, isRunning} = useStopwatch({
     autoStart: true,
   })
 
@@ -200,7 +199,8 @@ export const Timer_Finished = ({
         <div>
           <Column>
             <Row alignItems="baseline">
-              +{minutes}m {seconds}s
+              <div>+{minutes}m {seconds}s</div>
+              <PausePlayToggle pause={pause} resume={start} isRunning={isRunning}/>
             </Row>
 
             <Row>
