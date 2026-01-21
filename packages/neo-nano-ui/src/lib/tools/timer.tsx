@@ -32,7 +32,6 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         <form
           className={formClasses.form}
           onSubmit={handleSubmit(({ minutes }) => {
-            console.log('submit', minutes)
             startTimer(minutesToSeconds(minutes))
           })}
         >

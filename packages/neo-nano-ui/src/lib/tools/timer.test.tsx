@@ -1,13 +1,14 @@
-import { render } from '@testing-library/react'
-import { Timer_Finished } from './timer'
+import { fireEvent, render } from '@testing-library/react'
+import { Timer, Timer_Finished } from './timer'
 import { buildGoal } from '../types/forum.builders'
-import { useStopwatch } from 'react-timer-hook'
+import { useStopwatch, useTimer } from 'react-timer-hook'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { mock } from 'jest-mock-extended'
 import { PropsWithChildren } from 'react'
 jest.mock('./useActiveTimeBasedGoal', () => ({
   useUpdateActiveTimeBasedGoal: () => ({ addMinutes: jest.fn() }),
+  useActiveTimeBasedGoal: () => ({ })
 }))
 jest.mock('react-timer-hook')
 
@@ -16,7 +17,22 @@ const Wrapper = ({ children }: PropsWithChildren) => (
 )
 
 describe('timer', () => {
-  describe('finished state', () => {
+test('start a 5 minute timer, then cancel it', async () => {
+  // @ts-expect-error test
+  jest.mocked(useTimer).mockReturnValue({minutes: 5, seconds: 30})
+  const {getByRole, findByText, getByText} = render(<Timer/>)
+
+  expect(getByText('Start a timer')).toBeInTheDocument()
+  const input = getByRole('spinbutton', {name: 'minutes'})
+  fireEvent.input(input,{target: {value: 5}} )
+  fireEvent.click(getByRole('button', {name: 'Start'}))
+  expect(await findByText('The clock is ticking...')).toBeInTheDocument()
+  expect(getByText('5m 30s')).toBeInTheDocument()
+  fireEvent.click(getByRole('button', {name: 'Cancel'}))
+  expect(getByText('Start a timer')).toBeInTheDocument()
+})
+
+  describe('Timer_Finished', () => {
     test('no active goal', () => {
       // @ts-expect-error test
       jest.mocked(useStopwatch).mockReturnValue({ minutes: 0 })
