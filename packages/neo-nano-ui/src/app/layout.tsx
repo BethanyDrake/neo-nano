@@ -10,6 +10,7 @@ import {
 } from '@tanstack/react-query'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import navBarStyles from '@/lib/navbar/NavBar.module.css'
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -46,7 +47,9 @@ export default async function RootLayout({
         <NavBar/>
         <ModalContextProvider>
           <NavBar />
-          <main>{children}</main>
+          <div className={navBarStyles.belowNav}>
+          {children}
+          </div>
         </ModalContextProvider>
         <ReactQueryDevtools/>
         </HydrationBoundary>

@@ -20,9 +20,9 @@ export const GutteredPage = ({ children }: PropsWithChildren) => {
     <div className={styles.background}>
       <Background />
 
-      <div className={styles.main}>
-        <div style={{ maxWidth: '100vw', padding: '16px' }}>{children}</div>
-      </div>
+      <main className={styles.main}>
+        <div>{children}</div>
+      </main>
     </div>
   )
 }

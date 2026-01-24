@@ -4,7 +4,7 @@
   max-width: 1000px;
   background-color: var(--background-colour);
   padding: 5em;
-  padding-top: 0;
+  padding-top: 2em;
   border-left: 2px solid var(--primary-dark);
   border-right: 2px solid var(--primary-dark);
   border-bottom: 24px solid var(--primary-dark);

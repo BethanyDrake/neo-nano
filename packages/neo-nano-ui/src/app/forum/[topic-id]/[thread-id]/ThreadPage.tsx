@@ -8,12 +8,12 @@ import { ExpandableAddCommentForm } from '@/lib/expandableForms/AddCommentForm'
 import { Category, Thread, Topic } from '@/lib/types/forum.types'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
-import styles from '@/lib/styles/forum.module.css'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import enUS from 'rc-pagination/lib/locale/en_US'
+import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 
 export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic: Topic; category: Category }) => {
   const breadcrumbItems = [
@@ -26,7 +26,7 @@ export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic:
 
   const { commentsData, onPageChange, currentPage, totalComments, isLoading } = useThreadContext()
   return (
-    <div className={styles['forum-container']}>
+    <FullWidthPage>
       <Column>
         <Row justifyContent="space-between">
           <Breadcrumbs breadcrumbItems={breadcrumbItems} />
@@ -63,6 +63,6 @@ export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic:
           </Link>
         )}
       </Column>
-    </div>
+    </FullWidthPage>
   )
 }

@@ -64,11 +64,6 @@ a {
   }
 }
 
-main {
-  padding-top: var( --nav-bar-height);
-  min-width: 100vw;
-}
-
 p {
   line-height: 1.4em;
 }

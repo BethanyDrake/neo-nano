@@ -6,6 +6,7 @@ import { useProfileContext } from '@/lib/context/ProfileContext'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
 import { SuggestNextGoal } from '@/lib/goalTracker/SuggestNextGoal'
 import { Row } from '@/lib/layoutElements/flexLayouts'
+import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
@@ -26,7 +27,7 @@ export const ProfilePageInner = () => {
   useRequireLogin()
 
   return (
-    <div style={{ padding: '24px' }}>
+    <FullWidthPage>
       <Row alignItems="center">
         <h1>My Profile</h1> <EditProfileModal /> <SettingsModal />
       </Row>
@@ -60,6 +61,6 @@ export const ProfilePageInner = () => {
       ))}
 
       <NewAwardModal />
-    </div>
+    </FullWidthPage>
   )
 }

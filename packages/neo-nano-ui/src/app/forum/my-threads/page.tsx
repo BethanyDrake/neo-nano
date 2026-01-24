@@ -1,17 +1,17 @@
 import { ThreadCard } from '@/lib/ThreadCard'
-import styles from '@/lib/styles/forum.module.css'
 import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { getMyThreads } from '@/lib/serverFunctions/forum/getMyThreads'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import Link from 'next/link'
+import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 
 export default async function Page() {
   const myThreads = await getMyThreads()
   const breadcrumbItems = [{ href: '/forum', text: 'Forum' }, { text: 'My Threads' }]
 
   return (
-    <div className={styles['forum-container']}>
+    <FullWidthPage>
       <Column>
         {' '}
         <Breadcrumbs breadcrumbItems={breadcrumbItems} />
@@ -31,6 +31,6 @@ export default async function Page() {
           <ThreadCard key={thread.id} thread={thread} topicId={thread.topic} />
         ))}
       </Column>
-    </div>
+    </FullWidthPage>
   )
 }
