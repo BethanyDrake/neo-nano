@@ -1,7 +1,7 @@
 'use client'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
-import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
+import { Centered, Column, LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -13,6 +13,7 @@ import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiv
 import { getDateAsString } from '../misc'
 import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
 import classNames from './timer.module.css'
+import { PausePlayToggle } from './PausePlayToggle'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -30,17 +31,16 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         />
 
         <form
-          className={formClasses.form}
+          className={[formClasses.form, classNames.content].join(' ')}
           onSubmit={handleSubmit(({ minutes }) => {
-            console.log('submit', minutes)
             startTimer(minutesToSeconds(minutes))
           })}
         >
           <Column>
-            <Row alignItems="baseline">
+            <LeftRow alignItems="baseline">
               <input type="number" id="time" placeholder="20" {...register('minutes', { required: true })} />
               <label htmlFor="time">minutes</label>
-            </Row>
+            </LeftRow>
             <BasicButton>Start</BasicButton>
           </Column>
         </form>
@@ -74,7 +74,7 @@ const Timer_InProgress = ({
       <Centered>
         <h1>The clock is ticking...</h1>
       </Centered>
-      <Row>
+      <LeftRow style={{flexGrow: 1}}>
         <Image
           alt="clock"
           width={100}
@@ -84,19 +84,17 @@ const Timer_InProgress = ({
 
         <div>
           <Column>
-            <Row alignItems="baseline">
-              {minutes}m {seconds}s
+            <Row alignItems='center'>
+              <div>{minutes}m {seconds}s</div>
+              <PausePlayToggle pause={pause} resume={resume} isRunning={isRunning}/>
             </Row>
             <Row>
-              <BasicButton buttonProps={{ onClick: isRunning ? pause : resume }}>
-                {isRunning ? 'Pause' : 'Continue'}
-              </BasicButton>{' '}
               <BasicButton buttonProps={{ onClick: onCancel }}>Cancel</BasicButton>
             </Row>
           </Column>
         </div>
-      </Row>
-    </div>
+      </LeftRow>
+      </div>
   )
 }
 
@@ -181,7 +179,7 @@ export const Timer_Finished = ({
   onRepeat: () => void
   activeGoal?: Goal | null
 }) => {
-  const { seconds, minutes, pause } = useStopwatch({
+  const { seconds, minutes, pause, start, isRunning} = useStopwatch({
     autoStart: true,
   })
 
@@ -201,7 +199,8 @@ export const Timer_Finished = ({
         <div>
           <Column>
             <Row alignItems="baseline">
-              +{minutes}m {seconds}s
+              <div>+{minutes}m {seconds}s</div>
+              <PausePlayToggle pause={pause} resume={start} isRunning={isRunning}/>
             </Row>
 
             <Row>
@@ -225,7 +224,7 @@ export const Timer = () => {
   const { goal } = useActiveTimeBasedGoal()
 
   return (
-    <>
+    <div className={classNames.Timer}>
       {timerState === 'initial' && (
         <Timer_Initial
           startTimer={(durationSeconds) => {
@@ -254,6 +253,6 @@ export const Timer = () => {
           onRepeat={() => setTimerState('inProgress')}
         />
       )}
-    </>
+    </div>
   )
 }

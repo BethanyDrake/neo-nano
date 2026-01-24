@@ -9,3 +9,30 @@
         padding: 0
     }
 }
+
+.PausePlayToggle {
+    background-color: unset;
+    border: unset;
+    padding: 3px;
+    color: var( --primary-vibrant);
+
+}
+
+.Timer {
+    width: 100%;
+    max-width: 500px;
+
+    input {
+        width: 3em;
+    }
+
+    h1 {
+        padding-bottom: 16px;
+        text-align: center;
+        font-size: x-large;
+    }
+
+    .content {
+        flex-grow: 1;
+    }
+}
