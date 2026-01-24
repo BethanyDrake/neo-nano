@@ -6,7 +6,9 @@ import { ModalContextProvider } from '@/lib/modals/ModalContext'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { GoogleTagManager } from '@next/third-parties/google'
 import {
-  HydrationBoundary
+  dehydrate,
+  HydrationBoundary,
+  QueryClient
 } from '@tanstack/react-query'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -37,13 +39,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+      const queryClient = new QueryClient()
   return (
     <html lang="en">
       <GoogleTagManager gtmId="GTM-KRXL28V4" />
 
       <body>
         <Providers>
-        <HydrationBoundary state={null}>
+        <HydrationBoundary state={dehydrate(queryClient)}>
         <NavBar/>
         <ModalContextProvider>
           <NavBar />
