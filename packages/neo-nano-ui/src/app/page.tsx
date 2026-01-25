@@ -55,60 +55,70 @@ const FeaturesSection = () => {
       />
     </Row>
   )
+
 }
 
 export default function Home() {
   return (
-     <GutteredPage>
-          <div style={{ textAlign: 'center', minHeight: '75px' }}>
-                    <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
-                      <FontAwesomeIcon icon={faScissors} />
-                      The 80 Hour Edit
-                      <FontAwesomeIcon icon={faScissors} flip="horizontal" />
-                    </h1>
-                    
-            <ClientSideOnly fallback={<TextLinePlaceHolder />}>
-              <ChallengeCountDown />
-            </ClientSideOnly>
-           
-            <Image
-              fetchPriority="high"
-              loading="eager"
-              alt="Novel November"
-              width={300}
-              height={300}
-              src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/logo-v4.png"
-            />
-          </div>
+    <GutteredPage>
+      <div style={{ textAlign: 'center', minHeight: '75px' }}>
+        <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
+          <FontAwesomeIcon icon={faScissors} />
+          The 80 Hour Edit
+          <FontAwesomeIcon icon={faScissors} flip="horizontal" />
+        </h1>
 
-            <details><summary><h2>{"What's Novel November?"}</h2></summary>
-            <h3>History:</h3>
-            <p>{"Previously, 'National Novel Writing Month' (NaNoWriMo) was a world-wide writing challenge run by a non-profit organisation. The official website and forums shut down in March 2025, but the challenge lives on."}</p>
-            <h3>The Challenge:</h3>
-            <ul>
-              <li>50,000 words</li>
-              <li>30 days, starting November 1st</li>
-              <li>A full, completed draft of a new novel</li>
-              <li>No editing, no second guessing, no hesitation.</li>
-            </ul>
-            </details>
+        <ClientSideOnly fallback={<TextLinePlaceHolder />}>
+          <ChallengeCountDown />
+        </ClientSideOnly>
 
-                     <details><summary><h2>{"What's the 80 Hour Edit?"}</h2></summary>
-            <h3>Premise:</h3>
-            <p>{"If you wrote a novel this November, then you might want to spend some time editing in the new year."}</p>
-            <p>{"Fix the major plotholes, rename the main character, and reduce the typos to a respectable number."}</p>
-             <h3>The Challenge:</h3>
-            <ul>
-              <li>80 hours</li>
-              <li>60 days, starting January 1st</li>
-              <li>Be focused. Be ruthless. Get it ready for the world.</li>
-            </ul>
-            </details>
-           <GetStartedSection />
-          <Column>
-            <FeaturesSection />
-   
-          </Column>
+        <Image
+          fetchPriority="high"
+          loading="eager"
+          alt="Novel November"
+          width={300}
+          height={300}
+          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/logo-v4.png"
+        />
+      </div>
+
+      <details>
+        <summary>
+          <h2>{"What's Novel November?"}</h2>
+        </summary>
+        <h3>History:</h3>
+        <p>
+          {
+            "Previously, 'National Novel Writing Month' (NaNoWriMo) was a world-wide writing challenge run by a non-profit organisation. The official website and forums shut down in March 2025, but the challenge lives on."
+          }
+        </p>
+        <h3>The Challenge:</h3>
+        <ul>
+          <li>50,000 words</li>
+          <li>30 days, starting November 1st</li>
+          <li>A full, completed draft of a new novel</li>
+          <li>No editing, no second guessing, no hesitation.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>
+          <h2>{"What's the 80 Hour Edit?"}</h2>
+        </summary>
+        <h3>Premise:</h3>
+        <p>{'If you wrote a novel this November, then you might want to spend some time editing in the new year.'}</p>
+        <p>{'Fix the major plotholes, rename the main character, and reduce the typos to a respectable number.'}</p>
+        <h3>The Challenge:</h3>
+        <ul>
+          <li>80 hours</li>
+          <li>60 days, starting January 1st</li>
+          <li>Be focused. Be ruthless. Get it ready for the world.</li>
+        </ul>
+      </details>
+      <GetStartedSection />
+      <Column>
+        <FeaturesSection />
+      </Column>
     </GutteredPage>
   )
 }
