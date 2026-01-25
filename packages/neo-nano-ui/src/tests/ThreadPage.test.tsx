@@ -2,12 +2,14 @@ import Page from '@/app/forum/[topic-id]/[thread-id]/page'
 import { buildThreadSummary } from '@/lib/types/forum.builders'
 import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWithComments'
 import { render } from '@testing-library/react'
+import { mockAuthState } from './utils/mockUseUser'
 
 jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
 jest.mock('@/lib/serverFunctions/forum/getThreadReactions', () => ({getThreadReactions: () => Promise.resolve({})}))
 
 describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {
+    mockAuthState('loggedOut')
     jest.mocked(getThreadWithComments).mockResolvedValue({
       totalComments: 1,
       commentCardDataEntries: [

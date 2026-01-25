@@ -7,9 +7,9 @@ import { Column, Row } from '../layoutElements/flexLayouts'
 import { ReportCommentModal } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
-import { useIsLoggedIn } from '../context/UserContext'
 import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
 import { useLayoutEffect, useRef, useState } from 'react'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,

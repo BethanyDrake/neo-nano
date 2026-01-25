@@ -3,12 +3,15 @@ import { auth0 } from '@/lib/auth0'
 import { getCurrentChallenge } from '@/lib/challenges'
 import { getMyGoals } from '@/lib/serverFunctions/goals/getMyGoals'
 import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
+import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
+import { getEmailPreferences } from '@/lib/serverFunctions/settings/getEmailPreferences'
 import { buildChallenge } from '@/lib/types/challenge.builders'
 import { SessionData } from '@auth0/nextjs-auth0/types'
 import { fireEvent, render, waitFor } from '@testing-library/react'
+import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
+  useSearchParams: jest.fn()
 }))
 
 jest.mock('@/lib/auth0', () => ({
@@ -21,17 +24,18 @@ jest.mock('@/lib/useRequireLogin')
 jest.mock('@/lib/goalTracker/UpdateWordCount')
 jest.mock('@/lib/serverFunctions/profile/getMyProfile')
 jest.mock('@/lib/serverFunctions/goals/getMyGoals')
-jest.mock('@/lib/serverFunctions/profile/getMyAwards', () => ({
-  getMyAwards: jest.fn().mockResolvedValue([]),
-}))
-
-jest.mock('@/lib/serverFunctions/settings/getEmailPreferences', () => ({
-  getEmailPreferences: jest.fn().mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
-}))
+jest.mock('@/lib/serverFunctions/profile/getMyAwards')
+jest.mock('@/lib/serverFunctions/settings/getEmailPreferences')
 
 jest.mock('@/lib/challenges')
 jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
 describe('<ProfilePage />', () => {
+
+  beforeEach(() => {
+    jest.mocked(getMyAwards).mockResolvedValue([])
+    jest.mocked(useSearchParams).mockReturnValue({get: jest.fn()} as unknown as ReadonlyURLSearchParams ) 
+    jest.mocked(getEmailPreferences).mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
+  })
   it('shows user details and goals', async () => {
     jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
     jest.mocked(getMyProfile).mockResolvedValue({

@@ -18,13 +18,11 @@ const getQueryKey = () => {
 
 export const useActiveTimeBasedGoal = () => {
 
-  const {isLoggedIn, isLoading: isUserLoading} =  useIsLoggedIn()
+  const isLoggedIn =  useIsLoggedIn()
   const today = getDateAsString(startOfToday())
   const queryKey = ['active-goal', 'time-based', today]
 
-  const shouldFetch = !isUserLoading && isLoggedIn
-
-  const {isLoading, data, error} = useQuery({ queryKey, queryFn: () => getActiveTimeBasedGoal(today), enabled: shouldFetch})
+  const {isLoading, data, error} = useQuery({ queryKey, queryFn: () => getActiveTimeBasedGoal(today), enabled: isLoggedIn})
   return {
     isLoading,
     goal: data,

@@ -3,7 +3,6 @@ import { Breadcrumbs } from '@/lib/Breadcrumbs'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { CommentCard } from '@/lib/commentCards/CommentCard'
 import { useThreadContext } from '@/lib/context/ThreadContext'
-import { useIsLoggedIn } from '@/lib/context/UserContext'
 import { ExpandableAddCommentForm } from '@/lib/expandableForms/AddCommentForm'
 import { Category, Thread, Topic } from '@/lib/types/forum.types'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
@@ -14,6 +13,7 @@ import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import enUS from 'rc-pagination/lib/locale/en_US'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
+import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 
 export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic: Topic; category: Category }) => {
   const breadcrumbItems = [

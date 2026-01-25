@@ -2,6 +2,7 @@ import '@testing-library/jest-dom'
 import 'whatwg-fetch';
 import { setupServer } from 'msw/node';
 
+jest.mock('@auth0/nextjs-auth0')
 jest.mock('@auth0/nextjs-auth0/server', () => ({
     Auth0Client: class { public getSession = jest.fn()}
 }))
