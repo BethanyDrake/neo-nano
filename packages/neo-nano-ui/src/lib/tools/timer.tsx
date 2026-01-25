@@ -4,7 +4,7 @@ import formClasses from '@/lib/expandableForms/form.module.css'
 import { Centered, Column, LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import useSound from 'use-sound'
@@ -14,6 +14,7 @@ import { getDateAsString } from '../misc'
 import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
 import classNames from './timer.module.css'
 import { PausePlayToggle } from './PausePlayToggle'
+import confetti from 'canvas-confetti'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -182,6 +183,13 @@ export const Timer_Finished = ({
   const { seconds, minutes, pause, start, isRunning} = useStopwatch({
     autoStart: true,
   })
+  useEffect(() => {
+   confetti({
+         disableForReducedMotion: true,
+         spread: 90,
+         colors: ['#C0E5C8', '#1ab394', '#6e1ab3', '#d8a9ffff'],
+       })
+  }, [])
 
   return (
     <div>
