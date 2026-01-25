@@ -1,9 +1,9 @@
 'use client'
+import { UserAward } from '@/lib/types/profile.types'
 import confetti from 'canvas-confetti'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { BasicButton } from '../buttons/BasicButton'
 import { Column } from '../layoutElements/flexLayouts'
-import { UserAward } from '@/lib/types/profile.types'
 import classNames from './awards.module.css'
 import { Trophy } from './Trophy'
 
@@ -52,14 +52,14 @@ export const NewAwardModal = () => {
     return null
   }
 
-  return (
-    <div className={classNames['modal-overlay']}>
+  return ( <>
       <div className={classNames.modal}>
         <Column>
           <Trophy award={award} />
           <BasicButton buttonProps={{ onClick: closeModal }}>Accept Trophy</BasicButton>
         </Column>
       </div>
-    </div>
+     <div onClick={closeModal} className={classNames['modal-overlay']}/>
+    </>
   )
 }
