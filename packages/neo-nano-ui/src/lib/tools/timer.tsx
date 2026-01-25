@@ -39,7 +39,7 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         >
           <Column>
             <LeftRow alignItems="baseline">
-              <input type="number" id="time" placeholder="20" {...register('minutes', { required: true })} />
+              <input type="number" min={0} id="time" placeholder="20" {...register('minutes', { required: true })} />
               <label htmlFor="time">minutes</label>
             </LeftRow>
             <BasicButton>Start</BasicButton>
