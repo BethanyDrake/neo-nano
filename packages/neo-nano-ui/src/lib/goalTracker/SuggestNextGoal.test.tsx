@@ -5,15 +5,16 @@ import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
 import { buildChallenge } from '../types/challenge.builders'
 import { render } from '@testing-library/react'
 import { useModalContext } from '@/lib/modals/ModalContext'
-import { mockAuthState } from '@/tests/utils/mockUseUser'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 
 jest.mock('@/lib/challenges')
 jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
 jest.mock('@/lib/modals/ModalContext')
+jest.mock('@/lib/hooks/useIsLoggedIn')
 describe('SuggestNextGoal', () => {
 
   beforeEach(() => {
-    mockAuthState('loggedIn')
+    jest.mocked(useIsLoggedIn).mockReturnValue(true)
     jest.mocked(useModalContext).mockReturnValue({
       setOpenModal: jest.fn(),
       openModal: null,

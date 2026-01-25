@@ -1,7 +1,16 @@
-import { useUser } from "@auth0/nextjs-auth0";
+'use client'
+import { SessionData } from "@auth0/nextjs-auth0/types";
+import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 
-export const useIsLoggedIn = () => {
-  const {user} = useUser() 
+export const AuthContext = createContext<{isLoggedIn: boolean}>({isLoggedIn: false})
 
-  return !!user
+export const useIsLoggedIn = () => useContext(AuthContext).isLoggedIn
+
+export const AuthContextProvider = ({
+  session,
+  children,
+}: PropsWithChildren & {session: SessionData | null}) => {
+ 
+  const value = useMemo(() => ({isLoggedIn: !!session}), [session])
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -1,16 +1,16 @@
 import { flagComment } from '@/lib/serverFunctions/moderation/flagComment'
 import { Flag } from '@/lib/types/forum.types'
-import { mockAuthState } from '@/tests/utils/mockUseUser'
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { ModalContextProvider } from '../modals/ModalContext'
 import { CommentCard } from './CommentCard'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 
 jest.mock('@/lib/serverFunctions/moderation/flagComment')
 jest.mock('@/lib/context/UserContext')
+jest.mock('@/lib/hooks/useIsLoggedIn')
 
 describe('<CommentCard />', () => {
   test('no flags', async () => {
-    mockAuthState('loggedOut')
     const { findByText } = render(
       <CommentCard
         comment={{ id: '1', text: 'Plain text', richText: '<p>some rich text</p>', createdAt: new Date() }}
@@ -23,7 +23,6 @@ describe('<CommentCard />', () => {
   })
 
   test('flagged comment, no reviews', async () => {
-    mockAuthState('loggedOut')
     const flag: Flag = {
       id: '1',
       reason: 'harrassment',
@@ -48,7 +47,6 @@ describe('<CommentCard />', () => {
   })
 
   test('flagged comment, overruled by moderator', async () => {
-    mockAuthState('loggedOut')
     const flag: Flag = {
       id: '1',
       reason: 'harrassment',
@@ -69,7 +67,6 @@ describe('<CommentCard />', () => {
   })
 
   test('flagged comment, confirmed by moderator', async () => {
-    mockAuthState( 'loggedOut')
     const flag: Flag = {
       id: '1',
       reason: 'harrassment',
@@ -92,7 +89,7 @@ describe('<CommentCard />', () => {
   })
 
   test('flag a comment as inappropriate', async () => {
-    mockAuthState('loggedIn')
+   jest.mocked(useIsLoggedIn).mockReturnValue(true)
     const { getByRole } = render(
       <CommentCard
         comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}

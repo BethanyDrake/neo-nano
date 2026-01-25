@@ -10,7 +10,7 @@ import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 import { useRouter } from 'next/navigation'
 import { DotiContainer } from '../layoutElements/dotiContainer'
-import { useUser } from '@auth0/nextjs-auth0'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 
 const getChallengeToJoin = () => {
   const currentChallenge = getCurrentChallenge()
@@ -35,12 +35,12 @@ const JoinChallengeButton = () => {
 }
 
 const ActionButtons = () => {
-  const {user, isLoading: isUserLoading} = useUser()
+  const isLoggedIn = useIsLoggedIn()
   const { hasActiveOrUpcomingGoal, isLoading: hasActiveGoalLoading } = useHasActiveOrUpcomingGoal()
 
-  if (isUserLoading || hasActiveGoalLoading) return null
+  if (hasActiveGoalLoading) return null
 
-  if (!user) {
+  if (!isLoggedIn) {
     return (
       <Column>
         <Row>

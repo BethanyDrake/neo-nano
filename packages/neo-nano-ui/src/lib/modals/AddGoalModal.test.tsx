@@ -4,17 +4,18 @@ import { AddGoalModal } from './AddGoalModal'
 import { ModalContextProvider } from './ModalContext'
 import {  ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { getCurrentChallenge } from '../challenges'
-import { mockAuthState } from '@/tests/utils/mockUseUser'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
 }))
 jest.mock('../serverFunctions/goals/createGoal')
 
 jest.mock('../challenges')
+jest.mock('@/lib/hooks/useIsLoggedIn')
 
 describe('AddGoalModal', () => {
   beforeEach(() => {
-    mockAuthState('loggedIn')
+    jest.mocked(useIsLoggedIn).mockReturnValue(true)
     jest.mocked(useSearchParams).mockReturnValue({get: jest.fn()} as unknown as ReadonlyURLSearchParams ) 
   })
   test('add default goal', async () => {

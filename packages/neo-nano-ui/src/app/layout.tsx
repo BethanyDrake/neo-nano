@@ -14,6 +14,8 @@ import navBarStyles from '@/lib/navbar/NavBar.module.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import ReactQueryProvider from './providers'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { auth0 } from '@/lib/auth0'
+import { AuthContextProvider } from '@/lib/hooks/useIsLoggedIn'
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
@@ -28,30 +30,29 @@ export const metadata: Metadata = {
   },
 }
 
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await auth0.getSession()
+
   return (
     <html lang="en">
       <GoogleTagManager gtmId="GTM-KRXL28V4" />
-
       <body>
-        <ReactQueryProvider>
-        <NavBar/>
-        <ModalContextProvider>
-          <NavBar />
-          <div className={navBarStyles.belowNav}>
-          {children}
-          </div>
-        </ModalContextProvider>
-        <ReactQueryDevtools/>
-        </ReactQueryProvider>
+        <AuthContextProvider session={session}>
+          <ReactQueryProvider>
+            <NavBar />
+            <ModalContextProvider>
+              <NavBar />
+              <div className={navBarStyles.belowNav}>{children}</div>
+            </ModalContextProvider>
+            <ReactQueryDevtools />
+          </ReactQueryProvider>
+        </AuthContextProvider>
         <SpeedInsights />
         <Analytics />
- 
       </body>
     </html>
   )
