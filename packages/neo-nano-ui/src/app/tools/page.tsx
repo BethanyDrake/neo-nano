@@ -1,12 +1,10 @@
 import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
+import { Centered } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
-import { Timer } from '@/lib/tools/timer'
-import classNames  from './tools.module.css'
-import { PropsWithChildren } from 'react'
+import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Centered } from '@/lib/layoutElements/flexLayouts'
-import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
+import classNames from './tools.module.css'
 
 const ToolCard = ({toolName, imageSrc, id}: {id: string, toolName: string, imageSrc: string} ) => {
     return (
@@ -22,6 +20,7 @@ const ToolCard = ({toolName, imageSrc, id}: {id: string, toolName: string, image
 
 const ToolsPage = () => {
   return (
+    <NewAwardModalProvider >
     <GutteredPage>
       <UnderDevelopmentMessage upcomingChanges={[]}/>
      <Centered><h1>Toolbox</h1></Centered>
@@ -30,6 +29,8 @@ const ToolsPage = () => {
       <ToolCard id={"focus-clock"} toolName="Focus clock" imageSrc="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"/>
       </div>
     </GutteredPage>
+    <NewAwardModal/>
+    </NewAwardModalProvider>
   )
 }
 
