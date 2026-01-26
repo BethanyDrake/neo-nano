@@ -5,7 +5,7 @@ import { render } from '@testing-library/react'
 
 jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
 jest.mock('@/lib/serverFunctions/forum/getThreadReactions', () => ({getThreadReactions: () => Promise.resolve({})}))
-
+jest.mock('@/lib/hooks/useIsLoggedIn')
 describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {
     jest.mocked(getThreadWithComments).mockResolvedValue({

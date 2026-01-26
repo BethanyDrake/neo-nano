@@ -9,9 +9,6 @@
   }
 }
 
-.forum-container {
-  padding: 30px;
-}
 .forum-sub-title {
    color: var(--grey-dark);
    @media (prefers-color-scheme: dark) {

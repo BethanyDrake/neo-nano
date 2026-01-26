@@ -5,6 +5,11 @@
   font-size: larger;
 }
 
+.belowNav {
+  position: relative;
+  top: var(--nav-bar-height);
+  min-width: 100vw;
+}
 
 .nav {
   padding: 1em;

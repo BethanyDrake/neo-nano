@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import 'whatwg-fetch';
 import { setupServer } from 'msw/node';
-
+jest.mock('@auth0/nextjs-auth0')
 jest.mock('@auth0/nextjs-auth0/server', () => ({
     Auth0Client: class { public getSession = jest.fn()}
 }))
@@ -13,6 +13,7 @@ jest.mock("next/navigation", () => ({
 jest.mock('@neondatabase/serverless')
 jest.mock('@/lib/richText/RichTextEditor', () => jest.requireActual('./MockRichTextEditor'))
 jest.mock('@/lib/richText/RichTextDisplay', () => jest.requireActual('./MockRichTextDisplay'))
+jest.mock('canvas-confetti')
 
 process.env.DATABASE_URL = 'DATABASE_URL'
 

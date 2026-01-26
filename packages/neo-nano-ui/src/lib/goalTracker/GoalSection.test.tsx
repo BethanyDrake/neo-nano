@@ -2,20 +2,19 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
 import { GoalSection } from './GoalSection'
+import { isActive } from '../serverFunctions/goals/goalUtils'
 
 jest.mock('./UpdateWordCount')
-jest.mock('@/lib/serverFunctions/goals/setGoalVisibility', () => ({
-  setGoalVisibility: jest.fn().mockResolvedValue(undefined),
-}))
-jest.mock('@/lib/serverFunctions/goals/deleteGoal', () => ({
-  deleteGoal: jest.fn().mockResolvedValue([]),
-}))
-jest.mock('../serverFunctions/goals/goalUtils', () => ({
-  isActive: jest.fn().mockReturnValue(true)
-}))
-
+jest.mock('@/lib/serverFunctions/goals/setGoalVisibility')
+jest.mock('@/lib/serverFunctions/goals/deleteGoal')
+jest.mock('../serverFunctions/goals/goalUtils')
 
 describe('<GoalSection />', () => {
+  beforeEach(() => {
+    jest.mocked(isActive).mockReturnValue(true)
+    jest.mocked(deleteGoal).mockResolvedValue([])
+    jest.mocked(setGoalVisibility).mockResolvedValue([])
+  })
   it('displays goal', () => {
     const { getByText } = render(
       <GoalSection

@@ -1,15 +1,15 @@
+import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { Timer } from '@/lib/tools/timer'
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 
 const TimerPage = () => {
-    const queryClient = new QueryClient()
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <NewAwardModalProvider>
     <GutteredPage>
       <Timer />
     </GutteredPage>
-    </HydrationBoundary>
+    <NewAwardModal/>
+    </NewAwardModalProvider>
   )
 }
 

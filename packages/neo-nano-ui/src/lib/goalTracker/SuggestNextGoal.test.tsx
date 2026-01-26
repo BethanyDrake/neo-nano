@@ -5,13 +5,23 @@ import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
 import { buildChallenge } from '../types/challenge.builders'
 import { render } from '@testing-library/react'
 import { useModalContext } from '@/lib/modals/ModalContext'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 
 jest.mock('@/lib/challenges')
 jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
-jest.mock('@/lib/modals/ModalContext', () => ({
-  useModalContext: jest.fn().mockReturnValue({}),
-}))
+jest.mock('@/lib/modals/ModalContext')
+jest.mock('@/lib/hooks/useIsLoggedIn')
 describe('SuggestNextGoal', () => {
+
+  beforeEach(() => {
+    jest.mocked(useIsLoggedIn).mockReturnValue(true)
+    jest.mocked(useModalContext).mockReturnValue({
+      setOpenModal: jest.fn(),
+      openModal: null,
+      closeModal: jest.fn()
+    })
+    
+  })
   test('if there is no current or upcoming challenge, just make a custom goal', () => {
     const mockOpenModal = jest.fn()
 
@@ -33,7 +43,6 @@ describe('SuggestNextGoal', () => {
 
   test('if there is no current challenge, join an upcoming challenge', async () => {
     jest.mocked(getCurrentChallenge).mockReturnValue(undefined)
-
     jest
       .mocked(getUpcomingChallenge)
       .mockReturnValue(buildChallenge({ title: 'Some Upcoming Challenge', id: 'upcoming-challenge-id' }))

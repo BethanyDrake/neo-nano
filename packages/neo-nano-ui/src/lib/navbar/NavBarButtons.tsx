@@ -1,15 +1,12 @@
 'use client'
-import { useUser } from "@auth0/nextjs-auth0";
 import Link from 'next/link';
 import { LoggedInNavBarButtons } from "./LoggedInNavBarButtons";
 import { Row } from "../layoutElements/flexLayouts";
 import { BasicButton } from "../buttons/BasicButton";
+import { useIsLoggedIn } from "../hooks/useIsLoggedIn";
 
 export const NavBarButtons = () => {
-  const {isLoading, user} = useUser()
-  const isLoggedIn = !!user
-  if (isLoading) return null
-
+  const isLoggedIn = useIsLoggedIn()
   if (isLoggedIn)
     return (
   <LoggedInNavBarButtons/>

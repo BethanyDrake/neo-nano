@@ -7,13 +7,13 @@ import { Category } from '@/lib/types/forum.types'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { THREADS_PER_PAGE } from '@/lib/misc'
 import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
-import styles from '@/lib/styles/forum.module.css'
 import { ThreadCard } from '@/lib/ThreadCard'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import enUS from 'rc-pagination/lib/locale/en_US'
+import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 
 type Topic = {
   id: string
@@ -26,7 +26,7 @@ const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Ca
 
   const breadcrumbItems = [{ href: '/forum', text: category.title }, { text: topic.title }]
   return (
-    <div className={styles['forum-container']}>
+    <FullWidthPage>
       <Column>
         <Row justifyContent="space-between">
           <Breadcrumbs breadcrumbItems={breadcrumbItems} />
@@ -54,7 +54,7 @@ const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Ca
             threads.map((thread: ThreadSummary) => <ThreadCard key={thread.id} topicId={topic.id} thread={thread} />)}
         </Column>
       </Column>
-    </div>
+    </FullWidthPage>
   )
 }
 

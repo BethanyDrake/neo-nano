@@ -58,15 +58,18 @@ a {
   }
 }
 
+summary {
+  cursor: pointer; 
+    h2 {
+      display: inline-block;
+      padding-left: 12px;
+    }
+}
+
 .darkmode-invert {
   @media (prefers-color-scheme: dark) {
    filter: invert(1)
   }
-}
-
-main {
-  padding-top: var( --nav-bar-height);
-  min-width: 100vw;
 }
 
 p {

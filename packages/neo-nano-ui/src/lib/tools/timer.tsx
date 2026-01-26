@@ -4,7 +4,7 @@ import formClasses from '@/lib/expandableForms/form.module.css'
 import { Centered, Column, LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import useSound from 'use-sound'
@@ -14,6 +14,7 @@ import { getDateAsString } from '../misc'
 import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
 import classNames from './timer.module.css'
 import { PausePlayToggle } from './PausePlayToggle'
+import confetti from 'canvas-confetti'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -38,7 +39,7 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         >
           <Column>
             <LeftRow alignItems="baseline">
-              <input type="number" id="time" placeholder="20" {...register('minutes', { required: true })} />
+              <input type="number" min={0} id="time" placeholder="20" {...register('minutes', { required: true })} />
               <label htmlFor="time">minutes</label>
             </LeftRow>
             <BasicButton>Start</BasicButton>
@@ -74,7 +75,7 @@ const Timer_InProgress = ({
       <Centered>
         <h1>The clock is ticking...</h1>
       </Centered>
-      <LeftRow style={{flexGrow: 1}}>
+      <LeftRow style={{ flexGrow: 1 }}>
         <Image
           alt="clock"
           width={100}
@@ -84,9 +85,11 @@ const Timer_InProgress = ({
 
         <div>
           <Column>
-            <Row alignItems='center'>
-              <div>{minutes}m {seconds}s</div>
-              <PausePlayToggle pause={pause} resume={resume} isRunning={isRunning}/>
+            <Row alignItems="center">
+              <div>
+                {minutes}m {seconds}s
+              </div>
+              <PausePlayToggle pause={pause} resume={resume} isRunning={isRunning} />
             </Row>
             <Row>
               <BasicButton buttonProps={{ onClick: onCancel }}>Cancel</BasicButton>
@@ -94,7 +97,7 @@ const Timer_InProgress = ({
           </Column>
         </div>
       </LeftRow>
-      </div>
+    </div>
   )
 }
 
@@ -104,13 +107,13 @@ const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'start
   return records[challengeDay] ?? 0
 }
 
-const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes> 1 ? 's' : ''}`
+const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes > 1 ? 's' : ''}`
 
 const UpdateActiveGoal = ({
   goal,
   targetMinutes,
   extraMinutes,
-  pauseTimer
+  pauseTimer,
 }: {
   goal: Goal
   targetMinutes: number
@@ -121,7 +124,7 @@ const UpdateActiveGoal = ({
 
   const [hasAddedTargetMinutes, setHasAddedTargetMinutes] = useState(false)
   const [hasAddedExtraMinutes, setHasAddedExtraMinutes] = useState(false)
-  const extraMinutesToAdd = hasAddedTargetMinutes ? extraMinutes : extraMinutes + targetMinutes 
+  const extraMinutesToAdd = hasAddedTargetMinutes ? extraMinutes : extraMinutes + targetMinutes
 
   return (
     <div className={classNames.UpdateActiveGoal}>
@@ -154,7 +157,6 @@ const UpdateActiveGoal = ({
                   addMinutes(extraMinutesToAdd)
                   setHasAddedTargetMinutes(true)
                   setHasAddedExtraMinutes(true)
-                
                 },
                 disabled: hasAddedExtraMinutes,
               }}
@@ -179,9 +181,16 @@ export const Timer_Finished = ({
   onRepeat: () => void
   activeGoal?: Goal | null
 }) => {
-  const { seconds, minutes, pause, start, isRunning} = useStopwatch({
+  const { seconds, minutes, pause, start, isRunning } = useStopwatch({
     autoStart: true,
   })
+  useEffect(() => {
+    confetti({
+      disableForReducedMotion: true,
+      spread: 90,
+      colors: ['#C0E5C8', '#1ab394', '#6e1ab3', '#d8a9ffff'],
+    })
+  }, [])
 
   return (
     <div>
@@ -199,8 +208,10 @@ export const Timer_Finished = ({
         <div>
           <Column>
             <Row alignItems="baseline">
-              <div>+{minutes}m {seconds}s</div>
-              <PausePlayToggle pause={pause} resume={start} isRunning={isRunning}/>
+              <div>
+                +{minutes}m {seconds}s
+              </div>
+              <PausePlayToggle pause={pause} resume={start} isRunning={isRunning} />
             </Row>
 
             <Row>
@@ -211,7 +222,12 @@ export const Timer_Finished = ({
         </div>
       </Row>
       {activeGoal && (
-        <UpdateActiveGoal pauseTimer={pause} goal={activeGoal} targetMinutes={secondsToMinutes(targetTime)} extraMinutes={minutes} />
+        <UpdateActiveGoal
+          pauseTimer={pause}
+          goal={activeGoal}
+          targetMinutes={secondsToMinutes(targetTime)}
+          extraMinutes={minutes}
+        />
       )}
     </div>
   )
@@ -224,35 +240,37 @@ export const Timer = () => {
   const { goal } = useActiveTimeBasedGoal()
 
   return (
-    <div className={classNames.Timer}>
-      {timerState === 'initial' && (
-        <Timer_Initial
-          startTimer={(durationSeconds) => {
-            setTargetTime(durationSeconds)
-            setTimerState('inProgress')
-          }}
-        />
-      )}
+    <Centered>
+      <div className={classNames.Timer}>
+        {timerState === 'initial' && (
+          <Timer_Initial
+            startTimer={(durationSeconds) => {
+              setTargetTime(durationSeconds)
+              setTimerState('inProgress')
+            }}
+          />
+        )}
 
-      {timerState === 'inProgress' && (
-        <Timer_InProgress
-          onCancel={() => setTimerState('initial')}
-          onFinished={() => {
-            onCompletePlay()
-            setTimerState('finished')
-          }}
-          targetTime={targetTime}
-        />
-      )}
+        {timerState === 'inProgress' && (
+          <Timer_InProgress
+            onCancel={() => setTimerState('initial')}
+            onFinished={() => {
+              onCompletePlay()
+              setTimerState('finished')
+            }}
+            targetTime={targetTime}
+          />
+        )}
 
-      {timerState === 'finished' && (
-        <Timer_Finished
-          activeGoal={goal}
-          targetTime={targetTime}
-          onReset={() => setTimerState('initial')}
-          onRepeat={() => setTimerState('inProgress')}
-        />
-      )}
-    </div>
+        {timerState === 'finished' && (
+          <Timer_Finished
+            activeGoal={goal}
+            targetTime={targetTime}
+            onReset={() => setTimerState('initial')}
+            onRepeat={() => setTimerState('inProgress')}
+          />
+        )}
+      </div>
+    </Centered>
   )
 }

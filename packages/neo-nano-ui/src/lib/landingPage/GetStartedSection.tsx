@@ -4,13 +4,13 @@ import { BasicButton } from '@/lib/buttons/BasicButton'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import Link from 'next/link'
 import styles from './page.module.css'
-import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import { useHasActiveOrUpcomingGoal } from '@/lib/hooks/useHasActiveOrUpcomingGoal'
 import { getCurrentChallenge, getUpcomingChallenge } from '../challenges'
 import { joinChallenge } from '@/lib/serverFunctions/goals/joinCurrentChallenge'
 import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 import { useRouter } from 'next/navigation'
 import { DotiContainer } from '../layoutElements/dotiContainer'
+import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 
 const getChallengeToJoin = () => {
   const currentChallenge = getCurrentChallenge()
@@ -35,10 +35,10 @@ const JoinChallengeButton = () => {
 }
 
 const ActionButtons = () => {
-  const { isLoggedIn, isLoading: l1 } = useIsLoggedIn()
-  const { hasActiveOrUpcomingGoal, isLoading: l2 } = useHasActiveOrUpcomingGoal()
+  const isLoggedIn = useIsLoggedIn()
+  const { hasActiveOrUpcomingGoal, isLoading: hasActiveGoalLoading } = useHasActiveOrUpcomingGoal()
 
-  if (l1 || l2) return null
+  if (hasActiveGoalLoading) return null
 
   if (!isLoggedIn) {
     return (

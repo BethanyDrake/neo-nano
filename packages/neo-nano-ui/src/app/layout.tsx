@@ -5,17 +5,17 @@ import type { Metadata } from 'next'
 import { ModalContextProvider } from '@/lib/modals/ModalContext'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { GoogleTagManager } from '@next/third-parties/google'
-import {
-  HydrationBoundary
-} from '@tanstack/react-query'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import navBarStyles from '@/lib/navbar/NavBar.module.css'
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import Providers from './providers'
+import ReactQueryProvider from './providers'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { auth0 } from '@/lib/auth0'
+import { AuthContextProvider } from '@/lib/hooks/useIsLoggedIn'
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
@@ -30,30 +30,29 @@ export const metadata: Metadata = {
   },
 }
 
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await auth0.getSession()
+
   return (
     <html lang="en">
       <GoogleTagManager gtmId="GTM-KRXL28V4" />
-
       <body>
-        <Providers>
-        <HydrationBoundary state={null}>
-        <NavBar/>
-        <ModalContextProvider>
-          <NavBar />
-          <main>{children}</main>
-        </ModalContextProvider>
-        <ReactQueryDevtools/>
-        </HydrationBoundary>
-        </Providers>
+        <AuthContextProvider session={session}>
+          <ReactQueryProvider>
+            <NavBar />
+            <ModalContextProvider>
+              <NavBar />
+              <div className={navBarStyles.belowNav}>{children}</div>
+            </ModalContextProvider>
+            <ReactQueryDevtools />
+          </ReactQueryProvider>
+        </AuthContextProvider>
         <SpeedInsights />
         <Analytics />
- 
       </body>
     </html>
   )
