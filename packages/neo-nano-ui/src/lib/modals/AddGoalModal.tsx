@@ -25,7 +25,7 @@ export const AddGoalModal = () => {
     }
   }, [action, setOpenModal])
 
-  const { setGoals } = useMyGoalContext()
+  const { setGoals , isLoading} = useMyGoalContext()
   const onSave = async (goalDetails: GoalDetails) => {
     const response = await createGoal(goalDetails)
     setGoals(response)
@@ -34,7 +34,7 @@ export const AddGoalModal = () => {
 
   return (
     <>
-      <ExtendableIconButton onClick={() => setOpenModal(ADD_GOAL_MODAL)} text="add goal" icon={faAdd} />
+      <ExtendableIconButton isLoading={isLoading} onClick={() => setOpenModal(ADD_GOAL_MODAL)} text="add goal" icon={faAdd} />
         <Modal modalId={ADD_GOAL_MODAL}> 
           <AddEditGoalForm
             mode="add"
