@@ -1,10 +1,10 @@
 'use client'
+import modalStyles from '@/lib/modals/Modal.module.css'
 import { UserAward } from '@/lib/types/profile.types'
 import confetti from 'canvas-confetti'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { BasicButton } from '../buttons/BasicButton'
 import { Column } from '../layoutElements/flexLayouts'
-import classNames from './awards.module.css'
 import { Trophy } from './Trophy'
 
 export const NewAwardModalContext = createContext<{
@@ -48,18 +48,19 @@ export const NewAwardModalProvider = ({ children }: PropsWithChildren) => {
 
 export const NewAwardModal = () => {
   const { award, isOpen, closeModal } = useContext(NewAwardModalContext)
+
   if (!isOpen || !award) {
     return null
   }
 
   return ( <>
-      <div className={classNames.modal}>
+      <div className={modalStyles.modal}>
         <Column>
           <Trophy award={award} />
           <BasicButton buttonProps={{ onClick: closeModal }}>Accept Trophy</BasicButton>
         </Column>
       </div>
-     <div onClick={closeModal} className={classNames['modal-overlay']}/>
+     <div onClick={closeModal} className={modalStyles['modal-overlay']}/>
     </>
   )
 }
