@@ -11,7 +11,7 @@ export const UnderDevelopmentMessage = ({upcomingChanges}: {upcomingChanges: str
         </h2>
       </Centered>
       <p>
-        This tool is under development. Feel free to try it out, but it may not work very well! Expect frequent tweaks.
+        This page is under development. Feel free to try it out, but it may not work very well! Expect frequent tweaks.
       </p>
       <h3>Upcoming changes:</h3>
       <ul style={{ paddingLeft: '20px' }}>
