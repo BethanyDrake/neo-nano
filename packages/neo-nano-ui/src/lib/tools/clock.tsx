@@ -1,7 +1,7 @@
 'use client'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
-import { startOfToday } from 'date-fns'
+import { secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
 import { useStopwatch } from 'react-timer-hook'
 import { getDateAsString } from '../misc'
@@ -10,7 +10,7 @@ import { Goal } from '../types/forum.types'
 import { PausePlayToggle } from './PausePlayToggle'
 import classNames from './timer.module.css'
 import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
-
+import { useState } from 'react'
 
 const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
   const today = getDateAsString(startOfToday())
@@ -18,18 +18,21 @@ const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'start
   return records[challengeDay] ?? 0
 }
 
-const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes > 1 ? 's' : ''}`
+const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes === 1 ? '' : 's'}`
+
+const plural = (word: string, n: number) => `${word}${n === 1 ? '' : 's'}`
 
 const UpdateActiveGoal = ({
   goal,
-  minutes,
-  onAddMinutes
+  totalSeconds,
 }: {
   goal: Goal
-  minutes: number
-  onAddMinutes: () => void
+  totalSeconds: number
 }) => {
   const { addMinutes } = useUpdateActiveTimeBasedGoal(goal)
+  const [pastAdded, setPastAdded] = useState<{id: number, timeAdded: number}[]>([])
+  const [minutesAdded, setMinutesAdded] = useState(0)
+  const minutesToAdd = secondsToMinutes(totalSeconds) - minutesAdded
 
   return (
     <div className={classNames.UpdateActiveGoal}>
@@ -41,19 +44,21 @@ const UpdateActiveGoal = ({
           <div>(so far today: {getTodaysProgress(goal)} minutes)</div>
         </Centered>
 
-        <Row>
+        <Column>
           <BasicButton
             buttonProps={{
               onClick: () => {
-                addMinutes(minutes)
-                onAddMinutes()
+                addMinutes(minutesToAdd)
+                setPastAdded([...pastAdded, {id: pastAdded.length, timeAdded: minutesToAdd}])
+                setMinutesAdded(minutesAdded + minutesToAdd)
               },
-              disabled: minutes<1
+              disabled: minutesToAdd<1
             }}
           >
-            {formatAddMinutesText(minutes)}
+            {formatAddMinutesText(minutesToAdd)}
           </BasicButton>
-        </Row>
+          {pastAdded.map(({id, timeAdded}) => (<div key={id}>Added {timeAdded} {plural('minute' , timeAdded)}</div>))}
+        </Column>
       </Column>
     </div>
   )
@@ -68,7 +73,7 @@ const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes:
 
 export const Clock = () => {
   const { goal:activeGoal } = useActiveTimeBasedGoal()
-   const { seconds, minutes, hours, pause, start, isRunning, reset } = useStopwatch({
+   const { seconds, minutes, hours, pause, start, isRunning, reset, totalSeconds } = useStopwatch({
     autoStart: true,
   })
   
@@ -89,7 +94,7 @@ export const Clock = () => {
         <div>
           <Column>
             <Row alignItems="baseline">
-              <div>+{formatTimeString({ hours, minutes, seconds })}</div>
+              <div>{formatTimeString({ hours, minutes, seconds })}</div>
               <PausePlayToggle pause={pause} resume={start} isRunning={isRunning} />
             </Row>
 
@@ -100,7 +105,7 @@ export const Clock = () => {
         </div>
       </Row>
       {activeGoal && (
-        <UpdateActiveGoal onAddMinutes={reset} goal={activeGoal} minutes={minutes}></UpdateActiveGoal>
+        <UpdateActiveGoal goal={activeGoal} totalSeconds={totalSeconds}></UpdateActiveGoal>
       )}
       </div>
     </Centered>
