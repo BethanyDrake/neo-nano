@@ -232,6 +232,7 @@ export const Timer = () => {
   const { goal } = useActiveTimeBasedGoal()
 
   return (
+    <Centered>
     <div className={classNames.Timer}>
       {timerState === 'initial' && (
         <Timer_Initial
@@ -262,5 +263,6 @@ export const Timer = () => {
         />
       )}
     </div>
+    </Centered>
   )
 }
