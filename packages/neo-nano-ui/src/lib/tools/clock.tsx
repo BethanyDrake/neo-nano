@@ -35,7 +35,7 @@ const UpdateActiveGoal = ({
   const minutesToAdd = secondsToMinutes(totalSeconds) - minutesAdded
 
   return (
-    <div className={classNames.UpdateActiveGoal}>
+    <div className={[classNames.UpdateActiveGoal, classNames.secondary].join(' ')}>
       <Column gap="5px">
         <Centered>
           <h3>Update {goal.title}</h3>

@@ -140,7 +140,6 @@ const UpdateActiveGoal = ({
           <h3>Update {goal.title}</h3>
         </Centered>
         <Centered>
-          {' '}
           <div>(so far today: {getTodaysProgress(goal)} minutes)</div>
         </Centered>
 
