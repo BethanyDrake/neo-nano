@@ -11,7 +11,7 @@ import { PausePlayToggle } from './PausePlayToggle'
 import classNames from './timer.module.css'
 import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
 import { useState } from 'react'
-
+import focusClock from './images/focus-clock.png'
 const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
   const today = getDateAsString(startOfToday())
   const challengeDay = dateToChallengeDay(startDate, today)
@@ -88,7 +88,7 @@ export const Clock = () => {
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={focusClock}
         />
 
         <div>

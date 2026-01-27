@@ -16,6 +16,7 @@ import classNames from './timer.module.css'
 import { PausePlayToggle } from './PausePlayToggle'
 import confetti from 'canvas-confetti'
 import { minutesInDay } from 'date-fns/constants'
+import sprintTimerImage from './images/sprint-timer.png'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -29,7 +30,7 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={sprintTimerImage}
         />
 
         <form
@@ -88,7 +89,7 @@ const Timer_InProgress = ({
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={sprintTimerImage}
         />
 
         <div>
@@ -213,7 +214,7 @@ export const Timer_Finished = ({
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={sprintTimerImage}
         />
 
         <div>
