@@ -15,6 +15,8 @@ import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
 import classNames from './timer.module.css'
 import { PausePlayToggle } from './PausePlayToggle'
 import confetti from 'canvas-confetti'
+import { minutesInDay } from 'date-fns/constants'
+import sprintTimerImage from './images/sprint-timer.png'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -28,7 +30,7 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={sprintTimerImage}
         />
 
         <form
@@ -39,7 +41,14 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         >
           <Column>
             <LeftRow alignItems="baseline">
-              <input type="number" min={0} id="time" placeholder="20" {...register('minutes', { required: true })} />
+              <input
+                type="number"
+                min={0}
+                max={minutesInDay - 1}
+                id="time"
+                placeholder="20"
+                {...register('minutes', { required: true })}
+              />
               <label htmlFor="time">minutes</label>
             </LeftRow>
             <BasicButton>Start</BasicButton>
@@ -65,7 +74,7 @@ const Timer_InProgress = ({
   onCancel: () => void
   onFinished: () => void
 }) => {
-  const { seconds, minutes, isRunning, pause, resume } = useTimer({
+  const { seconds, minutes, hours, isRunning, pause, resume } = useTimer({
     expiryTimestamp: getExpiryTimestamp(targetTime),
     onExpire: onFinished,
   })
@@ -80,15 +89,13 @@ const Timer_InProgress = ({
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={sprintTimerImage}
         />
 
         <div>
           <Column>
             <Row alignItems="center">
-              <div>
-                {minutes}m {seconds}s
-              </div>
+              <div>{formatTimeString({ hours, minutes, seconds })}</div>
               <PausePlayToggle pause={pause} resume={resume} isRunning={isRunning} />
             </Row>
             <Row>
@@ -133,7 +140,6 @@ const UpdateActiveGoal = ({
           <h3>Update {goal.title}</h3>
         </Centered>
         <Centered>
-          {' '}
           <div>(so far today: {getTodaysProgress(goal)} minutes)</div>
         </Centered>
 
@@ -170,6 +176,11 @@ const UpdateActiveGoal = ({
   )
 }
 
+const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes: number; seconds: number }): string => {
+  const hours_s = `${hours}h`
+  return `${hours > 0 ? hours_s : ''} ${minutes}m ${seconds}s`
+}
+
 export const Timer_Finished = ({
   targetTime,
   onReset,
@@ -181,7 +192,7 @@ export const Timer_Finished = ({
   onRepeat: () => void
   activeGoal?: Goal | null
 }) => {
-  const { seconds, minutes, pause, start, isRunning } = useStopwatch({
+  const { seconds, minutes, hours, pause, start, isRunning } = useStopwatch({
     autoStart: true,
   })
   useEffect(() => {
@@ -202,15 +213,13 @@ export const Timer_Finished = ({
           alt="clock"
           width={100}
           height={100}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/clock.png"
+          src={sprintTimerImage}
         />
 
         <div>
           <Column>
             <Row alignItems="baseline">
-              <div>
-                +{minutes}m {seconds}s
-              </div>
+              <div>+{formatTimeString({ hours, minutes, seconds })}</div>
               <PausePlayToggle pause={pause} resume={start} isRunning={isRunning} />
             </Row>
 

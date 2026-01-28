@@ -17,7 +17,8 @@
   @media (width<500px) {
     width: 100%;
     padding: 1em;
-    border: unset
+    border-left: unset;
+    border-right: unset;
   }
 
 

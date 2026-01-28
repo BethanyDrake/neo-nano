@@ -52,7 +52,7 @@ export const NavMenu = () => {
           </Link>
         </MenuItem>
          <MenuItem>
-          <Link className={styles['menu-item']} href="/tools/timer">
+          <Link className={styles['menu-item']} href="/tools">
              <Row justifyContent="space-between">
               <span>Tools</span> <FontAwesomeIcon icon={faHammer} />
             </Row>
