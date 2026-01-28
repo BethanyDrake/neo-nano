@@ -17,6 +17,7 @@ import { PausePlayToggle } from './PausePlayToggle'
 import confetti from 'canvas-confetti'
 import { minutesInDay } from 'date-fns/constants'
 import sprintTimerImage from './images/sprint-timer.png'
+import { track } from '@vercel/analytics'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -149,6 +150,7 @@ const UpdateActiveGoal = ({
               onClick: () => {
                 setHasAddedTargetMinutes(true)
                 addMinutes(targetMinutes)
+                track('UpdateActiveGoal',  {minutesAdded: targetMinutes})
               },
               disabled: hasAddedTargetMinutes,
             }}
@@ -254,6 +256,7 @@ export const Timer = () => {
         {timerState === 'initial' && (
           <Timer_Initial
             startTimer={(durationSeconds) => {
+              track('StartTimer', {targetTime: secondsToMinutes(durationSeconds)})
               setTargetTime(durationSeconds)
               setTimerState('inProgress')
             }}

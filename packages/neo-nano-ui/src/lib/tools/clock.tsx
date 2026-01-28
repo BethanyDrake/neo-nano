@@ -12,6 +12,8 @@ import classNames from './timer.module.css'
 import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
 import { useState } from 'react'
 import focusClock from './images/focus-clock.png'
+import { track } from '@vercel/analytics';
+
 const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
   const today = getDateAsString(startOfToday())
   const challengeDay = dateToChallengeDay(startDate, today)
@@ -49,8 +51,10 @@ const UpdateActiveGoal = ({
             buttonProps={{
               onClick: () => {
                 addMinutes(minutesToAdd)
+                track('UpdateActiveGoal',  {minutesAdded: minutesToAdd})
                 setPastAdded([...pastAdded, {id: pastAdded.length, timeAdded: minutesToAdd}])
                 setMinutesAdded(minutesAdded + minutesToAdd)
+ 
               },
               disabled: minutesToAdd<1
             }}
