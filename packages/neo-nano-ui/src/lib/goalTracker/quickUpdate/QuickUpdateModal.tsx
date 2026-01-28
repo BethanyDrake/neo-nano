@@ -18,6 +18,7 @@ import { usePathname } from 'next/navigation'
 import { startOfToday } from 'date-fns'
 import { Goal } from '@/lib/types/forum.types'
 import { ModalOverlay, useModalContext } from '@/lib/modals/ModalContext'
+import { track } from '@vercel/analytics'
 
 const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => void; activeGoal: Goal }) => {
   const [isCumulative, setIsCumulative] = useState(false)
@@ -26,6 +27,7 @@ const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => vo
   const [localRecords, setLocalRecords] = useState(activeGoal?.records ?? [])
   const { onClick, isLoading } = useLoadableOnClick(async () => {
     await updateActiveGoal(localRecords)
+    track('UpdateActiveGoal',  {location: 'quickUpdateModal'})
 
     closeModal()
   })

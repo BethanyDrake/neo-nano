@@ -51,7 +51,7 @@ const UpdateActiveGoal = ({
             buttonProps={{
               onClick: () => {
                 addMinutes(minutesToAdd)
-                track('UpdateActiveGoal',  {minutesAdded: minutesToAdd})
+                track('UpdateActiveGoal',  {minutesAdded: minutesToAdd, location: 'clockTool'})
                 setPastAdded([...pastAdded, {id: pastAdded.length, timeAdded: minutesToAdd}])
                 setMinutesAdded(minutesAdded + minutesToAdd)
  

@@ -150,7 +150,7 @@ const UpdateActiveGoal = ({
               onClick: () => {
                 setHasAddedTargetMinutes(true)
                 addMinutes(targetMinutes)
-                track('UpdateActiveGoal',  {minutesAdded: targetMinutes})
+                track('UpdateActiveGoal',  {minutesAdded: targetMinutes, location: 'timerTool'})
               },
               disabled: hasAddedTargetMinutes,
             }}
