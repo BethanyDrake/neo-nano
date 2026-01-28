@@ -1,7 +1,6 @@
 import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { Centered } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
-import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from './tools.module.css'
@@ -25,10 +24,9 @@ const ToolsPage = () => {
   return (
     <NewAwardModalProvider >
     <GutteredPage>
-      <UnderDevelopmentMessage upcomingChanges={['enter word count after a sprint', 'graph wpm over a sprint session']}/>
-     <Centered><h1>Toolbox</h1></Centered>
+        <Centered><h1>Toolbox</h1></Centered>
       <div className={classNames.container}>
-      <ToolCard  description={"Set a timer, then see how many words you can write!"}id={"timer"} toolName="Sprint timer" imageSrc={sprintTimer}/>
+      <ToolCard description={"Set a timer, then see how many words you can write!"}id={"timer"} toolName="Sprint timer" imageSrc={sprintTimer}/>
       <ToolCard description={'Just start editing, and log the time after.'} id={"focus-clock"} toolName="Focus clock" imageSrc={focusClock}/>
       </div>
     </GutteredPage>
