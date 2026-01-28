@@ -8,11 +8,40 @@
     flex-grow: 1;
     border-radius: 16px;
     background-color: var(--background-colour-2);
-
+    position: relative;
     &:hover {
         box-shadow: var(--shadow-2);
         /* background-color: var(--primary-light); */
     }
+
+    .description {
+        visibility: hidden;
+        position: absolute;
+        color: white;
+        text-shadow: 0px 0px 3px  rgb(0 0 0 / 0.2);
+        background-color: var(--primary-vibrant);
+        bottom: 0;
+        margin-left: -16px;
+        padding: 1em;
+        border-radius: 0px 0px 4px 4px;
+        font-weight: bold;
+    }
+
+    &:hover{
+
+        .description {
+            
+            visibility: visible;
+        }
+    }
+    &:focus-within {
+        .description {
+            
+            visibility: visible;
+        }
+    }
+
+
 }
 
 .container {

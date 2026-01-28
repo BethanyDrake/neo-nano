@@ -13,7 +13,6 @@
         border-bottom: 2px dashed var(--secondary-light);
     }
 }
-
 .PausePlayToggle {
     background-color: unset;
     border: unset;
