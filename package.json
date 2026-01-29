@@ -8,7 +8,7 @@
   "description": "- forumn - login - tracking - moderation",
   "main": "index.js",
   "scripts": {
-    "typecheck":"yarn workspace neo-nano-ui tsc",
+    "typecheck": "yarn workspace neo-nano-ui tsc",
     "test": "yarn workspace neo-nano-ui test",
     "lint": "yarn workspace neo-nano-ui lint",
     "build": "yarn workspace neo-nano-ui build",
@@ -17,6 +17,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^25.1.0",
     "husky": "^9.1.7"
   },
   "packageManager": "yarn@1.22.19"
