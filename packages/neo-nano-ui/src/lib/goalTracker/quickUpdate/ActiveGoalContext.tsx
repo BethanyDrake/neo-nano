@@ -4,7 +4,7 @@ import { getDateAsString } from "@/lib/misc";
 import { getActiveGoal } from "@/lib/serverFunctions/goals/getActiveGoal";
 import { updateGoalProgress } from "@/lib/serverFunctions/goals/updateGoalProgress";
 import { startOfToday } from "date-fns";
-import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useContext, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const ActiveGoalContext = createContext<{
