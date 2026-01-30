@@ -10,8 +10,8 @@ test('browse as guest', async ({ page }) => {
 
   // forum
   await page.getByRole('link', { name: 'Browse forums as guest' }).click();
-  await page.getByRole('link', { name: 'Some Topic' }).click();
-  await page.getByRole('link', { name: 'Some Category' }).click();
+  await page.getByRole('link', { name: 'General Discussion' }).click();
+  await page.getByRole('link', { name: 'General' }).click();
 
   // analytics page
   await page.getByRole('button', {name: 'open navigation menu'}).click()
