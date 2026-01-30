@@ -43,7 +43,6 @@ export default async function RootLayout({
       <body>
         <AuthContextProvider session={session}>
           <ReactQueryProvider>
-            <NavBar />
             <ModalContextProvider>
               <NavBar />
               <div className={navBarStyles.belowNav}>{children}</div>
