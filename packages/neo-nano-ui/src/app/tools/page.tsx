@@ -11,12 +11,12 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 const ToolCard = ({toolName, imageSrc, id, description}: {id: string, toolName: string, imageSrc: string | StaticImport, description: string} ) => {
     return (
 
-    <div className={classNames.card}><Link style={{width: '100%'}}href={`/tools/${id}`}><h2>{toolName}</h2> <Image
-              alt={toolName}
+    <div className={classNames.card}><Link style={{width: '100%'}}href={`/tools/${id}`}><summary><h2>{toolName}</h2></summary> <Image
+              alt={description}
               width={100}
               height={100}
               src={imageSrc}
-            /><div className={classNames.description}>{description}</div></Link></div>
+            /><div id={description} className={classNames.description}>{description}</div></Link></div>
     )
 }
 
