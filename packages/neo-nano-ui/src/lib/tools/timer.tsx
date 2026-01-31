@@ -18,6 +18,9 @@ import confetti from 'canvas-confetti'
 import { minutesInDay } from 'date-fns/constants'
 import sprintTimerImage from './images/sprint-timer.png'
 import { track } from '@vercel/analytics'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { Sprint, SprintTable } from './SprintTable'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: number }>()
@@ -188,11 +191,13 @@ export const Timer_Finished = ({
   onReset,
   onRepeat,
   activeGoal,
+  onSubmitWordCount
 }: {
   targetTime: number
   onReset: () => void
   onRepeat: () => void
   activeGoal?: Goal | null
+  onSubmitWordCount: (sprint: Omit<Sprint, 'id'>)=> void
 }) => {
   const { seconds, minutes, hours, pause, start, isRunning } = useStopwatch({
     autoStart: true,
@@ -204,7 +209,11 @@ export const Timer_Finished = ({
       colors: ['#C0E5C8', '#1ab394', '#6e1ab3', '#d8a9ffff'],
     })
   }, [])
+    const { handleSubmit, register } = useForm<{ wordCount: number, includeOvertime: boolean, updateActiveGoal: boolean }>()
 
+    const onSubmitForm = () => {
+
+    }
   return (
     <div>
       <Centered>
@@ -218,19 +227,39 @@ export const Timer_Finished = ({
           src={sprintTimerImage}
         />
 
-        <div>
+          <form
+          className={[formClasses.form, classNames.content].join(' ')}
+          onSubmit={handleSubmit(({ wordCount }) => {
+            onSubmitWordCount({wordCount, durationSeconds: targetTime} )
+          })}
+        >
           <Column>
-            <Row alignItems="baseline">
-              <div>+{formatTimeString({ hours, minutes, seconds })}</div>
-              <PausePlayToggle pause={pause} resume={start} isRunning={isRunning} />
-            </Row>
+            <LeftRow alignItems="baseline">
+              <input
+                type="number"
+                min={0}
+                id="wordCount"
+                placeholder="0"
+                {...register('wordCount', { required: true })}
+              />
+              <label htmlFor="wordCount">words</label>
+            </LeftRow>
+           
+            {/* <label>
+              <LeftRow>
+                <div className={formClasses.checkboxContainer}>
+              <input type="checkbox" {...register('includeOvertime')}/></div>
+             Include overtime  </LeftRow></label>
 
-            <Row>
-              <BasicButton buttonProps={{ onClick: onRepeat }}>Repeat</BasicButton>
-              <BasicButton buttonProps={{ onClick: onReset }}>New target</BasicButton>
-            </Row>
+             <label>
+              <LeftRow>
+                <div className={formClasses.checkboxContainer}>
+              <input type="checkbox" {...register('updateActiveGoal')}/></div>
+             Update Goal  </LeftRow></label> */}
+        
+            <BasicButton>Submit</BasicButton>
           </Column>
-        </div>
+        </form>
       </Row>
       {activeGoal && (
         <UpdateActiveGoal
@@ -244,13 +273,18 @@ export const Timer_Finished = ({
   )
 }
 
+
+
 export const Timer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
   const [timerState, setTimerState] = useState('initial')
   const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
   const { goal } = useActiveTimeBasedGoal()
+  const [sprints, setSprints] = useState<Sprint[]>([])
+
 
   return (
+    <>
     <Centered>
       <div className={classNames.Timer}>
         {timerState === 'initial' && (
@@ -280,9 +314,21 @@ export const Timer = () => {
             targetTime={targetTime}
             onReset={() => setTimerState('initial')}
             onRepeat={() => setTimerState('inProgress')}
+            onSubmitWordCount={({durationSeconds, wordCount}) => {
+              setSprints([...sprints, {
+                durationSeconds,
+                wordCount,
+                id: sprints.length +1
+              }])
+              setTimerState('initial')
+            }}
           />
         )}
       </div>
+
+
     </Centered>
+<SprintTable sprints={sprints}/>
+      </>
   )
 }
