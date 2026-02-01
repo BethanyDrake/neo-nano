@@ -16,6 +16,7 @@ import ReactQueryProvider from './providers'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { auth0 } from '@/lib/auth0'
 import { AuthContextProvider } from '@/lib/hooks/useIsLoggedIn'
+import { ActiveGoalProvider } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
@@ -43,10 +44,12 @@ export default async function RootLayout({
       <body>
         <AuthContextProvider session={session}>
           <ReactQueryProvider>
-            <ModalContextProvider>
-              <NavBar />
-              <div className={navBarStyles.belowNav}>{children}</div>
-            </ModalContextProvider>
+            <ActiveGoalProvider>
+              <ModalContextProvider>
+                <NavBar />
+                <div className={navBarStyles.belowNav}>{children}</div>
+              </ModalContextProvider>
+            </ActiveGoalProvider>
             <ReactQueryDevtools />
           </ReactQueryProvider>
         </AuthContextProvider>

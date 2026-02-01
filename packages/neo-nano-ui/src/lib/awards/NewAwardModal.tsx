@@ -19,6 +19,8 @@ export const NewAwardModalContext = createContext<{
   closeModal: () => {},
 })
 
+export const useNewAwardModalContext = () => useContext(NewAwardModalContext)
+
 export const NewAwardModalProvider = ({ children }: PropsWithChildren) => {
   const [award, setAward] = useState<UserAward>()
   const [isOpen, setIsOpen] = useState(false)

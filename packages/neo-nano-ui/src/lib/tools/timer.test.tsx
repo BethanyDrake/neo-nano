@@ -1,20 +1,10 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, waitFor, act } from '@testing-library/react'
 import { Timer, Timer_Finished } from './timer'
 import { buildGoal } from '../types/forum.builders'
 import { useStopwatch, useTimer } from 'react-timer-hook'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-import { mock } from 'jest-mock-extended'
-import { act, PropsWithChildren } from 'react'
-jest.mock('./useActiveTimeBasedGoal', () => ({
-  useUpdateActiveTimeBasedGoal: () => ({ addMinutes: jest.fn() }),
-  useActiveTimeBasedGoal: () => ({}),
-}))
+import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
+jest.mock('@/lib/goalTracker/quickUpdate/ActiveGoalContext', () => ({useActiveGoal: jest.fn().mockReturnValue({})}))
 jest.mock('react-timer-hook')
-
-const Wrapper = ({ children }: PropsWithChildren) => (
-  <QueryClientProvider client={mock<QueryClient>()}>{children}</QueryClientProvider>
-)
 
 describe('timer', () => {
   test('start a 5 minute timer, then cancel it', async () => {
@@ -62,4 +52,27 @@ describe('timer', () => {
     expect(await findByText('50 words')).toBeInTheDocument()
     expect(await findByText('50.0 w/m')).toBeInTheDocument()
   })
+
+  describe('Timer_Finished', () => {
+    test('update active wordcount goal', async () => {
+      const addToTodaysTotal = jest.fn()
+      // @ts-expect-error test
+      jest.mocked(useActiveGoal).mockReturnValue({activeGoal: buildGoal({metric: 'words'}), addToTodaysTotal})
+            // @ts-expect-error test
+      jest.mocked(useStopwatch).mockReturnValue({  })
+      
+      const {getByRole } = render(<Timer_Finished targetTime={0} onReset={jest.fn() } onRepeat={jest.fn() } onSubmitWordCount={ jest.fn()} />)
+       
+      const wordCountInput = getByRole('spinbutton', { name: 'words' })
+      fireEvent.input(wordCountInput, { target: { value: 50 } })
+      fireEvent.click(getByRole('checkbox'))
+      fireEvent.click(getByRole('button', { name: 'Submit' }))
+      await waitFor(() => {
+
+      expect(addToTodaysTotal).toHaveBeenCalledWith(50)
+    })
+      })
+  })
+
+  
 })
