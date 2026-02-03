@@ -15,7 +15,10 @@ const myFormatDuration = (durationSeconds: number) => {
 }
 
 export const SprintTable = ({sprints}: {sprints: Sprint[]}) => {
-    return (<table className={classNames.SprintTable}>
+    return (
+    <>
+    <h2>Sprint Log:</h2>
+    <table className={classNames.SprintTable}>
       <thead>
         <tr>
         <th/>
@@ -31,5 +34,5 @@ export const SprintTable = ({sprints}: {sprints: Sprint[]}) => {
         <td>{wordCount} words</td>
         <td>{(wordCount * 60 / durationSeconds ).toFixed(1)} w/m</td>
         </tr>))}</tbody>
-      </table>)
+      </table></>)
 }

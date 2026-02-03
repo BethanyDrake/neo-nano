@@ -16,3 +16,7 @@ export const truncateText = (text: string) => {
     
     return `${text.slice(0, targetLength)}...`
 }
+
+export const plural = (word: string, n: number) => `${word}${n === 1 ? '' : 's'}`
+
+export const plural1 = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`

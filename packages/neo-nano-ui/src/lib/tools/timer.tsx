@@ -1,25 +1,23 @@
 'use client'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
+import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
 import { Centered, Column, LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { track } from '@vercel/analytics'
 import confetti from 'canvas-confetti'
-import { minutesToSeconds, secondsToMinutes, startOfToday } from 'date-fns'
+import { minutesToSeconds } from 'date-fns'
 import { minutesInDay } from 'date-fns/constants'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
+import { ToastContainer, toast } from 'react-toastify'
 import useSound from 'use-sound'
-import { getDateAsString } from '../misc'
-import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
-import { Goal } from '../types/forum.types'
 import sprintTimerImage from './images/sprint-timer.png'
 import { PausePlayToggle } from './PausePlayToggle'
-import classNames from './timer.module.css'
-import { useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
-import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
 import { Sprint, SprintTable } from './SprintTable'
+import classNames from './timer.module.css'
+import { plural1 } from '../misc'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: string }>()
@@ -101,75 +99,6 @@ const Timer_InProgress = ({
   )
 }
 
-const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
-  const today = getDateAsString(startOfToday())
-  const challengeDay = dateToChallengeDay(startDate, today)
-  return records[challengeDay] ?? 0
-}
-
-const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes > 1 ? 's' : ''}`
-
-const UpdateActiveGoal = ({
-  goal,
-  targetMinutes,
-  extraMinutes,
-  pauseTimer,
-}: {
-  goal: Goal
-  targetMinutes: number
-  extraMinutes: number
-  pauseTimer: () => void
-}) => {
-  const { addMinutes } = useUpdateActiveTimeBasedGoal(goal)
-
-  const [hasAddedTargetMinutes, setHasAddedTargetMinutes] = useState(false)
-  const [hasAddedExtraMinutes, setHasAddedExtraMinutes] = useState(false)
-  const extraMinutesToAdd = hasAddedTargetMinutes ? extraMinutes : extraMinutes + targetMinutes
-
-  return (
-    <div className={classNames.UpdateActiveGoal}>
-      <Column gap="5px">
-        <Centered>
-          <h3>Update {goal.title}</h3>
-        </Centered>
-        <Centered>
-          <div>(so far today: {getTodaysProgress(goal)} minutes)</div>
-        </Centered>
-
-        <Row>
-          <BasicButton
-            buttonProps={{
-              onClick: () => {
-                setHasAddedTargetMinutes(true)
-                addMinutes(targetMinutes)
-                track('UpdateActiveGoal', { minutesAdded: targetMinutes, location: 'timerTool' })
-              },
-              disabled: hasAddedTargetMinutes,
-            }}
-          >
-            {formatAddMinutesText(targetMinutes)}
-          </BasicButton>
-          {extraMinutes > 0 && (
-            <BasicButton
-              buttonProps={{
-                onClick: () => {
-                  pauseTimer()
-                  addMinutes(extraMinutesToAdd)
-                  setHasAddedTargetMinutes(true)
-                  setHasAddedExtraMinutes(true)
-                },
-                disabled: hasAddedExtraMinutes,
-              }}
-            >
-              {formatAddMinutesText(extraMinutesToAdd)}
-            </BasicButton>
-          )}
-        </Row>
-      </Column>
-    </div>
-  )
-}
-
 const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes: number; seconds: number }): string => {
   const hours_s = `${hours}h`
   return `${hours > 0 ? hours_s : ''} ${minutes}m ${seconds}s`
@@ -177,8 +106,6 @@ const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes:
 
 export const Timer_Finished = ({
   targetTime,
-  onReset,
-  onRepeat,
   onSubmitWordCount,
 }: {
   targetTime: number
@@ -186,7 +113,7 @@ export const Timer_Finished = ({
   onRepeat: () => void
   onSubmitWordCount: (sprint: Omit<Sprint, 'id'>) => void
 }) => {
-  const { seconds, minutes, hours, pause, start, isRunning } = useStopwatch({
+  const { seconds, minutes, pause, start, isRunning, totalSeconds } = useStopwatch({
     autoStart: true,
   })
   useEffect(() => {
@@ -202,7 +129,6 @@ export const Timer_Finished = ({
     updateActiveGoal: boolean
   }>()
 
-
   const { activeGoal, addToTodaysTotal } = useActiveGoal()
   return (
     <div>
@@ -214,18 +140,26 @@ export const Timer_Finished = ({
 
         <form
           className={[formClasses.form, classNames.content].join(' ')}
-          onSubmit={handleSubmit(({ wordCount, updateActiveGoal }) => {
+          onSubmit={handleSubmit(({ wordCount, updateActiveGoal , includeOvertime}) => {
             const parsedWordCount = parseInt(wordCount)
+            const targetSeconds = targetTime
+            const durationSeconds = includeOvertime ? targetSeconds + totalSeconds : targetSeconds
             if (activeGoal?.metric === 'words' && updateActiveGoal) {
-              addToTodaysTotal(parsedWordCount)
+              addToTodaysTotal(parsedWordCount, {onSuccess: () => toast(`added ${plural1(parsedWordCount, 'word' , )} to ${activeGoal.title}`, {position: "bottom-center", hideProgressBar: true,})})
             }
              if (activeGoal?.metric === 'minutes' && updateActiveGoal) {
-              addToTodaysTotal(targetTime)
+              const minutesToAdd = Math.round(durationSeconds / 60)
+              addToTodaysTotal(minutesToAdd, {onSuccess: () => toast(`added ${plural1( minutesToAdd, 'minute' ,)} to ${activeGoal.title}`, {position: "bottom-center",hideProgressBar: true,})})
             }
-            onSubmitWordCount({ wordCount: parsedWordCount, durationSeconds: targetTime })
+            onSubmitWordCount({ wordCount: parsedWordCount, durationSeconds})
           })}
         >
           <Column>
+
+            <LeftRow alignItems="baseline">
+              <div>+{formatTimeString({ hours: 0, minutes, seconds })}</div>
+              <PausePlayToggle pause={pause} resume={start} isRunning={isRunning} />
+            </LeftRow>
             <LeftRow alignItems="baseline">
               <input
                 type="number"
@@ -235,12 +169,12 @@ export const Timer_Finished = ({
               />
               <label htmlFor="wordCount">words</label>
             </LeftRow>
-            {/*            
+                       
             <label>
               <LeftRow>
                 <div className={formClasses.checkboxContainer}>
               <input type="checkbox" {...register('includeOvertime')}/></div>
-             Include overtime  </LeftRow></label> */}
+             Include overtime  </LeftRow></label>
 
             {activeGoal && (
               <label>
@@ -267,6 +201,7 @@ export const Timer = () => {
 
   const [sprints, setSprints] = useState<Sprint[]>([])
 
+
   return (
     <>
       <Centered>
@@ -274,7 +209,7 @@ export const Timer = () => {
           {timerState === 'initial' && (
             <Timer_Initial
               startTimer={(durationSeconds) => {
-                track('StartTimer', { targetTime: secondsToMinutes(durationSeconds) })
+                track('StartTimer', { targetTime: durationSeconds })
                 setTargetTime(durationSeconds)
                 setTimerState('inProgress')
               }}
@@ -312,7 +247,9 @@ export const Timer = () => {
           )}
         </div>
       </Centered>
-      <SprintTable sprints={sprints} />
+     <SprintTable sprints={sprints} />
+     
+            <ToastContainer/>
     </>
   )
 }

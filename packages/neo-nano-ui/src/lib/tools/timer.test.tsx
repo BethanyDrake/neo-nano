@@ -3,7 +3,7 @@ import { Timer, Timer_Finished } from './timer'
 import { buildGoal } from '../types/forum.builders'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
-jest.mock('@/lib/goalTracker/quickUpdate/ActiveGoalContext', () => ({useActiveGoal: jest.fn().mockReturnValue({})}))
+jest.mock('@/lib/goalTracker/quickUpdate/ActiveGoalContext', () => ({ useActiveGoal: jest.fn().mockReturnValue({}) }))
 jest.mock('react-timer-hook')
 
 describe('timer', () => {
@@ -56,23 +56,70 @@ describe('timer', () => {
   describe('Timer_Finished', () => {
     test('update active wordcount goal', async () => {
       const addToTodaysTotal = jest.fn()
+
+      jest
+        .mocked(useActiveGoal)
+        // @ts-expect-error test
+        .mockReturnValue({ activeGoal: buildGoal({ title: 'Goal', metric: 'words' }), addToTodaysTotal })
       // @ts-expect-error test
-      jest.mocked(useActiveGoal).mockReturnValue({activeGoal: buildGoal({metric: 'words'}), addToTodaysTotal})
-            // @ts-expect-error test
-      jest.mocked(useStopwatch).mockReturnValue({  })
-      
-      const {getByRole } = render(<Timer_Finished targetTime={0} onReset={jest.fn() } onRepeat={jest.fn() } onSubmitWordCount={ jest.fn()} />)
-       
+      jest.mocked(useStopwatch).mockReturnValue({})
+
+      const { getByRole } = render(
+        <Timer_Finished targetTime={0} onReset={jest.fn()} onRepeat={jest.fn()} onSubmitWordCount={jest.fn()} />,
+      )
+
       const wordCountInput = getByRole('spinbutton', { name: 'words' })
       fireEvent.input(wordCountInput, { target: { value: 50 } })
-      fireEvent.click(getByRole('checkbox'))
+      fireEvent.click(getByRole('checkbox', { name: 'Update Goal' }))
       fireEvent.click(getByRole('button', { name: 'Submit' }))
       await waitFor(() => {
-
-      expect(addToTodaysTotal).toHaveBeenCalledWith(50)
-    })
+        expect(addToTodaysTotal).toHaveBeenCalledWith(50, expect.anything())
       })
-  })
+    })
 
-  
+    test('update active timebased goal', async () => {
+      const addToTodaysTotal = jest.fn()
+      jest
+        .mocked(useActiveGoal)
+        // @ts-expect-error test
+        .mockReturnValue({ activeGoal: buildGoal({ title: 'Goal', metric: 'minutes' }), addToTodaysTotal })
+      // @ts-expect-error test
+      jest.mocked(useStopwatch).mockReturnValue({})
+
+      const { getByRole } = render(
+        <Timer_Finished targetTime={7*60} onReset={jest.fn()} onRepeat={jest.fn()} onSubmitWordCount={jest.fn()} />,
+      )
+
+      const wordCountInput = getByRole('spinbutton', { name: 'words' })
+      fireEvent.input(wordCountInput, { target: { value: 50 } })
+      fireEvent.click(getByRole('checkbox', { name: 'Update Goal' }))
+      fireEvent.click(getByRole('button', { name: 'Submit' }))
+      await waitFor(() => {
+        expect(addToTodaysTotal).toHaveBeenCalledWith(7,  expect.anything())
+      })
+    })
+
+    test('include overtime', async () => {
+      const addToTodaysTotal = jest.fn()
+      jest
+        .mocked(useActiveGoal)
+        // @ts-expect-error test
+        .mockReturnValue({ activeGoal: buildGoal({ title: 'Goal', metric: 'minutes' ,}), addToTodaysTotal })
+      // @ts-expect-error test
+      jest.mocked(useStopwatch).mockReturnValue({ minutes: 10, totalSeconds: 10*60 })
+
+      const { getByRole } = render(
+        <Timer_Finished targetTime={7*60} onReset={jest.fn()} onRepeat={jest.fn()} onSubmitWordCount={jest.fn()} />,
+      )
+
+      const wordCountInput = getByRole('spinbutton', { name: 'words' })
+      fireEvent.input(wordCountInput, { target: { value: 50 } })
+      fireEvent.click(getByRole('checkbox', { name: 'Update Goal' }))
+      fireEvent.click(getByRole('checkbox', { name: 'Include overtime' }))
+      fireEvent.click(getByRole('button', { name: 'Submit' }))
+      await waitFor(() => {
+        expect(addToTodaysTotal).toHaveBeenCalledWith(17,  expect.anything())
+      })
+    })
+  })
 })

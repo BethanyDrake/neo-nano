@@ -4,7 +4,7 @@ import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { secondsToMinutes, startOfToday } from 'date-fns'
 import Image from 'next/image'
 import { useStopwatch } from 'react-timer-hook'
-import { getDateAsString } from '../misc'
+import { getDateAsString, plural } from '../misc'
 import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
 import { Goal } from '../types/forum.types'
 import { PausePlayToggle } from './PausePlayToggle'
@@ -21,8 +21,6 @@ const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'start
 }
 
 const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes === 1 ? '' : 's'}`
-
-const plural = (word: string, n: number) => `${word}${n === 1 ? '' : 's'}`
 
 const UpdateActiveGoal = ({
   goal,
