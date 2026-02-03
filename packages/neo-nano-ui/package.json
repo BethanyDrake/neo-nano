@@ -41,6 +41,7 @@
     "react-is": "19.2.3",
     "react-quill-new": "^3.6.0",
     "react-timer-hook": "^4.0.5",
+    "react-toastify": "^11.0.5",
     "recharts": "^3.4.1",
     "snakecase-keys": "^9.0.2",
     "use-sound": "^5.0.0"

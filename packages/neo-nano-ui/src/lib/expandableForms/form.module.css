@@ -13,6 +13,29 @@
         }
     }
 
+    input[type="checkbox"] {
+        appearance: none;
+        border: none;
+        box-shadow: none;
+        width: 1.5em;
+        height: 1.5em;
+
+        &:checked {
+            transform: translateX(1px);
+           background-color: var(--primary-vibrant);
+           clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+    }
+
+    .checkboxContainer {
+      width: 1.5em;
+      height: 1.5em;
+      cursor: pointer;
+      border-radius: 2px;
+      border: 1px solid var(--primary-light);
+      box-shadow: inset 0 3px 5px rgb(0 0 0 / 0.1);
+    }
+
     select {
         border: 1px solid var(--primary-light);
         border-radius: 2px;

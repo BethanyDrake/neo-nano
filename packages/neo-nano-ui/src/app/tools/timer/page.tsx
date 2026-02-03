@@ -7,7 +7,7 @@ const TimerPage = () => {
   return (
     <NewAwardModalProvider>
     <GutteredPage>
-       <UnderDevelopmentMessage upcomingChanges={[{description: 'enter word count after a sprint', issueId: 216}, {description: 'graph wpm over a sprint session', issueId: 217}]}/>
+       <UnderDevelopmentMessage upcomingChanges={[{description: 'graph wpm over a sprint session', issueId: 217}]}/>
      
       <Timer />
     </GutteredPage>

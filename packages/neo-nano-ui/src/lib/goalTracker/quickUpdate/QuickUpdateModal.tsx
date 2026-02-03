@@ -8,7 +8,6 @@ import { faPencil, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { CumulativeSwitch } from '../CumulativeSwitch'
 import { Column, Row } from '../../layoutElements/flexLayouts'
 import { BasicButton } from '../../buttons/BasicButton'
-import { useLoadableOnClick } from '../../buttons/usLoadableOnClick'
 import _ from 'lodash'
 import { dateToChallengeDay } from '../../serverFunctions/goals/goalUtils'
 import { updateRecordsUtil } from '../updateRecordsUtil'
@@ -22,15 +21,14 @@ import { track } from '@vercel/analytics'
 
 const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => void; activeGoal: Goal }) => {
   const [isCumulative, setIsCumulative] = useState(false)
-  const { updateActiveGoal } = useActiveGoal()
+  const { updateActiveGoal, isRefreshing } = useActiveGoal()
   const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, startOfToday()) : -1
   const [localRecords, setLocalRecords] = useState(activeGoal?.records ?? [])
-  const { onClick, isLoading } = useLoadableOnClick(async () => {
-    await updateActiveGoal(localRecords)
+  const onClick = () => updateActiveGoal(localRecords, {onSuccess: () => {
     track('UpdateActiveGoal',  {location: 'quickUpdateModal'})
-
     closeModal()
-  })
+  }})
+  
 
   const updateTodaysWordCount = (newValue: number) => {
     const sanitisedValue = isNaN(newValue) ? 0 : newValue
@@ -85,7 +83,7 @@ const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => vo
           )}
         </Row>
 
-        <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+        <BasicButton isLoading={isRefreshing} buttonProps={{ type: 'submit' }}>
           Save
         </BasicButton>
 
@@ -101,6 +99,7 @@ export const QuickUpdateModal = () => {
   const { activeGoal, refresh, isRefreshing } = useActiveGoal()
   const pathname = usePathname()
   const isOpen = openModal === modalId
+
 
   useEffect(() => {
     refresh()
