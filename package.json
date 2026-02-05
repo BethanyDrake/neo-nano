@@ -10,7 +10,7 @@
   "scripts": {
     "typecheck": "yarn workspace neo-nano-ui tsc",
     "test": "yarn workspace neo-nano-ui test",
-    "e2e": "yarn playwright test --ui",
+    "e2e": "LANG=en_AU.UTF-8 yarn playwright test --ui",
     "lint": "yarn workspace neo-nano-ui lint",
     "build": "yarn workspace neo-nano-ui build",
     "prepare": "husky"

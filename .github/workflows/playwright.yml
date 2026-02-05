@@ -30,7 +30,7 @@ jobs:
         yarn workspace neo-nano-ui start & 
         npx wait-on http://localhost:3000
     - name: Run Playwright tests
-      run: yarn playwright test
+      run: LANG=en_AU.UTF-8 yarn playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
