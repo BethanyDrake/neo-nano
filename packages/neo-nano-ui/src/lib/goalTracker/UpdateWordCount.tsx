@@ -74,18 +74,16 @@ export const UpdateWordCount = ({
       const challengeDay = differenceInCalendarDays(date, parseISO(startDate))
 
       const onSubmit = ({ target }: { target: EventTarget & HTMLInputElement }) => {
-        console.log('onsubmit')
         updateRecord(challengeDay, target.valueAsNumber)
       }
 
       const wordCount = isCumulative ? cumulativeRecords[challengeDay] : records[challengeDay]
-
       if (view === 'month') {
         if (isSelected) {
           return (
             <input
               defaultValue={wordCount ?? undefined}
-              name={`wordcount for ${date}${isCumulative ? ' (cumulative)' : ''}`}
+              aria-label={`wordcount for ${date.toLocaleDateString()}${isCumulative ? ' (cumulative)' : ''}`}
               onBlur={onSubmit}
               onKeyDown={({ target, key }) => {
                 if (key === 'Enter') {

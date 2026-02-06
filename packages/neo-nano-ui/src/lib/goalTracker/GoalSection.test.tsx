@@ -3,8 +3,6 @@ import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
 import { GoalSection } from './GoalSection'
 import { isActive } from '../serverFunctions/goals/goalUtils'
-
-jest.mock('./UpdateWordCount')
 jest.mock('@/lib/serverFunctions/goals/setGoalVisibility')
 jest.mock('@/lib/serverFunctions/goals/deleteGoal')
 jest.mock('../serverFunctions/goals/goalUtils')
