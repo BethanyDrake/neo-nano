@@ -12,8 +12,7 @@ export const metadata: Metadata = {
 }
 
 const Page = async () => {
-  const awardCounts = await getTrophyCounts()
-  const milestoneUserCounts = await getPyramidData()
+  const [awardCounts, milestoneUserCounts] = await Promise.all([getTrophyCounts(), getPyramidData()])
   return (
     <GutteredPage>
       <Column>
