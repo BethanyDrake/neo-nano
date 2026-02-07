@@ -3,14 +3,42 @@ import { Timer, Timer_Finished } from './timer'
 import { buildGoal } from '../types/forum.builders'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
+import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
+import { wrap } from 'souvlaki'
+import { createPrivateSprint, getMySprintLog, Sprint, UserSprint } from '../serverFunctions/sprints/recordPrivateSprint'
 jest.mock('@/lib/goalTracker/quickUpdate/ActiveGoalContext', () => ({ useActiveGoal: jest.fn().mockReturnValue({}) }))
 jest.mock('react-timer-hook')
+
+jest.mock('@/lib/serverFunctions/sprints/recordPrivateSprint')
+
+const buildSprint = (overrides: Partial<Sprint> = {}): Sprint => {
+  return {
+    id: 'sprint-id',
+    durationSeconds: 0,
+    startTime: new Date(),
+
+    ...overrides
+  }
+}
+
+const buildUserSprint =  (overrides: Partial<UserSprint> = {}): UserSprint => {
+  return {
+    id: 'sprint-id',
+    durationSeconds: 0,
+    startTime: new Date(),
+    wordCount: 0,
+
+    ...overrides
+  }
+}
+
 
 describe('timer', () => {
   test('start a 5 minute timer, then cancel it', async () => {
     // @ts-expect-error test
     jest.mocked(useTimer).mockReturnValue({ minutes: 5, seconds: 30 })
-    const { getByRole, findByText, getByText } = render(<Timer />)
+    jest.mocked(getMySprintLog).mockResolvedValueOnce([])
+    const { getByRole, findByText, getByText } = render(<Timer />, {wrapper: wrap(withReactQueryClient())})
 
     expect(getByText('Start a timer')).toBeInTheDocument()
     const input = getByRole('spinbutton', { name: 'minutes' })
@@ -31,7 +59,10 @@ describe('timer', () => {
     })
     // @ts-expect-error test
     jest.mocked(useStopwatch).mockReturnValue({ minutes: 0, seconds: 0 })
-    const { getByRole, findByText, getByText } = render(<Timer />)
+    jest.mocked(createPrivateSprint).mockResolvedValue(buildSprint({id: '1'}))
+    jest.mocked(getMySprintLog).mockResolvedValueOnce([])
+    jest.mocked(getMySprintLog).mockResolvedValueOnce([buildUserSprint({id: '1', durationSeconds: 60, wordCount: 50})])
+    const { getByRole, findByText, getByText } = render(<Timer />, {wrapper: wrap(withReactQueryClient())})
 
     expect(getByText('Start a timer')).toBeInTheDocument()
     const input = getByRole('spinbutton', { name: 'minutes' })

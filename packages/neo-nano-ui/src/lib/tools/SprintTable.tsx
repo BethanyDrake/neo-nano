@@ -1,20 +1,15 @@
 import { secondsToMinutes } from "date-fns"
 import classNames from './timer.module.css'
-
-export type Sprint = {
-  id: number,
-  durationSeconds: number,
-  wordCount: number
-}
+import { UserSprint } from "../serverFunctions/sprints/recordPrivateSprint"
 
 const myFormatDuration = (durationSeconds: number) => {
-    const seconds=  durationSeconds % 60
-    const  minutes=  secondsToMinutes(durationSeconds)
+    const seconds =  durationSeconds % 60
+    const  minutes =  secondsToMinutes(durationSeconds)
     if (seconds > 0) return `${minutes}m ${seconds}s`
     return `${minutes}m`
 }
 
-export const SprintTable = ({sprints}: {sprints: Sprint[]}) => {
+export const SprintTable = ({sprints}: {sprints: UserSprint[]}) => {
     return (
     <>
     <h2>Sprint Log:</h2>

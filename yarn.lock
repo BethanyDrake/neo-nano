@@ -5654,6 +5654,11 @@ source-map@^0.6.0:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
+souvlaki@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/souvlaki/-/souvlaki-0.3.1.tgz#d87447c5086c8f06032aafeb7b1cac40581f6bfe"
+  integrity sha512-Zew9Bq0e6bOdIsOt3WQlRMnYY4OIOjyAj2iJq8uJvIIHxazlNZmsBG8BaFLNb3uCVDG9UYpr8rc17SKcBErTFg==
+
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"

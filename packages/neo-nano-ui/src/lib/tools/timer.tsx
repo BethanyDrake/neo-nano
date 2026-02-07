@@ -15,9 +15,11 @@ import { ToastContainer, toast } from 'react-toastify'
 import useSound from 'use-sound'
 import sprintTimerImage from './images/sprint-timer.png'
 import { PausePlayToggle } from './PausePlayToggle'
-import { Sprint, SprintTable } from './SprintTable'
+import { SprintTable } from './SprintTable'
 import classNames from './timer.module.css'
 import { plural1 } from '../misc'
+import { completePrivateSprint, createPrivateSprint, getMySprintLog, cancelPrivateSprint, Sprint, UserSprint } from '../serverFunctions/sprints/recordPrivateSprint'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: string }>()
@@ -111,7 +113,7 @@ export const Timer_Finished = ({
   targetTime: number
   onReset: () => void
   onRepeat: () => void
-  onSubmitWordCount: (sprint: Omit<Sprint, 'id'>) => void
+  onSubmitWordCount:  (sprint: Pick<UserSprint, 'wordCount' | 'durationSeconds'>) => Promise<void>
 }) => {
   const { seconds, minutes, pause, start, isRunning, totalSeconds } = useStopwatch({
     autoStart: true,
@@ -123,6 +125,8 @@ export const Timer_Finished = ({
       colors: ['#C0E5C8', '#1ab394', '#6e1ab3', '#d8a9ffff'],
     })
   }, [])
+
+  const [isLoading, setIsLoading] = useState(false)
   const { handleSubmit, register } = useForm<{
     wordCount: string
     includeOvertime: boolean
@@ -140,7 +144,9 @@ export const Timer_Finished = ({
 
         <form
           className={[formClasses.form, classNames.content].join(' ')}
-          onSubmit={handleSubmit(({ wordCount, updateActiveGoal , includeOvertime}) => {
+          onSubmit={handleSubmit(async ({ wordCount, updateActiveGoal , includeOvertime}) => {
+            if(isLoading) return
+            setIsLoading(true)
             const parsedWordCount = parseInt(wordCount)
             const targetSeconds = targetTime
             const durationSeconds = includeOvertime ? targetSeconds + totalSeconds : targetSeconds
@@ -151,7 +157,8 @@ export const Timer_Finished = ({
               const minutesToAdd = Math.round(durationSeconds / 60)
               addToTodaysTotal(minutesToAdd, {onSuccess: () => toast(`added ${plural1( minutesToAdd, 'minute' ,)} to ${activeGoal.title}`, {position: "bottom-center",hideProgressBar: true,})})
             }
-            onSubmitWordCount({ wordCount: parsedWordCount, durationSeconds})
+            await onSubmitWordCount({ wordCount: parsedWordCount, durationSeconds})
+            setIsLoading(false)
           })}
         >
           <Column>
@@ -186,7 +193,7 @@ export const Timer_Finished = ({
                 </LeftRow>
               </label>
             )}
-            <BasicButton>Submit</BasicButton>
+            <BasicButton isLoading={isLoading}>Submit</BasicButton>
           </Column>
         </form>
       </Row>
@@ -198,8 +205,9 @@ export const Timer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
   const [timerState, setTimerState] = useState('initial')
   const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
-
-  const [sprints, setSprints] = useState<Sprint[]>([])
+  const [pendingPromise, setPendingPromise] = useState<Promise<Sprint | null>>(Promise.resolve(null))
+  const {data: sprints} = useQuery({queryKey: ['my-sprint-log'], queryFn: getMySprintLog})
+  const queryClient = useQueryClient()
 
 
   return (
@@ -210,6 +218,9 @@ export const Timer = () => {
             <Timer_Initial
               startTimer={(durationSeconds) => {
                 track('StartTimer', { targetTime: durationSeconds })
+                const createSprintPromise = createPrivateSprint(new Date(), durationSeconds)
+                pendingPromise.then( () => setPendingPromise(createSprintPromise))
+               
                 setTargetTime(durationSeconds)
                 setTimerState('inProgress')
               }}
@@ -218,7 +229,14 @@ export const Timer = () => {
 
           {timerState === 'inProgress' && (
             <Timer_InProgress
-              onCancel={() => setTimerState('initial')}
+              onCancel={async () => {
+                setTimerState('initial')
+                const activeSprint = await pendingPromise;
+                if(activeSprint) {
+                  const cancelPromise = cancelPrivateSprint(activeSprint.id)
+                  setPendingPromise(cancelPromise.then(() => null))
+                }
+              }}
               onFinished={() => {
                 onCompletePlay()
                 setTimerState('finished')
@@ -232,22 +250,23 @@ export const Timer = () => {
               targetTime={targetTime}
               onReset={() => setTimerState('initial')}
               onRepeat={() => setTimerState('inProgress')}
-              onSubmitWordCount={({ durationSeconds, wordCount }) => {
-                setSprints([
-                  ...sprints,
-                  {
-                    durationSeconds,
-                    wordCount,
-                    id: sprints.length + 1,
-                  },
-                ])
+              onSubmitWordCount={async ({ durationSeconds, wordCount }) => {
+                const currentSprint = await pendingPromise
+                if (!currentSprint) {
+                  console.error('no active sprint :(')
+                } else {
+                  await completePrivateSprint(currentSprint.id, durationSeconds, wordCount)
+                  queryClient.invalidateQueries({queryKey: ['my-sprint-log']})
+                  setPendingPromise(Promise.resolve(null))
+                }
+                
                 setTimerState('initial')
               }}
             />
           )}
         </div>
       </Centered>
-     <SprintTable sprints={sprints} />
+     {sprints && <SprintTable sprints={sprints} />}
      
             <ToastContainer/>
     </>
