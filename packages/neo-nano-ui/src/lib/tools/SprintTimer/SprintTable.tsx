@@ -9,6 +9,10 @@ const myFormatDuration = (durationSeconds: number) => {
     return `${minutes}m`
 }
 
+const formatStartTime = (startTime: Date) => {
+  return startTime.toLocaleTimeString(undefined, {hourCycle: 'h24', timeStyle: 'short'})
+}
+
 export const SprintTable = ({sprints}: {sprints: CompletedSprint[]}) => {
     return (
     <>
@@ -23,8 +27,8 @@ export const SprintTable = ({sprints}: {sprints: CompletedSprint[]}) => {
         </tr>
       </thead>
   <tbody>
-      {sprints.map(({id, durationSeconds, wordCount}) => (<tr key={id}>
-        <th>Sprint {id}</th>
+      {sprints.map(({id, durationSeconds, wordCount, startTime}) => (<tr key={id}>
+        <th>{formatStartTime(startTime)}</th>
         <td>{myFormatDuration(durationSeconds)}</td>
         <td>{wordCount} words</td>
         <td>{(wordCount * 60 / durationSeconds ).toFixed(1)} w/m</td>

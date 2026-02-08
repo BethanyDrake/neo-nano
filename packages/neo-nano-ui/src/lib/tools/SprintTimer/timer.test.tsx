@@ -51,7 +51,6 @@ describe('timer', () => {
         .mockResolvedValueOnce([buildCompletedSprint({ id: 'some-id', durationSeconds: 2 * 60, wordCount: 50 })])
       const { findByText } = render(<Timer />)
 
-      expect(await findByText('Sprint some-id')).toBeInTheDocument()
       expect(await findByText('50 words')).toBeInTheDocument()
       expect(await findByText('25.0 w/m')).toBeInTheDocument()
     })
@@ -86,7 +85,6 @@ describe('timer', () => {
       fireEvent.input(wordCountInput, { target: { value: 50 } })
       fireEvent.click(getByRole('button', { name: 'Submit' }))
 
-      expect(await findByText('Sprint 1')).toBeInTheDocument()
       expect(await findByText('1m')).toBeInTheDocument()
       expect(await findByText('50 words')).toBeInTheDocument()
       expect(await findByText('50.0 w/m')).toBeInTheDocument()
@@ -208,7 +206,6 @@ describe('timer', () => {
       fireEvent.input(wordCountInput, { target: { value: 50 } })
       fireEvent.click(getByRole('button', { name: 'Submit' }))
 
-      expect(await findByText('Sprint 1')).toBeInTheDocument()
       expect(await findByText('1m')).toBeInTheDocument()
       expect(await findByText('50 words')).toBeInTheDocument()
       expect(await findByText('50.0 w/m')).toBeInTheDocument()
