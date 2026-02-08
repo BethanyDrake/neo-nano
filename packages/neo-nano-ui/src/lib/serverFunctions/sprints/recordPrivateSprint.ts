@@ -2,15 +2,24 @@
 import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getUserId } from '../_utils/getUserIdFromSession'
+import { Visibility } from "@/lib/types/forum.types"
 
 export type Sprint = {
   id: string
   startTime: Date
   durationSeconds: number
+  visibility: Visibility
+
+}
+export type ParticipationState = 'registered' | 'completed'
+export type UserSprint = Sprint & {
+  wordCount: number | null
+  participationState: ParticipationState
 }
 
-export type UserSprint = Sprint & {
-    wordCount: number
+export type CompletedSprint = Sprint & {
+  wordCount: number,
+  participationState: 'completed'
 }
 
 const registerForSprint = async (userId: string, sprintId: string) => {
@@ -51,8 +60,9 @@ export const getMySprintLog = async () => {
   from sprints join user_sprints on sprint_id = sprints.id 
   where user_sprints.user_id=${userId}
   and user_sprints.participation_state='completed'
-  order by sprints.start_time desc`
-  return sprints.map((sprint) => camelcaseKeys(sprint) as UserSprint)
+  order by sprints.start_time desc
+  limit 10`
+  return sprints.map((sprint) => camelcaseKeys(sprint) as CompletedSprint)
 }
 
 export const completePrivateSprint = async (
