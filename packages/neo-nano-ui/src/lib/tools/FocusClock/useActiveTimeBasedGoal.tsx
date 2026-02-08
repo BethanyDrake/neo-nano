@@ -1,15 +1,15 @@
 'use client'
 import { startOfToday } from 'date-fns'
-import { getDateAsString } from '../misc'
-import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
-import { getActiveTimeBasedGoal } from '../serverFunctions/goals/getActiveGoal'
+import { getDateAsString } from '../../misc'
+import { useIsLoggedIn } from '../../hooks/useIsLoggedIn'
+import { getActiveTimeBasedGoal } from '../../serverFunctions/goals/getActiveGoal'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { dateToChallengeDay } from '../serverFunctions/goals/goalUtils'
-import { Goal } from '../types/forum.types'
-import { changeAtIndex } from '../goalTracker/recordUtils'
-import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
+import { dateToChallengeDay } from '../../serverFunctions/goals/goalUtils'
+import { Goal } from '../../types/forum.types'
+import { changeAtIndex } from '../../goalTracker/recordUtils'
+import { updateGoalProgress } from '../../serverFunctions/goals/updateGoalProgress'
 import { useContext } from 'react'
-import { NewAwardModalContext } from '../awards/NewAwardModal'
+import { NewAwardModalContext } from '../../awards/NewAwardModal'
 
 const getQueryKey = () => {
   const today = getDateAsString(startOfToday())

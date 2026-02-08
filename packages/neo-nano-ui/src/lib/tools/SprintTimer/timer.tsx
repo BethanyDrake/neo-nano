@@ -13,12 +13,12 @@ import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import { ToastContainer, toast } from 'react-toastify'
 import useSound from 'use-sound'
-import sprintTimerImage from './images/sprint-timer.png'
-import { PausePlayToggle } from './PausePlayToggle'
+import sprintTimerImage from './sprint-timer.png'
+import { PausePlayToggle } from '../PausePlayToggle'
 import { SprintTable } from './SprintTable'
-import classNames from './timer.module.css'
-import { plural1 } from '../misc'
-import { SprintContextProvider, useSprintContext } from './SprintLogger/SprintContext'
+import classNames from '../timer.module.css'
+import { plural1 } from '../../misc'
+import { SprintContextProvider, useSprintContext } from './SprintContext'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: string }>()

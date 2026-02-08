@@ -1,6 +1,6 @@
 import { secondsToMinutes } from "date-fns"
-import classNames from './timer.module.css'
-import { CompletedSprint } from "../serverFunctions/sprints/recordPrivateSprint"
+import classNames from '../timer.module.css'
+import { CompletedSprint } from "@/lib/serverFunctions/sprints/recordPrivateSprint"
 
 const myFormatDuration = (durationSeconds: number) => {
     const seconds =  durationSeconds % 60

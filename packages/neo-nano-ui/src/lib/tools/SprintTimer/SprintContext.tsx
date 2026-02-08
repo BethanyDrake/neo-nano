@@ -1,7 +1,6 @@
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import {
   Sprint,
-  UserSprint,
   getMySprintLog as _getMySprintLog,
   completePrivateSprint as _completePrivateSprint,
   createPrivateSprint as _createPrivateSprint,

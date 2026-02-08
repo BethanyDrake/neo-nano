@@ -1,7 +1,7 @@
 import { fireEvent, render } from "@testing-library/react"
 import { Clock } from "./clock"
 import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from "./useActiveTimeBasedGoal"
-import { buildGoal } from "../types/forum.builders"
+import { buildGoal } from "@/lib/types/forum.builders"
 import { useStopwatch } from "react-timer-hook"
 import { minutesToSeconds } from "date-fns"
 jest.mock('./useActiveTimeBasedGoal')

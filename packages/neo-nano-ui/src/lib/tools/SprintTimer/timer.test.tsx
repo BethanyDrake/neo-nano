@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor, act } from '@testing-library/react'
 import { Timer, Timer_Finished } from './timer'
-import { buildGoal } from '../types/forum.builders'
+import { buildGoal } from '@/lib/types/forum.builders'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
 import {
@@ -8,8 +8,8 @@ import {
   createPrivateSprint,
   getMySprintLog,
   Sprint,
-} from '../serverFunctions/sprints/recordPrivateSprint'
-import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
+} from '@/lib/serverFunctions/sprints/recordPrivateSprint'
+import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 jest.mock('@/lib/goalTracker/quickUpdate/ActiveGoalContext', () => ({ useActiveGoal: jest.fn().mockReturnValue({}) }))
 jest.mock('react-timer-hook')
 jest.mock('@/lib/hooks/useIsLoggedIn')
