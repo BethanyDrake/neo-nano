@@ -1,6 +1,6 @@
 import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
-import { Timer } from '@/lib/tools/SprintTimer/timer'
+import { Timer } from '@/lib/tools/sprintTimer/timer'
 
 import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 
