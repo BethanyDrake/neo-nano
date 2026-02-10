@@ -50,12 +50,9 @@ export const SprintChart = ({ sprints }: { sprints: CompletedSprint[] }) => {
     data[i].startTime = formatStartTime(startTime)
   })
 
-  // console.log(data)
-
   return (
     <ResponsiveContainer height={400}>
       <ComposedChart
-        title="Sprint History"
         accessibilityLayer
         data={data}
         margin={{
