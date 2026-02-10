@@ -1,5 +1,5 @@
 import { fireEvent, render } from "@testing-library/react"
-import { Clock } from "./clock"
+import { Clock } from "./Clock"
 import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from "./useActiveTimeBasedGoal"
 import { buildGoal } from "@/lib/types/forum.builders"
 import { useStopwatch } from "react-timer-hook"

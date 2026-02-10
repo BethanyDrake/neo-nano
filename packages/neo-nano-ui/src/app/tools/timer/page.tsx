@@ -1,7 +1,6 @@
 import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
-import { Timer } from '@/lib/tools/sprintTimer/timer'
-
+import { Timer } from '@/lib/tools/sprintTimerTool/Timer'
 import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 
 const TimerPage = () => {

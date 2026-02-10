@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor, act } from '@testing-library/react'
-import { Timer, Timer_Finished } from './timer'
+import { Timer, Timer_Finished } from './Timer'
 import { buildGoal } from '@/lib/types/forum.builders'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import { useActiveGoal } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'

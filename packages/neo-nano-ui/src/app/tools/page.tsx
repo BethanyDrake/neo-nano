@@ -4,8 +4,8 @@ import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from './tools.module.css'
-import focusClock from '@/lib/tools/focusClock/focus-clock.png'
-import sprintTimer from '@/lib/tools/sprintTimer/sprint-timer.png'
+import focusClock from '@/lib/tools/focusClockTool/focus-clock.png'
+import sprintTimer from '@/lib/tools/sprintTimerTool/sprint-timer.png'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 
 const ToolCard = ({
