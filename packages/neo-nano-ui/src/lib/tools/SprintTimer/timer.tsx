@@ -19,6 +19,7 @@ import { SprintTable } from './SprintTable'
 import classNames from '../timer.module.css'
 import { plural1 } from '../../misc'
 import { SprintContextProvider, useSprintContext } from './SprintContext'
+import { SprintChart } from './SprintChart'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: string }>()
@@ -272,7 +273,7 @@ const InnerTimer = () => {
         </div>
       </Centered>
       {sprintLog && <SprintTable sprints={sprintLog} />}
-
+  {sprintLog && <SprintChart sprints={sprintLog} />}
       <ToastContainer />
     </>
   )

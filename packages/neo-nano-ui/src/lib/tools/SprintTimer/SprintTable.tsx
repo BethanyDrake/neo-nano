@@ -9,7 +9,7 @@ const myFormatDuration = (durationSeconds: number) => {
     return `${minutes}m`
 }
 
-const formatStartTime = (startTime: Date) => {
+export const formatStartTime = (startTime: Date) => {
   return startTime.toLocaleTimeString(undefined, {hourCycle: 'h24', timeStyle: 'short'})
 }
 
