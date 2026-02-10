@@ -5,7 +5,11 @@ import { ProfilePageInner } from './ProfilePage'
 import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { MyGoalContextProvider } from '@/lib/context/MyGoalsContext'
+import { Metadata } from 'next'
 
+export const metadata: Metadata = {
+  title: 'My Profile',
+}
 const ProfilePage = async () => {
   const [initalProfile, initialAwards] = await Promise.all([getMyProfile(), getMyAwards()])
   if (!initalProfile) throw Error('No profile found for ProfilePage.')

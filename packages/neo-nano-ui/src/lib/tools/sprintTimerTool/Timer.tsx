@@ -13,14 +13,17 @@ import { useForm } from 'react-hook-form'
 import { useStopwatch, useTimer } from 'react-timer-hook'
 import { ToastContainer, toast } from 'react-toastify'
 import useSound from 'use-sound'
-import sprintTimerImage from './images/sprint-timer.png'
-import { PausePlayToggle } from './PausePlayToggle'
-import { Sprint, SprintTable } from './SprintTable'
-import classNames from './timer.module.css'
-import { plural1 } from '../misc'
+import sprintTimerImage from './sprint-timer.png'
+import { PausePlayToggle } from '../PausePlayToggle'
+import { SprintTable } from './SprintTable'
+import classNames from '../timer.module.css'
+import { plural1 } from '../../misc'
+import { SprintContextProvider, useSprintContext } from './SprintContext'
+import { SprintChart } from './SprintChart'
 
 const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) => void }) => {
   const { handleSubmit, register } = useForm<{ minutes: string }>()
+  const { startSprint } = useSprintContext()
   return (
     <div>
       <Centered>
@@ -32,7 +35,9 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
         <form
           className={[formClasses.form, classNames.content].join(' ')}
           onSubmit={handleSubmit(({ minutes }) => {
-            startTimer(minutesToSeconds(parseInt(minutes)))
+            const durationSeconds = minutesToSeconds(parseInt(minutes))
+            startSprint(durationSeconds)
+            startTimer(durationSeconds)
           })}
         >
           <Column>
@@ -75,6 +80,12 @@ const Timer_InProgress = ({
     onExpire: onFinished,
   })
 
+  const { cancelSprint } = useSprintContext()
+  const _onCancel = () => {
+    cancelSprint()
+    onCancel()
+  }
+
   return (
     <div>
       <Centered>
@@ -90,7 +101,7 @@ const Timer_InProgress = ({
               <PausePlayToggle pause={pause} resume={resume} isRunning={isRunning} />
             </Row>
             <Row>
-              <BasicButton buttonProps={{ onClick: onCancel }}>Cancel</BasicButton>
+              <BasicButton buttonProps={{ onClick: _onCancel }}>Cancel</BasicButton>
             </Row>
           </Column>
         </div>
@@ -111,7 +122,7 @@ export const Timer_Finished = ({
   targetTime: number
   onReset: () => void
   onRepeat: () => void
-  onSubmitWordCount: (sprint: Omit<Sprint, 'id'>) => void
+  onSubmitWordCount: () => void
 }) => {
   const { seconds, minutes, pause, start, isRunning, totalSeconds } = useStopwatch({
     autoStart: true,
@@ -123,11 +134,15 @@ export const Timer_Finished = ({
       colors: ['#C0E5C8', '#1ab394', '#6e1ab3', '#d8a9ffff'],
     })
   }, [])
+
+  const [isLoading, setIsLoading] = useState(false)
   const { handleSubmit, register } = useForm<{
     wordCount: string
     includeOvertime: boolean
     updateActiveGoal: boolean
   }>()
+
+  const { completeSprint } = useSprintContext()
 
   const { activeGoal, addToTodaysTotal } = useActiveGoal()
   return (
@@ -140,41 +155,59 @@ export const Timer_Finished = ({
 
         <form
           className={[formClasses.form, classNames.content].join(' ')}
-          onSubmit={handleSubmit(({ wordCount, updateActiveGoal , includeOvertime}) => {
-            const parsedWordCount = parseInt(wordCount)
-            const targetSeconds = targetTime
-            const durationSeconds = includeOvertime ? targetSeconds + totalSeconds : targetSeconds
-            if (activeGoal?.metric === 'words' && updateActiveGoal) {
-              addToTodaysTotal(parsedWordCount, {onSuccess: () => toast(`added ${plural1(parsedWordCount, 'word' , )} to ${activeGoal.title}`, {position: "bottom-center", hideProgressBar: true,})})
+          onSubmit={handleSubmit(async ({ wordCount, updateActiveGoal, includeOvertime }) => {
+            if (isLoading) return
+            try {
+              setIsLoading(true)
+              const parsedWordCount = parseInt(wordCount)
+              const targetSeconds = targetTime
+              const durationSeconds = includeOvertime ? targetSeconds + totalSeconds : targetSeconds
+              if (activeGoal?.metric === 'words' && updateActiveGoal) {
+                addToTodaysTotal(parsedWordCount, {
+                  onSuccess: () =>
+                    toast(`added ${plural1(parsedWordCount, 'word')} to ${activeGoal.title}`, {
+                      position: 'bottom-center',
+                      hideProgressBar: true,
+                    }),
+                })
+              }
+              if (activeGoal?.metric === 'minutes' && updateActiveGoal) {
+                const minutesToAdd = Math.round(durationSeconds / 60)
+                addToTodaysTotal(minutesToAdd, {
+                  onSuccess: () =>
+                    toast(`added ${plural1(minutesToAdd, 'minute')} to ${activeGoal.title}`, {
+                      position: 'bottom-center',
+                      hideProgressBar: true,
+                    }),
+                })
+              }
+              await completeSprint(durationSeconds, parsedWordCount)
+              setIsLoading(false)
+              onSubmitWordCount()
+            } catch {
+              toast('Error :(', { position: 'bottom-center', hideProgressBar: true })
+              setIsLoading(false)
             }
-             if (activeGoal?.metric === 'minutes' && updateActiveGoal) {
-              const minutesToAdd = Math.round(durationSeconds / 60)
-              addToTodaysTotal(minutesToAdd, {onSuccess: () => toast(`added ${plural1( minutesToAdd, 'minute' ,)} to ${activeGoal.title}`, {position: "bottom-center",hideProgressBar: true,})})
-            }
-            onSubmitWordCount({ wordCount: parsedWordCount, durationSeconds})
           })}
         >
           <Column>
-
             <LeftRow alignItems="baseline">
               <div>+{formatTimeString({ hours: 0, minutes, seconds })}</div>
               <PausePlayToggle pause={pause} resume={start} isRunning={isRunning} />
             </LeftRow>
             <LeftRow alignItems="baseline">
-              <input
-                type="number"
-                min={0}
-                id="wordCount"
-                {...register('wordCount', { required: true })}
-              />
+              <input type="number" min={0} id="wordCount" {...register('wordCount', { required: true })} />
               <label htmlFor="wordCount">words</label>
             </LeftRow>
-                       
+
             <label>
               <LeftRow>
                 <div className={formClasses.checkboxContainer}>
-              <input type="checkbox" {...register('includeOvertime')}/></div>
-             Include overtime  </LeftRow></label>
+                  <input type="checkbox" {...register('includeOvertime')} />
+                </div>
+                Include overtime{' '}
+              </LeftRow>
+            </label>
 
             {activeGoal && (
               <label>
@@ -186,7 +219,7 @@ export const Timer_Finished = ({
                 </LeftRow>
               </label>
             )}
-            <BasicButton>Submit</BasicButton>
+            <BasicButton isLoading={isLoading}>Submit</BasicButton>
           </Column>
         </form>
       </Row>
@@ -194,13 +227,11 @@ export const Timer_Finished = ({
   )
 }
 
-export const Timer = () => {
+const InnerTimer = () => {
   const [targetTime, setTargetTime] = useState(minutesToSeconds(20))
   const [timerState, setTimerState] = useState('initial')
   const [onCompletePlay] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
-
-  const [sprints, setSprints] = useState<Sprint[]>([])
-
+  const { sprintLog } = useSprintContext()
 
   return (
     <>
@@ -218,7 +249,9 @@ export const Timer = () => {
 
           {timerState === 'inProgress' && (
             <Timer_InProgress
-              onCancel={() => setTimerState('initial')}
+              onCancel={async () => {
+                setTimerState('initial')
+              }}
               onFinished={() => {
                 onCompletePlay()
                 setTimerState('finished')
@@ -232,24 +265,22 @@ export const Timer = () => {
               targetTime={targetTime}
               onReset={() => setTimerState('initial')}
               onRepeat={() => setTimerState('inProgress')}
-              onSubmitWordCount={({ durationSeconds, wordCount }) => {
-                setSprints([
-                  ...sprints,
-                  {
-                    durationSeconds,
-                    wordCount,
-                    id: sprints.length + 1,
-                  },
-                ])
+              onSubmitWordCount={() => {
                 setTimerState('initial')
               }}
             />
           )}
         </div>
       </Centered>
-     <SprintTable sprints={sprints} />
-     
-            <ToastContainer/>
+      {sprintLog && <SprintTable sprints={sprintLog} />}
+  {sprintLog && <SprintChart sprints={sprintLog} />}
+      <ToastContainer />
     </>
   )
 }
+
+export const Timer = () => (
+  <SprintContextProvider>
+    <InnerTimer />
+  </SprintContextProvider>
+)

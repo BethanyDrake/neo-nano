@@ -1,0 +1,7 @@
+.Tooltip {
+    background-color: var(--background-colour-2);
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    border: 1px dashed var(--primary-light);
+}

@@ -20,7 +20,10 @@ import { ActiveGoalProvider } from '@/lib/goalTracker/quickUpdate/ActiveGoalCont
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
-  title: 'Novel November',
+  title: {
+    template: '%s | Novel November',
+    default: 'Novel November',
+  },
   description: 'Write a novel this November!',
   openGraph: {
     title: 'Write a novel this November!',

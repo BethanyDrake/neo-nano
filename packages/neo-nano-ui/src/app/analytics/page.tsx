@@ -5,10 +5,14 @@ import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { Section } from '@/lib/layoutElements/Section'
 import { getPyramidData } from '@/lib/serverFunctions/analytics/getPyramidData'
 import { getTrophyCounts } from '@/lib/serverFunctions/analytics/getTrophyCounts'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Analytics',
+}
 
 const Page = async () => {
-  const awardCounts = await getTrophyCounts()
-  const milestoneUserCounts = await getPyramidData()
+  const [awardCounts, milestoneUserCounts] = await Promise.all([getTrophyCounts(), getPyramidData()])
   return (
     <GutteredPage>
       <Column>

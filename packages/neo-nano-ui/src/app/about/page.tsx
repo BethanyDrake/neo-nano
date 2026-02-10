@@ -3,7 +3,10 @@ import { TechnologyItems } from '@/lib/about/TechnologyItems'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { Section } from '@/lib/layoutElements/Section'
 import { Centered } from '@/lib/layoutElements/flexLayouts'
-
+import { Metadata } from 'next'
+export const metadata: Metadata = {
+  title: 'About',
+}
 const AboutPage = () => {
   return (
     <GutteredPage>
