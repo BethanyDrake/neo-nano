@@ -1,15 +1,44 @@
 'use client'
 
-import { Bar, Line, ComposedChart, Label, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  Line,
+  ComposedChart,
+  Label,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  TooltipContentProps,
+} from 'recharts'
 
 import { CompletedSprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 import { formatStartTime } from './SprintTable'
+import classNames from './SprintChart.module.css'
 
 type Datum = {
   wordCount?: number
   speed?: number
   startTime: string
   id: number
+}
+
+const MyTooltip = ({ active, payload }: TooltipContentProps<string | number, string>) => {
+  const isVisible = active && payload && payload.length
+
+  const wordCount = isVisible && payload[0].value
+  const speed = isVisible && payload[1].value.toFixed(1)
+
+  return (
+    <div style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+      {isVisible && (
+        <div className={classNames.Tooltip}>
+          <div>{wordCount} words</div>
+          <div>{speed} w/m</div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export const SprintChart = ({ sprints }: { sprints: CompletedSprint[] }) => {
@@ -21,7 +50,7 @@ export const SprintChart = ({ sprints }: { sprints: CompletedSprint[] }) => {
     data[i].startTime = formatStartTime(startTime)
   })
 
-  console.log(data)
+  // console.log(data)
 
   return (
     <ResponsiveContainer height={400}>
@@ -46,8 +75,7 @@ export const SprintChart = ({ sprints }: { sprints: CompletedSprint[] }) => {
         </YAxis>
 
         <XAxis type="category" stroke="var(--text-colour-2)" dataKey={'startTime'} allowDuplicatedCategory></XAxis>
-
-        {/* <XAxis tick={false} stroke='var(--text-colour-2)' dataKey={"id"} allowDuplicatedCategory></XAxis> */}
+        <Tooltip content={MyTooltip} />
         <Bar dataKey="wordCount" fill="var(--tertiary-light)" />
         <Line dataKey="speed" stroke="var(--primary-vibrant)" />
       </ComposedChart>
