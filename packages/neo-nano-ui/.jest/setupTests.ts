@@ -9,6 +9,7 @@ jest.mock('@auth0/nextjs-auth0/server', () => ({
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   usePathname: jest.fn(),
+  useSearchParams: jest.fn()
 }));
 jest.mock('@neondatabase/serverless')
 jest.mock('@/lib/richText/RichTextEditor', () => jest.requireActual('./MockRichTextEditor'))

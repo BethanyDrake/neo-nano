@@ -1,0 +1,61 @@
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { BasicButton } from '../buttons/BasicButton'
+import formClasses from '@/lib/expandableForms/form.module.css'
+import { Column, Row } from '../layoutElements/flexLayouts'
+import { useModalContext } from './ModalContext'
+import { Project, ProjectStatus } from '../projects/Project.type'
+import { useMyProjectsContext } from '../projects/MyProjectContext'
+
+type Inputs = Omit<Project, 'userId' | 'id'>
+
+const statuses: ProjectStatus[] = ['planning', 'writing', 'editing', 'done']
+export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edit'; defaultValues: Inputs }) => {
+  const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
+  const { closeModal } = useModalContext()
+  const { isLoading, addProject } = useMyProjectsContext()
+  const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    addProject(data, { onSuccess: closeModal })
+  }
+
+  return (
+    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
+      <Column>
+        <h2>{mode === 'add' ? 'Add Goal' : 'Update Goal'}</h2>
+        <Row alignItems="center" justifyContent="start">
+          <label htmlFor="title">Title:</label>
+          <input id="title" placeholder="Title" {...register('title', { required: true })} />
+        </Row>
+
+        <label style={{ fontWeight: 'bold' }} htmlFor="blurb">
+          Blurb:
+        </label>
+        <textarea style={{ height: '10em' }} id="blurb" {...register('blurb')} />
+
+        <Row alignItems="center" justifyContent="start">
+          <label htmlFor="status">Status:</label>
+          <select id="status" {...register('status', { required: true })}>
+            {statuses.map((status) => <option key={status} value={status}>{status}</option>)}
+          </select>
+        </Row>
+        <Row alignItems="center" justifyContent="start">
+          <label htmlFor="visibility">Visibility:</label>
+          <select id="visibility" {...register('visibility', { required: true })}>
+            <option key="private" value="private">
+              private
+            </option>
+            <option key="public" value="public">
+              public
+            </option>
+          </select>
+        </Row>
+
+        <Row>
+          <BasicButton buttonProps={{ type: 'button', onClick: closeModal }}>Cancel</BasicButton>{' '}
+          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+            Save
+          </BasicButton>
+        </Row>
+      </Column>
+    </form>
+  )
+}
