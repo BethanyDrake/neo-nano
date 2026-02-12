@@ -23,6 +23,15 @@ export const isActiveOrUpcoming = (goal: Goal): boolean => {
   return isFuture(endDate)
 }
 
+export const Paragraphs = ({rawText}: {rawText?: string | null}) => {
+  if (!rawText) return null
+  console.log()
+  return (<>
+  {rawText.split(/$/)}
+  </>)
+}
+
+
 export const ProfilePageInner = () => {
   const { profile, awards } = useProfileContext()
   const { goals, isLoading: isLoadingGoals } = useMyGoalContext()
@@ -35,7 +44,7 @@ export const ProfilePageInner = () => {
       </Row>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
-      <p>{profile.aboutMe}</p>
+      <p style={{whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
 
       <TrophyCase awards={awards} />
 

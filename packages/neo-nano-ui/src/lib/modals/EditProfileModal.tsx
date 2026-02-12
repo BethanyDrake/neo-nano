@@ -51,7 +51,7 @@ const EditProfileForm = () => {
         <label style={{ fontWeight: 'bold' }} htmlFor="aboutMe">
           About me:
         </label>
-        <input id="aboutMe" placeholder="Favourite genres, writing experience, etc." {...register('aboutMe')} />
+        <textarea id="aboutMe" placeholder="Favourite genres, writing experience, etc." {...register('aboutMe')} />
         <Row>
           <BasicButton buttonProps={{ onClick: closeModal }}>Cancel</BasicButton>{' '}
           <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>

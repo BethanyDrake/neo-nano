@@ -35,7 +35,7 @@ export const ProjectSection = ({ title, blurb, visibility, status }: Project) =>
             />
           </Row>
         </Row>
-        {blurb}
+       <p style={{whiteSpaceCollapse: 'preserve' }}>{blurb}</p>
       </DisclosurePanel>
     </Disclosure>
   )
