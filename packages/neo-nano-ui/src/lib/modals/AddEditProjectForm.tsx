@@ -24,7 +24,7 @@ export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edi
   return (
     <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
-        <h2>{mode === 'add' ? 'Add Goal' : 'Update Goal'}</h2>
+        <h2>{mode === 'add' ? 'Add Project' : 'Update Project'}</h2>
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="title">Title:</label>
           <input id="title" placeholder="Title" {...register('title', { required: true })} />
@@ -42,7 +42,7 @@ export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edi
 
 
         <label htmlFor="wordCount">Expected/final word count:</label>
-        <input id="wordCount" placeholder="50000" {...register('wordCount')} />
+        <input type="number" id="wordCount" placeholder="50000" {...register('wordCount')} />
 
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="status">Status:</label>
