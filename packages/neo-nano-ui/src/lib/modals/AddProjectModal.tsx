@@ -39,6 +39,8 @@ export const AddProjectModal = () => {
             blurb: '',
             visibility: 'private',
             status: 'planning',
+            wordCount: '',
+            excerpt: ''
           }}
         />
       </Modal>

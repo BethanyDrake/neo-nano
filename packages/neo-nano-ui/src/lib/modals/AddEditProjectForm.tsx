@@ -6,7 +6,7 @@ import { useModalContext } from './ModalContext'
 import { Project, ProjectStatus } from '../projects/Project.type'
 import { useMyProjectsContext } from '../projects/MyProjectContext'
 
-type Inputs = Omit<Project, 'userId' | 'id'>
+type Inputs = Omit<Project, 'userId' | 'id' | 'wordCount'> & {wordCount: string}
 
 const statuses: ProjectStatus[] = ['planning', 'writing', 'editing', 'done']
 export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edit'; defaultValues: Inputs }) => {
@@ -14,7 +14,11 @@ export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edi
   const { closeModal } = useModalContext()
   const { isLoading, addProject } = useMyProjectsContext()
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    addProject(data, { onSuccess: closeModal })
+    const wordCount = data.wordCount ? parseInt(data.wordCount) : undefined
+    addProject({
+      ...data,
+      wordCount
+    }, { onSuccess: closeModal })
   }
 
   return (
@@ -30,6 +34,15 @@ export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edi
           Blurb:
         </label>
         <textarea style={{ height: '10em' }} id="blurb" {...register('blurb')} />
+
+        <label style={{ fontWeight: 'bold' }} htmlFor="excerpt">
+          Excerpt:
+        </label>
+        <textarea style={{ height: '10em' }} id="excerpt" {...register('excerpt')} />
+
+
+        <label htmlFor="wordCount">Expected/final word count:</label>
+        <input id="wordCount" placeholder="50000" {...register('wordCount')} />
 
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="status">Status:</label>

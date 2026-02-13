@@ -3,11 +3,11 @@ import { Project } from './Project.type'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import disclosureStyles from '@/lib/styles/disclosure.module.css'
-import { Row } from '../layoutElements/flexLayouts'
+import { LeftRow, Row } from '../layoutElements/flexLayouts'
 import { UpdateVisibilityButton } from '../buttons/UpdateVisibilityBotton'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
 
-export const ProjectSection = ({ title, blurb, visibility, status }: Project) => {
+export const ProjectSection = ({ title, blurb, visibility, status, excerpt, wordCount }: Project) => {
   return (
     <Disclosure>
       <DisclosureButton className={disclosureStyles.DisclosureButton}>
@@ -35,7 +35,25 @@ export const ProjectSection = ({ title, blurb, visibility, status }: Project) =>
             />
           </Row>
         </Row>
-       <p style={{whiteSpaceCollapse: 'preserve' }}>{blurb}</p>
+
+        {blurb && (
+          <>
+            <h4>Blurb:</h4>
+            <p style={{ whiteSpaceCollapse: 'preserve' }}>{blurb}</p>
+          </>
+        )}
+        {excerpt && (
+          <>
+            <h4>Exceprt:</h4>
+            <p style={{ whiteSpaceCollapse: 'preserve' }}>{excerpt}</p>
+          </>
+        )}
+
+        {wordCount && (
+          <LeftRow>
+            <h4>Expected/Final word count:</h4> <span>{ wordCount / 1000}K</span>
+          </LeftRow>
+        )}
       </DisclosurePanel>
     </Disclosure>
   )

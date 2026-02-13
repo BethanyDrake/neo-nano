@@ -16,6 +16,8 @@ const initProjects = async () => {
   user_id bigint REFERENCES users(id),
   title text,
   blurb text,
+  excerpt text,
+  word_count int,
   visibility visibility,
   status project_status
  )`
