@@ -6,8 +6,10 @@ import disclosureStyles from '@/lib/styles/disclosure.module.css'
 import { LeftRow, Row } from '../layoutElements/flexLayouts'
 import { UpdateVisibilityButton } from '../buttons/UpdateVisibilityBotton'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
+import { useMyProjectsContext } from './MyProjectContext'
 
-export const ProjectSection = ({ title, blurb, visibility, status, excerpt, wordCount }: Project) => {
+export const ProjectSection = ({ title, blurb, visibility, status, excerpt, wordCount , id}: Project) => {
+  const {deleteProject, isDeleteProjectPending} = useMyProjectsContext()
   return (
     <Disclosure>
       <DisclosureButton className={disclosureStyles.DisclosureButton}>
@@ -27,8 +29,8 @@ export const ProjectSection = ({ title, blurb, visibility, status, excerpt, word
             />
             <SmallIconButton
               id="delete"
-              onClick={() => window.alert('todo')}
-              isLoading={false}
+              onClick={() => deleteProject(id)}
+              isLoading={isDeleteProjectPending}
               icon={faTrash}
               text="delete project"
               variant="angry"
