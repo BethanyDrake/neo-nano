@@ -9,6 +9,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { faBullseye, faChartLine, faComment, faScissors, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
+import logoV4 from '@/lib/media/logo-v4.png'
 
 const FeatureCard = ({
   title,
@@ -78,7 +79,8 @@ export default function Home() {
           alt="Novel November"
           width={300}
           height={300}
-          src="https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/logo-v4.png"
+          src={logoV4}
+          placeholder='blur'
         />
       </div>
 
