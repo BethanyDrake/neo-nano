@@ -1,14 +1,9 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { doSignup } from './landingPageActions/doSignup';
 
 test('sign up and post a comment', async ({ page }) => {
-  await page.goto('http://localhost:3000/');
-  await page.getByRole('navigation').getByRole('button', { name: 'Sign up' }).click();
-  await page.getByRole('textbox', { name: 'Email address' }).fill(faker.internet.email());
-
-  await page.getByRole('textbox', { name: 'Password' }).fill('Test1234!');
-  await page.getByRole('button', { name: 'Continue', exact: true }).click();
-  await page.getByRole('button', { name: 'Accept' }).click();
+  await doSignup(page)
   await page.getByRole('main').getByRole('button', { name: 'Browse Forum' }).click();
   await page.getByRole('link', { name: 'General Discussion' }).click();
   await page.getByRole('button', { name: 'Create Thread' }).click();
