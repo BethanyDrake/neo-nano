@@ -41,7 +41,7 @@ export const ProjectSection = ({ project }: {project: Project}) => {
         )}
         {excerpt && (
           <>
-            <h4>Exceprt:</h4>
+            <h4>Excerpt:</h4>
             <p style={{ whiteSpaceCollapse: 'preserve' }}>{excerpt}</p>
           </>
         )}

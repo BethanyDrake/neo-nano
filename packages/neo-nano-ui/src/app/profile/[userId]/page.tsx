@@ -5,10 +5,12 @@ import { getPublicProfile } from '@/lib/serverFunctions/profile/publicProfile'
 import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { getPublicAwards } from '@/lib/serverFunctions/awards/getPublicAwards'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
+import { getPublicProjects } from '@/lib/serverFunctions/projects/getPublicProjects'
+import { PublicProjectSection } from '@/lib/projects/PublicProjectSection'
 
 const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string }> }) => {
   const userId = (await params).userId
-  const [profile, goals, awards] = await Promise.all([getPublicProfile(userId), getPublicGoals(userId),getPublicAwards(userId)])
+  const [profile, goals, awards, projects] = await Promise.all([getPublicProfile(userId), getPublicGoals(userId),getPublicAwards(userId), getPublicProjects(userId)])
 
   return (
     <FullWidthPage>
@@ -17,11 +19,16 @@ const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string 
       </Centered>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
-      <p>{profile.aboutMe}</p>
+      <p style={{ whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
+        
       <TrophyCase awards={awards}/>
+      {projects.map((project) => (
+        <PublicProjectSection key={project.id} project={project} />
+      ))}
       {goals.map((goal) => (
         <PublicGoalSection key={goal.id} goal={goal} />
       ))}
+     
     </FullWidthPage>
   )
 }
