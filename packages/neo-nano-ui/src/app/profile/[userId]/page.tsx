@@ -1,5 +1,5 @@
 import { PublicGoalSection } from '@/lib/goalTracker/PublicGoalSection'
-import { Centered } from '@/lib/layoutElements/flexLayouts'
+import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { getPublicGoals } from '@/lib/serverFunctions/goals/getPublicGoals'
 import { getPublicProfile } from '@/lib/serverFunctions/profile/publicProfile'
 import { TrophyCase } from '@/lib/awards/TrophyCase'
@@ -7,6 +7,11 @@ import { getPublicAwards } from '@/lib/serverFunctions/awards/getPublicAwards'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { getPublicProjects } from '@/lib/serverFunctions/projects/getPublicProjects'
 import { PublicProjectSection } from '@/lib/projects/PublicProjectSection'
+import { PropsWithChildren } from 'react'
+
+const Header = ({children}: PropsWithChildren) => {
+  return (<Centered><h2 style={{fontSize: '2em'}}>{children}</h2></Centered>)
+}
 
 const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string }> }) => {
   const userId = (await params).userId
@@ -14,21 +19,26 @@ const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string 
 
   return (
     <FullWidthPage>
+      <Column>
       <Centered>
         <h1>{profile.displayName}&apos;s Profile</h1>
       </Centered>
+      
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p style={{ whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
         
       <TrophyCase awards={awards}/>
+         <Header>{profile.displayName}&apos;s Novels</Header>
       {projects.map((project) => (
         <PublicProjectSection key={project.id} project={project} />
       ))}
+
+      <Header>{profile.displayName}&apos;s Goals</Header>
       {goals.map((goal) => (
         <PublicGoalSection key={goal.id} goal={goal} />
       ))}
-     
+     </Column>
     </FullWidthPage>
   )
 }
