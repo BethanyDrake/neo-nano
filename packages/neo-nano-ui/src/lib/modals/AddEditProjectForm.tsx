@@ -7,18 +7,19 @@ import { Project, ProjectStatus } from '../projects/Project.type'
 import { useMyProjectsContext } from '../projects/MyProjectContext'
 
 type Inputs = Omit<Project, 'userId' | 'id' | 'wordCount'> & {wordCount: string}
+export type ProjectDetails = Omit<Project, 'userId' | 'id'>
 
 const statuses: ProjectStatus[] = ['planning', 'writing', 'editing', 'done']
-export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edit'; defaultValues: Inputs }) => {
+export const AddEditProjectForm = ({ defaultValues, mode, onSave }: { mode: 'add' | 'edit'; defaultValues: Inputs,  onSave: (details: ProjectDetails) => void}) => {
   const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
   const { closeModal } = useModalContext()
-  const { isLoading, addProject } = useMyProjectsContext()
+  const { isAddProjectPending } = useMyProjectsContext()
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    const wordCount = data.wordCount ? parseInt(data.wordCount) : undefined
-    addProject({
+    const wordCount = data.wordCount ? parseInt(data.wordCount) : null
+    onSave({
       ...data,
       wordCount
-    }, { onSuccess: closeModal })
+    })
   }
 
   return (
@@ -64,7 +65,7 @@ export const AddEditProjectForm = ({ defaultValues, mode }: { mode: 'add' | 'edi
 
         <Row>
           <BasicButton buttonProps={{ type: 'button', onClick: closeModal }}>Cancel</BasicButton>{' '}
-          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+          <BasicButton isLoading={isAddProjectPending} buttonProps={{ type: 'submit' }}>
             Save
           </BasicButton>
         </Row>

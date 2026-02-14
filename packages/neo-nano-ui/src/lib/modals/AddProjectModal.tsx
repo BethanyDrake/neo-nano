@@ -5,17 +5,20 @@ import { useModalContext } from './ModalContext'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Modal } from './Modal'
-import { AddEditProjectForm } from './AddEditProjectForm'
+import { AddEditProjectForm, ProjectDetails } from './AddEditProjectForm'
 import { useMyProjectsContext } from '../projects/MyProjectContext'
 
 export const ADD_PROJECT_MODAL = 'ADD_PROJECT_MODAL'
 export const CREATE_PROJECT_ACTION = 'createProject'
 
 export const AddProjectModal = () => {
-  const { setOpenModal } = useModalContext()
+  const { setOpenModal, closeModal } = useModalContext()
   const action = useSearchParams().get('action')
 
-  const { isLoading } = useMyProjectsContext()
+  const { isLoading, addProject } = useMyProjectsContext()
+  const onSave = (projectDetails: ProjectDetails) => {
+     addProject(projectDetails, { onSuccess: closeModal })
+  }
 
   useEffect(() => {
     if (action === CREATE_PROJECT_ACTION) {
@@ -33,6 +36,7 @@ export const AddProjectModal = () => {
       />
       <Modal modalId={ADD_PROJECT_MODAL}>
         <AddEditProjectForm
+          onSave={onSave}
           mode={'add'}
           defaultValues={{
             title: '',

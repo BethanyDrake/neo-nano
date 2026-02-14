@@ -53,7 +53,7 @@ export const ProfilePageInner = () => {
           <h2>Projects</h2>
           <AddProjectModal />
         </Row>
-        {projects && projects.map((project) => <ProjectSection key={project.id} {...project} />)}
+        {projects && projects.map((project) => <ProjectSection key={project.id} project={project}/>)}
       </ModeratorOnly>
       <Row alignItems="center">
         <h2>Goals</h2>

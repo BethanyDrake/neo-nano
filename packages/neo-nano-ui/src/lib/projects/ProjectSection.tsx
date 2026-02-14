@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import disclosureStyles from '@/lib/styles/disclosure.module.css'
 import { LeftRow, Row } from '../layoutElements/flexLayouts'
-import { UpdateVisibilityButton } from '../buttons/UpdateVisibilityBotton'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { useMyProjectsContext } from './MyProjectContext'
+import { EditProjectModal } from '../modals/EditProjectModal'
 
-export const ProjectSection = ({ title, blurb, visibility, status, excerpt, wordCount , id}: Project) => {
+export const ProjectSection = ({ project }: {project: Project}) => {
+  const {title, blurb, status, excerpt, wordCount , id} = project
   const {deleteProject, isDeleteProjectPending} = useMyProjectsContext()
   return (
     <Disclosure>
@@ -20,13 +21,7 @@ export const ProjectSection = ({ title, blurb, visibility, status, excerpt, word
         <Row style={{ paddingTop: '1em' }} justifyContent="space-between" alignItems="center">
           <h4>Quick Actions:</h4>
           <Row alignItems="center">
-            <UpdateVisibilityButton
-              onClick={() => {
-                window.alert('todo')
-                return Promise.reject()
-              }}
-              visibility={visibility}
-            />
+            <EditProjectModal initialProject={project}/>
             <SmallIconButton
               id="delete"
               onClick={() => deleteProject(id)}

@@ -7,7 +7,7 @@ export type Project = {
     title: string,
     blurb?: string,
     excerpt?: string,
-    wordCount?: number,
+    wordCount?: number | null,
     userId: string,
     visibility: Visibility
     status: ProjectStatus
