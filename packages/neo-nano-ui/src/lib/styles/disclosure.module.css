@@ -23,7 +23,6 @@
 }
 
 .DisclosurePanel {
-  overflow: hidden;
   animation-duration: 0.4s;
   animation-name: slide-open;
 }
