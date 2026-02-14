@@ -8,23 +8,34 @@ import { SuggestNextGoal } from '@/lib/goalTracker/SuggestNextGoal'
 import { Row } from '@/lib/layoutElements/flexLayouts'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { AddGoalModal } from '@/lib/modals/AddGoalModal'
+import { AddProjectModal } from '@/lib/modals/AddProjectModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
+import { ModeratorOnly } from '@/lib/moderation/ModeratorOnly'
+import { useMyProjectsContext } from '@/lib/projects/MyProjectContext'
+import { ProjectSection } from '@/lib/projects/ProjectSection'
 import { getChallengeEndDate } from '@/lib/serverFunctions/goals/goalUtils'
 import { Goal } from '@/lib/types/forum.types'
-import { useRequireLogin } from '@/lib/useRequireLogin'
 import { isFuture } from 'date-fns'
 
-export const isActiveOrUpcoming = (goal: Goal):boolean => {
+export const isActiveOrUpcoming = (goal: Goal): boolean => {
   const endDate = getChallengeEndDate(goal.startDate, goal.lengthDays)
   return isFuture(endDate)
 }
 
-export const ProfilePageInner = () => {
-  const { profile,  awards } = useProfileContext()
-  const{ goals, isLoading: isLoadingGoals } = useMyGoalContext()
+export const Paragraphs = ({rawText}: {rawText?: string | null}) => {
+  if (!rawText) return null
+  console.log()
+  return (<>
+  {rawText.split(/$/)}
+  </>)
+}
 
-  useRequireLogin()
+
+export const ProfilePageInner = () => {
+  const { profile, awards } = useProfileContext()
+  const { goals, isLoading: isLoadingGoals } = useMyGoalContext()
+  const { projects } = useMyProjectsContext()
 
   return (
     <FullWidthPage>
@@ -33,18 +44,23 @@ export const ProfilePageInner = () => {
       </Row>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
-      <p>{profile.aboutMe}</p>
+      <p style={{whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
 
       <TrophyCase awards={awards} />
 
+      <ModeratorOnly>
+        <Row alignItems="center">
+          <h2>Projects</h2>
+          <AddProjectModal />
+        </Row>
+        {projects && projects.map((project) => <ProjectSection key={project.id} project={project}/>)}
+      </ModeratorOnly>
       <Row alignItems="center">
         <h2>Goals</h2>
-        <AddGoalModal/>
+        <AddGoalModal />
       </Row>
 
-      {goals.filter(isActiveOrUpcoming).length === 0 && !isLoadingGoals && (
-       <SuggestNextGoal/>
-      )}
+      {goals.filter(isActiveOrUpcoming).length === 0 && !isLoadingGoals && <SuggestNextGoal />}
 
       {goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
         <GoalSection

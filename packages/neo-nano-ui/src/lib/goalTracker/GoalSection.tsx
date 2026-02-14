@@ -13,6 +13,7 @@ import { EditGoalModal } from '../modals/EditGoalModal'
 import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 import { CumulativeWords } from './CumulativeWords'
 import classNames from './goalTracker.module.css'
+import disclosureStyles from '@/lib/styles/disclosure.module.css'
 import { toCumulative } from './recordUtils'
 import { StatsCard } from './StatsCard'
 import { UpdateWordCount } from './UpdateWordCount'
@@ -70,10 +71,10 @@ export const GoalSection = ({
 
   return (
     <Disclosure defaultOpen={defaultOpen}>
-      <DisclosureButton className={classNames.DisclosureButton}>
+      <DisclosureButton className={disclosureStyles.DisclosureButton}>
         <FontAwesomeIcon icon={faCaretRight}/> <h3>{title}</h3>
       </DisclosureButton>
-      <DisclosurePanel className={classNames.DisclosurePanel}>
+      <DisclosurePanel className={disclosureStyles.DisclosurePanel}>
         <Row style={{ paddingTop: '1em' }} justifyContent="space-between" alignItems="center">
           <h4>Quick Actions:</h4>
           <Row alignItems="center">

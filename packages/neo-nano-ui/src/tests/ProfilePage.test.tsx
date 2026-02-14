@@ -15,10 +15,13 @@ import { SessionData } from '@auth0/nextjs-auth0/types'
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { startOfToday } from 'date-fns'
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { wrap } from 'souvlaki'
+import { withReactQueryClient } from './utils/withReactQueryClient'
 jest.mock('@/lib/serverFunctions/goals/updateGoalProgress')
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
 }))
+jest.mock('@/lib/serverFunctions/moderation/getIsModerator', () => ({getIsModerator: () => Promise.resolve(false)}))
 
 jest.mock('@/lib/auth0', () => ({
   auth0: {
@@ -62,7 +65,7 @@ describe('<ProfilePage />', () => {
         metric: 'words',
       },
     ])
-    const { findByText } = render(await ProfilePage())
+    const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
     expect(await findByText('Some Name')).toBeInTheDocument()
     expect(await findByText('Goal Title')).toBeInTheDocument()
   })
@@ -79,7 +82,7 @@ describe('<ProfilePage />', () => {
     })
     jest.mocked(getMyGoals).mockResolvedValue([])
     jest.mocked(joinChallenge).mockResolvedValue([])
-    const { findByRole } = render(await ProfilePage())
+    const { findByRole } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
 
     const joinChallengeButton = await findByRole('button', { name: 'Join Current Challenge' })
 
@@ -97,7 +100,7 @@ describe('<ProfilePage />', () => {
       role: 'moderator',
     })
     jest.mocked(getMyGoals).mockResolvedValue([])
-    const { findByText } = render(await ProfilePage())
+    const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
     expect(await findByText('Moderator')).toBeInTheDocument()
   })
 
@@ -122,7 +125,7 @@ describe('<ProfilePage />', () => {
     jest
       .mocked(updateGoalProgress)
       .mockResolvedValue({ updatedGoal: buildGoal(), claimedAwards: [buildUserAward({ title: 'Some Award', imageUrl: 'http://example' })] })
-    const { findByText, getByRole } = render(await ProfilePage())
+    const { findByText, getByRole } = render(await ProfilePage(), {wrapper: wrap(withReactQueryClient())})
 
     expect(await findByText('Goal Title')).toBeInTheDocument()
     const input = getByRole('spinbutton', { name: /wordcount for/ })

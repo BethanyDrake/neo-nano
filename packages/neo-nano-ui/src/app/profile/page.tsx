@@ -6,6 +6,7 @@ import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { MyGoalContextProvider } from '@/lib/context/MyGoalsContext'
 import { Metadata } from 'next'
+import { MyProjectsContextProvider } from '@/lib/projects/MyProjectContext'
 
 export const metadata: Metadata = {
   title: 'My Profile',
@@ -18,7 +19,9 @@ const ProfilePage = async () => {
       <NewAwardModalProvider>
           <ProfileContextProvider initialProfile={initalProfile} initialAwards={initialAwards}>
             <MyGoalContextProvider>
+              <MyProjectsContextProvider>
               <ProfilePageInner />
+              </MyProjectsContextProvider>
             </MyGoalContextProvider>
           </ProfileContextProvider>
       </NewAwardModalProvider>

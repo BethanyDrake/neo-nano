@@ -66,6 +66,11 @@ summary {
       display: inline-block;
       padding-left: 12px;
     }
+
+}
+
+ul {
+  padding-left: 1em;
 }
 
 .darkmode-invert {
