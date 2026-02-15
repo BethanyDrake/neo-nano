@@ -16,7 +16,6 @@ const Header = ({children}: PropsWithChildren) => {
 const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string }> }) => {
   const userId = (await params).userId
   const [profile, goals, awards, projects] = await Promise.all([getPublicProfile(userId), getPublicGoals(userId),getPublicAwards(userId), getPublicProjects(userId)])
-
   return (
     <FullWidthPage>
       <Column>
