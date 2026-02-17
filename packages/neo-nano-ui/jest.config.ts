@@ -104,6 +104,7 @@ const config: Config = {
         '^snakecase-keys(/(.*)|$)': '<rootDir>/.jest/mockModule.js',
         '^camelcase-keys(/(.*)|$)': '<rootDir>/.jest/mockModule.js',
         '@auth0/nextjs-auth0/server(/(.*)|$)':'<rootDir>/.jest/mockModule.js',
+        '@tanstack/react-ranger':'<rootDir>/.jest/mockModule.js'
 
     },
 

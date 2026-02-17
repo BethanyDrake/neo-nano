@@ -1,9 +1,9 @@
 'use server'
-import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { Project } from '@/lib/projects/Project.type'
+import { rawProjectToProject } from './rawProjectMapper'
 
-export const getPublicProjects = async (userId: string) => {
+export const getPublicProjects = async (userId: string): Promise<Project[]> => {
   console.log('getPublicProjects')
   const sql = getQueryFunction()
   const projects = await sql`SELECT *
@@ -11,5 +11,5 @@ export const getPublicProjects = async (userId: string) => {
     WHERE user_id=${userId}
     AND visibility='public'`
 
-  return camelcaseKeys(projects) as Project[]
+  return projects.map(rawProjectToProject)
 }

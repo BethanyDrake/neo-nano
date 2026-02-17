@@ -7,6 +7,7 @@ import { LeftRow, Row } from '../layoutElements/flexLayouts'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { useMyProjectsContext } from './MyProjectContext'
 import { EditProjectModal } from '../modals/EditProjectModal'
+import { AspectChart } from './AspectChart'
 
 export const ProjectSection = ({ project }: {project: Project}) => {
   const {title, blurb, status, excerpt, wordCount , id} = project
@@ -45,6 +46,8 @@ export const ProjectSection = ({ project }: {project: Project}) => {
             <p style={{ whiteSpaceCollapse: 'preserve' }}>{excerpt}</p>
           </>
         )}
+
+        <AspectChart aspects={project.aspects}/>
 
         {wordCount && (
           <LeftRow>

@@ -11,4 +11,11 @@ export type Project = {
     userId: string,
     visibility: Visibility
     status: ProjectStatus
+    aspects: {
+        romance: number,
+        fantasy: number,
+        mystery: number,
+        thrill: number,
+        complexity: number
+    }
 }

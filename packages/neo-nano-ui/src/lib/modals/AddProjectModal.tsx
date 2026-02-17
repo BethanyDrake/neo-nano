@@ -44,7 +44,14 @@ export const AddProjectModal = () => {
             visibility: 'private',
             status: 'planning',
             wordCount: '',
-            excerpt: ''
+            excerpt: '',
+            aspects: {
+              fantasy: 0,
+              mystery: 0,
+              romance: 0,
+              thrill: 0,
+              complexity: 0
+            }
           }}
         />
       </Modal>

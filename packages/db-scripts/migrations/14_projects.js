@@ -19,7 +19,12 @@ const initProjects = async () => {
   excerpt text,
   word_count int,
   visibility visibility,
-  status project_status
+  status project_status,
+  romance_aspect int,
+  thrill_aspect int,
+  fantasy_aspect int,
+  mystery_aspect int,
+  complexity_aspect int
  )`
 }
 

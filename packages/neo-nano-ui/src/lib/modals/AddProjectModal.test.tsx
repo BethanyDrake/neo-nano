@@ -11,7 +11,7 @@ import { Project } from '../projects/Project.type'
 
 jest.mock('@/lib/serverFunctions/projects/createProject')
 jest.mock('@/lib/serverFunctions/projects/getMyProjects')
-
+jest.mock('@/lib/projects/AspectInput')
 describe('AddProjectModal', () => {
   beforeEach(() => {
     jest.mocked(useSearchParams).mockReturnValue({ get: jest.fn() } as unknown as ReadonlyURLSearchParams)
@@ -51,6 +51,13 @@ describe('AddProjectModal', () => {
         title: 'Some Title',
         visibility: 'public',
         wordCount: 50000,
+        aspects: {
+          mystery: 0,
+          fantasy:0,
+          thrill: 0,
+          romance: 0,
+          complexity: 0
+        }
       },
       expect.anything(),
     )
