@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRanger, Ranger } from '@tanstack/react-ranger'
-import { Project } from './Project.type'
+import { Aspect, Project } from './Project.type'
+import { aspectDefinitions } from './aspects'
 
 export const AspectInput = ({
   color,
@@ -90,92 +91,46 @@ export const AspectInput = ({
   )
 }
 
-export const FantasyAspectInput =  ({value, setValue}: {value: number, setValue: (n: number) => void}) => {
-
-  const descriptions = [
-    'factual',
-    'based on true events',
-    'real world setting',
-    'real world with fantasy/speculative elements',
-    'fantasy world',
-  ]
-
-  const description = descriptions[Math.round((value * (descriptions.length - 1)) / 100)]
-  return (
-    <div>
-      <h4>Fantasy: </h4> <p>{description}</p>
-      <AspectInput value={value} setValue={setValue} color="var(--primary-vibrant)"></AspectInput>
-    </div>
-  )
-}
-
-export const ComplexityAspectInput = ({value, setValue}: {value: number, setValue: (n: number) => void}) => {
-
-
-  const descriptions = ['clear and direct', 'some complexity', 'deeply complex']
-
-  const description = descriptions[Math.round((value * (descriptions.length - 1)) / 100)]
-  return (
-    <div>
-      <h4>Complexity: </h4> <p>{description}</p>
-      <AspectInput value={value} setValue={setValue} color="var(--secondary-vibrant)"></AspectInput>
-    </div>
-  )
-}
-
-export const RomanceAspectInput = ({value, setValue}: {value: number, setValue: (n: number) => void}) => {
-
-
-  const descriptions = ['no romance', 'some romance', 'romantic subplot', 'romance main plot']
-
-  const n = Math.round(value / descriptions.length)
-  const description = descriptions[Math.round((value * (descriptions.length - 1)) / 100)]
-  console.log({ description, n })
-  return (
-    <div>
-      <h4>Romance: </h4> <p>{description}</p>
-      <AspectInput value={value} setValue={setValue} color="var(--secondary-light)"></AspectInput>
-    </div>
-  )
-}
-
-export const ThrillAspectInput =  ({value, setValue}: {value: number, setValue: (n: number) => void}) => {
-
-  const descriptions = ['cozy', 'thrilling']
-
+export const TitledAspectInput = ({
+  value,
+  setValue,
+  title,
+  descriptions,
+  colour,
+}: {
+  value: number
+  setValue: (n: number) => void
+  title: string
+  descriptions: string[]
+  colour: string
+}) => {
   const description = descriptions[Math.round((value * (descriptions.length - 1)) / 100)]
 
   return (
     <div>
-      <h4>Thrill: </h4> <p>{description}</p>
-      <AspectInput value={value} setValue={setValue} color="var(--tertiary-vibrant)"></AspectInput>
+      <h4 style={{ textTransform: 'capitalize' }}>{title}:</h4> <p>{description}</p>
+      <AspectInput value={value} setValue={setValue} color={colour}></AspectInput>
     </div>
   )
 }
 
-export const MysteryAspectInput = ({value, setValue}: {value: number, setValue: (n: number) => void}) => {
-
-  const descriptions = ['no mystery', 'some mystery', 'mystery subplot', 'mystery main plot']
-
-  const description = descriptions[Math.round((value * (descriptions.length - 1)) / 100)]
-
-  return (
-    <div>
-      <h4>Mystery: </h4> <p>{description}</p>
-      <AspectInput value={value} setValue={setValue} color="var(--primary-light)"></AspectInput>
-    </div>
-  )
-}
-
-export const AspectInputFormSection = ({ aspects, setAspects }: {aspects: Project['aspects'], setAspects: (a: Project['aspects']) => void}) => {
-  
-  return (
-    <>
-      <FantasyAspectInput value={aspects.fantasy} setValue={(n) => setAspects({...aspects, fantasy: n})}/>
-      <ComplexityAspectInput value={aspects.complexity} setValue={(n) => setAspects({...aspects, complexity: n})}/>
-      <ThrillAspectInput value={aspects.thrill} setValue={(n) => setAspects({...aspects, thrill: n})}/>
-      <MysteryAspectInput value={aspects.mystery} setValue={(n) => setAspects({...aspects, mystery: n})}/>
-      <RomanceAspectInput value={aspects.romance} setValue={(n) => setAspects({...aspects, romance: n})}/>
-    </>
-  )
+export const AspectInputFormSection = ({
+  aspects,
+  setAspects,
+}: {
+  aspects: Project['aspects']
+  setAspects: (a: Project['aspects']) => void
+}) => {
+  return (['fantasy', 'complexity', 'thrill', 'mystery', 'romance'] as const).map((aspect: Aspect) => {
+    return (
+      <TitledAspectInput
+        key={aspect}
+        value={aspects[aspect]}
+        setValue={(n) => setAspects({ ...aspects, [aspect]: n })}
+        title={aspectDefinitions[aspect].name}
+        descriptions={aspectDefinitions[aspect].descriptions}
+        colour={aspectDefinitions[aspect].colour}
+      />
+    )
+  })
 }
