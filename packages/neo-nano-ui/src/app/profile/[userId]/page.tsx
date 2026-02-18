@@ -27,13 +27,13 @@ const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string 
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p style={{ whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
         
-      <TrophyCase awards={awards}/>
-         <Header>{profile.displayName}&apos;s Novels</Header>
+      <TrophyCase awards={awards}/> 
+      {projects.length > 0 && <Header>{profile.displayName}&apos;s Novels</Header>}
       {projects.map((project) => (
         <PublicProjectSection key={project.id} project={project} />
       ))}
 
-      <Header>{profile.displayName}&apos;s Goals</Header>
+      {goals.length > 0 && <Header>{profile.displayName}&apos;s Goals</Header>}
       {goals.map((goal) => (
         <PublicGoalSection key={goal.id} goal={goal} />
       ))}
