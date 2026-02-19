@@ -1,6 +1,7 @@
 'use client'
 import { NewAwardModal } from '@/lib/awards/NewAwardModal'
 import { TrophyCase } from '@/lib/awards/TrophyCase'
+import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
 import { useProfileContext } from '@/lib/context/ProfileContext'
 import { GoalSection } from '@/lib/goalTracker/GoalSection'
@@ -16,7 +17,9 @@ import { useMyProjectsContext } from '@/lib/projects/MyProjectContext'
 import { ProjectSection } from '@/lib/projects/ProjectSection'
 import { getChallengeEndDate } from '@/lib/serverFunctions/goals/goalUtils'
 import { Goal } from '@/lib/types/forum.types'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { isFuture } from 'date-fns'
+import Link from 'next/link'
 
 export const isActiveOrUpcoming = (goal: Goal): boolean => {
   const endDate = getChallengeEndDate(goal.startDate, goal.lengthDays)
@@ -36,11 +39,10 @@ export const ProfilePageInner = () => {
   const { profile, awards } = useProfileContext()
   const { goals, isLoading: isLoadingGoals } = useMyGoalContext()
   const { projects } = useMyProjectsContext()
-
   return (
     <FullWidthPage>
       <Row alignItems="center">
-        <h1>My Profile</h1> <EditProfileModal /> <SettingsModal />
+        <h1>My Profile</h1> <EditProfileModal /> <SettingsModal /> <Link href={`/profile/${profile.id}`}><ExtendableIconButton icon={faArrowRight} text="view"/></Link>
       </Row>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}

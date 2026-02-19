@@ -8,7 +8,6 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import navBarStyles from '@/lib/navbar/NavBar.module.css'
-
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -33,7 +32,6 @@ export const metadata: Metadata = {
     images: [{ url: 'https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/opengraph-image.png' }],
   },
 }
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -47,12 +45,13 @@ export default async function RootLayout({
       <body>
         <AuthContextProvider session={session}>
           <ReactQueryProvider>
-            <ActiveGoalProvider>
-              <ModalContextProvider>
-                <NavBar />
-                <div className={navBarStyles.belowNav}>{children}</div>
-              </ModalContextProvider>
-            </ActiveGoalProvider>
+              <ActiveGoalProvider>
+                <ModalContextProvider>
+                  <NavBar />
+                  <div className={navBarStyles.belowNav}>{children}</div>
+                </ModalContextProvider>
+              </ActiveGoalProvider>
+         
             <ReactQueryDevtools />
           </ReactQueryProvider>
         </AuthContextProvider>

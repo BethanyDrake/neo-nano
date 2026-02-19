@@ -1,6 +1,8 @@
 import { Visibility } from "../types/forum.types"
 
 export type ProjectStatus = 'planning'| 'writing'| 'editing' |'done'
+export type Aspect = 'romance' | 'fantasy' | 'mystery' | 'thrill' | 'complexity'
+
 
 export type Project = {
     id: string,
@@ -11,4 +13,5 @@ export type Project = {
     userId: string,
     visibility: Visibility
     status: ProjectStatus
+    aspects: Record<Aspect, number>
 }

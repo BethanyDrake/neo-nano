@@ -5,20 +5,34 @@ import { Column, Row } from '../layoutElements/flexLayouts'
 import { useModalContext } from './ModalContext'
 import { Project, ProjectStatus } from '../projects/Project.type'
 import { useMyProjectsContext } from '../projects/MyProjectContext'
+import {
+  AspectInputFormSection,
+} from '../projects/AspectInput'
+import { useState } from 'react'
 
-type Inputs = Omit<Project, 'userId' | 'id' | 'wordCount'> & {wordCount: string}
+type Inputs = Omit<Project, 'userId' | 'id' | 'wordCount'> & { wordCount: string }
 export type ProjectDetails = Omit<Project, 'userId' | 'id'>
 
 const statuses: ProjectStatus[] = ['planning', 'writing', 'editing', 'done']
-export const AddEditProjectForm = ({ defaultValues, mode, onSave }: { mode: 'add' | 'edit'; defaultValues: Inputs,  onSave: (details: ProjectDetails) => void}) => {
+export const AddEditProjectForm = ({
+  defaultValues,
+  mode,
+  onSave,
+}: {
+  mode: 'add' | 'edit'
+  defaultValues: Inputs
+  onSave: (details: ProjectDetails) => void
+}) => {
   const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
   const { closeModal } = useModalContext()
   const { isAddProjectPending } = useMyProjectsContext()
+  const [aspects, setAspects] = useState<Project['aspects']>(defaultValues.aspects)
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const wordCount = data.wordCount ? parseInt(data.wordCount) : null
     onSave({
       ...data,
-      wordCount
+      wordCount,
+      aspects,
     })
   }
 
@@ -41,6 +55,7 @@ export const AddEditProjectForm = ({ defaultValues, mode, onSave }: { mode: 'add
         </label>
         <textarea style={{ height: '10em' }} id="excerpt" {...register('excerpt')} />
 
+        <AspectInputFormSection aspects={aspects} setAspects={setAspects } />
 
         <label htmlFor="wordCount">Expected/final word count:</label>
         <input type="number" id="wordCount" placeholder="50000" {...register('wordCount')} />
@@ -48,7 +63,11 @@ export const AddEditProjectForm = ({ defaultValues, mode, onSave }: { mode: 'add
         <Row alignItems="center" justifyContent="start">
           <label htmlFor="status">Status:</label>
           <select id="status" {...register('status', { required: true })}>
-            {statuses.map((status) => <option key={status} value={status}>{status}</option>)}
+            {statuses.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
           </select>
         </Row>
         <Row alignItems="center" justifyContent="start">

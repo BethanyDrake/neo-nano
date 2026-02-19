@@ -20,6 +20,7 @@ import { withReactQueryClient } from './utils/withReactQueryClient'
 jest.mock('@/lib/serverFunctions/goals/updateGoalProgress')
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
+  useRouter: jest.fn()
 }))
 jest.mock('@/lib/serverFunctions/moderation/getIsModerator', () => ({getIsModerator: () => Promise.resolve(false)}))
 
