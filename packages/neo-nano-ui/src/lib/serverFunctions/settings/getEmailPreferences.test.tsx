@@ -1,6 +1,7 @@
 import { mockRequest } from '@/tests/utils/mswHelpers'
 import { getEmailPreferences } from './getEmailPreferences'
-jest.mock('@/lib/auth0', () => ({
+import { vi } from 'vitest'
+vi.mock('@/lib/auth0', () => ({
   auth0: {
     getSession: () => Promise.resolve({ user: { email: 'name@example.com' } }),
   },

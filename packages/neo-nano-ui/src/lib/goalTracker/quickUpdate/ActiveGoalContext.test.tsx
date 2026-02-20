@@ -9,23 +9,24 @@ import { updateGoalProgress } from '@/lib/serverFunctions/goals/updateGoalProgre
 import { buildUserAward, UserAward } from '@/lib/types/profile.types'
 import { dateToChallengeDay } from '@/lib/serverFunctions/goals/goalUtils'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
-jest.mock('@/lib/serverFunctions/goals/getActiveGoal')
-jest.mock('@/lib/awards/NewAwardModal')
-jest.mock('@/lib/serverFunctions/goals/updateGoalProgress')
-jest.mock('@/lib/serverFunctions/goals/goalUtils')
-jest.mock('@/lib/hooks/useIsLoggedIn' )
+import { vi } from 'vitest'
+vi.mock('@/lib/serverFunctions/goals/getActiveGoal')
+vi.mock('@/lib/awards/NewAwardModal')
+vi.mock('@/lib/serverFunctions/goals/updateGoalProgress')
+vi.mock('@/lib/serverFunctions/goals/goalUtils')
+vi.mock('@/lib/hooks/useIsLoggedIn' )
 
 describe('useActiveGoal', () => {
   beforeEach(() => {
-    jest.mocked(useIsLoggedIn).mockReturnValue(true)
+    vi.mocked(useIsLoggedIn).mockReturnValue(true)
   })
   test('returns active goal', async () => {
     const returnedGoal = buildGoal({ title: 'Some Goal' })
-    jest.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
-    jest.mocked(useNewAwardModalContext).mockReturnValue({
-      displayNewAward: jest.fn(),
+    vi.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
+    vi.mocked(useNewAwardModalContext).mockReturnValue({
+      displayNewAward: vi.fn(),
       isOpen: false,
-      closeModal: jest.fn(),
+      closeModal: vi.fn(),
     })
 
     const Providers = ({ children }: PropsWithChildren) => (
@@ -41,18 +42,18 @@ describe('useActiveGoal', () => {
 
   test('displays award', async () => {
     const returnedGoal = buildGoal({ title: 'Initial Goal' })
-    jest.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
-    const displayNewAward = jest.fn()
-    jest.mocked(useNewAwardModalContext).mockReturnValue({
+    vi.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
+    const displayNewAward = vi.fn()
+    vi.mocked(useNewAwardModalContext).mockReturnValue({
       displayNewAward,
       isOpen: false,
-      closeModal: jest.fn(),
+      closeModal: vi.fn(),
     })
 
     const updatedGoal = buildGoal({ title: 'Updated Goal' })
     const award: UserAward = buildUserAward({ title: 'Some Award' })
 
-    jest.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [award] })
+    vi.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [award] })
     const Providers = ({ children }: PropsWithChildren) => (
       <QueryClientProvider client={new QueryClient()}>
         <ActiveGoalProvider>{children}</ActiveGoalProvider>
@@ -71,17 +72,17 @@ describe('useActiveGoal', () => {
 
   test('updates active goal', async () => {
     const returnedGoal = buildGoal({ id: 'goal-id', title: 'Initial Goal', records: [null] })
-    jest.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
-    const displayNewAward = jest.fn()
-    jest.mocked(useNewAwardModalContext).mockReturnValue({
+    vi.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
+    const displayNewAward = vi.fn()
+    vi.mocked(useNewAwardModalContext).mockReturnValue({
       displayNewAward,
       isOpen: false,
-      closeModal: jest.fn(),
+      closeModal: vi.fn(),
     })
 
     const updatedGoal = buildGoal({ title: 'Updated Goal' })
 
-    jest.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [] })
+    vi.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [] })
     const Providers = ({ children }: PropsWithChildren) => (
       <QueryClientProvider client={new QueryClient()}>
         <ActiveGoalProvider>{children}</ActiveGoalProvider>
@@ -105,18 +106,18 @@ describe('useActiveGoal', () => {
 
   test('add todays total', async () => {
     const returnedGoal = buildGoal({ id: 'goal-id', title: 'Initial Goal', records: [100, 100, 100] })
-    jest.mocked(dateToChallengeDay).mockReturnValue(1)
-    jest.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
-    const displayNewAward = jest.fn()
-    jest.mocked(useNewAwardModalContext).mockReturnValue({
+    vi.mocked(dateToChallengeDay).mockReturnValue(1)
+    vi.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
+    const displayNewAward = vi.fn()
+    vi.mocked(useNewAwardModalContext).mockReturnValue({
       displayNewAward,
       isOpen: false,
-      closeModal: jest.fn(),
+      closeModal: vi.fn(),
     })
 
     const updatedGoal = buildGoal({ title: 'Updated Goal' })
 
-    jest.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [] })
+    vi.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [] })
     const Providers = ({ children }: PropsWithChildren) => (
       <QueryClientProvider client={new QueryClient()}>
         <ActiveGoalProvider>{children}</ActiveGoalProvider>

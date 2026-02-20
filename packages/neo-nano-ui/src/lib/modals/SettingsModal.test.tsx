@@ -3,13 +3,14 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { ModalContextProvider } from './ModalContext'
 import { SettingsModal } from './SettingsModal'
 import { getEmailPreferences } from '../serverFunctions/settings/getEmailPreferences'
+import { vi } from 'vitest'
 
-jest.mock('@/lib/serverFunctions/settings/updateEmailPreferences')
-jest.mock('@/lib/serverFunctions/settings/getEmailPreferences')
+vi.mock('@/lib/serverFunctions/settings/updateEmailPreferences')
+vi.mock('@/lib/serverFunctions/settings/getEmailPreferences')
 describe('<SettingsModal />', () => {
   test('update email preferences', async () => {
-    jest.mocked(updateEmailPreferences).mockResolvedValue()
-    jest
+    vi.mocked(updateEmailPreferences).mockResolvedValue()
+    vi
       .mocked(getEmailPreferences)
       .mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
     const { getByRole, queryByRole } = render(
@@ -22,7 +23,7 @@ describe('<SettingsModal />', () => {
       expect(getByRole('button', { name: 'settings' })).toBeEnabled()
     })
     fireEvent.click(getByRole('button', { name: 'settings' }))
-    expect(getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
+    expect(getByRole('heading', { name: 'Settings' }))
 
     fireEvent.click(getByRole('checkbox', { name: /remind me about upcoming challenges/ }))
     fireEvent.click(getByRole('checkbox', { name: /send me encouragement throughout the challenge/ }))
@@ -37,7 +38,7 @@ describe('<SettingsModal />', () => {
     })
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument()
+      expect(queryByRole('heading', { name: 'Settings' })).not
     })
   })
 })

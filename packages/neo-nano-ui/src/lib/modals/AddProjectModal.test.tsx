@@ -8,15 +8,16 @@ import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
 import { withMyProjectContext } from '@/tests/utils/withMyProjectContext'
 import { getMyProjects } from '../serverFunctions/projects/getMyProjects'
 import { Project } from '../projects/Project.type'
+import { vi } from 'vitest'
 
-jest.mock('@/lib/serverFunctions/projects/createProject')
-jest.mock('@/lib/serverFunctions/projects/getMyProjects')
-jest.mock('@/lib/projects/AspectInput')
+vi.mock('@/lib/serverFunctions/projects/createProject')
+vi.mock('@/lib/serverFunctions/projects/getMyProjects')
+vi.mock('@/lib/projects/AspectInput')
 describe('AddProjectModal', () => {
   beforeEach(() => {
-    jest.mocked(useSearchParams).mockReturnValue({ get: jest.fn() } as unknown as ReadonlyURLSearchParams)
-    jest.mocked(getMyProjects).mockResolvedValue([])
-    jest.mocked(createProject).mockResolvedValue({} as Project)
+    vi.mocked(useSearchParams).mockReturnValue({ get: vi.fn() } as unknown as ReadonlyURLSearchParams)
+    vi.mocked(getMyProjects).mockResolvedValue([])
+    vi.mocked(createProject).mockResolvedValue({} as Project)
   })
 
   test('addProject', async () => {
@@ -28,7 +29,7 @@ describe('AddProjectModal', () => {
     })
 
     fireEvent.click(getByRole('button', { name: 'add project' }))
-    expect(getByRole('heading', { name: 'Add Project' })).toBeInTheDocument()
+    expect(getByRole('heading', { name: 'Add Project' }))
 
     fireEvent.change(getByRole('textbox', { name: /Title/ }), { target: { value: 'Some Title' } })
     fireEvent.change(getByRole('textbox', { name: /Blurb/ }), { target: { value: 'Some blurb' } })
@@ -41,7 +42,7 @@ describe('AddProjectModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Add Project' })).not.toBeInTheDocument()
+      expect(queryByRole('heading', { name: 'Add Project' })).not
     })
     expect(createProject).toHaveBeenCalledWith(
       {

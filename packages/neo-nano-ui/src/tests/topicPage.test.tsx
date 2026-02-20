@@ -8,72 +8,73 @@ import { SessionData } from '@auth0/nextjs-auth0/types'
 import { fireEvent, render } from '@testing-library/react'
 import axios from 'axios'
 import { buildThreadSummary } from '@/lib/types/forum.builders'
+import { vi } from 'vitest'
 
-jest.spyOn(axios, 'post')
-jest.mock('next/navigation', () => ({
+vi.spyOn(axios, 'post')
+vi.mock('next/navigation', () => ({
   usePathname: () => '',
   useRouter: () => ({
     push: () => {}
   })
 }))
-jest.mock('@/lib/useRequireLogin')
-jest.mock('@/lib/serverFunctions/forum/getThreads')
-jest.mock('@/lib/serverFunctions/forum/getTopic')
-jest.mock('@/lib/serverFunctions/forum/createThread')
+vi.mock('@/lib/useRequireLogin')
+vi.mock('@/lib/serverFunctions/forum/getThreads')
+vi.mock('@/lib/serverFunctions/forum/getTopic')
+vi.mock('@/lib/serverFunctions/forum/createThread')
 
 describe('<TopicPage />', () => {
   beforeEach(() => {
-    jest.mocked(getTopic).mockResolvedValue({
+    vi.mocked(getTopic).mockResolvedValue({
       topic: { } as Topic,
       category: {} as Category,
     })
-    jest.mocked(getThreads).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
+    vi.mocked(getThreads).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 })
   it('displays existing threads', async () => {
-    jest.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[buildThreadSummary({ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text', totalComments: 7 , authorDisplayName: 'Author Name'})]})
+    vi.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[buildThreadSummary({ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text', totalComments: 7 , authorDisplayName: 'Author Name'})]})
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
-    expect(getByText('Existing Topic 1')).toBeInTheDocument()
-    expect(getByText('Author Name: First comment text')).toBeInTheDocument()
-        expect(getByText('7')).toBeInTheDocument()
+    expect(getByText('Existing Topic 1'))
+    expect(getByText('Author Name: First comment text'))
+        expect(getByText('7'))
   })
 
   test('breadcumbs: category > topic', async () => {
-    jest.mocked(getTopic).mockResolvedValue({
+    vi.mocked(getTopic).mockResolvedValue({
       topic: { id: 'topic-id', title: 'Some Topic' } as Topic,
       category: { id: 'category-id', title: 'Some Category' } as Category,
     })
 
 
     const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
-    expect(getByText('Some Category')).toBeInTheDocument()
-    expect(getByText('Some Topic')).toBeInTheDocument()
+    expect(getByText('Some Category'))
+    expect(getByText('Some Topic'))
   })
 
   test('add new thread', async () => {
-    jest.mocked(auth0.getSession).mockResolvedValue("session data" as unknown as SessionData )
-    jest.mocked(getTopic).mockResolvedValue({
+    vi.mocked(auth0.getSession).mockResolvedValue("session data" as unknown as SessionData )
+    vi.mocked(getTopic).mockResolvedValue({
       topic: { id: 'someTopic'} as Topic,
       category: {} as Category,
     })
-     jest.mocked(createThread).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
+     vi.mocked(createThread).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 
     const {getByTestId, getByRole, findByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
 
     const button = getByRole('button', { name: 'Create Thread' })
 
-    expect(button).toBeInTheDocument()
+    expect(button)
     fireEvent.click(button)
 
     fireEvent.change(await findByLabelText(/Title/), { target: { value: 'New Thread Title' } })
     fireEvent.change(getByTestId('mock-rich-text-editor'), { target: { value: 'Some comment' } })
     
-   jest.mocked(getThreads).mockResolvedValue({
+   vi.mocked(getThreads).mockResolvedValue({
     totalThreads: 1,
     threadSummaries: [buildThreadSummary({ id: '1', title: 'New Thread Title'})]})
     fireEvent.click(getByRole('button', { name: 'Post!' }))
 
-    expect(await findByText('New Thread Title')).toBeInTheDocument()
+    expect(await findByText('New Thread Title'))
 
     expect(createThread).toHaveBeenCalledWith({
       title: 'New Thread Title',

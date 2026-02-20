@@ -4,14 +4,15 @@ import { getDateAsString } from "../misc"
 import { startOfToday } from "date-fns"
 import { updateGoalProgress } from '../serverFunctions/goals/updateGoalProgress'
 import { buildGoal } from "../types/forum.builders"
-jest.mock('@/lib/serverFunctions/goals/updateGoalProgress')
+import { vi } from "vitest"
+vi.mock('@/lib/serverFunctions/goals/updateGoalProgress')
 
 
 
 describe("<UpdateWordCount />", () => {
     test('update goal progress', async () => {
-        jest.mocked(updateGoalProgress).mockResolvedValue({updatedGoal: buildGoal(), claimedAwards: []})
-        const {debug, getByRole} = render(<UpdateWordCount setRecords={jest.fn()} isCumulative={false} id={"goal-id"} records={[null]} startDate={getDateAsString(startOfToday())} lengthDays={1} />)
+        vi.mocked(updateGoalProgress).mockResolvedValue({updatedGoal: buildGoal(), claimedAwards: []})
+        const {debug, getByRole} = render(<UpdateWordCount setRecords={vi.fn()} isCumulative={false} id={"goal-id"} records={[null]} startDate={getDateAsString(startOfToday())} lengthDays={1} />)
         const input = getByRole('spinbutton', {name: /wordcount for/})
         fireEvent.change(input, {target: {value: 100}})
         fireEvent.blur(input)

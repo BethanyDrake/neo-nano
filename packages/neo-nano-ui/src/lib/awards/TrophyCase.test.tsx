@@ -22,7 +22,7 @@ describe('<TrophyCase />', () => {
     ]
 
     const { findByText } = render(<TrophyCase awards={trophies} />)
-    expect(await findByText('Some Title')).toBeInTheDocument()
-    expect(await findByText('Some description.')).toBeInTheDocument()
+    expect(await findByText('Some Title'))
+    expect(await findByText('Some description.'))
   })
 })

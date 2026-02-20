@@ -13,6 +13,6 @@ describe('<AwardCounts />', () => {
       ]} />
       )
 
-    expect(getByText('x700')).toBeInTheDocument()
+    expect(getByText('x700'))
   })
 })

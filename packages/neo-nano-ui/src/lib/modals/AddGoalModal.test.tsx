@@ -5,22 +5,23 @@ import { ModalContextProvider } from './ModalContext'
 import {  ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { getCurrentChallenge } from '../challenges'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
-jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn().mockReturnValue({get: () => undefined})
+import { vi } from 'vitest'
+vi.mock('next/navigation', () => ({
+  useSearchParams: vi.fn().mockReturnValue({get: () => undefined})
 }))
-jest.mock('../serverFunctions/goals/createGoal')
+vi.mock('../serverFunctions/goals/createGoal')
 
-jest.mock('../challenges')
-jest.mock('@/lib/hooks/useIsLoggedIn')
+vi.mock('../challenges')
+vi.mock('@/lib/hooks/useIsLoggedIn')
 
 describe('AddGoalModal', () => {
   beforeEach(() => {
-    jest.mocked(useIsLoggedIn).mockReturnValue(true)
-    jest.mocked(useSearchParams).mockReturnValue({get: jest.fn()} as unknown as ReadonlyURLSearchParams ) 
+    vi.mocked(useIsLoggedIn).mockReturnValue(true)
+    vi.mocked(useSearchParams).mockReturnValue({get: vi.fn()} as unknown as ReadonlyURLSearchParams ) 
   })
   test('add default goal', async () => {
-    jest.mocked(createGoal).mockResolvedValue([])
-    jest.mocked(getCurrentChallenge).mockReturnValue({
+    vi.mocked(createGoal).mockResolvedValue([])
+    vi.mocked(getCurrentChallenge).mockReturnValue({
       lengthDays: 30,
       startDate: '2025-11-01',
       target: 50000,
@@ -30,11 +31,11 @@ describe('AddGoalModal', () => {
     })
     const { getByRole, queryByRole } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
     fireEvent.click(getByRole('button', { name: 'add goal' }))
-    expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
+    expect(getByRole('heading', { name: 'Add Goal' }))
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Add Goal' })).not.toBeInTheDocument()
+      expect(queryByRole('heading', { name: 'Add Goal' })).not
     })
     expect(createGoal).toHaveBeenCalledWith({
       lengthDays: 30,
@@ -47,10 +48,10 @@ describe('AddGoalModal', () => {
   })
 
   test('add custom goal', async () => {
-    jest.mocked(createGoal).mockResolvedValue([])
+    vi.mocked(createGoal).mockResolvedValue([])
     const { getByRole, queryByRole, getByLabelText } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
     fireEvent.click(getByRole('button', { name: 'add goal' }))
-    expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
+    expect(getByRole('heading', { name: 'Add Goal' }))
 
     fireEvent.change(getByRole('textbox', { name: /Title/ }), { target: { value: 'Some Title' } })
     fireEvent.change(getByRole('spinbutton', { name: /Duration/ }), { target: { value: '10' } })
@@ -61,7 +62,7 @@ describe('AddGoalModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Add Goal' })).not.toBeInTheDocument()
+      expect(queryByRole('heading', { name: 'Add Goal' })).not
     })
     expect(createGoal).toHaveBeenCalledWith({
       lengthDays: 10,
@@ -74,9 +75,9 @@ describe('AddGoalModal', () => {
   })
 
   it('opens by default using pathname action', () => {
-    jest.mocked(useSearchParams).mockReturnValue({get: () => 'createGoal'} as unknown as ReadonlyURLSearchParams)
+    vi.mocked(useSearchParams).mockReturnValue({get: () => 'createGoal'} as unknown as ReadonlyURLSearchParams)
     const { getByRole } = render(<ModalContextProvider><AddGoalModal /></ModalContextProvider>)
-     expect(getByRole('heading', { name: 'Add Goal' })).toBeInTheDocument()
+     expect(getByRole('heading', { name: 'Add Goal' }))
   })
 
 })

@@ -4,8 +4,8 @@ import { getCurrentChallenge, getPreviousChallenge, getUpcomingChallenge } from 
 import { hoursToMinutes } from 'date-fns'
 import { buildGoal } from '../types/forum.builders'
 import { buildChallenge } from '../types/challenge.builders'
-
-jest.mock('../challenges')
+import { vi } from 'vitest'
+vi.mock('../challenges')
 
 describe('<ChallengeCountDown />', () => {
   it('does not explode', () => {
@@ -13,7 +13,7 @@ describe('<ChallengeCountDown />', () => {
   })
 
   it('displays info for the of the active challenge', () => {
-    jest.mocked(getCurrentChallenge).mockReturnValue(
+    vi.mocked(getCurrentChallenge).mockReturnValue(
       buildChallenge({
         title: 'Current Challenge',
         startDate: '2026-01-01',
@@ -24,13 +24,13 @@ describe('<ChallengeCountDown />', () => {
     )
 
     const { getByText } = render(<ChallengeCountDown />)
-    // expect(getByText('Current Challenge')).toBeInTheDocument()
-    expect(getByText(/remaining/)).toBeInTheDocument()
+    // expect(getByText('Current Challenge'))
+    expect(getByText(/remaining/))
   })
 
   it('displays info for the of the upcoming challenge', () => {
-    jest.mocked(getCurrentChallenge).mockReturnValue(undefined)
-    jest.mocked(getUpcomingChallenge).mockReturnValue(
+    vi.mocked(getCurrentChallenge).mockReturnValue(undefined)
+    vi.mocked(getUpcomingChallenge).mockReturnValue(
       buildChallenge({
         title: 'The 80h Edit',
         startDate: '2026-01-01',
@@ -41,17 +41,17 @@ describe('<ChallengeCountDown />', () => {
     )
 
     const { getByText } = render(<ChallengeCountDown />)
-    expect(getByText('The 80h Edit')).toBeInTheDocument()
-    expect(getByText(/until the challenge begins./)).toBeInTheDocument()
+    expect(getByText('The 80h Edit'))
+    expect(getByText(/until the challenge begins./))
   })
 
   it('displays wrapup of previous challenge', () => {
-    jest.mocked(getPreviousChallenge).mockReturnValue(buildGoal({ title: 'Previous Challenge' }))
+    vi.mocked(getPreviousChallenge).mockReturnValue(buildGoal({ title: 'Previous Challenge' }))
     const { getByText } = render(<ChallengeCountDown />)
     expect(
       getByText(
         'Previous Challenge is over, the challenge is complete! Time to bask in your success and take a breather.',
       ),
-    ).toBeInTheDocument()
+    )
   })
 })

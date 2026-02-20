@@ -4,11 +4,12 @@ import { ProfileContextProvider } from '../context/ProfileContext'
 import { updateProfile } from '../serverFunctions/profile/updateProfile'
 import { buildProfile } from '@/lib/types/forum.builders'
 import { ModalContextProvider } from './ModalContext'
+import { vi } from 'vitest'
 
-jest.mock('../serverFunctions/profile/updateProfile')
+vi.mock('../serverFunctions/profile/updateProfile')
 describe('<EditProfileModal />', () => {
   test('update profile', async () => {
-    jest.mocked(updateProfile).mockResolvedValue(buildProfile())
+    vi.mocked(updateProfile).mockResolvedValue(buildProfile())
     const { getByRole } = render(
       <ModalContextProvider>
         <ProfileContextProvider initialProfile={buildProfile()} initialAwards={[]}>
@@ -17,7 +18,7 @@ describe('<EditProfileModal />', () => {
       </ModalContextProvider>,
     )
     fireEvent.click(getByRole('button', { name: 'edit profile' }))
-    expect(getByRole('heading', { name: 'Update Profile Details' })).toBeInTheDocument()
+    expect(getByRole('heading', { name: 'Update Profile Details' }))
 
     fireEvent.change(getByRole('textbox', { name: /Display Name/ }), { target: { value: 'New Name' } })
     fireEvent.change(getByRole('textbox', { name: /About me/ }), { target: { value: 'Some details about myself.' } })
