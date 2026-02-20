@@ -1,9 +1,22 @@
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip } from 'recharts'
+'use client'
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip, TooltipContentProps } from 'recharts'
 import { Project } from './Project.type'
 import { capitalize } from 'lodash'
+import classNames from './tooltip.module.css'
+
+
+const MyTooltip = ({label, payload}: TooltipContentProps<number, string>) => {
+
+  return (<div className={classNames.Tooltip}><div>{label}:</div><div style={{fontWeight: 'normal'}}>{JSON.stringify(payload[0]?.value)}</div></div>)
+}
+
+type DataType = {
+  name: string,
+  value: number
+}
 
 export const AspectChart = ({ aspects }: { aspects: Project['aspects'] }) => {
-  const data = Object.entries(aspects).map(([key, value]) => ({
+  const data: DataType[] = Object.entries(aspects).map(([key, value]) => ({
     name: capitalize(key),
     value,
   }))
@@ -29,11 +42,11 @@ export const AspectChart = ({ aspects }: { aspects: Project['aspects'] }) => {
       stackOffset="none"
       startAngle={90}
       syncMethod="index"
-      width={800}
+      width={350}
     >
       <PolarAngleAxis dataKey="name" />
       <PolarGrid />
-      <Tooltip defaultIndex={1} />
+      <Tooltip defaultIndex={1} content={MyTooltip}/>
       <Radar
         dataKey="value"
         fill="var(--primary-vibrant)"

@@ -4,6 +4,7 @@ import novelCover from '@/lib/media/novel-cover.png'
 import Grid from '@mui/material/Grid';
 
 import Image from 'next/image'
+import { AspectChart } from './AspectChart';
 export const PublicProjectSection = ({ project }: { project: Project }) => {
   const { title, blurb, status, excerpt, wordCount} = project
   return (
@@ -23,6 +24,7 @@ export const PublicProjectSection = ({ project }: { project: Project }) => {
 
    <Grid size={{sm: 12, md: 6}}>
       <Image style={{borderRadius: '4px', boxShadow: "var(--shadow-1)"}} height="300" src={novelCover} alt={title}/>
+       <AspectChart aspects={project.aspects}/>
       {wordCount &&<LeftRow>
         <h4>Word count:</h4> <span>{wordCount / 1000}K</span>
       </LeftRow> }

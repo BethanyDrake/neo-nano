@@ -1,0 +1,11 @@
+.Tooltip {
+    background-color: var(--background-colour-2);
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    border: 2px dashed var(--secondary-vibrant);
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    box-shadow: var(  --shadow-glow-1);
+}
