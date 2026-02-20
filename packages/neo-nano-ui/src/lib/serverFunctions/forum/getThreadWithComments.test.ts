@@ -1,6 +1,7 @@
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getThreadWithComments } from './getThreadWithComments'
-jest.mock('../_utils/getQueryFunction')
+import { vi } from 'vitest'
+vi.mock('../_utils/getQueryFunction')
 
 const someDate = new Date()
 describe('getThreadWithComments', () => {
@@ -24,10 +25,10 @@ describe('getThreadWithComments', () => {
     ]
     const category = [{ id: '7', title: 'Category Title' }]
 
-    const sql = jest.fn()
+    const sql = vi.fn()
 
     // @ts-expect-error test
-    jest.mocked(getQueryFunction).mockReturnValue(sql)
+    vi.mocked(getQueryFunction).mockReturnValue(sql)
     sql.mockResolvedValueOnce(comments)
     sql.mockResolvedValueOnce([{ count: 1 }])
     sql.mockResolvedValueOnce([{ thread, topic, category }])
@@ -84,9 +85,9 @@ describe('getThreadWithComments', () => {
       },
     ]
 
-    const sql = jest.fn()
+    const sql = vi.fn()
     // @ts-expect-error test
-    jest.mocked(getQueryFunction).mockReturnValue(sql)
+    vi.mocked(getQueryFunction).mockReturnValue(sql)
     sql.mockResolvedValueOnce(comments)
     sql.mockResolvedValueOnce([{ count: 1 }])
     sql.mockResolvedValueOnce([{ thread: [{}], topic: [{}], category: [{}] }])

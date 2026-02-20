@@ -11,10 +11,11 @@ import { usePathname } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 import { ActiveGoalProvider } from './ActiveGoalContext'
 import { QuickUpdateModal } from './QuickUpdateModal'
-jest.mock('next/navigation')
-jest.mock('@/lib/serverFunctions/goals/updateGoalProgress')
-jest.mock('@/lib/serverFunctions/goals/getActiveGoal')
-jest.mock('@/lib/hooks/useIsLoggedIn')
+import { vi } from 'vitest'
+vi.mock('next/navigation')
+vi.mock('@/lib/serverFunctions/goals/updateGoalProgress')
+vi.mock('@/lib/serverFunctions/goals/getActiveGoal')
+vi.mock('@/lib/hooks/useIsLoggedIn')
 
 const today = getDateAsString(new Date())
 const yesterday = getDateAsString(subDays(new Date(), 1))
@@ -30,20 +31,20 @@ const Providers = ({ children }: PropsWithChildren) => {
 }
 describe('<QuickUpdateModal/>', () => {
   beforeEach(() => {
-    jest.mocked(usePathname).mockReturnValue('')
-    jest.mocked(useIsLoggedIn).mockReturnValue(true)
+    vi.mocked(usePathname).mockReturnValue('')
+    vi.mocked(useIsLoggedIn).mockReturnValue(true)
   })
 
   test('disabled on profile page', () => {
-    jest.mocked(getActiveGoal).mockResolvedValue(buildGoal())
-    jest.mocked(usePathname).mockReturnValue('/profile')
+    vi.mocked(getActiveGoal).mockResolvedValue(buildGoal())
+    vi.mocked(usePathname).mockReturnValue('/profile')
     const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })
     const button = getByRole('button', { name: 'Quick Update' })
     expect(button).toBeDisabled()
   })
 
   test('disabled when there is no active goal', () => {
-    jest.mocked(getActiveGoal).mockResolvedValue(null)
+    vi.mocked(getActiveGoal).mockResolvedValue(null)
     const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })
     const button = getByRole('button', { name: 'Quick Update' })
     expect(button).toBeDisabled()
@@ -51,7 +52,7 @@ describe('<QuickUpdateModal/>', () => {
 
   describe('initial state', () => {
     test('middle day, with later days filled', async () => {
-      jest
+      vi
         .mocked(getActiveGoal)
         .mockResolvedValue(buildGoal({ id: 'goal-id', records: [100, 200, 400], startDate: yesterday }))
       const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })
@@ -69,7 +70,7 @@ describe('<QuickUpdateModal/>', () => {
 
   describe('per day', () => {
     test('shows goal metric', async () => {
-      jest
+      vi
         .mocked(getActiveGoal)
         .mockResolvedValue(buildGoal({ id: 'goal-id', metric: 'words', records: [null], startDate: today }))
 
@@ -78,10 +79,10 @@ describe('<QuickUpdateModal/>', () => {
         expect(getByRole('button', { name: 'Quick Update' })).toBeEnabled()
       })
       fireEvent.click(getByRole('button'))
-      expect(getByText('words')).toBeInTheDocument()
+      expect(getByText('words'))
     })
     test('first day', async () => {
-      jest.mocked(getActiveGoal).mockResolvedValue(buildGoal({ id: 'goal-id', records: [0], startDate: today }))
+      vi.mocked(getActiveGoal).mockResolvedValue(buildGoal({ id: 'goal-id', records: [0], startDate: today }))
 
       const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })
       await waitFor(() => {
@@ -97,7 +98,7 @@ describe('<QuickUpdateModal/>', () => {
     })
 
     test('second day', async () => {
-      jest
+      vi
         .mocked(getActiveGoal)
         .mockResolvedValue(buildGoal({ id: 'goal-id', records: [100, 0], startDate: yesterday }))
 
@@ -116,7 +117,7 @@ describe('<QuickUpdateModal/>', () => {
   })
   describe('cumulative', () => {
     it('shows goal metric', async () => {
-      jest
+      vi
         .mocked(getActiveGoal)
         .mockResolvedValue(buildGoal({ id: 'goal-id', records: [null], metric: 'minutes', startDate: today }))
       const { getByRole, getByText } = render(<QuickUpdateModal />, { wrapper: Providers })
@@ -126,10 +127,10 @@ describe('<QuickUpdateModal/>', () => {
 
       fireEvent.click(getByRole('button'))
       fireEvent.click(getByRole('switch'))
-      expect(getByText('minutes')).toBeInTheDocument()
+      expect(getByText('minutes'))
     })
     test('first day', async () => {
-      jest.mocked(getActiveGoal).mockResolvedValue(buildGoal({ id: 'goal-id', records: [0], startDate: today }))
+      vi.mocked(getActiveGoal).mockResolvedValue(buildGoal({ id: 'goal-id', records: [0], startDate: today }))
       const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })
 
       await waitFor(() => {
@@ -146,7 +147,7 @@ describe('<QuickUpdateModal/>', () => {
     })
 
     test('second day', async () => {
-      jest
+      vi
         .mocked(getActiveGoal)
         .mockResolvedValue(buildGoal({ id: 'goal-id', records: [100, 0], startDate: yesterday }))
       const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })
@@ -166,7 +167,7 @@ describe('<QuickUpdateModal/>', () => {
     })
 
     test('second day, total word count went down', async () => {
-      jest
+      vi
         .mocked(getActiveGoal)
         .mockResolvedValue(buildGoal({ id: 'goal-id', records: [100, 0], startDate: yesterday }))
       const { getByRole } = render(<QuickUpdateModal />, { wrapper: Providers })

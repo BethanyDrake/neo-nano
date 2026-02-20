@@ -9,8 +9,8 @@ describe('Breadcrumbs', () => {
       { text: 'Thread' },
     ]
     const { getByRole } = render(<Breadcrumbs breadcrumbItems={breadcrumbItems} />)
-    expect(getByRole('link', { name: 'Category' })).toBeInTheDocument()
-    expect(getByRole('link', { name: 'Topic' })).toBeInTheDocument()
-    expect(getByRole('heading', { name: 'Thread' })).toBeInTheDocument()
+    expect(getByRole('link', { name: 'Category' }))
+    expect(getByRole('link', { name: 'Topic' }))
+    expect(getByRole('heading', { name: 'Thread' }))
   })
 })

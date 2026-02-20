@@ -1,12 +1,14 @@
+import { vi , Mock} from "vitest"
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const mockQueryFunction = (
-  mockGetQueryFunction: jest.Mock<any, any, any>,
+  mockGetQueryFunction: Mock,
   tableRows: Record<string, unknown[]>,
   matcherResults: Record<string, unknown> = {}
 ) => {
 
 
-  const sql = jest.fn().mockImplementation((query: string) => {
+  const sql = vi.fn().mockImplementation((query: string) => {
 
     const matcherResult = Object.keys(matcherResults).find((matcher: string) => {
       const regex = new RegExp(matcher, 'gi')

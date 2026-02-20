@@ -3,14 +3,15 @@ import { ExpandableAddCommentForm, ReplyToCommentForm } from './AddCommentForm'
 import { ThreadContextProvider } from '../context/ThreadContext'
 import { addThreadComment } from '@/lib/serverFunctions/forum/addThreadComment'
 import { getThreadWithComments } from '../serverFunctions/forum/getThreadWithComments'
+import { vi } from 'vitest'
 
-jest.mock('@/lib/serverFunctions/forum/addThreadComment')
-jest.mock('@/lib/serverFunctions/forum/getThreadWithComments')
+vi.mock('@/lib/serverFunctions/forum/addThreadComment')
+vi.mock('@/lib/serverFunctions/forum/getThreadWithComments')
 
 describe('<AddCommentForm />', () => {
   test('add a comment', async () => {
-    // @ts-expect-error testf file
-    jest.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
+    // @ts-expect-error test file
+    vi.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
     const { getByRole, queryByRole, findByTestId } = render(
       <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
         <ExpandableAddCommentForm />
@@ -35,7 +36,7 @@ describe('<AddCommentForm />', () => {
 
   test('cant add an empty comment', async () => {
     // @ts-expect-error testf file
-    jest.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
+    vi.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
     const { getByRole, findByText } = render(
       <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
         <ExpandableAddCommentForm />
@@ -44,13 +45,13 @@ describe('<AddCommentForm />', () => {
     fireEvent.click(getByRole('button', { name: 'Add Comment' }))
     fireEvent.click(getByRole('button', { name: 'Post!' }))
 
-    expect(await findByText("Can't post an empty comment.")).toBeInTheDocument()
+    expect(await findByText("Can't post an empty comment."))
     expect(addThreadComment).not.toHaveBeenCalled()
   })
 
    test('reply to an existing comment', async () => {
-    // @ts-expect-error testf file
-    jest.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
+    // @ts-expect-error test file
+    vi.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
     const { getByRole } = render(
       <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
         <ReplyToCommentForm comment={{id: 'comment-id', text: 'Some comment text'}} author={{id:'user-id', displayName:'Display Name'}} />

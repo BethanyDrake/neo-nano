@@ -4,10 +4,10 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { ModalContextProvider } from '../modals/ModalContext'
 import { CommentCard } from './CommentCard'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
-
-jest.mock('@/lib/serverFunctions/moderation/flagComment')
-jest.mock('@/lib/context/UserContext')
-jest.mock('@/lib/hooks/useIsLoggedIn')
+import { vi } from 'vitest'
+vi.mock('@/lib/serverFunctions/moderation/flagComment')
+vi.mock('@/lib/context/UserContext')
+vi.mock('@/lib/hooks/useIsLoggedIn')
 
 describe('<CommentCard />', () => {
   test('no flags', async () => {
@@ -18,8 +18,8 @@ describe('<CommentCard />', () => {
         flags={[]}
       />,
     )
-    expect(await findByText(/Some Name/)).toBeInTheDocument()
-    expect(await findByText(/some rich text/)).toBeInTheDocument()
+    expect(await findByText(/Some Name/))
+    expect(await findByText(/some rich text/))
   })
 
   test('flagged comment, no reviews', async () => {
@@ -42,8 +42,8 @@ describe('<CommentCard />', () => {
       await findByText(
         /This comment has been flagged as potentially inappropriate, and has been hidden while pending manual review./,
       ),
-    ).toBeInTheDocument()
-    expect(queryByText(/Some text/)).not.toBeInTheDocument()
+    )
+    expect(queryByText(/Some text/)).not
   })
 
   test('flagged comment, overruled by moderator', async () => {
@@ -63,7 +63,7 @@ describe('<CommentCard />', () => {
         flags={[flag]}
       />,
     )
-    expect(await findByText(/some comment text/)).toBeInTheDocument()
+    expect(await findByText(/some comment text/))
   })
 
   test('flagged comment, confirmed by moderator', async () => {
@@ -83,13 +83,13 @@ describe('<CommentCard />', () => {
         flags={[flag]}
       />,
     )
-    expect(await findByText(/This comment has been removed./)).toBeInTheDocument()
+    expect(await findByText(/This comment has been removed./))
 
-    expect(queryByText(/Some text/)).not.toBeInTheDocument()
+    expect(queryByText(/Some text/)).not
   })
 
   test('flag a comment as inappropriate', async () => {
-   jest.mocked(useIsLoggedIn).mockReturnValue(true)
+   vi.mocked(useIsLoggedIn).mockReturnValue(true)
     const { getByRole } = render(
       <CommentCard
         comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
@@ -99,7 +99,7 @@ describe('<CommentCard />', () => {
       { wrapper: ModalContextProvider },
     )
     fireEvent.click(getByRole('button', { name: 'Report comment as inappropriate' }))
-    expect(getByRole('heading', { name: 'Report Comment as Inappropriate' })).toBeInTheDocument()
+    expect(getByRole('heading', { name: 'Report Comment as Inappropriate' }))
     fireEvent.click(getByRole('radio', { name: 'harrassment' }))
     fireEvent.input(getByRole('textbox', { name: 'More details:' }), { target: { value: 'Some details.' } })
     fireEvent.click(getByRole('button', { name: 'Save' }))

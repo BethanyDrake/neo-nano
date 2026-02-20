@@ -6,30 +6,31 @@ import { buildChallenge } from '../types/challenge.builders'
 import { render } from '@testing-library/react'
 import { useModalContext } from '@/lib/modals/ModalContext'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
+import { vi } from 'vitest'
 
-jest.mock('@/lib/challenges')
-jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
-jest.mock('@/lib/modals/ModalContext')
-jest.mock('@/lib/hooks/useIsLoggedIn')
+vi.mock('@/lib/challenges')
+vi.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
+vi.mock('@/lib/modals/ModalContext')
+vi.mock('@/lib/hooks/useIsLoggedIn')
 describe('SuggestNextGoal', () => {
 
   beforeEach(() => {
-    jest.mocked(useIsLoggedIn).mockReturnValue(true)
-    jest.mocked(useModalContext).mockReturnValue({
-      setOpenModal: jest.fn(),
+    vi.mocked(useIsLoggedIn).mockReturnValue(true)
+    vi.mocked(useModalContext).mockReturnValue({
+      setOpenModal: vi.fn(),
       openModal: null,
-      closeModal: jest.fn()
+      closeModal: vi.fn()
     })
     
   })
   test('if there is no current or upcoming challenge, just make a custom goal', () => {
-    const mockOpenModal = jest.fn()
+    const mockOpenModal = vi.fn()
 
     //@ts-expect-error test file
-    jest.mocked(useModalContext).mockReturnValue({ setOpenModal: mockOpenModal })
-    jest.mocked(getCurrentChallenge).mockReturnValue(undefined)
+    vi.mocked(useModalContext).mockReturnValue({ setOpenModal: mockOpenModal })
+    vi.mocked(getCurrentChallenge).mockReturnValue(undefined)
 
-    jest.mocked(getUpcomingChallenge).mockReturnValue(undefined)
+    vi.mocked(getUpcomingChallenge).mockReturnValue(undefined)
 
     const { getAllByRole, getByRole } = render(<SuggestNextGoal />)
     const buttons = getAllByRole('button')
@@ -42,11 +43,11 @@ describe('SuggestNextGoal', () => {
   })
 
   test('if there is no current challenge, join an upcoming challenge', async () => {
-    jest.mocked(getCurrentChallenge).mockReturnValue(undefined)
-    jest
+    vi.mocked(getCurrentChallenge).mockReturnValue(undefined)
+    vi
       .mocked(getUpcomingChallenge)
       .mockReturnValue(buildChallenge({ title: 'Some Upcoming Challenge', id: 'upcoming-challenge-id' }))
-    jest.mocked(joinChallenge).mockResolvedValue([])
+    vi.mocked(joinChallenge).mockResolvedValue([])
     const { getByRole } = render(<SuggestNextGoal />)
 
     const joinChallengeButton = getByRole('button', { name: 'Join Some Upcoming Challenge' })
@@ -57,10 +58,10 @@ describe('SuggestNextGoal', () => {
     })
   })
   test('join current challenge', async () => {
-    jest
+    vi
       .mocked(getCurrentChallenge)
       .mockReturnValue(buildChallenge({ title: 'Current Challenge', id: 'current-challenge-id' }))
-    jest.mocked(joinChallenge).mockResolvedValue([])
+    vi.mocked(joinChallenge).mockResolvedValue([])
     const { getByRole } = render(<SuggestNextGoal />)
 
     const joinChallengeButton = getByRole('button', { name: 'Join Current Challenge' })

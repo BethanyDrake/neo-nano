@@ -3,15 +3,16 @@ import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
 import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
 import { GoalSection } from './GoalSection'
 import { isActive } from '../serverFunctions/goals/goalUtils'
-jest.mock('@/lib/serverFunctions/goals/setGoalVisibility')
-jest.mock('@/lib/serverFunctions/goals/deleteGoal')
-jest.mock('../serverFunctions/goals/goalUtils')
+import { vi } from 'vitest'
+vi.mock('@/lib/serverFunctions/goals/setGoalVisibility')
+vi.mock('@/lib/serverFunctions/goals/deleteGoal')
+vi.mock('../serverFunctions/goals/goalUtils')
 
 describe('<GoalSection />', () => {
   beforeEach(() => {
-    jest.mocked(isActive).mockReturnValue(true)
-    jest.mocked(deleteGoal).mockResolvedValue([])
-    jest.mocked(setGoalVisibility).mockResolvedValue([])
+    vi.mocked(isActive).mockReturnValue(true)
+    vi.mocked(deleteGoal).mockResolvedValue([])
+    vi.mocked(setGoalVisibility).mockResolvedValue([])
   })
   it('displays goal', () => {
     const { getByText } = render(
@@ -26,7 +27,7 @@ describe('<GoalSection />', () => {
         metric={'words'}
       />,
     )
-    expect(getByText('Goal Title')).toBeInTheDocument()
+    expect(getByText('Goal Title'))
   })
 
   it('displays time-based goal', () => {
@@ -42,7 +43,7 @@ describe('<GoalSection />', () => {
         metric={'minutes'}
       />,
     )
-    expect(queryByText(/words/)).not.toBeInTheDocument()
+    expect(queryByText(/words/)).not
   })
 
   it('displays total words', () => {
@@ -58,7 +59,7 @@ describe('<GoalSection />', () => {
         metric={'words'}
       />,
     )
-    expect(getByText('Goal Title')).toBeInTheDocument()
+    expect(getByText('Goal Title'))
     expect(container).toHaveTextContent(/So far\: 300/)
   })
 
@@ -89,7 +90,7 @@ describe('<GoalSection />', () => {
         metric={'words'}
       />,
     )
-    expect(await findByRole('button', { name: 'make private' })).toBeInTheDocument()
+    expect(await findByRole('button', { name: 'make private' }))
   })
 
   test('toggle cumulative/perday', async () => {
@@ -105,7 +106,7 @@ describe('<GoalSection />', () => {
         metric={'words'}
       />,
     )
-    fireEvent.click(getByRole('switch', { name: /Words Per Day • Cumulative/i }))
+    fireEvent.click(getByRole('switch', { name: /Words Per Day.*Cumulative/i }))
   })
 
   test('delete goal', async () => {

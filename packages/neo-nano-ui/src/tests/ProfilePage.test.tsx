@@ -17,43 +17,44 @@ import { startOfToday } from 'date-fns'
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { wrap } from 'souvlaki'
 import { withReactQueryClient } from './utils/withReactQueryClient'
-jest.mock('@/lib/serverFunctions/goals/updateGoalProgress')
-jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn(),
-  useRouter: jest.fn()
+import { vi } from 'vitest'
+vi.mock('@/lib/serverFunctions/goals/updateGoalProgress')
+vi.mock('next/navigation', () => ({
+  useSearchParams: vi.fn(),
+  useRouter: vi.fn()
 }))
-jest.mock('@/lib/serverFunctions/moderation/getIsModerator', () => ({getIsModerator: () => Promise.resolve(false)}))
+vi.mock('@/lib/serverFunctions/moderation/getIsModerator', () => ({getIsModerator: () => Promise.resolve(false)}))
 
-jest.mock('@/lib/auth0', () => ({
+vi.mock('@/lib/auth0', () => ({
   auth0: {
     withPageAuthRequired: (fn: () => Promise<React.JSX.Element>) => fn,
-    getSession: jest.fn(),
+    getSession: vi.fn(),
   },
 }))
-jest.mock('@/lib/useRequireLogin')
-jest.mock('@/lib/serverFunctions/profile/getMyProfile')
-jest.mock('@/lib/serverFunctions/goals/getMyGoals')
-jest.mock('@/lib/serverFunctions/profile/getMyAwards')
-jest.mock('@/lib/serverFunctions/settings/getEmailPreferences')
+vi.mock('@/lib/useRequireLogin')
+vi.mock('@/lib/serverFunctions/profile/getMyProfile')
+vi.mock('@/lib/serverFunctions/goals/getMyGoals')
+vi.mock('@/lib/serverFunctions/profile/getMyAwards')
+vi.mock('@/lib/serverFunctions/settings/getEmailPreferences')
 
-jest.mock('@/lib/challenges')
-jest.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
+vi.mock('@/lib/challenges')
+vi.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
 describe('<ProfilePage />', () => {
   beforeEach(() => {
-    jest.mocked(getMyAwards).mockResolvedValue([])
-    jest.mocked(useSearchParams).mockReturnValue({ get: jest.fn() } as unknown as ReadonlyURLSearchParams)
-    jest
+    vi.mocked(getMyAwards).mockResolvedValue([])
+    vi.mocked(useSearchParams).mockReturnValue({ get: vi.fn() } as unknown as ReadonlyURLSearchParams)
+    vi
       .mocked(getEmailPreferences)
       .mockResolvedValue({ recieveChallengeReminders: false, revieveEncouragmentEmails: false })
   })
   it('shows user details and goals', async () => {
-    jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
-    jest.mocked(getMyProfile).mockResolvedValue({
+    vi.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    vi.mocked(getMyProfile).mockResolvedValue({
       displayName: 'Some Name',
       id: '1',
       role: 'user',
     })
-    jest.mocked(getMyGoals).mockResolvedValue([
+    vi.mocked(getMyGoals).mockResolvedValue([
       {
         title: 'Goal Title',
         id: '1',
@@ -67,22 +68,22 @@ describe('<ProfilePage />', () => {
       },
     ])
     const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
-    expect(await findByText('Some Name')).toBeInTheDocument()
-    expect(await findByText('Goal Title')).toBeInTheDocument()
+    expect(await findByText('Some Name'))
+    expect(await findByText('Goal Title'))
   })
 
   test('invites users without a goal to join the current challenge', async () => {
-    jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
-    jest
+    vi.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    vi
       .mocked(getCurrentChallenge)
       .mockReturnValue(buildChallenge({ title: 'Current Challenge', id: 'current-challenge-id' }))
-    jest.mocked(getMyProfile).mockResolvedValue({
+    vi.mocked(getMyProfile).mockResolvedValue({
       displayName: 'Some Name',
       id: '1',
       role: 'user',
     })
-    jest.mocked(getMyGoals).mockResolvedValue([])
-    jest.mocked(joinChallenge).mockResolvedValue([])
+    vi.mocked(getMyGoals).mockResolvedValue([])
+    vi.mocked(joinChallenge).mockResolvedValue([])
     const { findByRole } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
 
     const joinChallengeButton = await findByRole('button', { name: 'Join Current Challenge' })
@@ -94,25 +95,25 @@ describe('<ProfilePage />', () => {
   })
 
   test('moderators have a label on their profile', async () => {
-    jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
-    jest.mocked(getMyProfile).mockResolvedValue({
+    vi.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    vi.mocked(getMyProfile).mockResolvedValue({
       displayName: 'Some Name',
       id: '1',
       role: 'moderator',
     })
-    jest.mocked(getMyGoals).mockResolvedValue([])
+    vi.mocked(getMyGoals).mockResolvedValue([])
     const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
-    expect(await findByText('Moderator')).toBeInTheDocument()
+    expect(await findByText('Moderator'))
   })
 
   test('update a goal and earn a new award', async () => {
-    jest.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
-    jest.mocked(getMyProfile).mockResolvedValue({
+    vi.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    vi.mocked(getMyProfile).mockResolvedValue({
       displayName: 'Some Name',
       id: '1',
       role: 'moderator',
     })
-    jest
+    vi
       .mocked(getMyGoals)
       .mockResolvedValue([
         buildGoal({
@@ -123,12 +124,12 @@ describe('<ProfilePage />', () => {
           startDate: getDateAsString(startOfToday()),
         }),
       ])
-    jest
+    vi
       .mocked(updateGoalProgress)
       .mockResolvedValue({ updatedGoal: buildGoal(), claimedAwards: [buildUserAward({ title: 'Some Award', imageUrl: 'http://example' })] })
     const { findByText, getByRole } = render(await ProfilePage(), {wrapper: wrap(withReactQueryClient())})
 
-    expect(await findByText('Goal Title')).toBeInTheDocument()
+    expect(await findByText('Goal Title'))
     const input = getByRole('spinbutton', { name: /wordcount for/ })
     fireEvent.change(input, { target: { value: 100 } })
     fireEvent.blur(input)

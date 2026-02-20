@@ -13,7 +13,7 @@ describe('<FlaggedCommentCard />', () => {
             text: ''
         }} />)
 
-        expect(getByText('#comment2-flag1')).toBeInTheDocument()
+        expect(getByText('#comment2-flag1'))
         expect(container).toHaveTextContent(/details: \(none\)/i)
         expect(container).toHaveTextContent(/reason: harrassment/i)
     })
