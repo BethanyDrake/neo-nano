@@ -1,6 +1,5 @@
 import { vi , Mock} from "vitest"
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export const mockQueryFunction = (
   mockGetQueryFunction: Mock,
   tableRows: Record<string, unknown[]>,

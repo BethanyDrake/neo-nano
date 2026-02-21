@@ -7,10 +7,12 @@ export const AspectInput = ({
   color,
   value,
   setValue,
+  aspect
 }: {
   color: string
   value: number
   setValue: (n: number) => void
+  aspect: Aspect
 }) => {
   const rangerRef = React.useRef<HTMLDivElement>(null)
 
@@ -37,7 +39,8 @@ export const AspectInput = ({
     >
       {rangerInstance.handles().map(({ value, onKeyDownHandler, onMouseDownHandler, onTouchStart }, i) => (
         <button
-          key={i}
+          key={`${aspect}-slider`}
+          id={`${aspect}-slider`}
           onKeyDown={onKeyDownHandler}
           onMouseDown={onMouseDownHandler}
           onTouchStart={onTouchStart}
@@ -65,6 +68,7 @@ export const AspectInput = ({
         return (
           <button
             role="button"
+            aria-label={`set ${aspect} to ${_value}`}
             key={key}
             onClick={(event) => {
               event.preventDefault()
@@ -94,22 +98,22 @@ export const AspectInput = ({
 export const TitledAspectInput = ({
   value,
   setValue,
-  title,
+  aspect,
   descriptions,
   colour,
 }: {
   value: number
   setValue: (n: number) => void
-  title: string
+  aspect: Aspect
   descriptions: string[]
   colour: string
 }) => {
   const description = descriptions[Math.round((value * (descriptions.length - 1)) / 100)]
-
+  const title = aspectDefinitions[aspect].name
   return (
     <div>
-      <h4 style={{ textTransform: 'capitalize' }}>{title}:</h4> <p>{description}</p>
-      <AspectInput value={value} setValue={setValue} color={colour}></AspectInput>
+      <label htmlFor={`${aspect}-slider`} style={{ textTransform: 'capitalize' }}>{title}:</label> <p>{description}</p>
+      <AspectInput aspect={aspect} value={value} setValue={setValue} color={colour}></AspectInput>
     </div>
   )
 }
@@ -127,7 +131,7 @@ export const AspectInputFormSection = ({
         key={aspect}
         value={aspects[aspect]}
         setValue={(n) => setAspects({ ...aspects, [aspect]: n })}
-        title={aspectDefinitions[aspect].name}
+        aspect={aspect}
         descriptions={aspectDefinitions[aspect].descriptions}
         colour={aspectDefinitions[aspect].colour}
       />

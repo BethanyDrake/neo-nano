@@ -29,7 +29,7 @@ describe('EditGoalModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Update Goal' })).not
+      expect(queryByRole('heading', { name: 'Update Goal' })).not.toBeInTheDocument()
     })
     expect(updateGoal).toHaveBeenCalledWith(
       'goal-id',
@@ -67,7 +67,7 @@ describe('EditGoalModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Update Goal' })).not
+      expect(queryByRole('heading', { name: 'Update Goal' })).not.toBeInTheDocument()
     })
     expect(updateGoal).toHaveBeenCalledWith(
       'goal-id',

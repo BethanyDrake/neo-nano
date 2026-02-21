@@ -18,13 +18,14 @@ import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { wrap } from 'souvlaki'
 import { withReactQueryClient } from './utils/withReactQueryClient'
 import { vi } from 'vitest'
+import { getMyProjects } from '@/lib/serverFunctions/projects/getMyProjects'
 vi.mock('@/lib/serverFunctions/goals/updateGoalProgress')
 vi.mock('next/navigation', () => ({
   useSearchParams: vi.fn(),
   useRouter: vi.fn()
 }))
 vi.mock('@/lib/serverFunctions/moderation/getIsModerator', () => ({getIsModerator: () => Promise.resolve(false)}))
-
+vi.mock( '@/lib/serverFunctions/projects/getMyProjects')
 vi.mock('@/lib/auth0', () => ({
   auth0: {
     withPageAuthRequired: (fn: () => Promise<React.JSX.Element>) => fn,
@@ -134,5 +135,34 @@ describe('<ProfilePage />', () => {
     fireEvent.change(input, { target: { value: 100 } })
     fireEvent.blur(input)
     expect(await findByText('Some Award'))
+  })
+
+  it('shows user projects', async () => {
+    vi.mocked(auth0.getSession).mockResolvedValue('some session data' as unknown as SessionData)
+    vi.mocked(getMyProfile).mockResolvedValue({
+      displayName: 'Some Name',
+      id: '1',
+      role: 'user',
+    })
+    vi.mocked(getMyGoals).mockResolvedValue([])
+    vi.mocked(getMyProjects).mockResolvedValue([
+      {
+        id: '1',
+        title: 'Project Title',
+        userId: '',
+        visibility: 'private',
+        status: 'planning',
+        aspects: {
+          romance: 100,
+          fantasy: 60,
+          mystery: 20,
+          thrill: 60,
+          complexity: 20
+        }
+      },
+    ])
+    const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
+    expect(await findByText('Some Name'))
+    expect(await findByText('Project Title'))
   })
 })
