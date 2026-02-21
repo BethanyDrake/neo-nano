@@ -20,15 +20,9 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { isFuture } from 'date-fns'
 import Link from 'next/link'
 
-export const isActiveOrUpcoming = (goal: Goal): boolean => {
+const isActiveOrUpcoming = (goal: Goal): boolean => {
   const endDate = getChallengeEndDate(goal.startDate, goal.lengthDays)
   return isFuture(endDate)
-}
-
-export const Paragraphs = ({ rawText }: { rawText?: string | null }) => {
-  if (!rawText) return null
-  console.log()
-  return <>{rawText.split(/$/)}</>
 }
 
 export const ProfilePageInner = () => {

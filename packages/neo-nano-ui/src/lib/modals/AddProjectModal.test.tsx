@@ -12,7 +12,6 @@ import { vi } from 'vitest'
 
 vi.mock('@/lib/serverFunctions/projects/createProject')
 vi.mock('@/lib/serverFunctions/projects/getMyProjects')
-vi.mock('@/lib/projects/AspectInput')
 describe('AddProjectModal', () => {
   beforeEach(() => {
     vi.mocked(useSearchParams).mockReturnValue({ get: vi.fn() } as unknown as ReadonlyURLSearchParams)
@@ -20,7 +19,45 @@ describe('AddProjectModal', () => {
     vi.mocked(createProject).mockResolvedValue({} as Project)
   })
 
-  test('addProject', async () => {
+  test('add minimal project', async () => {
+    const { getByRole, queryByRole } = render(<AddProjectModal />, {
+      wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
+    })
+    await waitFor(() => {
+      expect(getByRole('button', { name: 'add project' })).toBeEnabled()
+    })
+
+    fireEvent.click(getByRole('button', { name: 'add project' }))
+    expect(getByRole('heading', { name: 'Add Project' }))
+
+    fireEvent.change(getByRole('textbox', { name: /Title/ }), { target: { value: 'Some Title' } })
+
+    fireEvent.click(getByRole('button', { name: 'Save' }))
+
+    await waitFor(() => {
+      expect(queryByRole('heading', { name: 'Add Project' })).not.toBeInTheDocument()
+    })
+    expect(createProject).toHaveBeenCalledWith(
+      {
+        title: 'Some Title',
+        blurb: '',
+        excerpt: '',
+        status: 'planning',
+        visibility: 'private',
+        wordCount: null,
+        aspects: {
+          mystery: 0,
+          fantasy: 0,
+          thrill: 0,
+          romance: 0,
+          complexity: 0,
+        },
+      },
+      expect.anything(),
+    )
+  })
+
+  test('add project with details', async () => {
     const { getByRole, queryByRole } = render(<AddProjectModal />, {
       wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
     })
@@ -54,12 +91,49 @@ describe('AddProjectModal', () => {
         wordCount: 50000,
         aspects: {
           mystery: 0,
-          fantasy:0,
+          fantasy: 0,
           thrill: 0,
           romance: 0,
-          complexity: 0
-        }
+          complexity: 0,
+        },
       },
+      expect.anything(),
+    )
+  })
+
+  test('add project with aspects', async () => {
+    const { getByRole, queryByRole } = render(<AddProjectModal />, {
+      wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
+    })
+    await waitFor(() => {
+      expect(getByRole('button', { name: 'add project' })).toBeEnabled()
+    })
+
+    fireEvent.click(getByRole('button', { name: 'add project' }))
+    expect(getByRole('heading', { name: 'Add Project' }))
+
+    fireEvent.change(getByRole('textbox', { name: /Title/ }), { target: { value: 'Some Title' } })
+
+    fireEvent.click(getByRole('button', { name: /set fantasy to 100/ }))
+    fireEvent.click(getByRole('button', { name: /set mystery to 80/ }))
+    fireEvent.click(getByRole('button', { name: /set romance to 60/ }))
+    fireEvent.click(getByRole('button', { name: /set complexity to 40/ }))
+    fireEvent.click(getByRole('button', { name: /set thrill to 20/ }))
+    fireEvent.click(getByRole('button', { name: 'Save' }))
+
+    await waitFor(() => {
+      expect(queryByRole('heading', { name: 'Add Project' })).not.toBeInTheDocument()
+    })
+    expect(createProject).toHaveBeenCalledWith(
+      expect.objectContaining({
+        aspects: {
+          mystery: 80,
+          fantasy: 100,
+          thrill: 20,
+          romance: 60,
+          complexity: 40,
+        },
+      }),
       expect.anything(),
     )
   })

@@ -62,6 +62,7 @@
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@types/to-camel-case": "^1.0.2",
+    "@vitest/coverage-v8": "4.0.18",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "jsdom": "^28.1.0",
