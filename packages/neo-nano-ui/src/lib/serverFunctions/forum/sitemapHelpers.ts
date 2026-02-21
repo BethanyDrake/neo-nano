@@ -26,6 +26,7 @@ HAVING count(comments.id) > 1`
 export const getHotProfiles = async (): Promise<{ profileId: string }[]> => {
   const sql = getQueryFunction()
   const profilesWithAProject = await sql`SELECT DISTINCT users.id 
-FROM users JOIN projects ON projects.user_id = users.id`
+FROM users JOIN projects ON projects.user_id = users.id
+WHERE projects.visibility='public'`
   return profilesWithAProject.map(({ id }) => ({ profileId: id as string }))
 }
