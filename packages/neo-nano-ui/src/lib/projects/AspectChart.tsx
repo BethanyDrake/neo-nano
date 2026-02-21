@@ -13,38 +13,30 @@ const MyTooltip = ({label, payload}: TooltipContentProps<number, string>) => {
 type DataType = {
   name: string,
   value: number
+  max: number
 }
 
 export const AspectChart = ({ aspects }: { aspects: Project['aspects'] }) => {
   const data: DataType[] = Object.entries(aspects).map(([key, value]) => ({
     name: capitalize(key),
     value,
+    max: 100
   }))
   return (
     <RadarChart
       accessibilityLayer
-      barCategoryGap="10%"
-      barGap={4}
-      cx="50%"
-      cy="50%"
       data={data}
-      endAngle={-270}
       height={300}
-      innerRadius={0}
-      layout="centric"
       margin={{
         bottom: 5,
         left: 5,
         right: 5,
         top: 5,
       }}
-      outerRadius="80%"
-      stackOffset="none"
-      startAngle={90}
-      syncMethod="index"
       width={350}
+    
     >
-      <PolarAngleAxis dataKey="name" />
+      <PolarAngleAxis dataKey="name"/>
       <PolarGrid />
       <Tooltip defaultIndex={1} content={MyTooltip}/>
       <Radar
@@ -54,6 +46,11 @@ export const AspectChart = ({ aspects }: { aspects: Project['aspects'] }) => {
         stroke="var(--primary-vibrant)"
         strokeOpacity={0.7}
         strokeWidth={3}
+      />
+      <Radar
+        dataKey="max"
+        fillOpacity={0}
+        strokeOpacity={0}
       />
     </RadarChart>
   )
