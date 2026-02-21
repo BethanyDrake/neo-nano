@@ -12,7 +12,6 @@ import { AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { AddProjectModal } from '@/lib/modals/AddProjectModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
-import { ModeratorOnly } from '@/lib/moderation/ModeratorOnly'
 import { useMyProjectsContext } from '@/lib/projects/MyProjectContext'
 import { ProjectSection } from '@/lib/projects/ProjectSection'
 import { getChallengeEndDate } from '@/lib/serverFunctions/goals/goalUtils'
@@ -26,14 +25,11 @@ export const isActiveOrUpcoming = (goal: Goal): boolean => {
   return isFuture(endDate)
 }
 
-export const Paragraphs = ({rawText}: {rawText?: string | null}) => {
+export const Paragraphs = ({ rawText }: { rawText?: string | null }) => {
   if (!rawText) return null
   console.log()
-  return (<>
-  {rawText.split(/$/)}
-  </>)
+  return <>{rawText.split(/$/)}</>
 }
-
 
 export const ProfilePageInner = () => {
   const { profile, awards } = useProfileContext()
@@ -42,21 +38,22 @@ export const ProfilePageInner = () => {
   return (
     <FullWidthPage>
       <Row alignItems="center">
-        <h1>My Profile</h1> <EditProfileModal /> <SettingsModal /> <Link href={`/profile/${profile.id}`}><ExtendableIconButton icon={faArrowRight} text="view"/></Link>
+        <h1>My Profile</h1> <EditProfileModal /> <SettingsModal />
+        <Link href={`/profile/${profile.id}`}>
+          <ExtendableIconButton icon={faArrowRight} text="view" />
+        </Link>
       </Row>
       <h2>{profile.displayName}</h2>
       {profile.role === 'moderator' && <p>Moderator</p>}
-      <p style={{whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
+      <p style={{ whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
 
       <TrophyCase awards={awards} />
 
-      <ModeratorOnly>
-        <Row alignItems="center">
-          <h2>Projects</h2>
-          <AddProjectModal />
-        </Row>
-        {projects && projects.map((project) => <ProjectSection key={project.id} project={project}/>)}
-      </ModeratorOnly>
+      <Row alignItems="center">
+        <h2>Projects</h2>
+        <AddProjectModal />
+      </Row>
+      {projects && projects.map((project) => <ProjectSection key={project.id} project={project} />)}
       <Row alignItems="center">
         <h2>Goals</h2>
         <AddGoalModal />
