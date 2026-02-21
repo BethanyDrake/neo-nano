@@ -37,7 +37,7 @@ export const AspectInput = ({
         borderRadius: '2px',
       }}
     >
-      {rangerInstance.handles().map(({ value, onKeyDownHandler, onMouseDownHandler, onTouchStart }, i) => (
+      {rangerInstance.handles().map(({ value, onKeyDownHandler, onMouseDownHandler, onTouchStart }) => (
         <button
           key={`${aspect}-slider`}
           id={`${aspect}-slider`}

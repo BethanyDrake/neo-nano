@@ -22,3 +22,10 @@ GROUP BY threads.id
 HAVING count(comments.id) > 1`
   return threads.map(({ id, topic }) => ({ threadId: id as string, topicId: topic as string }))
 }
+
+export const getHotProfiles = async (): Promise<{ profileId: string }[]> => {
+  const sql = getQueryFunction()
+  const profilesWithAProject = await sql`SELECT DISTINCT users.id 
+FROM users JOIN projects ON projects.user_id = users.id`
+  return profilesWithAProject.map(({ id }) => ({ profileId: id as string }))
+}

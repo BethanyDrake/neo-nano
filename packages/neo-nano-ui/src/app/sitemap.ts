@@ -1,4 +1,4 @@
-import { getHotThreads, getTopicIds } from '@/lib/serverFunctions/forum/sitemapHelpers'
+import { getHotProfiles, getHotThreads, getTopicIds } from '@/lib/serverFunctions/forum/sitemapHelpers'
 import type { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -10,6 +10,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const threadEntries: MetadataRoute.Sitemap = (await getHotThreads()).map(({ threadId, topicId }) => ({
     url: `https://www.novel-november.com/forum/${topicId}/${threadId}`,
+  }))
+
+  const profileEntries = (await getHotProfiles()).map(({profileId}) => ({
+    url: `https://www.novel-november.com/profiles/${profileId}`,
   }))
 
   return [
@@ -44,7 +48,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 0.5,
     },
+    ...profileEntries,
     ...topicEntries,
     ...threadEntries,
+    
   ]
 }
