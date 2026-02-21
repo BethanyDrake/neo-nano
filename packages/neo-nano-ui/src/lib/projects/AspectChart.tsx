@@ -1,27 +1,38 @@
 'use client'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip, TooltipContentProps } from 'recharts'
-import { Project } from './Project.type'
-import { capitalize } from 'lodash'
+import { Aspect, Project } from './Project.type'
+import { capitalize, maxBy } from 'lodash'
 import classNames from './tooltip.module.css'
+import { aspectDefinitions } from './aspects'
 
-
-const MyTooltip = ({label, payload}: TooltipContentProps<number, string>) => {
-
-  return (<div className={classNames.Tooltip}><div>{label}:</div><div style={{fontWeight: 'normal'}}>{JSON.stringify(payload[0]?.value)}</div></div>)
+const MyTooltip = ({ label, payload }: TooltipContentProps<number, string>) => {
+  const aspect: Aspect = payload[0]?.payload?.key ?? 'fantasy'
+  console.log(payload)
+  return (
+    <div className={classNames.Tooltip} style={{borderColor: aspectDefinitions[aspect].colour}}>
+      <div>{label}:</div>
+      <div style={{ fontWeight: 'normal' }}>{JSON.stringify(payload[0]?.value)}</div>
+    </div>
+  )
 }
 
 type DataType = {
-  name: string,
+  name: string
   value: number
   max: number
+  key: Aspect
 }
 
 export const AspectChart = ({ aspects }: { aspects: Project['aspects'] }) => {
   const data: DataType[] = Object.entries(aspects).map(([key, value]) => ({
     name: capitalize(key),
+    key: key as Aspect,
     value,
-    max: 100
+    max: 100,
   }))
+
+  const dominantAspect: Aspect = maxBy(data, ({ value }) => value)?.key ?? 'fantasy'
+
   return (
     <RadarChart
       accessibilityLayer
@@ -34,24 +45,19 @@ export const AspectChart = ({ aspects }: { aspects: Project['aspects'] }) => {
         top: 5,
       }}
       width={350}
-    
     >
-      <PolarAngleAxis dataKey="name"/>
+      <PolarAngleAxis dataKey="name" />
       <PolarGrid />
-      <Tooltip defaultIndex={1} content={MyTooltip}/>
+      <Tooltip defaultIndex={1} content={MyTooltip} />
       <Radar
         dataKey="value"
-        fill="var(--primary-vibrant)"
+        fill={aspectDefinitions[dominantAspect].colour}
         fillOpacity={0.5}
-        stroke="var(--primary-vibrant)"
+        stroke={aspectDefinitions[dominantAspect].colour}
         strokeOpacity={0.7}
         strokeWidth={3}
       />
-      <Radar
-        dataKey="max"
-        fillOpacity={0}
-        strokeOpacity={0}
-      />
+      <Radar dataKey="max" fillOpacity={0} strokeOpacity={0} />
     </RadarChart>
   )
 }
