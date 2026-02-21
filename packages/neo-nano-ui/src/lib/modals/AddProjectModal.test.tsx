@@ -42,7 +42,7 @@ describe('AddProjectModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Add Project' })).not
+      expect(queryByRole('heading', { name: 'Add Project' })).not.toBeInTheDocument()
     })
     expect(createProject).toHaveBeenCalledWith(
       {

@@ -38,7 +38,7 @@ describe('<SettingsModal />', () => {
     })
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Settings' })).not
+      expect(queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument()
     })
   })
 })

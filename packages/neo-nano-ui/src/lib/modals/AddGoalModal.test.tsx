@@ -35,7 +35,7 @@ describe('AddGoalModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Add Goal' })).not
+      expect(queryByRole('heading', { name: 'Add Goal' })).not.toBeInTheDocument()
     })
     expect(createGoal).toHaveBeenCalledWith({
       lengthDays: 30,
@@ -62,7 +62,7 @@ describe('AddGoalModal', () => {
     fireEvent.click(getByRole('button', { name: 'Save' }))
 
     await waitFor(() => {
-      expect(queryByRole('heading', { name: 'Add Goal' })).not
+      expect(queryByRole('heading', { name: 'Add Goal' })).not.toBeInTheDocument()
     })
     expect(createGoal).toHaveBeenCalledWith({
       lengthDays: 10,

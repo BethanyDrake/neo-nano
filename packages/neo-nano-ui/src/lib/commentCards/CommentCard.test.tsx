@@ -43,7 +43,7 @@ describe('<CommentCard />', () => {
         /This comment has been flagged as potentially inappropriate, and has been hidden while pending manual review./,
       ),
     )
-    expect(queryByText(/Some text/)).not
+    expect(queryByText(/Some text/)).not.toBeInTheDocument()
   })
 
   test('flagged comment, overruled by moderator', async () => {
@@ -85,7 +85,7 @@ describe('<CommentCard />', () => {
     )
     expect(await findByText(/This comment has been removed./))
 
-    expect(queryByText(/Some text/)).not
+    expect(queryByText(/Some text/)).not.toBeInTheDocument()
   })
 
   test('flag a comment as inappropriate', async () => {

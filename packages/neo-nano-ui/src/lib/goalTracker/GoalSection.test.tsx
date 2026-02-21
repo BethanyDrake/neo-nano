@@ -43,7 +43,7 @@ describe('<GoalSection />', () => {
         metric={'minutes'}
       />,
     )
-    expect(queryByText(/words/)).not
+    expect(queryByText(/words/)).not.toBeInTheDocument()
   })
 
   it('displays total words', () => {
