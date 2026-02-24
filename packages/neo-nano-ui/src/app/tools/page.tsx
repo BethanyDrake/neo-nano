@@ -1,11 +1,12 @@
 import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
-import { Centered } from '@/lib/layoutElements/flexLayouts'
+import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from './tools.module.css'
 import focusClock from '@/lib/tools/focusClockTool/focus-clock.png'
 import sprintTimer from '@/lib/tools/sprintTimerTool/sprint-timer.png'
+import abacus from '@/lib/tools/wordCountTool/abacus.png'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 
 const ToolCard = ({
@@ -38,10 +39,17 @@ const ToolsPage = () => {
   return (
     <NewAwardModalProvider>
       <GutteredPage>
+        <Column>
         <Centered>
           <h1>Toolbox</h1>
         </Centered>
         <div className={classNames.container}>
+            <ToolCard
+            description={'Just start editing, and log the time after.'}
+            id={'focus-clock'}
+            toolName="Focus clock"
+            imageSrc={focusClock}
+          />
           <ToolCard
             description={'Set a timer, then see how many words you can write!'}
             id={'timer'}
@@ -49,12 +57,13 @@ const ToolsPage = () => {
             imageSrc={sprintTimer}
           />
           <ToolCard
-            description={'Just start editing, and log the time after.'}
-            id={'focus-clock'}
-            toolName="Focus clock"
-            imageSrc={focusClock}
+            description={'Calculate the word count and other metrics.'}
+            id={'word-count'}
+            toolName="Word Counter"
+            imageSrc={abacus}
           />
         </div>
+        </Column>
       </GutteredPage>
       <NewAwardModal />
     </NewAwardModalProvider>
