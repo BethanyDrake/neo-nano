@@ -1,11 +1,11 @@
 import { fireEvent, render } from "@testing-library/react"
 import { Clock } from "./Clock"
-import { useActiveGoal, useUpdateActiveGoal } from "./useActiveTimeBasedGoal"
+import { useActiveGoal, useUpdateActiveGoal } from "./useActiveGoal"
 import { buildGoal } from "@/lib/types/forum.builders"
 import { useStopwatch } from "react-timer-hook"
 import { minutesToSeconds } from "date-fns"
 import { vi } from "vitest"
-vi.mock('./useActiveTimeBasedGoal')
+vi.mock('./useActiveGoal')
 vi.mock("react-timer-hook")
 
 

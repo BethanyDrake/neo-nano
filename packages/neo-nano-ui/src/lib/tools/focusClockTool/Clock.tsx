@@ -9,7 +9,7 @@ import { dateToChallengeDay } from '@/lib/serverFunctions/goals/goalUtils'
 import { Goal } from'@/lib/types/forum.types'
 import { PausePlayToggle } from '../PausePlayToggle'
 import classNames from '../timer.module.css'
-import { useActiveGoal, useUpdateActiveGoal } from './useActiveTimeBasedGoal'
+import { useActiveGoal, useUpdateActiveGoal } from './useActiveGoal'
 import { useState } from 'react'
 import focusClock from './focus-clock.png'
 import { track } from '@vercel/analytics';

@@ -33,11 +33,11 @@ export const useActiveGoal = (metric: Metric) => {
   }
 }
 
-const getOptimisticGoal = (minutesToAdd: number, old: Goal): Goal => {
+const getOptimisticGoal = (valueToAdd: number, old: Goal): Goal => {
   const today = getDateAsString(startOfToday())
   const challengeDay = dateToChallengeDay(old.startDate, today)
   const previousTotal = old.records[challengeDay] ?? 0
-  const updatedRecords = changeAtIndex(old.records, challengeDay, previousTotal + minutesToAdd)
+  const updatedRecords = changeAtIndex(old.records, challengeDay, previousTotal + valueToAdd)
 
   return {
     ...old,
@@ -48,12 +48,12 @@ const getOptimisticGoal = (minutesToAdd: number, old: Goal): Goal => {
 export const useUpdateActiveGoal = (goal: Goal) => {
   const { displayNewAward } = useContext(NewAwardModalContext)
   const { mutate } = useMutation({
-    mutationFn: (minutesToAdd: number) => {
-      return updateGoalProgress({ id: goal.id, records: getOptimisticGoal(minutesToAdd, goal).records })
+    mutationFn: (valueToAdd: number) => {
+      return updateGoalProgress({ id: goal.id, records: getOptimisticGoal(valueToAdd, goal).records })
     },
-    onMutate: async (minutesToAdd, context) => {
+    onMutate: async (valueToAdd, context) => {
       // update optimistic record
-      context.client.setQueryData(getQueryKey(goal.metric), (old: Goal) => getOptimisticGoal(minutesToAdd, old))
+      context.client.setQueryData(getQueryKey(goal.metric), (old: Goal) => getOptimisticGoal(valueToAdd, old))
 
       return null
     },
