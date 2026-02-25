@@ -9,7 +9,7 @@ import { dateToChallengeDay } from '@/lib/serverFunctions/goals/goalUtils'
 import { Goal } from'@/lib/types/forum.types'
 import { PausePlayToggle } from '../PausePlayToggle'
 import classNames from '../timer.module.css'
-import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
+import { useActiveGoal, useUpdateActiveGoal } from './useActiveTimeBasedGoal'
 import { useState } from 'react'
 import focusClock from './focus-clock.png'
 import { track } from '@vercel/analytics';
@@ -29,7 +29,7 @@ const UpdateActiveGoal = ({
   goal: Goal
   totalSeconds: number
 }) => {
-  const { addMinutes } = useUpdateActiveTimeBasedGoal(goal)
+  const { addMinutes } = useUpdateActiveGoal(goal)
   const [pastAdded, setPastAdded] = useState<{id: number, timeAdded: number}[]>([])
   const [minutesAdded, setMinutesAdded] = useState(0)
   const minutesToAdd = secondsToMinutes(totalSeconds) - minutesAdded
@@ -74,7 +74,7 @@ const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes:
 
 
 export const Clock = () => {
-  const { goal:activeGoal } = useActiveTimeBasedGoal()
+  const { goal:activeGoal } = useActiveGoal('minutes')
    const { seconds, minutes, hours, pause, start, isRunning, reset, totalSeconds } = useStopwatch({
     autoStart: true,
   })

@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/react"
 import { Clock } from "./Clock"
-import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from "./useActiveTimeBasedGoal"
+import { useActiveGoal, useUpdateActiveGoal } from "./useActiveTimeBasedGoal"
 import { buildGoal } from "@/lib/types/forum.builders"
 import { useStopwatch } from "react-timer-hook"
 import { minutesToSeconds } from "date-fns"
@@ -11,8 +11,8 @@ vi.mock("react-timer-hook")
 
 describe('clock', () => {
   test('add to todays total', () => {
-    vi.mocked(useUpdateActiveTimeBasedGoal, ).mockReturnValue({addMinutes: vi.fn()})
-    vi.mocked(useActiveTimeBasedGoal).mockReturnValue({isLoading: false, error: null, goal: buildGoal({title: 'Some Active Goal'})})
+    vi.mocked(useUpdateActiveGoal, ).mockReturnValue({addMinutes: vi.fn()})
+    vi.mocked(useActiveGoal).mockReturnValue({isLoading: false, error: null, goal: buildGoal({title: 'Some Active Goal'})})
     
     // @ts-expect-error test
     vi.mocked(useStopwatch).mockReturnValue({

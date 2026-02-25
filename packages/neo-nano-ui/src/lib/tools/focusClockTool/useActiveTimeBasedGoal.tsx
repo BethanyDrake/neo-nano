@@ -2,29 +2,28 @@
 import { startOfToday } from 'date-fns'
 import { getDateAsString } from '../../misc'
 import { useIsLoggedIn } from '../../hooks/useIsLoggedIn'
-import { getActiveTimeBasedGoal } from '../../serverFunctions/goals/getActiveGoal'
+import { getActiveGoalWithMetric } from '../../serverFunctions/goals/getActiveGoal'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { dateToChallengeDay } from '../../serverFunctions/goals/goalUtils'
-import { Goal } from '../../types/forum.types'
+import { Goal, Metric } from '../../types/forum.types'
 import { changeAtIndex } from '../../goalTracker/recordUtils'
 import { updateGoalProgress } from '../../serverFunctions/goals/updateGoalProgress'
 import { useContext } from 'react'
 import { NewAwardModalContext } from '../../awards/NewAwardModal'
 
-const getQueryKey = () => {
+const getQueryKey = (metric: Metric) => {
   const today = getDateAsString(startOfToday())
-  const queryKey = ['active-goal', 'time-based', today]
+  const queryKey = ['active-goal', `metric=${metric}`, today]
   return queryKey
 }
 
-export const useActiveTimeBasedGoal = () => {
+export const useActiveGoal = (metric: Metric) => {
   const isLoggedIn = useIsLoggedIn()
   const today = getDateAsString(startOfToday())
-  const queryKey = ['active-goal', 'time-based', today]
 
   const { isLoading, data, error } = useQuery({
-    queryKey,
-    queryFn: () => getActiveTimeBasedGoal(today),
+    queryKey: getQueryKey(metric),
+    queryFn: () => getActiveGoalWithMetric(today, 'minutes'),
     enabled: isLoggedIn,
   })
   return {
@@ -46,7 +45,7 @@ const getOptimisticGoal = (minutesToAdd: number, old: Goal): Goal => {
   }
 }
 
-export const useUpdateActiveTimeBasedGoal = (goal: Goal) => {
+export const useUpdateActiveGoal = (goal: Goal) => {
   const { displayNewAward } = useContext(NewAwardModalContext)
   const { mutate } = useMutation({
     mutationFn: (minutesToAdd: number) => {
@@ -54,12 +53,12 @@ export const useUpdateActiveTimeBasedGoal = (goal: Goal) => {
     },
     onMutate: async (minutesToAdd, context) => {
       // update optimistic record
-      context.client.setQueryData(getQueryKey(), (old: Goal) => getOptimisticGoal(minutesToAdd, old))
+      context.client.setQueryData(getQueryKey(goal.metric), (old: Goal) => getOptimisticGoal(minutesToAdd, old))
 
       return null
     },
     onSuccess(data, variables, onMutateResult, context) {
-      context.client.setQueryData(getQueryKey(), data.updatedGoal)
+      context.client.setQueryData(getQueryKey(goal.metric), data.updatedGoal)
       if (data.claimedAwards.length > 0) {
         displayNewAward(data.claimedAwards[0])
       }
