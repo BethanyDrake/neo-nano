@@ -11,7 +11,7 @@ vi.mock("react-timer-hook")
 
 describe('clock', () => {
   test('add to todays total', () => {
-    vi.mocked(useUpdateActiveGoal, ).mockReturnValue({addMinutes: vi.fn()})
+    vi.mocked(useUpdateActiveGoal, ).mockReturnValue({addValue: vi.fn()})
     vi.mocked(useActiveGoal).mockReturnValue({isLoading: false, error: null, goal: buildGoal({title: 'Some Active Goal'})})
     
     // @ts-expect-error test

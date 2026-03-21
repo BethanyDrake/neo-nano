@@ -1,4 +1,7 @@
-import { Record } from "@/lib/types/forum.types"
+import { Goal, Record } from "@/lib/types/forum.types"
+import { getDateAsString } from "../misc"
+import { startOfToday } from "date-fns"
+import { dateToChallengeDay } from "../serverFunctions/goals/goalUtils"
 
 export const toCumulative = (perDay: Record[]) => {
   const cumulative: Array<number> = []
@@ -24,4 +27,11 @@ export const changeAtIndex = (array: Array<number|null>, index: number, newValue
       const head = array.slice(0, index)
       const tail = array.slice(index + 1) 
       return [...head, newValue, ...tail]
+}
+
+export const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
+  'use client'
+  const today = getDateAsString(startOfToday())
+  const challengeDay = dateToChallengeDay(startDate, today)
+  return records[challengeDay] ?? 0
 }

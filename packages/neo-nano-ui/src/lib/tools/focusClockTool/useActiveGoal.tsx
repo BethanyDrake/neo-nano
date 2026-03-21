@@ -23,7 +23,7 @@ export const useActiveGoal = (metric: Metric) => {
 
   const { isLoading, data, error } = useQuery({
     queryKey: getQueryKey(metric),
-    queryFn: () => getActiveGoalWithMetric(today, 'minutes'),
+    queryFn: () => getActiveGoalWithMetric(today, metric),
     enabled: isLoggedIn,
   })
   return {
@@ -66,6 +66,6 @@ export const useUpdateActiveGoal = (goal: Goal) => {
   })
 
   return {
-    addMinutes: mutate,
+    addValue: mutate,
   }
 }
