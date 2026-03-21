@@ -1,5 +1,5 @@
 'use server'
-import { Goal } from '@/lib/types/forum.types'
+import { Goal, Metric } from '@/lib/types/forum.types'
 import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getExternalId } from '../_utils/getUserIdFromSession'
@@ -7,15 +7,15 @@ import { getChallengeEndDate, isActive } from './goalUtils'
 import { isAfter, parseISO } from 'date-fns'
 import { auth0 } from '@/lib/auth0'
 
-export const getActiveTimeBasedGoal = async (date: string) => {
-  console.log('getActiveTimeBasedGoal', date)
+export const getActiveGoalWithMetric = async (date: string, metric: Metric) => {
+  console.log('getActiveGoalOfType', date)
   const sql = getQueryFunction()
   const external_id = await getExternalId()
   const startedGoals = await sql`SELECT goals.*
     FROM goals
     join users on users.id=goals.user_id
     WHERE users.external_id=${external_id} and start_date <= ${date}
-    and goals.metric='minutes'
+    and goals.metric=${metric}
     ORDER BY start_date DESC, id ASC`
 
   const activeGoals = startedGoals.filter(({ start_date, length_days }) => isActive(start_date, length_days, date))

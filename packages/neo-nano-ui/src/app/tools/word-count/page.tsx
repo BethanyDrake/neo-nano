@@ -7,7 +7,10 @@ const TimerPage = () => {
   return (
     <NewAwardModalProvider>
     <GutteredPage>
-       <UnderDevelopmentMessage upcomingChanges={[{description: 'add words to todays total', issueId: 239}]}/>
+       <UnderDevelopmentMessage upcomingChanges={[
+        {description: 'update today\'s total (cumulative)'},
+        {description: 'update project total (cumulative)'}]
+        }/>
      
       <WordCounter />
     </GutteredPage>

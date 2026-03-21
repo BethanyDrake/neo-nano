@@ -34,6 +34,7 @@ export type Profile = {
 }
 
 export type Visibility ='private' | 'public'
+export type Metric = 'words' | 'minutes'
 
 export type Record = (number | null)
 export type Goal = {
@@ -45,7 +46,7 @@ export type Goal = {
     records: Record[]
     userId: string
     target: number
-    metric: 'words' | 'minutes'
+    metric: Metric
     visibility: Visibility
 }
 

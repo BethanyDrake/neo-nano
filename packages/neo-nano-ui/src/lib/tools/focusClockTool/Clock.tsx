@@ -1,24 +1,18 @@
 'use client'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
-import { secondsToMinutes, startOfToday } from 'date-fns'
+import { secondsToMinutes } from 'date-fns'
 import Image from 'next/image'
 import { useStopwatch } from 'react-timer-hook'
-import { getDateAsString, plural } from '../../misc'
-import { dateToChallengeDay } from '@/lib/serverFunctions/goals/goalUtils'
+import { plural } from '../../misc'
 import { Goal } from'@/lib/types/forum.types'
 import { PausePlayToggle } from '../PausePlayToggle'
 import classNames from '../timer.module.css'
-import { useActiveTimeBasedGoal, useUpdateActiveTimeBasedGoal } from './useActiveTimeBasedGoal'
+import { useActiveGoal, useUpdateActiveGoal } from './useActiveGoal'
 import { useState } from 'react'
 import focusClock from './focus-clock.png'
 import { track } from '@vercel/analytics';
-
-const getTodaysProgress = ({ records, startDate }: Pick<Goal, 'records' | 'startDate'>): number => {
-  const today = getDateAsString(startOfToday())
-  const challengeDay = dateToChallengeDay(startDate, today)
-  return records[challengeDay] ?? 0
-}
+import { getTodaysProgress } from '@/lib/goalTracker/recordUtils'
 
 const formatAddMinutesText = (minutes: number) => `+${minutes} minute${minutes === 1 ? '' : 's'}`
 
@@ -29,7 +23,7 @@ const UpdateActiveGoal = ({
   goal: Goal
   totalSeconds: number
 }) => {
-  const { addMinutes } = useUpdateActiveTimeBasedGoal(goal)
+  const { addValue: addMinutes } = useUpdateActiveGoal(goal)
   const [pastAdded, setPastAdded] = useState<{id: number, timeAdded: number}[]>([])
   const [minutesAdded, setMinutesAdded] = useState(0)
   const minutesToAdd = secondsToMinutes(totalSeconds) - minutesAdded
@@ -72,9 +66,8 @@ const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes:
 }
 
 
-
 export const Clock = () => {
-  const { goal:activeGoal } = useActiveTimeBasedGoal()
+  const { goal:activeGoal } = useActiveGoal('minutes')
    const { seconds, minutes, hours, pause, start, isRunning, reset, totalSeconds } = useStopwatch({
     autoStart: true,
   })
