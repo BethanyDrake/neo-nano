@@ -24,7 +24,33 @@ const challenges: Challenge[] = [
     metric: 'minutes',
      id: '80h-edit-2026'
   },
+  {
+    title: 'Mid Year Novelette',
+    startDate: '2026-06-01',
+    lengthDays: 30,
+    target: 15000,
+    metric: 'words',
+    id: 'mid-year-2026'
+  },
+  {
+    title: 'Preptober',
+    startDate: '2026-10-01',
+    lengthDays: 31,
+    target: 30*31,
+    metric: 'minutes',
+    id: 'preptober-2026'
+  },
+  {
+    title: 'Novel November',
+    startDate: '2026-11-01',
+    lengthDays: 30,
+    target: 50000,
+    metric: 'words',
+    id: 'novel-november-2026'
+  },
 ]
+
+
 
 export const getChallengeById = (id: string) => challenges.find((challenge) => challenge.id === id)
 

@@ -25,7 +25,7 @@ vi.mock('next/navigation', () => ({
   useRouter: vi.fn()
 }))
 vi.mock('@/lib/serverFunctions/moderation/getIsModerator', () => ({getIsModerator: () => Promise.resolve(false)}))
-vi.mock( '@/lib/serverFunctions/projects/getMyProjects')
+vi.mock( '@/lib/serverFunctions/projects/getMyProjects', () => ({getMyProjects: vi.fn().mockResolvedValue([])}))
 vi.mock('@/lib/auth0', () => ({
   auth0: {
     withPageAuthRequired: (fn: () => Promise<React.JSX.Element>) => fn,
