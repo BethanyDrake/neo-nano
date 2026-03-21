@@ -27,7 +27,7 @@ const ToolCard = ({
           <h2>{toolName}</h2>
         </summary>{' '}
         <Image alt={description} width={100} height={100} src={imageSrc} />
-        <div id={description} className={classNames.description}>
+        <div style={{width: '100%'}} id={description} className={classNames.description}>
           {description}
         </div>
       </Link>
@@ -57,7 +57,7 @@ const ToolsPage = () => {
             imageSrc={sprintTimer}
           />
           <ToolCard
-            description={'Calculate the word count and other metrics.'}
+            description={'Calculate your word count.'}
             id={'word-count'}
             toolName="Word Counter"
             imageSrc={abacus}
