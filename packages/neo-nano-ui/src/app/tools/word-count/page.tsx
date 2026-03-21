@@ -8,8 +8,8 @@ const TimerPage = () => {
     <NewAwardModalProvider>
     <GutteredPage>
        <UnderDevelopmentMessage upcomingChanges={[
-        {description: 'update today\'s total (cumulative)'},
-        {description: 'update project total (cumulative)'}]
+        {description: 'update today\'s total (cumulative)', issueId:243},
+        {description: 'update project total (cumulative)', issueId: 242}]
         }/>
      
       <WordCounter />
