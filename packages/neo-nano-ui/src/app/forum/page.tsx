@@ -7,6 +7,7 @@ import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 import { connection } from 'next/server'
 import Link from 'next/link'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
+import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 
 const QuickLink = ({title, icon, href}: {title: string, icon: IconProp, href:string}) => {
   return (
@@ -77,6 +78,13 @@ const Forum = async () => {
  
   return (
     <FullWidthPage>
+       <UnderDevelopmentMessage upcomingChanges={[
+                  {description: 'edit comment', issueId: 245},
+                  {description: 'view past versions of a comment', issueId: 246},
+                   {description: 'delete comment', issueId: 248}
+                
+                ]
+                  }/>
        <h2>Quick Links</h2>
       <QuickLink title={'Recent activity'} icon={Icons.faClock} href={'forum/recent'} />
       <QuickLink title={'My Threads'} icon={Icons.faUser} href={'forum/my-threads'}/>
