@@ -5,12 +5,12 @@ import styles from './Breadcrumbs.module.css'
 
 const BreadcrumbLink = ({ href, text }: { href: string; text: string }) => {
   return (
-    <>
+    <span>
       <Link key={`${href}-link`} className={styles.breadcrumb} href={href}>
         {text}
       </Link>
       <FontAwesomeIcon key={`${href}-chevron`} style={{ alignSelf: 'center' }} icon={faChevronRight} />
-    </>
+    </span>
   )
 }
 

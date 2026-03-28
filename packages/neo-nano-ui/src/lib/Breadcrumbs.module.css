@@ -12,4 +12,7 @@
   font-weight: bold;
   gap: 5px;
 
+   @media (max-width: 800px)  {
+    flex-direction: column;
+  }
 }
