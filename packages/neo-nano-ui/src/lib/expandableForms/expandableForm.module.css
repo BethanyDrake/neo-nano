@@ -4,12 +4,12 @@
     padding: 1em;
     margin: 1em;
     border-radius: 8px;
-
 }
 
 .richTextEditor {
     color: black;
     background-color: white;
+    min-height: 5em;
 
     @media (prefers-color-scheme: dark) {
            filter: sepia()

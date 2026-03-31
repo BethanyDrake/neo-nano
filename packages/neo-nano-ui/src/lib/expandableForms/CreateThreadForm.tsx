@@ -5,7 +5,7 @@ import { useTopicContext } from '../context/TopicContext'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import RichTextEditor from '../richText/RichTextEditor'
 import { BasicButton } from '../buttons/BasicButton'
-import { ExtendableIconButton } from '../buttons/ExtendableIconButton'
+import { FloatingActionButton } from '../buttons/ExtendableIconButton'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import formClasses from '@/lib/expandableForms/form.module.css'
 import styles from './expandableForm.module.css'
@@ -47,7 +47,7 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={(node) => node?.scrollIntoView?.()}>
       <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
         <Column>
           <Row alignItems="center" justifyContent="left">
@@ -80,7 +80,7 @@ export const CreateThreadExtendableForm = () => {
 
   return (
     <div>
-      <ExtendableIconButton icon={faAdd} onClick={() => setIsOpen(true)} text="Create Thread" />
+      <FloatingActionButton visible={!isOpen} icon={faAdd} onClick={() => setIsOpen(true)} text="Create Thread" />
       {isOpen && <CreateThreadForm onSubmit={() => setIsOpen(false)} />}
     </div>
   )

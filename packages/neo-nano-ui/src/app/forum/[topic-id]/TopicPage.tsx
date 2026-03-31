@@ -40,6 +40,12 @@ const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Ca
           />
         </Row>
         <p>{topic.description}</p>
+        <Column>
+          <h2>Threads:</h2>
+          {threads &&
+            threads.map((thread: ThreadSummary) => <ThreadCard key={thread.id} topicId={topic.id} thread={thread} />)}
+        </Column>
+
         {isLoggedIn ? (
           <CreateThreadExtendableForm />
         ) : (
@@ -47,12 +53,6 @@ const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Ca
             <ExtendableIconButton text="Log in to start a thread" icon={faAdd} />
           </Link>
         )}
-
-        <Column>
-          <h2>Threads:</h2>
-          {threads &&
-            threads.map((thread: ThreadSummary) => <ThreadCard key={thread.id} topicId={topic.id} thread={thread} />)}
-        </Column>
       </Column>
     </FullWidthPage>
   )

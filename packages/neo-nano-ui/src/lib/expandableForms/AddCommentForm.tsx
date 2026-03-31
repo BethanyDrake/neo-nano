@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ExtendableIconButton, SmallIconButton } from '../buttons/ExtendableIconButton'
+import { FloatingActionButton, SmallIconButton } from '../buttons/ExtendableIconButton'
 import { faAdd, faReply } from '@fortawesome/free-solid-svg-icons'
 import { BasicButton } from '../buttons/BasicButton'
 import RichTextEditor from '../richText/RichTextEditor'
@@ -42,7 +42,7 @@ const AddCommentForm = ({
   }
 
   return (
-    <div className={styles.container}>
+    <div ref={(node) => node?.scrollIntoView?.()} className={styles.container}>
       <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
         <Column>
           {errorText && <span>{errorText}</span>}
@@ -63,7 +63,7 @@ export const ExpandableAddCommentForm = () => {
 
   return (
     <div>
-      <ExtendableIconButton icon={faAdd} onClick={() => setIsOpen(true)} text="Add Comment" />
+      <FloatingActionButton onClick={() => setIsOpen(true)} text={'Add Comment'} icon={faAdd} visible={!isOpen}/>
       {isOpen && <AddCommentForm afterSubmit={() => setIsOpen(false)} />}
     </div>
   )
