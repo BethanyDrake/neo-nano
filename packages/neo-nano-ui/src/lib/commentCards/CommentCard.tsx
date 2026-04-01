@@ -56,7 +56,7 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
   return (
     <div style={{minHeight: minHeight}} ref={cardContainerRef} className={classNames.card}>
       <Column>
-      <Row justifyContent="space-between" alignItems="center" style={{ height: '1em' }}>
+      <Row justifyContent="space-between" alignItems="center" style={{ height: '1em', maxWidth: 'calc(100vw - 120px)' }}>
         <Link className={classNames.authorLink} href={`/profile/${author.id}`}>
           {author.displayName}:
         </Link>
