@@ -42,7 +42,7 @@ const AddCommentForm = ({
   }
 
   return (
-    <div ref={(node) => node?.scrollIntoView?.()} className={styles.container}>
+    <div ref={(node) => node?.scrollIntoView?.({behavior: "smooth"})} className={styles.container}>
       <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
         <Column>
           {errorText && <span>{errorText}</span>}

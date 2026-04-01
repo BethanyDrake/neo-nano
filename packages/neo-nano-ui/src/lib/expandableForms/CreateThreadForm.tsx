@@ -47,7 +47,7 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
   }
 
   return (
-    <div className={styles.container} ref={(node) => node?.scrollIntoView?.()}>
+    <div className={styles.container} ref={(node) => node?.scrollIntoView?.({behavior: "smooth"})}>
       <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
         <Column>
           <Row alignItems="center" justifyContent="left">
