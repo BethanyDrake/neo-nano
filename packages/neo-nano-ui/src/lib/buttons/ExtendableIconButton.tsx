@@ -9,6 +9,15 @@ export const ExtendableIconButton = ({text, onClick, icon, isLoading}: {text:str
     return <button title={text} className={styles["icon-button"]} onClick={onClick}><FontAwesomeIcon icon={icon} /><span>{text}</span></button>
 }
 
+export const FloatingActionButton = ({text, onClick, icon, visible}: {text:string, visible?: boolean} & Pick<DOMAttributes<HTMLButtonElement>, 'onClick'> & Pick<FontAwesomeIconProps, 'icon'>) => {
+    if (!visible) return null
+    return (<>
+    <div style={{height: '50px'}}/>
+                <button title={text} className={styles["floating-action-button"]} onClick={onClick}><FontAwesomeIcon icon={icon} /><span>{text}</span></button>
+        </>)
+
+}
+
 type SmallIconButtonProps = 
     {id: string, text:string, isLoading?: boolean, variant?: 'angry'} & Pick<DOMAttributes<HTMLButtonElement>, 'onClick' > & Pick<FontAwesomeIconProps, 'icon'>
 
