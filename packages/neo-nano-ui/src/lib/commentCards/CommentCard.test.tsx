@@ -93,13 +93,14 @@ describe('<CommentCard />', () => {
     const { getByRole } = render(
       <CommentCard
         comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
-        author={{ id: '2', displayName: '' }}
+        author={{ id: '2', displayName: 'Alice' }}
         flags={[]}
       />,
       { wrapper: ModalContextProvider },
     )
-    fireEvent.click(getByRole('button', { name: 'Report comment as inappropriate' }))
-    expect(getByRole('heading', { name: 'Report Comment as Inappropriate' }))
+    fireEvent.click(getByRole('button', { name: 'more actions' }))
+    fireEvent.click(getByRole('menuitem', { name: 'report' }))
+    expect(getByRole('heading', { name: "Report Alice's comment as inappropriate:" }))
     fireEvent.click(getByRole('radio', { name: 'harrassment' }))
     fireEvent.input(getByRole('textbox', { name: 'More details:' }), { target: { value: 'Some details.' } })
     fireEvent.click(getByRole('button', { name: 'Save' }))

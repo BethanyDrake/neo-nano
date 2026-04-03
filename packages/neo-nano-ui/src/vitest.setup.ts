@@ -2,6 +2,7 @@
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 import { setupServer } from 'msw/node';
+import ResizeObserver from 'resize-observer-polyfill';
 vi.mock('@auth0/nextjs-auth0')
 vi.mock('@auth0/nextjs-auth0/server', () => ({
     Auth0Client: class { public getSession = vi.fn()}
@@ -16,6 +17,8 @@ vi.mock('@neondatabase/serverless')
 vi.mock('@/lib/richText/RichTextEditor', () => vi.importActual('./__mocks__/MockRichTextEditor'))
 vi.mock('@/lib/richText/RichTextDisplay', () => vi.importActual('./__mocks__/MockRichTextDisplay'))
 vi.mock('canvas-confetti')
+
+globalThis.ResizeObserver = ResizeObserver;
 
 process.env.DATABASE_URL = 'DATABASE_URL'
 

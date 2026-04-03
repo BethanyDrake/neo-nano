@@ -8,8 +8,9 @@ import { ReportCommentModal } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
 import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
+import { MoreActions, } from './MoreActions'
 
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
@@ -21,13 +22,52 @@ export type CommentCardDataEntry = {
   flags: Flag[]
 }
 
+export const CommentCardContext = createContext<CommentCardDataEntry >({
+  comment: {
+    richText: '',
+    id: '',
+    text: '',
+    createdAt: new Date()
+  },
+  author: {
+    id: '',
+    displayName: ''
+  },
+  flags: [],
+})
+
+export const useCommentCardContext = () => useContext(CommentCardContext)
+
+export type CommentAction = 'reply' | 'report'
+type CommentActionContextType = {
+  activeAction?: CommentAction
+  setActiveAction: (action?: CommentAction) => void
+  cancelAction: () => void
+}
+
+export const CommentActionContext = createContext<CommentActionContextType>({
+  setActiveAction: () => {},
+  cancelAction: () => {}
+})
+
+export const useCommentActionContext = () => useContext(CommentActionContext)
+
 export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) => {
   const hasUnreviewedFlag = flags.some(({ reviewOutcome }) => !reviewOutcome)
   const hasConfirmedFlag = flags.some(({ reviewOutcome }) => reviewOutcome === 'confirmed')
   const isLoggedIn = useIsLoggedIn()
 
+  const commentCardContext = useMemo(() => ({comment, author, flags}), [comment, author, flags])
   const [minHeight, setMinHeight] = useState<number>()
   const cardContainerRef = useRef<HTMLDivElement>(null)
+      const [activeAction, setActiveAction] = useState<CommentAction>()
+    const actionContext = useMemo(() => {
+return {
+    activeAction,
+    setActiveAction,
+    cancelAction: () => setActiveAction(undefined)
+}
+    }, [activeAction])
 
   useLayoutEffect(() => {
     if(cardContainerRef.current) {
@@ -54,16 +94,21 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
   }
 
   return (
+      <CommentCardContext.Provider value={commentCardContext}>
+         <CommentActionContext.Provider value={actionContext}>
     <div style={{minHeight: minHeight}} ref={cardContainerRef} className={classNames.card}>
       <Column>
       <Row justifyContent="space-between" alignItems="center" style={{ height: '1em', maxWidth: 'calc(100vw - 120px)' }}>
+        <Row>
         <Link className={classNames.authorLink} href={`/profile/${author.id}`}>
           {author.displayName}:
         </Link>
-        <Row>
+        </Row>
+        {/* <SmallIconButton id={`edit-${comment.id}`} text='edit' icon={faEdit}/> */}
+        <Row alignItems='center' style={{translate: '26px'}}>
           <LikeButton commentId={comment.id} />
-          {isLoggedIn && <ReplyToCommentForm comment={comment} author={author} />}
-          {isLoggedIn && <ReportCommentModal comment={comment} />}
+        {isLoggedIn && <MoreActions />}
+          
         </Row>
       </Row>
       <ClientSideOnly fallback={<p>{comment.text}</p>}>
@@ -77,5 +122,9 @@ export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) =>
         </Row>
         </Column>
     </div>
+            <ReplyToCommentForm/>
+            <ReportCommentModal />
+    </CommentActionContext.Provider>
+    </CommentCardContext.Provider>
   )
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { FloatingActionButton, SmallIconButton } from '../buttons/ExtendableIconButton'
-import { faAdd, faReply } from '@fortawesome/free-solid-svg-icons'
+import { FloatingActionButton } from '../buttons/ExtendableIconButton'
+import { faAdd } from '@fortawesome/free-solid-svg-icons'
 import { BasicButton } from '../buttons/BasicButton'
 import RichTextEditor from '../richText/RichTextEditor'
 import { Column } from '../layoutElements/flexLayouts'
@@ -8,8 +8,8 @@ import formClasses from '@/lib/expandableForms/form.module.css'
 import styles from './expandableForm.module.css'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useThreadContext } from '../context/ThreadContext'
-import { Comment, Profile } from '@/lib/types/forum.types'
 import { truncateText } from '../misc'
+import { useCommentActionContext, useCommentCardContext } from '../commentCards/CommentCard'
 type Inputs = {
   commentText: string
 }
@@ -42,7 +42,7 @@ const AddCommentForm = ({
   }
 
   return (
-    <div ref={(node) => node?.scrollIntoView?.({behavior: "smooth"})} className={styles.container}>
+    <div ref={(node) => node?.scrollIntoView?.({behavior: "smooth", block:"end"})}>
       <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
         <Column>
           {errorText && <span>{errorText}</span>}
@@ -69,35 +69,20 @@ export const ExpandableAddCommentForm = () => {
   )
 }
 
-export const ReplyToCommentForm = ({
-  comment,
-  author,
-}: {
-  comment: Pick<Comment, 'id' | 'text'>
-  author: Pick<Profile, 'id' | 'displayName'>
-}) => {
-  const [isOpen, setIsOpen] = useState(false)
+export const ReplyToCommentForm = () => {
+  const {comment, author} = useCommentCardContext()
+  const {activeAction, cancelAction} = useCommentActionContext()
+
   return (
-    <div style={{ display: 'relative' }}>
-      <SmallIconButton onClick={() => setIsOpen(!isOpen)} id={`reply-to-${comment.id}`} text={'Reply'} icon={faReply} />
-      {isOpen && (
-        <div
-          style={{
-            transform: 'translateY(2.5em)',
-            zIndex: 500,
-            position: 'absolute',
-            left: '0',
-            width: '100vw',
-            backgroundColor: 'var(--background-colour-2)',
-          }}
-        >
+    <div>
+      {activeAction === 'reply' && (
+        <>
           <AddCommentForm
             initialPlainText={`Replying to ${author.displayName}:\n${truncateText(comment.text)}\n↩️`}
             initialRichText={`<p><em>Replying to ${author.displayName}:</em></p><blockquote>${truncateText(comment.text)}</blockquote><p>↩️</p>`}
-            afterSubmit={() => setIsOpen(false)}
+            afterSubmit={cancelAction}
           />
-        </div>
-      )}
+      </>)}
     </div>
   )
 }

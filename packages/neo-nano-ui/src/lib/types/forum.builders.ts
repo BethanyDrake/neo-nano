@@ -6,7 +6,7 @@ export const buildComment = (comment: Partial<Comment> = {}) => ({
   text: '',
   richText: '',
   author: '',
-  createdAt: Date(),
+  createdAt: new Date(),
   ...comment,
 })
 
