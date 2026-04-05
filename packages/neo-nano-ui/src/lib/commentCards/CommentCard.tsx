@@ -4,13 +4,14 @@ import Link from 'next/link'
 import { ClientSideOnly } from '../ClientSideOnly'
 import { Comment, Flag, Profile } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
-import { ReportCommentModal } from '../modals/ReportCommentModal'
+import { ReportCommentWrapper } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
 import { LikeButton } from './LikeButton'
 import { ReplyToCommentForm } from '../expandableForms/AddCommentForm'
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createContext, PropsWithChildren, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { MoreActions, } from './MoreActions'
+import { EditCommentForm } from '../expandableForms/EditCommentForm'
 
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
@@ -38,7 +39,7 @@ export const CommentCardContext = createContext<CommentCardDataEntry >({
 
 export const useCommentCardContext = () => useContext(CommentCardContext)
 
-export type CommentAction = 'reply' | 'report'
+export type CommentAction = 'reply' | 'report' | 'edit'
 type CommentActionContextType = {
   activeAction?: CommentAction
   setActiveAction: (action?: CommentAction) => void
@@ -51,6 +52,12 @@ export const CommentActionContext = createContext<CommentActionContextType>({
 })
 
 export const useCommentActionContext = () => useContext(CommentActionContext)
+
+export const WithAction = ({action, children}:{action: CommentAction} & PropsWithChildren) => {
+  const {activeAction} = useCommentActionContext()
+  return activeAction === action ? children : null
+
+}
 
 export const CommentCard = ({ comment, author, flags }: CommentCardDataEntry) => {
   const hasUnreviewedFlag = flags.some(({ reviewOutcome }) => !reviewOutcome)
@@ -122,8 +129,9 @@ return {
         </Row>
         </Column>
     </div>
-            <ReplyToCommentForm/>
-            <ReportCommentModal />
+      <WithAction action="reply"><ReplyToCommentForm/></WithAction>
+      <WithAction action="report"><ReportCommentWrapper /></WithAction>
+      <WithAction action="edit"><EditCommentForm /></WithAction>
     </CommentActionContext.Provider>
     </CommentCardContext.Provider>
   )

@@ -15,6 +15,6 @@ test('sign up and post a comment', async ({ page }) => {
 
   await page.getByRole('link', { name: `${threadTitle}` }).click();
   await page.getByRole('button', { name: 'Add Comment' }).click();
-  await page.locator('.ql-editor').fill(faker.lorem.paragraph());
+  await page.locator('.ql-editor.ql-blank').fill(faker.lorem.paragraph());
   await page.getByRole('button', { name: 'Post!' }).click();
 });

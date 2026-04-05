@@ -1,10 +1,12 @@
-import { faEllipsis, faFlag, faReply } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faEllipsis, faFlag, faReply } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import classes from './MoreActions.module.css'
 import iconButtonClasses from '@/lib/buttons/ExtendableIconButton.module.css'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { CommentAction, useCommentActionContext } from './CommentCard'
+import { CommentAction, useCommentActionContext, useCommentCardContext } from './CommentCard'
+import { UserContext } from '../context/UserContext'
+import { useContext } from 'react'
 
 const ActionItem = ({ text, icon, action }: { text: string; icon: IconProp; action: CommentAction }) => {
   const { setActiveAction } = useCommentActionContext()
@@ -25,6 +27,9 @@ const ActionItem = ({ text, icon, action }: { text: string; icon: IconProp; acti
 }
 
 export const MoreActions = () => {
+  const me = useContext(UserContext)
+  const {author} = useCommentCardContext()
+  const isMyComment = me?.id === author.id
   return (
     <Menu>
       <MenuButton
@@ -36,7 +41,7 @@ export const MoreActions = () => {
       </MenuButton>
       <MenuItems anchor={'bottom end'} className={classes['menu-items']}>
         <ActionItem text="reply" icon={faReply} action="reply" />
-        {/* <ActionItem text="edit" icon={faEdit}/> */}
+        {isMyComment && <ActionItem text="edit" icon={faEdit} action="edit"/>}
         <ActionItem text="report" icon={faFlag} action="report" />
       </MenuItems>
     </Menu>

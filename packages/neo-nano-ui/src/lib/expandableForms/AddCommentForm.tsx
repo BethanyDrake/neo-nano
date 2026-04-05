@@ -71,18 +71,13 @@ export const ExpandableAddCommentForm = () => {
 
 export const ReplyToCommentForm = () => {
   const {comment, author} = useCommentCardContext()
-  const {activeAction, cancelAction} = useCommentActionContext()
+  const {cancelAction} = useCommentActionContext()
 
   return (
-    <div>
-      {activeAction === 'reply' && (
-        <>
-          <AddCommentForm
-            initialPlainText={`Replying to ${author.displayName}:\n${truncateText(comment.text)}\n↩️`}
-            initialRichText={`<p><em>Replying to ${author.displayName}:</em></p><blockquote>${truncateText(comment.text)}</blockquote><p>↩️</p>`}
-            afterSubmit={cancelAction}
-          />
-      </>)}
-    </div>
+    <AddCommentForm
+      initialPlainText={`Replying to ${author.displayName}:\n${truncateText(comment.text)}\n↩️`}
+      initialRichText={`<p><em>Replying to ${author.displayName}:</em></p><blockquote>${truncateText(comment.text)}</blockquote><p>↩️</p>`}
+      afterSubmit={cancelAction}
+    />
   )
 }

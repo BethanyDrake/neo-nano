@@ -7,6 +7,7 @@ require('./validate-environment')
 const clearDb = async () => {
   await sql`delete from comment_reactions`
   await sql`delete from flags`
+  await sql`delete from comment_snapshots`
   await sql`delete from comments`
   await sql`delete from goals`
   await sql`delete from threads`

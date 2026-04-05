@@ -92,12 +92,8 @@ const ReportCommentForm = () => {
   )
 }
 
-export const ReportCommentModal = () => {
-  const { activeAction } = useCommentActionContext()
-
+export const ReportCommentWrapper = () => {
   return (
-    <>
-      {activeAction === 'report' && (
         <div
           ref={(node) => node?.scrollIntoView?.({ block: 'end', behavior: 'smooth' })}
           style={{
@@ -110,7 +106,5 @@ export const ReportCommentModal = () => {
         >
           <ReportCommentForm />
         </div>
-      )}
-    </>
   )
 }
