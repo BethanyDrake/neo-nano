@@ -1,13 +1,11 @@
 
 "use client"
-import { PropsWithChildren, ReactNode, useEffect, useState } from 'react'
+import { PropsWithChildren, ReactNode} from 'react'
 import { getIsModerator } from '@/lib/serverFunctions/moderation/getIsModerator'
+import { useQuery } from '@tanstack/react-query'
 
 export const ModeratorOnly = ({children, fallback}: PropsWithChildren & {fallback?: ReactNode})  => {
-  const [isModerator, setIsModerator] = useState(false)
-  useEffect(() => {
-    getIsModerator().then(setIsModerator)
-  }, [])
+  const {data: isModerator} = useQuery({queryKey: ['isModerator'], queryFn: getIsModerator })
 
   if (isModerator) {
     return children

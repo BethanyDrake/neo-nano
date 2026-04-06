@@ -1,7 +1,10 @@
-import ReactQuill from "react-quill-new"
 import 'react-quill-new/dist/quill.snow.css'
 import './richTextStyle.css'
-console.log("RichTextDisplay")
+import dynamic from "next/dynamic"
+
+const ReactQuill = dynamic(() => import('react-quill-new'), {
+  ssr: false,
+})
 
 const RichTextDisplay = ({ richText }: { richText: string }) => {
   return <ReactQuill modules={{ toolbar: null }} value={richText} readOnly bounds={'main'} />
