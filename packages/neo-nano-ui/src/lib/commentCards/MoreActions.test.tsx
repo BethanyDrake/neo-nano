@@ -10,7 +10,8 @@ describe("<MoreActions />", () => {
         const {getByRole} = render(<MoreActions />, { wrapper: wrap(withUserContext({id: 'my-id', role: 'user'}), withCommentCartContext({
             comment: buildComment(),
             author: {id: 'my-id', displayName: ""},
-            flags: []
+            flags: [],
+            snapshots: []
         })) })
 
         fireEvent.click(getByRole('button', {name: 'more actions'}))
@@ -21,7 +22,8 @@ describe("<MoreActions />", () => {
         const {queryByRole, getByRole} = render(<MoreActions />, { wrapper: wrap(withUserContext({id: 'my-id', role: 'user'}), withCommentCartContext({
             comment: buildComment(),
             author: {id: 'other-id', displayName: ""},
-            flags: []
+            flags: [],
+            snapshots: []
         })) })
 
         fireEvent.click(getByRole('button', {name: 'more actions'}))

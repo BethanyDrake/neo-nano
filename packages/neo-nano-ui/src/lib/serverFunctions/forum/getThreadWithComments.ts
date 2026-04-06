@@ -1,10 +1,11 @@
 'use server'
 
-import { Category, Thread, Topic } from '@/lib/types/forum.types'
+import { Category, CommentSnapshot, Thread, Topic } from '@/lib/types/forum.types'
 import { CommentCardDataEntry } from '@/lib/commentCards/CommentCard'
 import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
 import { redirect } from 'next/navigation'
+import { parseISO } from 'date-fns'
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
@@ -26,11 +27,23 @@ const mapFlag = ({ id, comment, reported_by, created_at, reason, details, review
   reviewOutcome: review_outcome,
 })
 
+// @ts-expect-error db mapper
+const mapSnapshot = ({ id, snapshot_of, comment_text, rich_text, version, posted_at }): CommentSnapshot => ({
+  id,
+  snapshotOf: snapshot_of,
+  text: comment_text,
+  richText: rich_text,
+  postedAt: parseISO(posted_at),
+  version
+})
+
+
 export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   console.log('getThreadWithComments')
-  const _commentsPromise = getQueryFunction()`SELECT comment_text, rich_text, author, comments.created_at, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags
+  const _commentsPromise = getQueryFunction()`SELECT comments.comment_text, comments.rich_text, author, comments.created_at, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags, jsonb_agg_strict(comment_snapshots.*) as snapshots
     FROM comments JOIN users on comments.author=users.id
     LEFT OUTER JOIN  flags on flags.comment = comments.id
+    LEFT OUTER JOIN comment_snapshots on comment_snapshots.snapshot_of = comments.id
   WHERE thread=${threadId}
   GROUP BY comments.id, users.id
   ORDER BY comments.created_at
@@ -66,7 +79,7 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   const { thread, topic, category } = breadcrumbData[0]
 
   const commentCardDataEntries = _comments.map(
-    ({ created_at, comment_text, rich_text, author, id, display_name, flags }) => ({
+    ({ created_at, comment_text, rich_text, author, id, display_name, flags, snapshots }) => ({
       comment: {
         text: comment_text,
         richText: rich_text,
@@ -78,6 +91,7 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
         displayName: display_name,
       },
       flags: flags.map(mapFlag),
+      snapshots: snapshots.map(mapSnapshot)
     }),
   )
 

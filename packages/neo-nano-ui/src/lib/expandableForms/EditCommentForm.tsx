@@ -14,34 +14,28 @@ type Inputs = {
 }
 
 export const EditCommentForm = () => {
-  const {comment} = useCommentCardContext()
+  const { comment } = useCommentCardContext()
 
   const initialRichText = comment.richText
   const initialPlainText = comment.text
-  const {cancelAction} = useCommentActionContext()
-  const {updateCommentsData} = useThreadContext()
-  const { handleSubmit } = 
-  useForm<Inputs>()
- 
+  const { cancelAction } = useCommentActionContext()
+  const { updateCommentsData } = useThreadContext()
+  const { handleSubmit } = useForm<Inputs>()
+
   const [richText, setRichText] = useState(initialRichText ?? '')
   const [plainText, setPlainText] = useState(initialPlainText ?? '')
-    const [errorText, setErrorText] = useState('')
-   const { mutate, status } = useMutation<unknown, Error, {plainText: string, richText: string}>({
-      mutationFn: (variables) => {
-        console.log("plainText mute", variables.plainText)
-    return updateComment(
-    comment.id,
-    variables.plainText,
-    variables.richText
-   )}, 
-   mutationKey: ['editComment', comment.id],
+  const [errorText, setErrorText] = useState('')
+  const { mutate, status } = useMutation<unknown, Error, { plainText: string; richText: string }>({
+    mutationFn: (variables) => {
+      return updateComment(comment.id, variables.plainText, variables.richText)
+    },
+    mutationKey: ['editComment', comment.id],
     onSuccess: () => {
       cancelAction()
       updateCommentsData()
     },
-    onError: () => setErrorText("Network error :(")
+    onError: () => setErrorText('Network error :('),
   })
-
 
   const _onSubmit: SubmitHandler<Inputs> = async () => {
     if (status === 'pending') return
@@ -50,15 +44,15 @@ export const EditCommentForm = () => {
       return
     }
     if (plainText === initialPlainText && richText === initialRichText) {
-      setErrorText("No changes.")
-      return 
+      setErrorText('No changes.')
+      return
     }
- 
-    mutate({plainText, richText})
+
+    mutate({ plainText, richText })
   }
 
   return (
-    <div ref={(node) => node?.scrollIntoView?.({behavior: "smooth"})} className={styles.container}>
+    <div ref={(node) => node?.scrollIntoView?.({ behavior: 'smooth' })} className={styles.container}>
       <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
         <Column>
           {errorText && <span>{errorText}</span>}
@@ -73,4 +67,3 @@ export const EditCommentForm = () => {
     </div>
   )
 }
-

@@ -16,6 +16,7 @@ describe('getThreadWithComments', () => {
         thread: '5',
         display_name: 'Author Name',
         flags: [],
+        snapshots: []
       },
     ]
 
@@ -48,6 +49,7 @@ describe('getThreadWithComments', () => {
               displayName: 'Author Name',
             },
             flags: [],
+            snapshots: []
           },
         ],
         category: {
@@ -82,6 +84,7 @@ describe('getThreadWithComments', () => {
         display_name: 'Author Name',
         reason: 'harrasment',
         flags: [{ reason: 'harrassment' }, { reason: 'sexual-content' }],
+        snapshots: []
       },
     ]
 
@@ -103,6 +106,7 @@ describe('getThreadWithComments', () => {
           displayName: 'Author Name',
         },
         flags: [{ reason: 'harrassment' }, { reason: 'sexual-content' }],
+        snapshots: []
       },
     ])
   })

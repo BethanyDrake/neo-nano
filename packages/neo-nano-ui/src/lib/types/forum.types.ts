@@ -1,3 +1,12 @@
+export type CommentSnapshot = {
+    id: string
+    version: number
+    snapshotOf: string
+    text: string
+    richText: string
+    postedAt: Date
+}
+
 export type Comment = {
     id: string
     text: string

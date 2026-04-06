@@ -8,7 +8,7 @@ const sql = neon(process.env.DATABASE_URL)
 const addUpdatedAtColumn = async () => {
 
   await sql`alter table comments
-  add column updated_at TIMESTAMPTZ`
+  add column updated_at TIMESTAMPTZ default Now()`
 
   await sql`alter table comments
   add column version int default 0`

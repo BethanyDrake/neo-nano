@@ -1,5 +1,17 @@
-import { Comment, Goal, Profile } from './forum.types'
+import { Comment, CommentSnapshot, Goal, Profile } from './forum.types'
 import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
+
+export const buildCommentSnapshot = (snapshot: Partial<CommentSnapshot> = {}): CommentSnapshot => ({
+  id: '',
+  text: '',
+  richText: '',
+  postedAt: new Date(),
+  version: 0,
+  snapshotOf: '',
+  ...snapshot
+
+})
+
 
 export const buildComment = (comment: Partial<Comment> = {}) => ({
   id: '',

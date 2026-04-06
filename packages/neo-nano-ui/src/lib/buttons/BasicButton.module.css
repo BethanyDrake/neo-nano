@@ -43,3 +43,14 @@
     cursor: not-allowed;
   }
 }
+
+.text-button {
+    border: none;
+    background: none;
+    font-weight: bold;
+    color: var(--primary-dark);
+    &:hover {
+        text-decoration: underline;
+    }
+
+}

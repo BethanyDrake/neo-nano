@@ -57,7 +57,7 @@ describe('<AddCommentForm />', () => {
     const cancelAction = vi.fn()
     const { getByRole } = render(
       <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
-        <CommentCardContext.Provider value={{comment: buildComment({id: 'comment-id', text: 'Some comment text'}), author: {id:'user-id', displayName:'Display Name'}, flags:[]}} >
+        <CommentCardContext.Provider value={{comment: buildComment({id: 'comment-id', text: 'Some comment text'}), author: {id:'user-id', displayName:'Display Name'}, flags:[], snapshots: []}} >
           <CommentActionContext value={{activeAction:"reply", setActiveAction: vi.fn(), cancelAction}}>
         <ReplyToCommentForm />
         </CommentActionContext>
