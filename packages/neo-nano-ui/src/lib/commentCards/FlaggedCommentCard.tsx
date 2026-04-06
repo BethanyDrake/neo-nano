@@ -1,11 +1,18 @@
-import { LoadingButton } from '../buttons/BasicButton'
+import {  useQueryClient } from '@tanstack/react-query'
+import {  LoadingButton } from '../buttons/BasicButton'
 import { Column, LeftRow } from '../layoutElements/flexLayouts'
 import RichTextDisplay from '../richText/RichTextDisplay'
-import { CommentFlag } from '../serverFunctions/moderation/getFlaggedComments'
+import { CommentFlag, getFlaggedComments } from '../serverFunctions/moderation/getFlaggedComments'
 import { confirmFlag, refuteFlag } from '../serverFunctions/moderation/reviewFlaggedComment'
 import classNames from './CommentCard.module.css'
 
 export const FlaggedCommentCard = ({ comment, flag, snapshots }: CommentFlag) => {
+  const queryClient = useQueryClient()
+  const updateFlaggedComments = async () => {
+    const newFlaggedComments = await getFlaggedComments()
+    queryClient.setQueryData(['flagged-comments'], newFlaggedComments)
+
+  }
   return (
     <div className={classNames.card}>
       <Column>
@@ -40,8 +47,8 @@ export const FlaggedCommentCard = ({ comment, flag, snapshots }: CommentFlag) =>
 
         :
         <LeftRow>
-          <LoadingButton onClick={() => refuteFlag(flag.id)}>Okay</LoadingButton>
-          <LoadingButton onClick={() => confirmFlag(flag.id)} variant="angry">
+          <LoadingButton onClick={() => refuteFlag(flag.id).then(updateFlaggedComments)}>Okay</LoadingButton>
+          <LoadingButton onClick={() => confirmFlag(flag.id).then(updateFlaggedComments)} variant="angry">
             Inappropriate
           </LoadingButton>
         </LeftRow>

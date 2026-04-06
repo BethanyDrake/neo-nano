@@ -1,6 +1,8 @@
 import { render } from "@testing-library/react"
 import { FlaggedCommentCard } from "./FlaggedCommentCard"
 import { buildCommentSnapshot } from "../types/forum.builders"
+import { withReactQueryClient } from "@/tests/utils/withReactQueryClient"
+import { wrap } from "souvlaki"
 
 describe('<FlaggedCommentCard />', () => {
     it('shows flag details, reason, and comment text', () => {
@@ -12,7 +14,7 @@ describe('<FlaggedCommentCard />', () => {
             id: 'comment2',
             richText: 'some rich text',
             text: ''
-        }} snapshots={[]}/>)
+        }} snapshots={[]}/>, {wrapper: wrap(withReactQueryClient())})
 
         expect(getByText('#comment2-flag1')).toBeInTheDocument()
         expect(container).toHaveTextContent(/details: extra details/i)
@@ -29,7 +31,7 @@ describe('<FlaggedCommentCard />', () => {
             id: 'comment2',
             richText: '',
             text: ''
-        }} snapshots={[]}/>)
+        }} snapshots={[]}/>, {wrapper: wrap(withReactQueryClient())})
 
         expect(container).toHaveTextContent(/details: \(none\)/i)
     })
@@ -44,7 +46,7 @@ describe('<FlaggedCommentCard />', () => {
             id: 'comment2',
             richText: 'current text',
             text: ''
-        }} snapshots={[buildCommentSnapshot({id: '1', richText: 'snapshot 1'}), buildCommentSnapshot({id: '2', richText: 'snapshot 2'})]}/>)
+        }} snapshots={[buildCommentSnapshot({id: '1', richText: 'snapshot 1'}), buildCommentSnapshot({id: '2', richText: 'snapshot 2'})]}/>, {wrapper: wrap(withReactQueryClient())})
 
         expect(container).toHaveTextContent(/current text/i)
         expect(container).toHaveTextContent(/snapshot 1/i)
