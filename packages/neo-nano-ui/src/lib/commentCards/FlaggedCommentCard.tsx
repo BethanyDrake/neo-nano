@@ -5,7 +5,7 @@ import { CommentFlag } from '../serverFunctions/moderation/getFlaggedComments'
 import { confirmFlag, refuteFlag } from '../serverFunctions/moderation/reviewFlaggedComment'
 import classNames from './CommentCard.module.css'
 
-export const FlaggedCommentCard = ({ comment, flag }: CommentFlag) => {
+export const FlaggedCommentCard = ({ comment, flag, snapshots }: CommentFlag) => {
   return (
     <div className={classNames.card}>
       <Column>
@@ -15,6 +15,13 @@ export const FlaggedCommentCard = ({ comment, flag }: CommentFlag) => {
             <span>
               #{comment.id}-{flag.id}
             </span>
+            {
+              snapshots.map((snapshot) => 
+                <div key={snapshot.id} className={classNames['angryPaper']}>
+              <RichTextDisplay richText={snapshot.richText} />
+            </div>
+              )
+            }
             <div className={classNames['angryPaper']}>
               <RichTextDisplay richText={comment.richText} />
             </div>

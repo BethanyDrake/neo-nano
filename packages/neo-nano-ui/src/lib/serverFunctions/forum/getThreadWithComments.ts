@@ -1,11 +1,11 @@
 'use server'
 
-import { Category, CommentSnapshot, Thread, Topic } from '@/lib/types/forum.types'
+import { Category, Thread, Topic } from '@/lib/types/forum.types'
 import { CommentCardDataEntry } from '@/lib/commentCards/CommentCard'
 import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
 import { redirect } from 'next/navigation'
-import { parseISO } from 'date-fns'
+import { mapSnapshot } from './rowMappers'
 
 export type ReturnType = {
   commentCardDataEntries: CommentCardDataEntry
@@ -25,16 +25,6 @@ const mapFlag = ({ id, comment, reported_by, created_at, reason, details, review
   details,
   reviewedBy: reviewed_by,
   reviewOutcome: review_outcome,
-})
-
-// @ts-expect-error db mapper
-const mapSnapshot = ({ id, snapshot_of, comment_text, rich_text, version, posted_at }): CommentSnapshot => ({
-  id,
-  snapshotOf: snapshot_of,
-  text: comment_text,
-  richText: rich_text,
-  postedAt: parseISO(posted_at),
-  version
 })
 
 
