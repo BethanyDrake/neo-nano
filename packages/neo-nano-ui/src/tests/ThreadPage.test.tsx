@@ -24,6 +24,7 @@ describe('<ThreadPage />', () => {
             displayName: 'Some Name',
           },
           flags: [],
+          snapshots: []
         },
       ],
       category: {

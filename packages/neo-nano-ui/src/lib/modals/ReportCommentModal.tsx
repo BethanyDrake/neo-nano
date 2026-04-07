@@ -1,27 +1,21 @@
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import { faFontAwesomeFlag } from '@fortawesome/free-solid-svg-icons/faFontAwesomeFlag'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { BasicButton } from '../buttons/BasicButton'
-import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { useThreadContext } from '../context/ThreadContext'
-import formClasses from '@/lib/styles/forum.module.css'
-import { Comment, Flag } from '@/lib/types/forum.types'
+import formClasses from '@/lib/expandableForms/form.module.css'
+import { Flag } from '@/lib/types/forum.types'
 import { Column, LeftRow, Row } from '../layoutElements/flexLayouts'
 import { flagComment } from '../serverFunctions/moderation/flagComment'
 import classNames from './Modal.module.css'
-import { useModalContext } from './ModalContext'
-import { Modal } from './Modal'
+import { useCommentActionContext, useCommentCardContext } from '../commentCards/CommentCard'
 type Inputs = Pick<Flag, 'reason' | 'details'>
 
-const ReportCommentForm = ({
-  comment,
-}: {
-  comment: Pick<Comment, 'id' | 'text'>
-}) => {
-  const {closeModal } = useModalContext()
+const ReportCommentForm = () => {
   const { updateCommentsData } = useThreadContext()
+  const { comment, author } = useCommentCardContext()
+  const { cancelAction } = useCommentActionContext()
   const {
     register,
     handleSubmit,
@@ -30,7 +24,7 @@ const ReportCommentForm = ({
 
   const [isLoading, setIsloading] = useState(false)
 
-   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+  const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     setIsloading(true)
     await flagComment({
       ...data,
@@ -38,14 +32,13 @@ const ReportCommentForm = ({
     })
     await updateCommentsData()
     setIsloading(false)
-    closeModal()
+    cancelAction()
   }
- 
+
   return (
     <form className={[formClasses.form, formClasses.angry].join(' ')} onSubmit={handleSubmit(_onSubmit)}>
       <Column>
-        <h2>Report Comment as Inappropriate</h2>
-        <p className={classNames['comment']}>{comment.text}</p>
+        <h2>Report {author.displayName}&apos;s comment as inappropriate:</h2>
         <fieldset className={classNames['reason-fieldset']}>
           <legend>Reason:</legend>
 
@@ -57,7 +50,7 @@ const ReportCommentForm = ({
                 type="radio"
                 value="sexual-content"
               />
-              <label htmlFor="sexual-conent">sexual content</label>
+              <label htmlFor="sexual-content">sexual content</label>
             </LeftRow>
             <LeftRow>
               <input id="harrassment" {...register('reason', { required: true })} type="radio" value="harrassment" />
@@ -87,7 +80,7 @@ const ReportCommentForm = ({
         />
 
         <Row>
-          <BasicButton variant="angry" buttonProps={{ onClick: closeModal }}>
+          <BasicButton variant="angry" buttonProps={{ onClick: cancelAction }}>
             Cancel
           </BasicButton>
           <BasicButton isLoading={isLoading} variant="angry" buttonProps={{ type: 'submit' }}>
@@ -99,16 +92,19 @@ const ReportCommentForm = ({
   )
 }
 
-export const ReportCommentModal = ({ comment }: { comment: Pick<Comment, 'id' | 'text'> }) => {
-  const modalId = `ReportCommentModal-${comment.id}`
-   const { setOpenModal } = useModalContext()
-
+export const ReportCommentWrapper = () => {
   return (
-    <>
-    <SmallIconButton onClick={() => setOpenModal(modalId)} id={'report'} text={'Report comment as inappropriate'} variant="angry" icon={faFontAwesomeFlag} />
-      <Modal variant="angry" modalId={modalId}>
-          <ReportCommentForm comment={comment} />
-        </Modal>
-    </>
+        <div
+          ref={(node) => node?.scrollIntoView?.({ block: 'end', behavior: 'smooth' })}
+          style={{
+            border: '2px dashed var(--angry-vibrant)',
+            borderLeft: 'none',
+            borderRight: 'none',
+            paddingTop: '24px',
+            paddingBottom: '24px',
+          }}
+        >
+          <ReportCommentForm />
+        </div>
   )
 }

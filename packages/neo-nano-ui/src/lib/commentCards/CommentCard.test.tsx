@@ -1,13 +1,17 @@
 import { flagComment } from '@/lib/serverFunctions/moderation/flagComment'
 import { Flag } from '@/lib/types/forum.types'
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { ModalContextProvider } from '../modals/ModalContext'
 import { CommentCard } from './CommentCard'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { vi } from 'vitest'
+import { updateComment } from '../serverFunctions/forum/addThreadComment'
+import { wrap } from 'souvlaki'
+import { withUserContext } from '@/tests/utils/withUserContext'
+import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
+import { buildCommentSnapshot } from '../types/forum.builders'
 vi.mock('@/lib/serverFunctions/moderation/flagComment')
-vi.mock('@/lib/context/UserContext')
 vi.mock('@/lib/hooks/useIsLoggedIn')
+vi.mock('@/lib/serverFunctions/forum/addThreadComment')
 
 describe('<CommentCard />', () => {
   test('no flags', async () => {
@@ -16,6 +20,7 @@ describe('<CommentCard />', () => {
         comment={{ id: '1', text: 'Plain text', richText: '<p>some rich text</p>', createdAt: new Date() }}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[]}
+        snapshots={[]}
       />,
     )
     expect(await findByText(/Some Name/))
@@ -36,6 +41,7 @@ describe('<CommentCard />', () => {
         comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
+        snapshots={[]}
       />,
     )
     expect(
@@ -61,6 +67,7 @@ describe('<CommentCard />', () => {
         comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
+        snapshots={[]}
       />,
     )
     expect(await findByText(/some comment text/))
@@ -81,6 +88,7 @@ describe('<CommentCard />', () => {
         comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
+        snapshots={[]}
       />,
     )
     expect(await findByText(/This comment has been removed./))
@@ -89,17 +97,18 @@ describe('<CommentCard />', () => {
   })
 
   test('flag a comment as inappropriate', async () => {
-   vi.mocked(useIsLoggedIn).mockReturnValue(true)
+    vi.mocked(useIsLoggedIn).mockReturnValue(true)
     const { getByRole } = render(
       <CommentCard
         comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
-        author={{ id: '2', displayName: '' }}
+        author={{ id: '2', displayName: 'Alice' }}
         flags={[]}
+        snapshots={[]}
       />,
-      { wrapper: ModalContextProvider },
     )
-    fireEvent.click(getByRole('button', { name: 'Report comment as inappropriate' }))
-    expect(getByRole('heading', { name: 'Report Comment as Inappropriate' }))
+    fireEvent.click(getByRole('button', { name: 'more actions' }))
+    fireEvent.click(getByRole('menuitem', { name: 'report' }))
+    expect(getByRole('heading', { name: "Report Alice's comment as inappropriate:" }))
     fireEvent.click(getByRole('radio', { name: 'harrassment' }))
     fireEvent.input(getByRole('textbox', { name: 'More details:' }), { target: { value: 'Some details.' } })
     fireEvent.click(getByRole('button', { name: 'Save' }))
@@ -110,6 +119,62 @@ describe('<CommentCard />', () => {
         details: 'Some details.',
         reason: 'harrassment',
       })
+    })
+  })
+
+  test('edit comment', async () => {
+    vi.mocked(useIsLoggedIn).mockReturnValue(true)
+
+    const { getByRole } = render(
+      <CommentCard
+        comment={{
+          id: 'comment-id',
+          text: 'initial text',
+          richText: '<p>initial rich text</p>',
+          createdAt: new Date(),
+        }}
+        author={{ id: 'my-id', displayName: 'Alice' }}
+        flags={[]}
+        snapshots={[]}
+      />,
+      { wrapper: wrap(withReactQueryClient(), withUserContext({ id: 'my-id', role: 'user' })) },
+    )
+    fireEvent.click(getByRole('button', { name: 'more actions' }))
+    fireEvent.click(getByRole('menuitem', { name: 'edit' }))
+    fireEvent.change(getByRole('textbox'), { target: { value: 'new text' } })
+    fireEvent.click(getByRole('button', { name: 'Edit' }))
+    await waitFor(() => {
+      expect(updateComment).toHaveBeenCalledWith('comment-id', 'new text', '<p>new text</p>')
+    })
+  })
+
+  describe('snapshots', () => {
+    test('comment with no edits', () => {
+      const { getAllByRole } = render(
+        <CommentCard
+          comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
+          author={{ id: '2', displayName: 'Alice' }}
+          flags={[]}
+          snapshots={[]}
+        />,
+      )
+
+      expect(getAllByRole('time')).toHaveLength(1)
+    })
+
+    test('comment with multiple edits', () => {
+      const { getAllByRole, getByRole } = render(
+        <CommentCard
+          comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
+          author={{ id: '2', displayName: 'Alice' }}
+          flags={[]}
+          snapshots={[buildCommentSnapshot({ version: 0 }), buildCommentSnapshot({ version: 1 })]}
+        />,
+      )
+
+      expect(getAllByRole('time')).toHaveLength(2)
+      expect(getByRole('button', { name: '(view original)' })).toBeInTheDocument()
+      expect(getByRole('button', { name: '(view v1)' })).toBeInTheDocument()
     })
   })
 })

@@ -19,3 +19,7 @@ export const LoadingButton = ({onClick, children, variant}: PropsWithChildren & 
     
     return <BasicButton buttonProps={{onClick: _onClick}} isLoading={isLoading} variant={variant}>{children}</BasicButton>
    }
+
+export const TextButton =({buttonProps, children}: PropsWithChildren & { buttonProps?: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>} ) => {
+    return <button role="button" className={classes["text-button"]}{...buttonProps}>{children}</button>
+}
