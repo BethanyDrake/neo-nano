@@ -30,7 +30,10 @@ const mapFlag = ({ id, comment, reported_by, created_at, reason, details, review
 
 export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   console.log('getThreadWithComments')
-  const _commentsPromise = getQueryFunction()`SELECT comments.comment_text, comments.rich_text, author, comments.created_at, comments.id, thread, display_name, jsonb_agg_strict(flags.*) as flags, jsonb_agg_strict(comment_snapshots.*) as snapshots
+  const _commentsPromise = getQueryFunction()`
+  SELECT comments.comment_text, comments.rich_text, author, comments.created_at, comments.id, thread, display_name, 
+  jsonb_agg_strict(flags.*) as flags, 
+  jsonb_agg_strict(comment_snapshots.*) as snapshots
     FROM comments JOIN users on comments.author=users.id
     LEFT OUTER JOIN  flags on flags.comment = comments.id
     LEFT OUTER JOIN comment_snapshots on comment_snapshots.snapshot_of = comments.id
