@@ -13,13 +13,14 @@ import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { MoreActions } from './MoreActions'
 import { EditCommentForm } from '../expandableForms/EditCommentForm'
 import { CommentSnapshotView } from './CommentSnapshotView'
+import { DeleteCommentConfirmation } from './DeleteCommentConfirmation'
 
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
 
 export type CommentCardDataEntry = {
-  comment: Pick<Comment, 'id' | 'text' | 'richText' | 'createdAt'>
+  comment: Pick<Comment, 'id' | 'text' | 'richText' | 'createdAt' | 'isDeleted'>
   author: Pick<Profile, 'id' | 'displayName'>
   flags: Flag[]
   snapshots: CommentSnapshot[]
@@ -31,6 +32,7 @@ export const CommentCardContext = createContext<CommentCardDataEntry>({
     id: '',
     text: '',
     createdAt: new Date(),
+    isDeleted: false
   },
   author: {
     id: '',
@@ -42,7 +44,7 @@ export const CommentCardContext = createContext<CommentCardDataEntry>({
 
 export const useCommentCardContext = () => useContext(CommentCardContext)
 
-export type CommentAction = 'reply' | 'report' | 'edit'
+export type CommentAction = 'reply' | 'report' | 'edit' | 'delete'
 type CommentActionContextType = {
   activeAction?: CommentAction
   setActiveAction: (action?: CommentAction) => void
@@ -118,10 +120,11 @@ export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDa
                 </Link>
               </Row>
               <Row alignItems="center" style={{ translate: '26px' }}>
-                <LikeButton commentId={comment.id} />
+                {!comment.isDeleted  && <LikeButton commentId={comment.id} />}
                 {isLoggedIn && <MoreActions />}
               </Row>
             </Row>
+            {comment.isDeleted && <p className={classNames.deletedMessage}>This comment has been deleted by the author.</p>}
             <ClientSideOnly fallback={<p>{comment.text}</p>}>
               <RichTextDisplay richText={comment.richText} />
             </ClientSideOnly>
@@ -146,6 +149,9 @@ export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDa
         </WithAction>
         <WithAction action="edit">
           <EditCommentForm />
+        </WithAction>
+        <WithAction action="delete">
+          <DeleteCommentConfirmation/>
         </WithAction>
       </CommentActionContext.Provider>
     </CommentCardContext.Provider>

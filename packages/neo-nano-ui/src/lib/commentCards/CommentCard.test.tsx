@@ -4,11 +4,11 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { CommentCard } from './CommentCard'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { vi } from 'vitest'
-import { updateComment } from '../serverFunctions/forum/addThreadComment'
+import { deleteComment, updateComment } from '../serverFunctions/forum/addThreadComment'
 import { wrap } from 'souvlaki'
 import { withUserContext } from '@/tests/utils/withUserContext'
 import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
-import { buildCommentSnapshot } from '../types/forum.builders'
+import { buildComment, buildCommentSnapshot } from '../types/forum.builders'
 vi.mock('@/lib/serverFunctions/moderation/flagComment')
 vi.mock('@/lib/hooks/useIsLoggedIn')
 vi.mock('@/lib/serverFunctions/forum/addThreadComment')
@@ -17,7 +17,7 @@ describe('<CommentCard />', () => {
   test('no flags', async () => {
     const { findByText } = render(
       <CommentCard
-        comment={{ id: '1', text: 'Plain text', richText: '<p>some rich text</p>', createdAt: new Date() }}
+        comment={buildComment({ id: '1', richText: '<p>some rich text</p>' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[]}
         snapshots={[]}
@@ -38,7 +38,7 @@ describe('<CommentCard />', () => {
     }
     const { findByText, queryByText } = render(
       <CommentCard
-        comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }}
+        comment={buildComment({ id: '1', richText: 'Some text' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
         snapshots={[]}
@@ -64,7 +64,7 @@ describe('<CommentCard />', () => {
     }
     const { findByText } = render(
       <CommentCard
-        comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }}
+        comment={buildComment({ id: '1', richText: '<p>some comment text</p>' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
         snapshots={[]}
@@ -85,7 +85,7 @@ describe('<CommentCard />', () => {
     }
     const { findByText, queryByText } = render(
       <CommentCard
-        comment={{ id: '1', text: 'Some text.', richText: '<p>some comment text</p>', createdAt: new Date() }}
+        comment={buildComment({ id: '1', richText: '<p>Some text/p>' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
         snapshots={[]}
@@ -100,7 +100,7 @@ describe('<CommentCard />', () => {
     vi.mocked(useIsLoggedIn).mockReturnValue(true)
     const { getByRole } = render(
       <CommentCard
-        comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
+        comment={buildComment({ id: 'comment-id' })}
         author={{ id: '2', displayName: 'Alice' }}
         flags={[]}
         snapshots={[]}
@@ -123,16 +123,9 @@ describe('<CommentCard />', () => {
   })
 
   test('edit comment', async () => {
-    vi.mocked(useIsLoggedIn).mockReturnValue(true)
-
     const { getByRole } = render(
       <CommentCard
-        comment={{
-          id: 'comment-id',
-          text: 'initial text',
-          richText: '<p>initial rich text</p>',
-          createdAt: new Date(),
-        }}
+        comment={buildComment({ id: 'comment-id', text: 'initial text', richText: '<p>initial rich text</p>' })}
         author={{ id: 'my-id', displayName: 'Alice' }}
         flags={[]}
         snapshots={[]}
@@ -148,11 +141,31 @@ describe('<CommentCard />', () => {
     })
   })
 
+    test('delete comment', async () => {
+    vi.mocked(deleteComment).mockResolvedValue(buildComment())
+
+    const { getByRole } = render(
+      <CommentCard
+        comment={buildComment({ id: 'comment-id'})}
+        author={{ id: 'my-id', displayName: 'Alice' }}
+        flags={[]}
+        snapshots={[]}
+      />,
+      { wrapper: wrap(withReactQueryClient(), withUserContext({ id: 'my-id', role: 'user' })) },
+    )
+    fireEvent.click(getByRole('button', { name: 'more actions' }))
+    fireEvent.click(getByRole('menuitem', { name: 'delete' }))
+    fireEvent.click(getByRole('button', { name: 'Yes, delete my comment' }))
+    await waitFor(() => {
+      expect(deleteComment).toHaveBeenCalledWith('comment-id')
+    })
+  })
+
   describe('snapshots', () => {
     test('comment with no edits', () => {
       const { getAllByRole } = render(
         <CommentCard
-          comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
+          comment={buildComment({ id: 'comment-id' })}
           author={{ id: '2', displayName: 'Alice' }}
           flags={[]}
           snapshots={[]}
@@ -165,7 +178,7 @@ describe('<CommentCard />', () => {
     test('comment with multiple edits', () => {
       const { getAllByRole, getByRole } = render(
         <CommentCard
-          comment={{ id: 'comment-id', text: '', richText: '', createdAt: new Date() }}
+          comment={buildComment({ id: 'comment-id' })}
           author={{ id: '2', displayName: 'Alice' }}
           flags={[]}
           snapshots={[buildCommentSnapshot({ version: 0 }), buildCommentSnapshot({ version: 1 })]}
@@ -175,6 +188,20 @@ describe('<CommentCard />', () => {
       expect(getAllByRole('time')).toHaveLength(2)
       expect(getByRole('button', { name: '(view original)' })).toBeInTheDocument()
       expect(getByRole('button', { name: '(view v1)' })).toBeInTheDocument()
+    })
+
+    test('deleted comment', () => {
+      const { getByRole, getByText } = render(
+        <CommentCard
+          comment={buildComment({ id: 'comment-id', isDeleted: true })}
+          author={{ id: '2', displayName: 'Alice' }}
+          flags={[]}
+          snapshots={[buildCommentSnapshot({ version: 0 }), buildCommentSnapshot({ version: 1 })]}
+        />,
+      )
+
+      expect(getByText('This comment has been deleted by the author.')).toBeInTheDocument()
+      expect(getByRole('button', { name: '(view original)' })).toBeInTheDocument()
     })
   })
 })

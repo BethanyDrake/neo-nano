@@ -13,6 +13,7 @@ export type Comment = {
     richText: string
     author: string
     createdAt: Date
+    isDeleted: boolean
 }
 
 export type Thread = {

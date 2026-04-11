@@ -1,4 +1,4 @@
-import { faEdit, faEllipsis, faFlag, faReply } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faEllipsis, faFlag, faReply, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import classes from './MoreActions.module.css'
 import iconButtonClasses from '@/lib/buttons/ExtendableIconButton.module.css'
@@ -28,8 +28,16 @@ const ActionItem = ({ text, icon, action }: { text: string; icon: IconProp; acti
 
 export const MoreActions = () => {
   const me = useContext(UserContext)
-  const {author} = useCommentCardContext()
+  const {
+    author,
+    comment: { isDeleted },
+  } = useCommentCardContext()
   const isMyComment = me?.id === author.id
+  const canReply = !isDeleted
+  const canEdit = !isDeleted && isMyComment
+  const canReport = !isMyComment
+  const canDelete = !isDeleted && isMyComment
+  if (!canReply && !canEdit && !canReport && !canDelete) return null
   return (
     <Menu>
       <MenuButton
@@ -40,9 +48,10 @@ export const MoreActions = () => {
         <FontAwesomeIcon icon={faEllipsis} />
       </MenuButton>
       <MenuItems anchor={'bottom end'} className={classes['menu-items']}>
-        <ActionItem text="reply" icon={faReply} action="reply" />
-        {isMyComment && <ActionItem text="edit" icon={faEdit} action="edit"/>}
-        <ActionItem text="report" icon={faFlag} action="report" />
+        {canReply && <ActionItem text="reply" icon={faReply} action="reply" />}
+        {canEdit && <ActionItem text="edit" icon={faEdit} action="edit" />}
+        {canReport && <ActionItem text="report" icon={faFlag} action="report" />}
+        {canDelete && <ActionItem text="delete" icon={faTrashCan} action="delete" />}
       </MenuItems>
     </Menu>
   )
