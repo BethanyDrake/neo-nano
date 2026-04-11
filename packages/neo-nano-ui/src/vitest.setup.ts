@@ -1,9 +1,11 @@
 /// <reference types="vitest/browser" />
+import {config} from 'dotenv'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
-import { setupServer } from 'msw/node';
 import ResizeObserver from 'resize-observer-polyfill';
 import { PropsWithChildren } from 'react'
+
+config({ path: `.env.test`})
 vi.mock('@auth0/nextjs-auth0')
 vi.mock('@auth0/nextjs-auth0/server', () => ({
     Auth0Client: class { public getSession = vi.fn()}
@@ -12,9 +14,9 @@ vi.mock('@auth0/nextjs-auth0/server', () => ({
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
   usePathname: vi.fn(),
-  useSearchParams: vi.fn()
+  useSearchParams: vi.fn(),
+  redirect: vi.fn()
 }));
-vi.mock('@neondatabase/serverless')
 vi.mock('@/lib/richText/RichTextEditor', () => vi.importActual('./__mocks__/MockRichTextEditor'))
 vi.mock('@/lib/richText/RichTextDisplay', () => vi.importActual('./__mocks__/MockRichTextDisplay'))
 vi.mock('canvas-confetti')
@@ -22,13 +24,8 @@ vi.mock('@/lib/ClientSideOnly', () => ({ClientSideOnly: ({children}: PropsWithCh
 
 
 globalThis.ResizeObserver = ResizeObserver;
+console.log("SETUP", process.env.DATABASE_URL)
 
-process.env.DATABASE_URL = 'DATABASE_URL'
-
-export const server = setupServer();
-beforeAll(() => server.listen());
 afterEach(() => {
-    server.resetHandlers()
     window.localStorage.clear()
 });
-afterAll(() => server.close());
