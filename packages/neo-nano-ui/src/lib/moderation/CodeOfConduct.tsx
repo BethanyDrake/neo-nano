@@ -55,8 +55,9 @@ export const CodeOfConduct = () => {
 
       <h3>1. Permanence and Visibility </h3>
       <p>
-        I made an intentional decision to not include any private messaging, editing of comments, or deletion of
-        comments. This means that any inappropriate activity is visible to all, and not able to slide under the radar.
+        {
+        "Although comments may be edited, previous versions remain visible, and mods will see the entire comment history when reviewing reports. There is no private messaging. This means that any inappropriate activity is visible to all, and not able to slide under the radar."
+}
       </p>
 
       <h3>2. Report and Review</h3>

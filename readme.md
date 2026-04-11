@@ -44,10 +44,7 @@ yarn dev
 ```
 
 
-## Tools
+### Run e2e tests
 
-- development framework: NextJs (colocated frontend and severless api)
-- infrastructure - vercel
-- logging - sentry
-- database - neon
-- auth - auth0 
+- run next js app as above
+- in a new terminal, run `yarn e2e`

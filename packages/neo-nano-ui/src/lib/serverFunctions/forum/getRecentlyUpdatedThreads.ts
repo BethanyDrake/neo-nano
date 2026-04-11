@@ -4,7 +4,7 @@ import { ThreadSummary } from "./getThreads"
 
 export const getRecentlyUpdatedThreads = async () => {
   const sql = getQueryFunction()
- const _threads = await sql`
+  const _threads = await sql`
     SELECT * FROM threads, 
       LATERAL (SELECT comments.comment_text, users.display_name 
         FROM comments join users on comments.author=users.id
