@@ -22,9 +22,7 @@ vi.mock('@/lib/richText/RichTextDisplay', () => vi.importActual('./__mocks__/Moc
 vi.mock('canvas-confetti')
 vi.mock('@/lib/ClientSideOnly', () => ({ClientSideOnly: ({children}: PropsWithChildren) => children}))
 
-
 globalThis.ResizeObserver = ResizeObserver;
-console.log("SETUP", process.env.DATABASE_URL)
 
 afterEach(() => {
     window.localStorage.clear()

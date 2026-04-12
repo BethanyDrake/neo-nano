@@ -2,10 +2,10 @@ import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction"
 import { Category, Comment, Flag, Profile, Thread, Topic } from "@/lib/types/forum.types"
 import { randomUUID } from "node:crypto"
 
-export const addUser = async (overrides: Partial<Profile> = {}): Promise<string> => {
+export const addUser = async (overrides: Partial<Profile> = {}, external_id?: string ): Promise<string> => {
     const rows = await getQueryFunction()`
         INSERT INTO users (external_id, display_name, role)
-        VALUES (${randomUUID()}, ${overrides.displayName}, ${overrides.role ?? 'user'})
+        VALUES (${ external_id ?? randomUUID()}, ${overrides.displayName}, ${overrides.role ?? 'user'})
         RETURNING users.id
     `
     return rows[0].id
@@ -43,6 +43,11 @@ export const addComment= async (thread: string, overrides: Partial<Comment> = {}
     return rows[0].id
 }
 
+
+export const addLike= async (commentId: string, userId: string) => {
+    await getQueryFunction()`INSERT INTO comment_reactions (comment_id, user_id, reaction) 
+      VALUES (${commentId}, ${userId}, 'like')`
+}
 
 export const addFlag= async (commentId: string, overrides: Partial<Flag> = {}, ): Promise<string> => {
     const rows = await getQueryFunction()`insert into flags (comment, reported_by, reason, details) values 
