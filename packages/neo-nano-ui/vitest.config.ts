@@ -8,6 +8,9 @@ export default defineConfig({
     setupFiles: ['./src/vitest.setup.ts'],
     clearMocks: true,
     fileParallelism: false,
+    coverage: {
+      enabled: true
+    }
   },
   resolve: {
     alias: {
