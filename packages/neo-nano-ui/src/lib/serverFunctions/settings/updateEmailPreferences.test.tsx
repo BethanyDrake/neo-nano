@@ -16,7 +16,7 @@ describe('get email preferences', () => {
     })
 
     expect(axios.put).toHaveBeenCalledWith(
-      'https://api.emailoctopus.com/lists/undefined/contacts',
+      'https://api.emailoctopus.com/lists/EMAIL_OCTOPUS_LIST_ID/contacts',
       {
         email_address: 'name@example.com',
         fields: {},

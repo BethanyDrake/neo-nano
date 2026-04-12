@@ -1,7 +1,7 @@
-import { server } from '@/vitest.setup';
 import { http, HttpResponse, JsonBodyType } from 'msw';
+import { SetupServer } from 'msw/node';
 
-export const mockRequest = <T extends JsonBodyType>(
+export const mockRequest = (server: SetupServer) => <T extends JsonBodyType>(
   method: 'get' | 'post' | 'put' | 'delete',
   url: string,
   response: T,

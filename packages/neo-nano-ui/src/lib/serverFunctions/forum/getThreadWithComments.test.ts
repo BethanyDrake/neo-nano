@@ -1,72 +1,64 @@
-import { getQueryFunction } from '../_utils/getQueryFunction'
+import {
+  addCategory,
+  addComment,
+  addFlag,
+  addThread,
+  addTopic,
+  addUser,
+  GENERAL_CATEGORY,
+  GENERAL_TOPIC,
+} from '@/tests/utils/fillDb'
 import { getThreadWithComments } from './getThreadWithComments'
-import { vi } from 'vitest'
-vi.mock('../_utils/getQueryFunction')
+import { clearDb } from '@/tests/utils/clearDb'
 
-const someDate = new Date()
+// @vitest-environment node
+
 describe('getThreadWithComments', () => {
+  beforeEach(async () => {
+    await clearDb()
+  })
   test('comment with no flags', async () => {
-    const comments = [
-      {
-        comment_text: 'comment text',
-        rich_text: '<p>comment text</p>',
-        created_at: someDate,
-        author: '1',
-        id: '2',
-        thread: '5',
-        display_name: 'Author Name',
-        flags: [],
-        snapshots: []
-      },
-    ]
+    const author = await addUser({ displayName: 'Author Name' })
+    await addCategory({ title: 'Category Title' })
+    await addTopic({ title: 'Topic Title', description: 'Topic description.', icon: 'faBoltLightning' })
+    const threadId = await addThread({ author, title: 'Thread Title' })
+    const commentId = await addComment(threadId, { author, text: 'comment text', richText: '<p>comment text</p>' })
 
-    const thread = [{ title: 'Thread Title', author: '4', id: '5', topic: '6' }]
-    const topic = [
-      { id: '6', title: 'Topic Title', description: 'Topic description.', icon: 'fasLightning', category: '7' },
-    ]
-    const category = [{ id: '7', title: 'Category Title' }]
-
-    const sql = vi.fn()
-
-    // @ts-expect-error test
-    vi.mocked(getQueryFunction).mockReturnValue(sql)
-    sql.mockResolvedValueOnce(comments)
-    sql.mockResolvedValueOnce([{ count: 1 }])
-    sql.mockResolvedValueOnce([{ thread, topic, category }])
-
-    expect(await getThreadWithComments('6')).toEqual(
+    expect(await getThreadWithComments(threadId)).toEqual(
       expect.objectContaining({
         commentCardDataEntries: [
           {
             comment: {
               text: 'comment text',
-              id: '2',
-              createdAt: someDate,
+              id: commentId,
+              createdAt: expect.anything(),
               richText: '<p>comment text</p>',
+              isDeleted: false,
             },
             author: {
-              id: '1',
+              id: author,
               displayName: 'Author Name',
             },
             flags: [],
-            snapshots: []
+            snapshots: [],
           },
         ],
         category: {
-          id: '7',
+          id: GENERAL_CATEGORY,
           title: 'Category Title',
         },
         thread: {
-          author: '4',
-          id: '5',
+          author: parseInt(author),
+          id: parseInt(threadId),
           title: 'Thread Title',
-          topic: '6',
+          topic: GENERAL_TOPIC,
+          created_at: expect.anything(),
         },
         topic: {
-          category: '7',
+          category: GENERAL_CATEGORY,
           description: 'Topic description.',
-          icon: 'fasLightning',
-          id: '6',
+          icon: 'faBoltLightning',
+          id: GENERAL_TOPIC,
           title: 'Topic Title',
         },
         totalComments: 1,
@@ -75,39 +67,36 @@ describe('getThreadWithComments', () => {
   })
 
   test('comment with multiple flags', async () => {
-    const comments = [
-      {
-        comment_text: 'comment text',
-        author: '1',
-        id: '2',
-        thread: '5',
-        display_name: 'Author Name',
-        reason: 'harrasment',
-        flags: [{ reason: 'harrassment' }, { reason: 'sexual-content' }],
-        snapshots: []
-      },
-    ]
+    const authorId = await addUser({ displayName: 'Author Name' })
+    await addCategory({ title: 'Category Title' })
+    await addTopic({ title: 'Topic Title', description: 'Topic description.', icon: 'faBoltLightning' })
+    const threadId = await addThread({ author: authorId, title: 'Thread Title' })
+    const commentId = await addComment(threadId, {
+      author: authorId,
+      text: 'comment text',
+      richText: '<p>comment text</p>',
+    })
+    await addFlag(commentId, { reason: 'harrassment' })
+    await addFlag(commentId, { reason: 'sexual-content' })
 
-    const sql = vi.fn()
-    // @ts-expect-error test
-    vi.mocked(getQueryFunction).mockReturnValue(sql)
-    sql.mockResolvedValueOnce(comments)
-    sql.mockResolvedValueOnce([{ count: 1 }])
-    sql.mockResolvedValueOnce([{ thread: [{}], topic: [{}], category: [{}] }])
+    const { comment, author, flags, snapshots } = (await getThreadWithComments(threadId)).commentCardDataEntries[0]
+    expect(comment).toEqual(
+      expect.objectContaining({
+        text: 'comment text',
+        id: commentId,
+      }),
+    )
 
-    expect((await getThreadWithComments('6')).commentCardDataEntries).toEqual([
-      {
-        comment: {
-          text: 'comment text',
-          id: '2',
-        },
-        author: {
-          id: '1',
-          displayName: 'Author Name',
-        },
-        flags: [{ reason: 'harrassment' }, { reason: 'sexual-content' }],
-        snapshots: []
-      },
-    ])
+    expect(author).toEqual(
+      expect.objectContaining({
+        id: authorId,
+        displayName: 'Author Name',
+      }),
+    )
+
+    expect(flags).toHaveLength(2)
+    expect(flags.map(({ reason }) => reason)).toContain('harrassment')
+    expect(flags.map(({ reason }) => reason)).toContain('sexual-content')
+    expect(snapshots).toEqual([])
   })
 })

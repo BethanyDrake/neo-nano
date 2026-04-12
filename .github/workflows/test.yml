@@ -8,7 +8,8 @@ jobs:
   lint-test-build:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.DEVELOP_DATABASE_URL }}
+      EMAIL_OCTOPUS_LIST_ID: EMAIL_OCTOPUS_LIST_ID
     steps:
       - name: Checkout
         uses: actions/checkout@v4

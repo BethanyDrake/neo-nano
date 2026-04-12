@@ -1,4 +1,5 @@
 import { neon, types } from '@neondatabase/serverless'
+console.log(process.env.NODE_ENV )
 
 export const getQueryFunction = () => {
   if (!process.env.DATABASE_URL) throw Error('DATABASE_URL not defined.')

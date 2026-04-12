@@ -71,7 +71,7 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   const totalComments = parseInt(totalCommentsData[0].count)
   const { thread, topic, category } = breadcrumbData[0]
 
-  const commentCardDataEntries = _comments.map(
+  const commentCardDataEntries: CommentCardDataEntry[] = _comments.map(
     ({ created_at, comment_text, rich_text, author, id, display_name, flags, snapshots , is_deleted}) => ({
       comment: {
         text: comment_text,

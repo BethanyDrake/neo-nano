@@ -31,6 +31,7 @@ const Providers = ({ children }: PropsWithChildren) => {
 }
 describe('<QuickUpdateModal/>', () => {
   beforeEach(() => {
+    window.localStorage.clear()
     vi.mocked(usePathname).mockReturnValue('')
     vi.mocked(useIsLoggedIn).mockReturnValue(true)
   })

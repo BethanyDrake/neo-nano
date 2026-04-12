@@ -1,24 +1,34 @@
-import { mockQueryFunction } from '@/tests/utils/mockQueryFunction'
-import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getThreadReactions } from './getThreadReactions'
-import { vi } from 'vitest'
-vi.mock('../_utils/getQueryFunction')
+import { clearDb } from '@/tests/utils/clearDb'
+import { addCategory, addComment, addLike, addThread, addTopic, addUser } from '@/tests/utils/fillDb'
+
+// @vitest-environment node
 
 describe('getThreadReactions', () => {
-  test('blah', async () => {
-    mockQueryFunction(vi.mocked(getQueryFunction), {
-      comment_reactions: [
-        { comment_id: '50', reaction: 'like', reacted_users: [16, 17] },
-        { comment_id: '12', reaction: 'like', reacted_users: [16] },
-      ],
+  beforeEach(async () => {
+    await clearDb()
+  })
+
+  test('gets likes for each comment in the thread', async () => {
+    const user1 = await addUser()
+    const user2 = await addUser({ displayName: 'Someone Else' })
+
+    await addCategory()
+    await addTopic()
+    const threadId = await addThread({ author: user1 })
+    const comment1 = await addComment(threadId, { author: user1 })
+    const comment2 = await addComment(threadId, { author: user1 })
+    await addLike(comment1, user1)
+    await addLike(comment1, user2)
+
+    await addLike(comment2, user1)
+
+    expect((await getThreadReactions(threadId))[comment1]).toEqual({
+      like: [user1, user2],
     })
 
-    expect((await getThreadReactions('666'))['50']).toEqual({
-      like: ['16', '17'],
-    })
-
-      expect((await getThreadReactions('666'))['12']).toEqual({
-      like: ['16'],
+    expect((await getThreadReactions(threadId))[comment2]).toEqual({
+      like: [user1],
     })
   })
 })
