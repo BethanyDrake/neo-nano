@@ -1,7 +1,7 @@
 import { clearDb } from '@/tests/utils/clearDb'
 import { addCategory, addTopic } from '@/tests/utils/fillDb'
 import { getTopic } from './getTopic'
-
+// @vitest-environment node
 describe('getTopic', () => {
   beforeEach(async () => {
     await clearDb()

@@ -2,6 +2,8 @@ import { clearDb } from "@/tests/utils/clearDb"
 import { getRecentlyUpdatedThreads } from "./getRecentlyUpdatedThreads"
 import { addCategory, addComment, addThread, addTopic, addUser } from "@/tests/utils/fillDb"
 
+// @vitest-environment node
+
 describe('getRecentlyUpdatedThreads', () => {
     beforeEach(async () => {
       await clearDb()

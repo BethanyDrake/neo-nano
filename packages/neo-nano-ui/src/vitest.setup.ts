@@ -23,7 +23,3 @@ vi.mock('canvas-confetti')
 vi.mock('@/lib/ClientSideOnly', () => ({ClientSideOnly: ({children}: PropsWithChildren) => children}))
 
 globalThis.ResizeObserver = ResizeObserver;
-
-afterEach(() => {
-    window.localStorage.clear()
-});

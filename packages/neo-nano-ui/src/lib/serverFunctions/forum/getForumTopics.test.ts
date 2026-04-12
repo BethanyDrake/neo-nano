@@ -1,7 +1,7 @@
 import { addCategory, addComment, addThread, addTopic, GENERAL_CATEGORY } from '@/tests/utils/fillDb'
 import { getForumTopics } from './getForumTopics'
 import { clearDb } from '@/tests/utils/clearDb'
-
+// @vitest-environment node
 describe('getForumTopics', () => {
   beforeEach(async () => {
     await clearDb()

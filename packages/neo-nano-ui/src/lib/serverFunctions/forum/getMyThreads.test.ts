@@ -3,6 +3,8 @@ import { addCategory, addComment, addThread, addTopic, addUser } from "@/tests/u
 import { getExternalId } from "../_utils/getUserIdFromSession"
 import { vi } from "vitest"
 import { getMyThreads } from "./getMyThreads"
+// @vitest-environment node
+
 vi.mock('../_utils/getUserIdFromSession')
 
 describe('getMyThreads', () => {

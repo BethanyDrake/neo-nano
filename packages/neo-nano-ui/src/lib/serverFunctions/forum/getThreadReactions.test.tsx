@@ -2,6 +2,8 @@ import { getThreadReactions } from './getThreadReactions'
 import { clearDb } from '@/tests/utils/clearDb'
 import { addCategory, addComment, addLike, addThread, addTopic, addUser } from '@/tests/utils/fillDb'
 
+// @vitest-environment node
+
 describe('getThreadReactions', () => {
   beforeEach(async () => {
     await clearDb()

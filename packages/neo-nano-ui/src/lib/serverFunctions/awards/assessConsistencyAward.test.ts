@@ -1,5 +1,5 @@
 import { GoalAssessmentInput, assessConsistencyAward } from './assessAwards'
-
+// @vitest-environment node
 describe('assessConsistencyAward', () => {
   it('returns false if goal is not of type consistency', () => {
     const goal = {} as GoalAssessmentInput['goal']

@@ -11,6 +11,8 @@ import {
 import { getThreadWithComments } from './getThreadWithComments'
 import { clearDb } from '@/tests/utils/clearDb'
 
+// @vitest-environment node
+
 describe('getThreadWithComments', () => {
   beforeEach(async () => {
     await clearDb()

@@ -3,7 +3,7 @@ import { createThread } from './createThread'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { vi } from 'vitest'
 import { clearDb } from '@/tests/utils/clearDb'
-
+// @vitest-environment node
 vi.mock('../_utils/getUserIdFromSession')
 
 describe('createThread', () => {

@@ -1,5 +1,5 @@
 import { assessWordCountAward, GoalAssessmentInput } from './assessAwards'
-
+// @vitest-environment node
 describe('assessWordCountAward', () => {
   it('returns false if GOAL is not of type wordCount', () => {
     const goal: GoalAssessmentInput['goal'] = {

@@ -1,5 +1,5 @@
 import { getQueryFunction } from "@/lib/serverFunctions/_utils/getQueryFunction"
-import { Category, Comment, Flag, Profile, Thread, Topic } from "@/lib/types/forum.types"
+import { Category, Comment, CommentSnapshot, Flag, Profile, Thread, Topic } from "@/lib/types/forum.types"
 import { randomUUID } from "node:crypto"
 
 export const addUser = async (overrides: Partial<Profile> = {}, external_id?: string ): Promise<string> => {
@@ -43,6 +43,13 @@ export const addComment= async (thread: string, overrides: Partial<Comment> = {}
     return rows[0].id
 }
 
+export const addCommentSnapshot = async (commentId: string, overrides: Partial<CommentSnapshot> = {}, ): Promise<string> => {
+    const rows = await getQueryFunction()`INSERT INTO comment_snapshots (snapshot_of, version, comment_text, rich_text, posted_at)
+      VALUES (${commentId}, ${overrides.version}, ${overrides.text}, ${overrides.richText}, ${overrides.postedAt ?? new Date()})
+        returning id`
+
+    return rows[0].id
+}
 
 export const addLike= async (commentId: string, userId: string) => {
     await getQueryFunction()`INSERT INTO comment_reactions (comment_id, user_id, reaction) 
