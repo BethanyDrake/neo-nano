@@ -1,4 +1,4 @@
-import { Comment, CommentSnapshot, Goal, Profile } from './forum.types'
+import { Comment, CommentSnapshot, Goal, Profile, Thread } from './forum.types'
 import { ThreadSummary } from '@/lib/serverFunctions/forum/getThreads'
 
 export const buildCommentSnapshot = (snapshot: Partial<CommentSnapshot> = {}): CommentSnapshot => ({
@@ -23,7 +23,15 @@ export const buildComment = (comment: Partial<Comment> = {}) => ({
   ...comment,
 })
 
-export const buildThreadSummary = (threadSummary: Partial<ThreadSummary> = {}) => ({
+export const buildThread = (thread: Partial<Thread> = {}): Thread => ({
+  id: '',
+  title: '',
+  author: '',
+  topic: '',
+  ...thread
+})
+
+export const buildThreadSummary = (threadSummary: Partial<ThreadSummary> = {}): ThreadSummary => ({
   id: '',
   title: '',
   author: '',
@@ -31,6 +39,7 @@ export const buildThreadSummary = (threadSummary: Partial<ThreadSummary> = {}) =
   text: '',
   topic: '',
   authorDisplayName: '',
+  isDeleted: false,
   ...threadSummary,
 })
 

@@ -47,6 +47,13 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   const totalCommentsPromise = getQueryFunction()`SELECT count(comments.id), pg_typeof(count(comments.id)) FROM comments 
   WHERE thread=${threadId}`
 
+  const initialCommentPromise = getQueryFunction()`
+      SELECT comments.id, comments.is_deleted FROM comments 
+      WHERE comments.thread=${threadId}
+      ORDER BY comments.created_at ASC
+      LIMIT 1
+      `
+
   const breadcrumbPromise = getQueryFunction()`select 
     jsonb_agg_strict(threads.*) as thread,
     jsonb_agg_strict(topics.*) as topic, 
@@ -57,11 +64,14 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
     group by categories.id, threads.id, topics.id
 `
 
-  const [_comments, totalCommentsData, breadcrumbData] = await Promise.all([
+  const [_comments, totalCommentsData, breadcrumbData, initialComment] = await Promise.all([
     _commentsPromise,
     totalCommentsPromise,
     breadcrumbPromise,
+    initialCommentPromise
   ])
+
+  console.log("initialComment", initialComment)
 
   if (totalCommentsData.length === 0 || breadcrumbData.length === 0) {
       console.warn(`Comments or breadcumbs not found for thread: ${threadId}`)
@@ -85,7 +95,7 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
         displayName: display_name,
       },
       flags: flags.map(mapFlag),
-      snapshots: snapshots.map(mapSnapshot)
+      snapshots: snapshots.map(mapSnapshot),
     }),
   )
 
@@ -95,5 +105,6 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
     thread: thread[0] as Thread,
     category: category[0] as Category,
     topic: topic[0] as Topic,
+    isDeleted: initialComment[0].is_deleted
   }
 }

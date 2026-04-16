@@ -1,5 +1,5 @@
 import Page from '@/app/forum/[topic-id]/[thread-id]/page'
-import { buildThreadSummary } from '@/lib/types/forum.builders'
+import { buildThread } from '@/lib/types/forum.builders'
 import { getThreadWithComments } from '@/lib/serverFunctions/forum/getThreadWithComments'
 import { render } from '@testing-library/react'
 import { vi } from 'vitest'
@@ -11,6 +11,7 @@ describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {
     vi.mocked(getThreadWithComments).mockResolvedValue({
       totalComments: 1,
+      isDeleted: false,
       commentCardDataEntries: [
         {
           comment: {
@@ -39,7 +40,7 @@ describe('<ThreadPage />', () => {
         icon: 'faBoltLightning',
         category: '',
       },
-      thread: buildThreadSummary()
+      thread: buildThread()
     })
     const { findByText } = render(await Page({ params: Promise.resolve({ 'thread-id': 'some-thread-id' }) }))
 

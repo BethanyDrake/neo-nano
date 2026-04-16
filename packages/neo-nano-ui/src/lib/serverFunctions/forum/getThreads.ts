@@ -4,13 +4,13 @@ import { Comment, Thread } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { THREADS_PER_PAGE } from '@/lib/misc'
 
-export type ThreadSummary = Thread & Pick<Comment, 'text'> & {totalComments: number} & {authorDisplayName: string}
+export type ThreadSummary = Thread & Pick<Comment, 'text' | 'isDeleted'> & {totalComments: number} & {authorDisplayName: string}
 
 const getThreadSummaries = async (topicId: string, currentPage: number) => {
   const sql = getQueryFunction()
  const _threads = await sql`
     SELECT * FROM threads, 
-      LATERAL (SELECT comments.comment_text, users.display_name FROM comments join users on comments.author=users.id WHERE comments.thread=threads.id order by comments.created_at asc LIMIT 1),
+      LATERAL (SELECT comments.comment_text, comments.is_deleted, users.display_name FROM comments join users on comments.author=users.id WHERE comments.thread=threads.id order by comments.created_at asc LIMIT 1),
       LATERAL (SELECT COUNT(comments.id), MAX(comments.created_at) as latest FROM comments
         WHERE comments.thread = threads.id
         GROUP BY threads.id)
@@ -20,12 +20,14 @@ const getThreadSummaries = async (topicId: string, currentPage: number) => {
     OFFSET ${(currentPage - 1) * THREADS_PER_PAGE}
     `
 
-  const threadSummaries = _threads.map((_thread) => ({
-    ..._thread,
-        authorDisplayName: _thread.display_name,
+  const threadSummaries = _threads.map((_thread) => {
+    const { id, latest, title, topic, author} = _thread
+    return{ id, latest, title, topic, author,
+    authorDisplayName: _thread.display_name,
     text: _thread.comment_text,
+    isDeleted: _thread.is_deleted,
     totalComments: parseInt(_thread.count)
-  })) as ThreadSummary[]
+  }}) as ThreadSummary[]
 
   return threadSummaries
 }

@@ -7,7 +7,7 @@ import { UserContextProvider } from '@/lib/context/UserContext'
 export default async function Page({ params }: { params: Promise<{ 'thread-id': string }> }) {
   const threadId = (await params)['thread-id'] as string
 
-  const { thread, category, commentCardDataEntries, topic, totalComments } = await getThreadWithComments(threadId)
+  const { thread, category, commentCardDataEntries, topic, totalComments, isDeleted } = await getThreadWithComments(threadId)
 
   return (
     <UserContextProvider>
@@ -16,6 +16,7 @@ export default async function Page({ params }: { params: Promise<{ 'thread-id': 
           initialComments={commentCardDataEntries}
           initialTotalComments={totalComments}
           threadId={thread.id}
+          initialIsLocked={isDeleted}
         >
           <ThreadPage thread={thread} topic={topic} category={category}/>
         </ThreadContextProvider>

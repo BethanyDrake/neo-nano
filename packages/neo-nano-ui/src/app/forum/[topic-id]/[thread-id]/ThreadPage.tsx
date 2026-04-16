@@ -7,24 +7,26 @@ import { ExpandableAddCommentForm } from '@/lib/expandableForms/AddCommentForm'
 import { Category, Thread, Topic } from '@/lib/types/forum.types'
 import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
-import { faAdd } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faLock } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import enUS from 'rc-pagination/lib/locale/en_US'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic: Topic; category: Category }) => {
-  const breadcrumbItems = [
-    { href: '/forum', text: category.title },
-    { href: `/forum/${topic.id}`, text: topic.title },
-    { text: thread.title },
-  ]
 
   const isLoggedIn = useIsLoggedIn()
 
-  const { commentsData, onPageChange, currentPage, totalComments, isLoading } = useThreadContext()
+  const { commentsData, onPageChange, currentPage, totalComments, isLoading, isLocked } = useThreadContext()
+
+   const breadcrumbItems = [
+    { href: '/forum', text: category.title },
+    { href: `/forum/${topic.id}`, text: topic.title },
+    { text: <span>{thread.title} {isLocked &&<FontAwesomeIcon icon={faLock}/>}</span> },
+  ]
   return (
     <FullWidthPage>
       <Column>
@@ -55,13 +57,10 @@ export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic:
           />
         </Row>
 
-        {isLoggedIn ? (
-          <ExpandableAddCommentForm />
-        ) : (
-          <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}/${thread.id}`}>
+        {!isLocked && isLoggedIn && <ExpandableAddCommentForm />} 
+        {!isLocked && !isLoggedIn && <Link prefetch={false} href={`/auth/login?returnTo=/forum/${topic.id}/${thread.id}`}>
             <ExtendableIconButton text="Log in to comment" icon={faAdd} />
-          </Link>
-        )}
+          </Link>}   
       </Column>
     </FullWidthPage>
   )
