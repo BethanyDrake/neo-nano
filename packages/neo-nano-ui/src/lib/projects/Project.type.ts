@@ -15,6 +15,17 @@ export type Project = {
   aspects: Record<Aspect, number>
 }
 
+export const buildAspects = (overrides: Partial<Record<Aspect, number>> = {}): Record<Aspect, number> => {
+  return {
+  romance: 0,
+  fantasy: 0,
+  mystery: 0,
+  thrill: 0,
+  complexity: 0,
+  ...overrides
+}
+}
+
 export const buildProject = (overrides: Partial<Project> = {}): Project => {
   return {
     id: '',

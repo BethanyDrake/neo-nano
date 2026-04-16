@@ -15,7 +15,7 @@ describe('<AddCommentForm />', () => {
     // @ts-expect-error test file
     vi.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
     const { getByRole, queryByRole, findByTestId } = render(
-      <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
+      <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'} initialIsLocked={false}>
         <ExpandableAddCommentForm />
       </ThreadContextProvider>,
     )
@@ -40,7 +40,7 @@ describe('<AddCommentForm />', () => {
     // @ts-expect-error testf file
     vi.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
     const { getByRole, findByText } = render(
-      <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
+      <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'} initialIsLocked={false}>
         <ExpandableAddCommentForm />
       </ThreadContextProvider>,
     )
@@ -56,7 +56,7 @@ describe('<AddCommentForm />', () => {
     vi.mocked(getThreadWithComments).mockResolvedValue({ totalComments: 0, commentCardDataEntries: [] })
     const cancelAction = vi.fn()
     const { getByRole } = render(
-      <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'}>
+      <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'} initialIsLocked={false}>
         <CommentCardContext.Provider value={{comment: buildComment({id: 'comment-id', text: 'Some comment text'}), author: {id:'user-id', displayName:'Display Name'}, flags:[], snapshots: []}} >
           <CommentActionContext value={{activeAction:"reply", setActiveAction: vi.fn(), cancelAction}}>
         <ReplyToCommentForm />

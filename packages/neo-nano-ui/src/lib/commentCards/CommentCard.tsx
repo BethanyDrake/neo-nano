@@ -14,6 +14,7 @@ import { MoreActions } from './MoreActions'
 import { EditCommentForm } from '../expandableForms/EditCommentForm'
 import { CommentSnapshotView } from './CommentSnapshotView'
 import { DeleteCommentConfirmation } from './DeleteCommentConfirmation'
+import { useThreadContext } from '../context/ThreadContext'
 
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
@@ -32,7 +33,7 @@ export const CommentCardContext = createContext<CommentCardDataEntry>({
     id: '',
     text: '',
     createdAt: new Date(),
-    isDeleted: false
+    isDeleted: false,
   },
   author: {
     id: '',
@@ -67,6 +68,7 @@ export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDa
   const hasUnreviewedFlag = flags.some(({ reviewOutcome }) => !reviewOutcome)
   const hasConfirmedFlag = flags.some(({ reviewOutcome }) => reviewOutcome === 'confirmed')
   const isLoggedIn = useIsLoggedIn()
+  const { isLocked } = useThreadContext()
 
   const commentCardContext = useMemo(() => ({ comment, author, flags, snapshots }), [comment, author, flags, snapshots])
   const [minHeight, setMinHeight] = useState<number>()
@@ -120,11 +122,13 @@ export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDa
                 </Link>
               </Row>
               <Row alignItems="center" style={{ translate: '26px' }}>
-                {!comment.isDeleted  && <LikeButton commentId={comment.id} />}
+                {!isLocked && !comment.isDeleted && <LikeButton commentId={comment.id} />}
                 {isLoggedIn && <MoreActions />}
               </Row>
             </Row>
-            {comment.isDeleted && <p className={classNames.deletedMessage}>This comment has been deleted by the author.</p>}
+            {comment.isDeleted && (
+              <p className={classNames.deletedMessage}>This comment has been deleted by the author.</p>
+            )}
             <ClientSideOnly fallback={<p>{comment.text}</p>}>
               <RichTextDisplay richText={comment.richText} />
             </ClientSideOnly>
@@ -151,7 +155,7 @@ export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDa
           <EditCommentForm />
         </WithAction>
         <WithAction action="delete">
-          <DeleteCommentConfirmation/>
+          <DeleteCommentConfirmation />
         </WithAction>
       </CommentActionContext.Provider>
     </CommentCardContext.Provider>

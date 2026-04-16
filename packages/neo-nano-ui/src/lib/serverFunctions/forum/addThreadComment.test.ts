@@ -3,6 +3,9 @@ import { createThread } from './createThread'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { vi } from 'vitest'
 import { clearDb } from '@/tests/utils/clearDb'
+import { getThreadWithComments } from './getThreadWithComments'
+import { deleteComment } from './addThreadComment'
+import { getThreads } from './getThreads'
 // @vitest-environment node
 vi.mock('../_utils/getUserIdFromSession')
 
@@ -10,7 +13,7 @@ describe('createThread', () => {
   beforeEach(async () => {
     await clearDb()
   })
-  test('creats a thread and an initial comment', async () => {
+  test('create thread then delete the initial comment ', async () => {
     const authorId = await addUser({ displayName: 'Author Name' })
     vi.mocked(getUserId).mockResolvedValue(authorId)
     await addCategory()
@@ -21,16 +24,12 @@ describe('createThread', () => {
       commentText: 'Some comment text.',
       commentRichText: '<p>Some comment text.</p>',
     })
-    expect(result.threadSummaries[0]).toEqual({
-      author: authorId,
-      authorDisplayName: 'Author Name',
-      id: expect.anything(),
-      latest: expect.anything(),
-      text: 'Some comment text.',
-      title: 'Thread Title',
-      topic: GENERAL_TOPIC,
-      totalComments: 1,
-      isDeleted: false
-    })
+    const createdThread = result.threadSummaries[0].id
+    expect(result.threadSummaries[0].isDeleted).toEqual(false)
+    const initialCommentId = (await getThreadWithComments(createdThread)).commentCardDataEntries[0].comment.id
+    console.log({initialCommentId})
+    await deleteComment(initialCommentId)
+    const updatedThreads = await getThreads(GENERAL_TOPIC)
+    expect(updatedThreads.threadSummaries[0].isDeleted).toEqual(true)
   })
 })

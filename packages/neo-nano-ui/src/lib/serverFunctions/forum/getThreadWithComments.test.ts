@@ -10,8 +10,13 @@ import {
 } from '@/tests/utils/fillDb'
 import { getThreadWithComments } from './getThreadWithComments'
 import { clearDb } from '@/tests/utils/clearDb'
+import { createThread } from './createThread'
+import { getThreads } from './getThreads'
+import { deleteComment } from './addThreadComment'
+import { getUserId } from '../_utils/getUserIdFromSession'
 
 // @vitest-environment node
+vi.mock('../_utils/getUserIdFromSession')
 
 describe('getThreadWithComments', () => {
   beforeEach(async () => {
@@ -98,5 +103,19 @@ describe('getThreadWithComments', () => {
     expect(flags.map(({ reason }) => reason)).toContain('harrassment')
     expect(flags.map(({ reason }) => reason)).toContain('sexual-content')
     expect(snapshots).toEqual([])
+  })
+
+   test('deleted initial comment', async () => {
+    const author = await addUser()
+    vi.mocked(getUserId).mockResolvedValue(author)
+    await addCategory()
+    await addTopic()
+    await createThread({title: '', commentRichText: '', commentText: '', topic: GENERAL_TOPIC})
+
+    const createdThreadId = (await getThreads(GENERAL_TOPIC)).threadSummaries[0].id
+    const initialCommentId = (await getThreadWithComments(createdThreadId)).commentCardDataEntries[0].comment.id
+    await deleteComment(initialCommentId)
+
+    expect((await getThreadWithComments(createdThreadId)).isDeleted).toEqual(true)
   })
 })

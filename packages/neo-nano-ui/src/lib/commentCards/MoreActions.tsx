@@ -7,6 +7,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { CommentAction, useCommentActionContext, useCommentCardContext } from './CommentCard'
 import { UserContext } from '../context/UserContext'
 import { useContext } from 'react'
+import { useThreadContext } from '../context/ThreadContext'
 
 const ActionItem = ({ text, icon, action }: { text: string; icon: IconProp; action: CommentAction }) => {
   const { setActiveAction } = useCommentActionContext()
@@ -28,13 +29,14 @@ const ActionItem = ({ text, icon, action }: { text: string; icon: IconProp; acti
 
 export const MoreActions = () => {
   const me = useContext(UserContext)
+  const { isLocked } = useThreadContext()
   const {
     author,
     comment: { isDeleted },
   } = useCommentCardContext()
   const isMyComment = me?.id === author.id
-  const canReply = !isDeleted
-  const canEdit = !isDeleted && isMyComment
+  const canReply = !isDeleted && !isLocked
+  const canEdit = !isDeleted && isMyComment && !isLocked
   const canReport = !isMyComment
   const canDelete = !isDeleted && isMyComment
   if (!canReply && !canEdit && !canReport && !canDelete) return null

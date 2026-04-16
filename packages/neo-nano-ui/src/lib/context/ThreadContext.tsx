@@ -12,6 +12,7 @@ export const ThreadContext = createContext<{
   currentPage: number
   totalComments: number
   isLoading: boolean
+  isLocked: boolean
   postComment: (plainText: string, richText: string) => Promise<void>
 }>({
   updateCommentsData: () => Promise.resolve(),
@@ -20,7 +21,8 @@ export const ThreadContext = createContext<{
   postComment: () => Promise.resolve(),
   currentPage: 0,
   totalComments: 0,
-  isLoading: false
+  isLoading: false,
+  isLocked: false
 })
 
 export const useThreadContext = () => useContext(ThreadContext)
@@ -30,11 +32,13 @@ export const ThreadContextProvider = ({
   children,
   threadId,
   initialTotalComments,
-}: PropsWithChildren & { initialTotalComments: number; initialComments: CommentCardDataEntry[]; threadId: string }) => {
+  initialIsLocked
+}: PropsWithChildren & { initialTotalComments: number; initialComments: CommentCardDataEntry[]; threadId: string, initialIsLocked: boolean }) => {
   const [totalComments, setTotalComments] = useState(initialTotalComments)
   const [commentCards, setComments] = useState<CommentCardDataEntry[]>(initialComments)
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLocked, setIsLocked] = useState(initialIsLocked)
 
   const _update = useCallback(
     async (page: number) => {
@@ -42,7 +46,9 @@ export const ThreadContextProvider = ({
       const response = await getThreadWithComments(threadId, page)
       setComments(response.commentCardDataEntries)
       setTotalComments(response.totalComments)
+      setIsLocked(response.isDeleted)
       setIsLoading(false)
+  
     },
     [threadId],
   )
@@ -68,8 +74,8 @@ export const ThreadContextProvider = ({
   }, [_update, currentPage])
 
   const value = useMemo(() => {
-    return { updateCommentsData: updateComments, commentsData: commentCards, currentPage, onPageChange, totalComments, isLoading, postComment }
-  }, [commentCards, updateComments, onPageChange, currentPage, totalComments, isLoading, postComment])
+    return { updateCommentsData: updateComments, commentsData: commentCards, currentPage, onPageChange, totalComments, isLoading, postComment, isLocked }
+  }, [commentCards, updateComments, onPageChange, currentPage, totalComments, isLoading, postComment, isLocked])
 
   return <ThreadContext value={value}>{children}</ThreadContext>
 }

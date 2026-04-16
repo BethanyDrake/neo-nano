@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import styles from './Breadcrumbs.module.css'
 
-const BreadcrumbLink = ({ href, text }: { href: string; text: string }) => {
+const BreadcrumbLink = ({ href, text }: { href: string; text: string | React.ReactNode}) => {
   return (
     <span>
       <Link key={`${href}-link`} className={styles.breadcrumb} href={href}>
@@ -14,11 +14,11 @@ const BreadcrumbLink = ({ href, text }: { href: string; text: string }) => {
   )
 }
 
-const BreadcrumbTitle = ({ text }: { text: string }) => {
+const BreadcrumbTitle = ({ text }: { text: string | React.ReactNode }) => {
   return <h2 className={styles.breadcrumb}>{text}</h2>
 }
 
-type BreadcrumbItem = { href?: string; text: string }
+type BreadcrumbItem = { href?: string; text: string | React.ReactNode }
 
 export const Breadcrumbs = ({ breadcrumbItems }: { breadcrumbItems: BreadcrumbItem[] }) => {
   return (
