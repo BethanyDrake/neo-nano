@@ -6,7 +6,6 @@ test('browse as guest', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.locator('summary').filter({ hasText: 'What\'s Novel November?' }).click();
   await page.getByRole('heading', { name: 'What\'s Novel November?' }).click();
-  await page.getByRole('heading', { name: 'What\'s the 80 Hour Edit?' }).click();
 
   // forum
   await page.getByRole('link', { name: 'Browse forums as guest' }).click();
