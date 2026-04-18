@@ -26,8 +26,8 @@ const challenges: Challenge[] = [
   },
   {
     title: 'Mid Year Novelette',
-    startDate: '2026-06-01',
-    lengthDays: 30,
+    startDate: '2026-07-01',
+    lengthDays: 31,
     target: 15000,
     metric: 'words',
     id: 'mid-year-2026'

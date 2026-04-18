@@ -3,8 +3,7 @@ import camelcaseKeys from 'camelcase-keys'
 
 export const rawProjectToProject = (rawProject: Record<string, unknown>): Project => {
   const project = camelcaseKeys(rawProject)
-
-  return {
+  const _project: Record<string, unknown> = {
     ...project,
     aspects: {
       romance: project.romanceAspect,
@@ -13,5 +12,13 @@ export const rawProjectToProject = (rawProject: Record<string, unknown>): Projec
       complexity: project.complexityAspect,
       fantasy: project.fantasyAspect,
     },
-  } as Project
+  }
+
+  delete _project.complexityAspect
+  delete _project.mysteryAspect
+  delete _project.thrillAspect
+  delete _project.romanceAspect
+  delete _project.fantasyAspect
+
+  return _project as Project
 }

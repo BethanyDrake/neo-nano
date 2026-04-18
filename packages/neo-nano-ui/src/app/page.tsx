@@ -103,7 +103,7 @@ export default function Home() {
         </ul>
       </details>
 
-      <details>
+      <details style={{display: 'none'}}>
         <summary>
           <h2>{"What's the 80 Hour Edit?"}</h2>
         </summary>
@@ -115,6 +115,20 @@ export default function Home() {
           <li>80 hours</li>
           <li>60 days, starting January 1st</li>
           <li>Be focused. Be ruthless. Get it ready for the world.</li>
+        </ul>
+      </details>
+
+        <details>
+        <summary>
+          <h2>{"What's the Mid-Year Novelette?"}</h2>
+        </summary>
+        <h3>Premise:</h3>
+        <p>{"November doesn't work for you? 50,000 words isn't the right target? Just want to write more?"}</p>
+        <p>{'The Mid-Year Novelette is a more flexible, less intense alternative to the main writing challenge. The default word target is set at 15K, but choose whatever works for you.'}</p>
+        <h3>The Challenge:</h3>
+        <ul>
+          <li>15,000 words (or whatever)</li>
+          <li>31 days, starting July 1st</li>
         </ul>
       </details>
       <GetStartedSection />
