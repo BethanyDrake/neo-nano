@@ -7,7 +7,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/vitest.setup.ts'],
     clearMocks: true,
-    fileParallelism: false,
+    fileParallelism: true,
+    exclude: ['./src/lib/serverFunctions/**'],
     coverage: {
       enabled: true
     }

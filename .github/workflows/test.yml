@@ -34,5 +34,7 @@ jobs:
         run: yarn lint
       - name: Unit tests
         run: yarn test
+      - name: Server tests
+        run: yarn workspace neo-nano-ui test-server
       - name: Build with Next.js
         run: yarn build
