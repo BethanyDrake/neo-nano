@@ -30,7 +30,7 @@ describe('createThread', () => {
       title: 'Thread Title',
       topic: GENERAL_TOPIC,
       totalComments: 1,
-      isDeleted: false
+      removalStatus: null
     })
   })
 })

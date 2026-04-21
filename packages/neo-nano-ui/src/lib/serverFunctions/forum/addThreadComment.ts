@@ -12,8 +12,11 @@ export async function addThreadComment(threadId: string, commentText: string, ri
   const sql = getDbConnection()
   const author = await getUserId()
 
-  return sql`INSERT INTO comments (comment_text, author, thread, rich_text) 
-      VALUES (${commentText}, ${author}, ${threadId}, ${richText})`
+  const rows = await sql`INSERT INTO comments (comment_text, author, thread, rich_text) 
+      VALUES (${commentText}, ${author}, ${threadId}, ${richText})
+      returning comments.*`
+
+  return transformRawComment(rows[0] as RawComment)
 }
 
 type RawComment = {

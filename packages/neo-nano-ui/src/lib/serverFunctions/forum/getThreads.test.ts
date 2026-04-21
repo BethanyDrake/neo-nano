@@ -45,6 +45,6 @@ describe('getThreads', () => {
     const initialCommentId = (await getThreadWithComments(createdThreadId)).commentCardDataEntries[0].comment.id
     await deleteComment(initialCommentId)
 
-    expect((await getThreads(GENERAL_TOPIC)).threadSummaries[0].isDeleted).toEqual(true)
+    expect((await getThreads(GENERAL_TOPIC)).threadSummaries[0].removalStatus).toEqual("DELETED")
   })
 })

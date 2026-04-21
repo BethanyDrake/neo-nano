@@ -39,7 +39,7 @@ export const buildThreadSummary = (threadSummary: Partial<ThreadSummary> = {}): 
   text: '',
   topic: '',
   authorDisplayName: '',
-  isDeleted: false,
+  removalStatus: null,
   ...threadSummary,
 })
 

@@ -25,11 +25,11 @@ describe('createThread', () => {
       commentRichText: '<p>Some comment text.</p>',
     })
     const createdThread = result.threadSummaries[0].id
-    expect(result.threadSummaries[0].isDeleted).toEqual(false)
+    expect(result.threadSummaries[0].removalStatus).toEqual(null)
     const initialCommentId = (await getThreadWithComments(createdThread)).commentCardDataEntries[0].comment.id
     console.log({initialCommentId})
     await deleteComment(initialCommentId)
     const updatedThreads = await getThreads(GENERAL_TOPIC)
-    expect(updatedThreads.threadSummaries[0].isDeleted).toEqual(true)
+    expect(updatedThreads.threadSummaries[0].removalStatus).toEqual('DELETED')
   })
 })

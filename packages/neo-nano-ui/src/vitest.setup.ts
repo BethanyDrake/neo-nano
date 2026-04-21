@@ -1,11 +1,9 @@
 /// <reference types="vitest/browser" />
-import {config} from 'dotenv'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 import ResizeObserver from 'resize-observer-polyfill';
 import { PropsWithChildren } from 'react'
 
-config({ path: `.env.test`})
 vi.mock('@auth0/nextjs-auth0')
 vi.mock('@auth0/nextjs-auth0/server', () => ({
     Auth0Client: class { public getSession = vi.fn()}

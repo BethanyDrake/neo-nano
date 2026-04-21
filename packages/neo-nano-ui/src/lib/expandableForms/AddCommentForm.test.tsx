@@ -4,8 +4,7 @@ import { ThreadContextProvider } from '../context/ThreadContext'
 import { addThreadComment } from '@/lib/serverFunctions/forum/addThreadComment'
 import { getThreadWithComments } from '../serverFunctions/forum/getThreadWithComments'
 import { vi } from 'vitest'
-import { CommentActionContext, CommentCardContext } from '../commentCards/CommentCard'
-import { buildComment } from '../types/forum.builders'
+import { buildCommentDataEntry, CommentActionContext, CommentCardContext } from '../commentCards/CommentCard'
 
 vi.mock('@/lib/serverFunctions/forum/addThreadComment')
 vi.mock('@/lib/serverFunctions/forum/getThreadWithComments')
@@ -57,7 +56,7 @@ describe('<AddCommentForm />', () => {
     const cancelAction = vi.fn()
     const { getByRole } = render(
       <ThreadContextProvider initialTotalComments={0} initialComments={[]} threadId={'thread-id'} initialIsLocked={false}>
-        <CommentCardContext.Provider value={{comment: buildComment({id: 'comment-id', text: 'Some comment text'}), author: {id:'user-id', displayName:'Display Name'}, flags:[], snapshots: []}} >
+        <CommentCardContext.Provider value={{comment: buildCommentDataEntry({id: 'comment-id', text: 'Some comment text'}), author: {id:'user-id', displayName:'Display Name'}, flags:[], snapshots: []}} >
           <CommentActionContext value={{activeAction:"reply", setActiveAction: vi.fn(), cancelAction}}>
         <ReplyToCommentForm />
         </CommentActionContext>

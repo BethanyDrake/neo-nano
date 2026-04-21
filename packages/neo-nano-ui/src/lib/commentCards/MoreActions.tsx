@@ -32,13 +32,13 @@ export const MoreActions = () => {
   const { isLocked } = useThreadContext()
   const {
     author,
-    comment: { isDeleted },
+    comment: { removalStatus },
   } = useCommentCardContext()
   const isMyComment = me?.id === author.id
-  const canReply = !isDeleted && !isLocked
-  const canEdit = !isDeleted && isMyComment && !isLocked
+  const canReply = !removalStatus && !isLocked
+  const canEdit = !removalStatus && isMyComment && !isLocked
   const canReport = !isMyComment
-  const canDelete = !isDeleted && isMyComment
+  const canDelete = !removalStatus && isMyComment
   if (!canReply && !canEdit && !canReport && !canDelete) return null
   return (
     <Menu>

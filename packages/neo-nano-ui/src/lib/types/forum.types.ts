@@ -67,6 +67,8 @@ export type Flag = {
     createdAt: Date,
     details: string,
     comment: string,
-    reviewedBy?: string,
-    reviewOutcome?: 'confirmed'| 'overruled'
+    reviewedBy?: string | null,
+    reviewOutcome?: 'confirmed'| 'overruled' | null
 }
+
+export type RemovalSatus = 'REMOVED_INAPPROPRIATE' | 'PENDING_REVIEW' | 'DELETED' | null

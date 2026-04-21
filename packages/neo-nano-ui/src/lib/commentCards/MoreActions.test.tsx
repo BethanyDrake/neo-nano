@@ -3,12 +3,12 @@ import { MoreActions } from "./MoreActions"
 import { withUserContext } from "@/tests/utils/withUserContext"
 import { wrap } from "souvlaki"
 import { withCommentCartContext } from "@/tests/utils/withCommentCardContext"
-import { buildComment } from "../types/forum.builders"
+import { buildCommentDataEntry } from "./CommentCard"
 
 describe("<MoreActions />", () => {
     test('shows edit button on my comment', () => {
         const {getByRole} = render(<MoreActions />, { wrapper: wrap(withUserContext({id: 'my-id', role: 'user'}), withCommentCartContext({
-            comment: buildComment(),
+            comment: buildCommentDataEntry(),
             author: {id: 'my-id', displayName: ""},
             flags: [],
             snapshots: []
@@ -20,7 +20,7 @@ describe("<MoreActions />", () => {
 
         test('hides edit button for comments that are not mine', () => {
         const {queryByRole, getByRole} = render(<MoreActions />, { wrapper: wrap(withUserContext({id: 'my-id', role: 'user'}), withCommentCartContext({
-            comment: buildComment(),
+            comment: buildCommentDataEntry(),
             author: {id: 'other-id', displayName: ""},
             flags: [],
             snapshots: []

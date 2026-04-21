@@ -11,7 +11,7 @@ describe('<ThreadPage />', () => {
   it('displays initial comments', async () => {
     vi.mocked(getThreadWithComments).mockResolvedValue({
       totalComments: 1,
-      isDeleted: false,
+      removalStatus: null,
       commentCardDataEntries: [
         {
           comment: {
@@ -19,7 +19,7 @@ describe('<ThreadPage />', () => {
             richText: '<p>some rich text</p>',
             id: '2',
             createdAt: new Date(),
-            isDeleted: false
+            removalStatus: null
           },
           author: {
             id: '1',
