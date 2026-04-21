@@ -46,7 +46,7 @@ export const ThreadContextProvider = ({
       const response = await getThreadWithComments(threadId, page)
       setComments(response.commentCardDataEntries)
       setTotalComments(response.totalComments)
-      setIsLocked(response.isDeleted)
+      setIsLocked(!!response.removalStatus)
       setIsLoading(false)
   
     },

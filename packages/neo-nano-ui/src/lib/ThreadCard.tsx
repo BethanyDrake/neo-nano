@@ -7,16 +7,18 @@ import { faComment, faLock } from '@fortawesome/free-solid-svg-icons'
 import { truncateText } from './misc'
 
 export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId: string }) => {
-  const { id, title, text, totalComments, isDeleted } = thread
+  const { id, title, text, totalComments, removalStatus } = thread
 
-  if (isDeleted) {
+  if (removalStatus) {
     return (
       <div style={{ fontStyle: 'italic', color: 'var(--text-colour-2)' }}>
         <FontAwesomeIcon icon={faLock} />
-        This thread has been deleted by the author
-        <Link style={{ paddingLeft: '10px' }} href={`/forum/${topicId}/${id}`}>
+        {removalStatus === 'DELETED' && 'This thread has been deleted by the author' }
+        {removalStatus === 'PENDING_REVIEW' && 'This thread is pending manual review.' }
+        {removalStatus === 'REMOVED_INAPPROPRIATE' && 'This thread has been removed.' }
+        {removalStatus === 'DELETED' && <Link style={{ paddingLeft: '10px' }} href={`/forum/${topicId}/${id}`}>
           (view history)
-        </Link>
+        </Link>}
       </div>
     )
   }

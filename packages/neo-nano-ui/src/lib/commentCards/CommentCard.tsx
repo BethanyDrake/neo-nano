@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { ClientSideOnly } from '../ClientSideOnly'
-import { Comment, CommentSnapshot, Flag, Profile } from '@/lib/types/forum.types'
+import { Comment, CommentSnapshot, Flag, Profile, RemovalSatus } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import { ReportCommentWrapper } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
@@ -15,16 +15,25 @@ import { EditCommentForm } from '../expandableForms/EditCommentForm'
 import { CommentSnapshotView } from './CommentSnapshotView'
 import { DeleteCommentConfirmation } from './DeleteCommentConfirmation'
 import { useThreadContext } from '../context/ThreadContext'
+import { buildComment } from '../types/forum.builders'
 
 const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
   ssr: false,
 })
 
 export type CommentCardDataEntry = {
-  comment: Pick<Comment, 'id' | 'text' | 'richText' | 'createdAt' | 'isDeleted'>
+  comment: Pick<Comment, 'id' | 'text' | 'richText' | 'createdAt'> & {removalStatus: RemovalSatus}
   author: Pick<Profile, 'id' | 'displayName'>
   flags: Flag[]
   snapshots: CommentSnapshot[]
+}
+
+export const buildCommentDataEntry = (overrides = {}): CommentCardDataEntry['comment'] => {
+  return {
+    ...buildComment(),
+    removalStatus: null,
+    ...overrides
+  }
 }
 
 export const CommentCardContext = createContext<CommentCardDataEntry>({
@@ -33,7 +42,7 @@ export const CommentCardContext = createContext<CommentCardDataEntry>({
     id: '',
     text: '',
     createdAt: new Date(),
-    isDeleted: false,
+    removalStatus: null
   },
   author: {
     id: '',
@@ -122,11 +131,11 @@ export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDa
                 </Link>
               </Row>
               <Row alignItems="center" style={{ translate: '26px' }}>
-                {!isLocked && !comment.isDeleted && <LikeButton commentId={comment.id} />}
+                {!isLocked && !comment.removalStatus && <LikeButton commentId={comment.id} />}
                 {isLoggedIn && <MoreActions />}
               </Row>
             </Row>
-            {comment.isDeleted && (
+            {comment.removalStatus === 'DELETED' && (
               <p className={classNames.deletedMessage}>This comment has been deleted by the author.</p>
             )}
             <ClientSideOnly fallback={<p>{comment.text}</p>}>

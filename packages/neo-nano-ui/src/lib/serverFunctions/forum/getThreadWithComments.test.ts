@@ -38,7 +38,7 @@ describe('getThreadWithComments', () => {
               id: commentId,
               createdAt: expect.anything(),
               richText: '<p>comment text</p>',
-              isDeleted: false,
+              removalStatus: null,
             },
             author: {
               id: author,
@@ -98,6 +98,7 @@ describe('getThreadWithComments', () => {
         displayName: 'Author Name',
       }),
     )
+    expect(comment.removalStatus).toEqual('PENDING_REVIEW')
 
     expect(flags).toHaveLength(2)
     expect(flags.map(({ reason }) => reason)).toContain('harrassment')
@@ -116,6 +117,6 @@ describe('getThreadWithComments', () => {
     const initialCommentId = (await getThreadWithComments(createdThreadId)).commentCardDataEntries[0].comment.id
     await deleteComment(initialCommentId)
 
-    expect((await getThreadWithComments(createdThreadId)).isDeleted).toEqual(true)
+    expect((await getThreadWithComments(createdThreadId)).removalStatus).toEqual('DELETED')
   })
 })

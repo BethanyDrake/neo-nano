@@ -1,7 +1,7 @@
 import { flagComment } from '@/lib/serverFunctions/moderation/flagComment'
 import { Flag } from '@/lib/types/forum.types'
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { CommentCard } from './CommentCard'
+import { buildCommentDataEntry, CommentCard } from './CommentCard'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { vi } from 'vitest'
 import { deleteComment, updateComment } from '../serverFunctions/forum/addThreadComment'
@@ -17,7 +17,7 @@ describe('<CommentCard />', () => {
   test('no flags', async () => {
     const { findByText } = render(
       <CommentCard
-        comment={buildComment({ id: '1', richText: '<p>some rich text</p>' })}
+        comment={buildCommentDataEntry({ id: '1', richText: '<p>some rich text</p>' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[]}
         snapshots={[]}
@@ -38,7 +38,7 @@ describe('<CommentCard />', () => {
     }
     const { findByText, queryByText } = render(
       <CommentCard
-        comment={buildComment({ id: '1', richText: 'Some text' })}
+        comment={buildCommentDataEntry({ id: '1', richText: 'Some text' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
         snapshots={[]}
@@ -64,7 +64,7 @@ describe('<CommentCard />', () => {
     }
     const { findByText } = render(
       <CommentCard
-        comment={buildComment({ id: '1', richText: '<p>some comment text</p>' })}
+        comment={buildCommentDataEntry({ id: '1', richText: '<p>some comment text</p>' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
         snapshots={[]}
@@ -85,7 +85,7 @@ describe('<CommentCard />', () => {
     }
     const { findByText, queryByText } = render(
       <CommentCard
-        comment={buildComment({ id: '1', richText: '<p>Some text/p>' })}
+        comment={buildCommentDataEntry({ id: '1', richText: '<p>Some text/p>' })}
         author={{ id: '2', displayName: 'Some Name' }}
         flags={[flag]}
         snapshots={[]}
@@ -100,7 +100,7 @@ describe('<CommentCard />', () => {
     vi.mocked(useIsLoggedIn).mockReturnValue(true)
     const { getByRole } = render(
       <CommentCard
-        comment={buildComment({ id: 'comment-id' })}
+        comment={buildCommentDataEntry({ id: 'comment-id' })}
         author={{ id: '2', displayName: 'Alice' }}
         flags={[]}
         snapshots={[]}
@@ -125,7 +125,7 @@ describe('<CommentCard />', () => {
   test('edit comment', async () => {
     const { getByRole } = render(
       <CommentCard
-        comment={buildComment({ id: 'comment-id', text: 'initial text', richText: '<p>initial rich text</p>' })}
+        comment={buildCommentDataEntry({ id: 'comment-id', text: 'initial text', richText: '<p>initial rich text</p>' })}
         author={{ id: 'my-id', displayName: 'Alice' }}
         flags={[]}
         snapshots={[]}
@@ -146,7 +146,7 @@ describe('<CommentCard />', () => {
 
     const { getByRole } = render(
       <CommentCard
-        comment={buildComment({ id: 'comment-id'})}
+        comment={buildCommentDataEntry({ id: 'comment-id'})}
         author={{ id: 'my-id', displayName: 'Alice' }}
         flags={[]}
         snapshots={[]}
@@ -165,7 +165,7 @@ describe('<CommentCard />', () => {
     test('comment with no edits', () => {
       const { getAllByRole } = render(
         <CommentCard
-          comment={buildComment({ id: 'comment-id' })}
+          comment={buildCommentDataEntry({ id: 'comment-id' })}
           author={{ id: '2', displayName: 'Alice' }}
           flags={[]}
           snapshots={[]}
@@ -178,7 +178,7 @@ describe('<CommentCard />', () => {
     test('comment with multiple edits', () => {
       const { getAllByRole, getByRole } = render(
         <CommentCard
-          comment={buildComment({ id: 'comment-id' })}
+          comment={buildCommentDataEntry({ id: 'comment-id' })}
           author={{ id: '2', displayName: 'Alice' }}
           flags={[]}
           snapshots={[buildCommentSnapshot({ version: 0 }), buildCommentSnapshot({ version: 1 })]}
@@ -193,7 +193,7 @@ describe('<CommentCard />', () => {
     test('deleted comment', () => {
       const { getByRole, getByText } = render(
         <CommentCard
-          comment={buildComment({ id: 'comment-id', isDeleted: true })}
+          comment={buildCommentDataEntry({ id: 'comment-id', removalStatus: 'DELETED' })}
           author={{ id: '2', displayName: 'Alice' }}
           flags={[]}
           snapshots={[buildCommentSnapshot({ version: 0 }), buildCommentSnapshot({ version: 1 })]}
