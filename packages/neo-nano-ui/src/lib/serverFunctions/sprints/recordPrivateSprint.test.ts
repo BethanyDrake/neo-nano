@@ -26,7 +26,7 @@ describe('recordPrivateSprint', () => {
       expect.objectContaining({
         durationSeconds: 120,
         participationState: 'completed',
-        userId,
+        startTime: expect.anything(),
         visibility: 'private',
         wordCount: 20,
       }),

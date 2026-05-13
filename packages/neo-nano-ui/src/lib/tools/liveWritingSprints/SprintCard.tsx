@@ -1,3 +1,4 @@
+"use client"
 import { Sprint } from "@/lib/serverFunctions/sprints/recordPrivateSprint"
 import classNames from './liveSprints.module.css'
 import { TextButton } from "@/lib/buttons/BasicButton"

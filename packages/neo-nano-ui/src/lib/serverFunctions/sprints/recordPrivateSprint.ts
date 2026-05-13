@@ -44,8 +44,8 @@ export const cancelPrivateSprint = async (sprintId: string) => {
 export const createPrivateSprint = async (startTime: Date, durationSeconds: number): Promise<Sprint> => {
   const sql = getQueryFunction()
   const [createdSprint] = await sql`INSERT into sprints (start_time, duration_seconds, visibility)
-  values (${startTime}, ${durationSeconds}, 'private')
-  returning *`
+  values (${startTime.toISOString()}, ${durationSeconds}, 'private')
+  returning start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds`
   
   const userId = await getUserId()
   await registerForSprint(userId, createdSprint.id)
@@ -56,7 +56,9 @@ export const getMySprintLog = async () => {
   const sql = getQueryFunction()
   const userId = await getUserId()
   const sprints = await sql`
-  select * 
+  select 
+    sprints.start_time AT TIME ZONE 'UTC' as start_time, sprints.visibility, sprints.duration_seconds,
+    user_sprints.participation_state, user_sprints.word_count
   from sprints join user_sprints on sprint_id = sprints.id 
   where user_sprints.user_id=${userId}
   and user_sprints.participation_state='completed'
