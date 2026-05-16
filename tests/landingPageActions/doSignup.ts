@@ -8,5 +8,5 @@ export const doSignup = async (page: Page) => {
 
   await page.getByRole('textbox', { name: 'Password' }).fill('Test1234!');
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
-  await page.getByRole('button', { name: 'Accept' }).click();
+  // await page.getByRole('button', { name: 'Accept' }).click();
 }
