@@ -51,7 +51,7 @@ const LiveSprintPage = () => {
         <h4>Upcoming Sprints:</h4>
         <Row style={{ flexWrap: 'wrap' }}>
           {(upcomingSprints ?? []).map(({ id, startTime, durationSeconds }) => (
-            <UpcomingSprintCard key={id} id={id} startTime={startTime} durationSeconds={durationSeconds} />
+            <UpcomingSprintCard key={id} id={id} startTime={startTime} durationSeconds={durationSeconds}/>
           ))}
         </Row>
 

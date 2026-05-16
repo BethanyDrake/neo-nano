@@ -3,6 +3,7 @@ import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { Visibility } from "@/lib/types/forum.types"
+import { cancelSprintRegistration, registerForSprint } from './registerForSprint'
 
 export type Sprint = {
   id: string
@@ -22,18 +23,6 @@ export type CompletedSprint = Sprint & {
   participationState: 'completed'
 }
 
-const registerForSprint = async (userId: string, sprintId: string) => {
-  const sql = getQueryFunction()
-  await sql`INSERT into user_sprints (user_id, sprint_id, word_count, participation_state) 
-  values (${userId}, ${sprintId}, null, 'registered')`
-}
-
-export const cancelSprintRegistration = async (userId: string, sprintId: string) => {
-  const sql = getQueryFunction()
-
-  await sql`delete from user_sprints 
-  where user_id=${userId} and sprint_id=${sprintId} and participation_state='registered'`
-}
 
 export const cancelPrivateSprint = async (sprintId: string) => {
   const userId = await getUserId()
