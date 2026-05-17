@@ -10,6 +10,8 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DEVELOP_DATABASE_URL }}
       EMAIL_OCTOPUS_LIST_ID: EMAIL_OCTOPUS_LIST_ID
+      FLAGS: ${{ secrets.FLAGS }}
+      FLAGS_SECRET: ${{ secrets.FLAGS_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
