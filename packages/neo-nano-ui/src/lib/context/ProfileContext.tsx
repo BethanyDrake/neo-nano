@@ -1,10 +1,10 @@
 'use client'
-import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { Profile } from '@/lib/types/forum.types'
 import { updateProfile as updateProfileServerSide } from '../serverFunctions/profile/updateProfile'
 import { UserAward } from '@/lib/types/profile.types'
 import { getMyAwards } from '../serverFunctions/profile/getMyAwards'
-import { UseMutateFunction, useMutation, useQuery } from '@tanstack/react-query'
+import {RefetchOptions, UseMutateFunction, useMutation, useQuery } from '@tanstack/react-query'
 import { useUser } from '@auth0/nextjs-auth0'
 import { getMyProfile } from '../serverFunctions/profile/getMyProfile'
 
@@ -14,7 +14,7 @@ const ProfileContext = createContext<{
   isLoading: boolean
 
   awards: UserAward[]
-  refreshAwards: () => Promise<void>
+  refreshAwards: (options?: RefetchOptions | undefined) => Promise<unknown>
 }>({
   updateProfile: () => Promise.resolve(),
   profile: { id: '', displayName: '', role: 'user' },
@@ -31,8 +31,13 @@ export const ProfileContextProvider = ({
   children,
 }: PropsWithChildren & { initialProfile: Profile; initialAwards: UserAward[] }) => {
  
-  const [awards, setAwards] = useState<UserAward[]>(initialAwards)
   const { user } = useUser()
+  const {data: awards, refetch: refreshAwards} = useQuery({
+    queryKey: ['awards', user?.sub],
+    initialData: initialAwards,
+    queryFn:  () => getMyAwards(),
+    enabled: !!user?.sub,
+  })
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', user?.sub],
     queryFn: async() => {
@@ -57,10 +62,6 @@ export const ProfileContextProvider = ({
     },
   })
 
-  const refreshAwards = useCallback(async () => {
-    const newAwards = await getMyAwards()
-    setAwards(newAwards)
-  }, [])
 
   const value = useMemo(() => {
     return { isLoading, profile, updateProfile, awards, refreshAwards }
