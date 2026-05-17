@@ -40,6 +40,7 @@ vi.mock('@/lib/serverFunctions/settings/getEmailPreferences')
 
 vi.mock('@/lib/challenges')
 vi.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
+vi.mock('@auth0/nextjs-auth0', () => ({useUser: () => ({})}))
 describe('<ProfilePage />', () => {
   beforeEach(() => {
     vi.mocked(getMyAwards).mockResolvedValue([])

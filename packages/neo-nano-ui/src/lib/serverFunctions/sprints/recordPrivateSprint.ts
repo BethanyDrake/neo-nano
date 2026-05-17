@@ -3,6 +3,7 @@ import camelcaseKeys from 'camelcase-keys'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { Visibility } from "@/lib/types/forum.types"
+import { cancelSprintRegistration, registerForSprint } from './registerForSprint'
 
 export type Sprint = {
   id: string
@@ -22,18 +23,6 @@ export type CompletedSprint = Sprint & {
   participationState: 'completed'
 }
 
-const registerForSprint = async (userId: string, sprintId: string) => {
-  const sql = getQueryFunction()
-  await sql`INSERT into user_sprints (user_id, sprint_id, word_count, participation_state) 
-  values (${userId}, ${sprintId}, null, 'registered')`
-}
-
-export const cancelSprintRegistration = async (userId: string, sprintId: string) => {
-  const sql = getQueryFunction()
-
-  await sql`delete from user_sprints 
-  where user_id=${userId} and sprint_id=${sprintId} and participation_state='registered'`
-}
 
 export const cancelPrivateSprint = async (sprintId: string) => {
   const userId = await getUserId()
@@ -44,8 +33,8 @@ export const cancelPrivateSprint = async (sprintId: string) => {
 export const createPrivateSprint = async (startTime: Date, durationSeconds: number): Promise<Sprint> => {
   const sql = getQueryFunction()
   const [createdSprint] = await sql`INSERT into sprints (start_time, duration_seconds, visibility)
-  values (${startTime}, ${durationSeconds}, 'private')
-  returning *`
+  values (${startTime.toISOString()}, ${durationSeconds}, 'private')
+  returning start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds`
   
   const userId = await getUserId()
   await registerForSprint(userId, createdSprint.id)
@@ -56,7 +45,9 @@ export const getMySprintLog = async () => {
   const sql = getQueryFunction()
   const userId = await getUserId()
   const sprints = await sql`
-  select * 
+  select 
+    sprints.start_time AT TIME ZONE 'UTC' as start_time, sprints.visibility, sprints.duration_seconds,
+    user_sprints.participation_state, user_sprints.word_count
   from sprints join user_sprints on sprint_id = sprints.id 
   where user_sprints.user_id=${userId}
   and user_sprints.participation_state='completed'

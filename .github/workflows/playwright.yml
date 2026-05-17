@@ -12,6 +12,8 @@ jobs:
       AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+      FLAGS: ${{ secrets.FLAGS }}
+      FLAGS_SECRET: ${{ secrets.FLAGS_SECRET }}
       EMAIL_OCTOPUS_LIST_ID: 983fa6bc-c369-11f0-821e-416e3640eb4d
     timeout-minutes: 60
     runs-on: ubuntu-latest

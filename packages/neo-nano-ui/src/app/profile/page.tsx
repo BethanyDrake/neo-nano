@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: 'My Profile',
 }
 const ProfilePage = async () => {
+  
   const [initalProfile, initialAwards] = await Promise.all([getMyProfile(), getMyAwards()])
   if (!initalProfile) throw Error('No profile found for ProfilePage.')
 

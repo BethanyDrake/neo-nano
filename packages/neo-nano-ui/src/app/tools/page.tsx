@@ -7,7 +7,9 @@ import classNames from './tools.module.css'
 import focusClock from '@/lib/tools/focusClockTool/focus-clock.png'
 import sprintTimer from '@/lib/tools/sprintTimerTool/sprint-timer.png'
 import abacus from '@/lib/tools/wordCountTool/abacus.png'
+import liveSprints from '@/lib/tools/liveWritingSprints/live-sprint.png'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
+import { liveSprintsFlag } from '@/lib/flags'
 
 const ToolCard = ({
   toolName,
@@ -35,7 +37,9 @@ const ToolCard = ({
   )
 }
 
-const ToolsPage = () => {
+const ToolsPage = async () => {
+  const liveSprintsFeature = await liveSprintsFlag() as boolean
+  console.log(liveSprintsFeature)
   return (
     <NewAwardModalProvider>
       <GutteredPage>
@@ -47,13 +51,13 @@ const ToolsPage = () => {
             <ToolCard
             description={'Just start editing, and log the time after.'}
             id={'focus-clock'}
-            toolName="Focus clock"
+            toolName="Focus Clock"
             imageSrc={focusClock}
           />
           <ToolCard
             description={'Set a timer, then see how many words you can write!'}
             id={'timer'}
-            toolName="Sprint timer"
+            toolName="Sprint Timer"
             imageSrc={sprintTimer}
           />
           <ToolCard
@@ -62,6 +66,13 @@ const ToolsPage = () => {
             toolName="Word Counter"
             imageSrc={abacus}
           />
+          {liveSprintsFeature && 
+           <ToolCard
+            description={'Write with others; compete for the highest word count!'}
+            id={'live-sprints'}
+            toolName="Live Sprints"
+            imageSrc={liveSprints}
+          />}
         </div>
         </Column>
       </GutteredPage>

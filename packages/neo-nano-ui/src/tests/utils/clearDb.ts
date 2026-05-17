@@ -13,4 +13,5 @@ export const clearDb = async () => {
   await getQueryFunction()`delete from projects`
   await getQueryFunction()`delete from user_sprints`
   await getQueryFunction()`delete from users`
+  await getQueryFunction()`delete from sprints`
 }

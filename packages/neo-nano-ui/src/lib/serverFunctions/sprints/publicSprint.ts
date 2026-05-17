@@ -1,0 +1,56 @@
+'use server'
+import camelcaseKeys from 'camelcase-keys'
+import { getQueryFunction } from '../_utils/getQueryFunction'
+import { Sprint } from './recordPrivateSprint'
+import { addHours } from 'date-fns'
+import { getUserId } from '../_utils/getUserIdFromSession'
+import { registerForSprint } from './registerForSprint'
+
+export const createPublicSprint = async (startTime: Date, durationSeconds: number): Promise<Sprint> => {
+  const sql = getQueryFunction()
+  const [createdSprint] = await sql`INSERT into sprints (start_time, duration_seconds, visibility)
+  values (${startTime.toUTCString()}, ${durationSeconds}, 'public')
+  returning start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds`
+
+  return camelcaseKeys(createdSprint) as Sprint
+}
+
+export type PublicSprintLogEntry = {
+  participationState: 'completed' | 'registered',
+  wordCount: number | null,
+  userId: string
+
+}
+
+export const getPublicSprintLog = async (id: string) => {
+  const rows = 
+    await getQueryFunction()`SELECT 
+    user_sprints.participation_state, user_sprints.word_count, user_sprints.user_id
+    FROM user_sprints
+    WHERE user_sprints.sprint_id=${id}
+    `
+    return rows.map((row) => camelcaseKeys(row) as PublicSprintLogEntry )
+
+}
+
+
+export const getUpcomingPublicSprints = async () => {
+  const sql = getQueryFunction()
+  const rows =
+    await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds  from sprints 
+    where visibility='public' and start_time>=now()`
+  return rows.map((row) => camelcaseKeys(row) as Sprint)
+}
+
+export const getPastRecentSprints = async (maxAgeHours: number) => {
+  const compareTime = addHours(Date.now(), -1 * maxAgeHours)
+  const rows =
+    await getQueryFunction()`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds from sprints where start_time between ${compareTime.toUTCString()} and now() and
+    visibility='public'`
+  return rows.map((row) => camelcaseKeys(row) as Sprint)
+}
+
+export const registerForPublicSprint = async (sprintId: string) => {
+    const userId = await getUserId()
+    await registerForSprint(userId, sprintId)
+}
