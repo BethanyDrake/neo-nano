@@ -4,9 +4,12 @@ import { Profile } from '@/lib/types/forum.types'
 import { updateProfile as updateProfileServerSide } from '../serverFunctions/profile/updateProfile'
 import { UserAward } from '@/lib/types/profile.types'
 import { getMyAwards } from '../serverFunctions/profile/getMyAwards'
+import { UseMutateFunction, useMutation, useQuery } from '@tanstack/react-query'
+import { useUser } from '@auth0/nextjs-auth0'
+import { getMyProfile } from '../serverFunctions/profile/getMyProfile'
 
 const ProfileContext = createContext<{
-  updateProfile: (newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => Promise<void>
+  updateProfile: UseMutateFunction<Profile, Error, Pick<Profile, "displayName" | "aboutMe">>
   profile: Profile
   isLoading: boolean
 
@@ -17,7 +20,7 @@ const ProfileContext = createContext<{
   profile: { id: '', displayName: '', role: 'user' },
   isLoading: false,
   awards: [],
-  refreshAwards: () => Promise.resolve()
+  refreshAwards: () => Promise.resolve(),
 })
 
 export const useProfileContext = () => useContext(ProfileContext)
@@ -27,16 +30,32 @@ export const ProfileContextProvider = ({
   initialAwards,
   children,
 }: PropsWithChildren & { initialProfile: Profile; initialAwards: UserAward[] }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [profile, setProfile] = useState(initialProfile)
-   const [awards, setAwards] = useState<UserAward[]>(initialAwards)
+ 
+  const [awards, setAwards] = useState<UserAward[]>(initialAwards)
+  const { user } = useUser()
+  const { data: profile, isLoading } = useQuery({
+    queryKey: ['profile', user?.sub],
+    queryFn: async() => {
+      const _profile = await getMyProfile()
+      if (!_profile) throw Error("Missing profile.")
+      return _profile
+    }
+      ,
+    initialData: initialProfile,
+    refetchOnMount: true,
+    enabled: !!user?.sub
+  })
 
-  const updateProfile = useCallback((newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => {
-    setIsLoading(true)
-    return updateProfileServerSide(newProfile)
-      .then((updatedProfile) => updatedProfile && setProfile(updatedProfile))
-      .then(() => setIsLoading(false))
-  }, [])
+  const { mutate: updateProfile } = useMutation({
+    mutationFn: async (newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => {
+      const _profile = await updateProfileServerSide(newProfile)
+      if (!_profile) throw Error("Missing profile.")
+      return _profile
+    },
+    onSuccess: (data, _variables, _onMutateResult, context) => {
+      context.client.setQueryData(['profile', user?.sub], data)
+    },
+  })
 
   const refreshAwards = useCallback(async () => {
     const newAwards = await getMyAwards()
@@ -44,7 +63,7 @@ export const ProfileContextProvider = ({
   }, [])
 
   const value = useMemo(() => {
-    return { isLoading, profile, updateProfile,  awards, refreshAwards }
+    return { isLoading, profile, updateProfile, awards, refreshAwards }
   }, [isLoading, profile, updateProfile, awards, refreshAwards])
 
   return <ProfileContext value={value}>{children}</ProfileContext>

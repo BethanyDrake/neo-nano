@@ -33,9 +33,7 @@ const EditProfileForm = () => {
       ...data,
     }
 
-    updateProfile(body).then(() => {
-      closeModal()
-    })
+    updateProfile(body, {onSuccess: closeModal})
   }
 
   return (

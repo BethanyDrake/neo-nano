@@ -5,17 +5,21 @@ import { updateProfile } from '../serverFunctions/profile/updateProfile'
 import { buildProfile } from '@/lib/types/forum.builders'
 import { ModalContextProvider } from './ModalContext'
 import { vi } from 'vitest'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 
 vi.mock('../serverFunctions/profile/updateProfile')
+vi.mock('@auth0/nextjs-auth0', () => ({useUser: () => ({})}))
 describe('<EditProfileModal />', () => {
   test('update profile', async () => {
     vi.mocked(updateProfile).mockResolvedValue(buildProfile())
     const { getByRole } = render(
+      <QueryClientProvider client={new QueryClient()}>
       <ModalContextProvider>
         <ProfileContextProvider initialProfile={buildProfile()} initialAwards={[]}>
           <EditProfileModal />
         </ProfileContextProvider>
-      </ModalContextProvider>,
+      </ModalContextProvider></QueryClientProvider>,
     )
     fireEvent.click(getByRole('button', { name: 'edit profile' }))
     expect(getByRole('heading', { name: 'Update Profile Details' }))
