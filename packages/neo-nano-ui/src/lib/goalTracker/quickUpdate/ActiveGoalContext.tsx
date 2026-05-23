@@ -7,7 +7,7 @@ import { UpdatedGoalProgressReturn, updateGoalProgress } from '@/lib/serverFunct
 import { Goal, Record } from '@/lib/types/forum.types'
 import { UseMutateFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { startOfToday } from 'date-fns'
-import { createContext, PropsWithChildren, useCallback, useContext, useMemo } from 'react'
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { changeAtIndex } from '../recordUtils'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 
@@ -16,13 +16,13 @@ const ActiveGoalContext = createContext<{
   updateActiveGoal: UseMutateFunction<UpdatedGoalProgressReturn, Error, Record[], unknown>,
   addToTodaysTotal:  UseMutateFunction<UpdatedGoalProgressReturn, Error, number, unknown>,
   isRefreshing: boolean
-  refresh: () => Promise<void>
+  refresh: () => void
 }>({
   activeGoal: null,
   updateActiveGoal: () => {},
   addToTodaysTotal: () => {},
   isRefreshing: false,
-  refresh: () => Promise.resolve(),
+  refresh: () => {},
 })
 
 const getQueryKey = () => {
@@ -32,7 +32,7 @@ const getQueryKey = () => {
 }
 
 export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
-  const { data: activeGoal, isLoading: isRefreshing } = useQuery({
+  const { data: activeGoal, isLoading: isRefreshing, refetch } = useQuery({
     queryKey: getQueryKey(),
     queryFn: () => {
       const today = getDateAsString(startOfToday())
@@ -44,9 +44,6 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient()
   const { displayNewAward } = useNewAwardModalContext()
 
-  const refresh = useCallback(async () => {
-    queryClient.invalidateQueries({ queryKey: ['active-goal'] })
-  }, [queryClient])
 
   const { mutate: updateActiveGoal } = useMutation({
     mutationFn: async (newRecords: Goal['records']) => {
@@ -79,8 +76,8 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
   })
 
   const value = useMemo(() => {
-    return { activeGoal, updateActiveGoal, isRefreshing, refresh, addToTodaysTotal }
-  }, [activeGoal, isRefreshing, refresh, updateActiveGoal, addToTodaysTotal])
+    return { activeGoal, updateActiveGoal, isRefreshing, refresh: refetch, addToTodaysTotal }
+  }, [activeGoal, isRefreshing, refetch, updateActiveGoal, addToTodaysTotal])
 
   return <ActiveGoalContext.Provider value={value}>{children}</ActiveGoalContext.Provider>
 }
