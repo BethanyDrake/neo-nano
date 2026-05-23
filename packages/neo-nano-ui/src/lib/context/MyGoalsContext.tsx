@@ -1,33 +1,18 @@
 'use client'
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
 import { Goal } from '@/lib/types/forum.types'
 import { getMyGoals } from '../serverFunctions/goals/getMyGoals'
+import {useQuery, useQueryClient } from '@tanstack/react-query'
 
-const MyGoalContext = createContext<{
-  isLoading: boolean
-  goals: Goal[]
-  setGoals: (goals: Goal[]) => void
-}>({
-  isLoading: false,
-  goals: [],
-  setGoals: () => Promise.resolve(),
-})
+export const useMyGoalContext = () => {
+  const queryClient = useQueryClient()
+  const {data: goals, isLoading} = useQuery({
+    queryKey: ['my-goals'],
+    queryFn: () => getMyGoals()
+  })
 
-export const useMyGoalContext = () => useContext(MyGoalContext)
-
-export const MyGoalContextProvider = ({
-  children,
-}: PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [goals, setGoals] = useState<Goal[]>([])
-
-  useEffect(() => {
-    getMyGoals().then(setGoals).then(() => setIsLoading(false))
-  }, [])
-
-  const value = useMemo(() => {
-    return { isLoading,  goals, setGoals, }
-  }, [isLoading, goals, setGoals])
-
-  return <MyGoalContext.Provider value={value}>{children}</MyGoalContext.Provider>
+  const setGoals = (updatedGoals: Goal[]) => {
+    queryClient.setQueryData(['my-goals'], updatedGoals)
+  }
+  return {goals, isLoading, setGoals}
 }
+

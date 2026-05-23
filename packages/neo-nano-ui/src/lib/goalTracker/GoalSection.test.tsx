@@ -4,6 +4,8 @@ import { setGoalVisibility } from '../serverFunctions/goals/setGoalVisibility'
 import { GoalSection } from './GoalSection'
 import { isActive } from '../serverFunctions/goals/goalUtils'
 import { vi } from 'vitest'
+import { wrap } from 'souvlaki'
+import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
 vi.mock('@/lib/serverFunctions/goals/setGoalVisibility')
 vi.mock('@/lib/serverFunctions/goals/deleteGoal')
 vi.mock('../serverFunctions/goals/goalUtils')
@@ -25,8 +27,9 @@ describe('<GoalSection />', () => {
         startDate={''}
         target={0}
         metric={'words'}
-      />,
-    )
+      />, {
+          wrapper: wrap( withReactQueryClient()),
+        })
     expect(getByText('Goal Title'))
   })
 
@@ -41,8 +44,9 @@ describe('<GoalSection />', () => {
         startDate={''}
         target={180}
         metric={'minutes'}
-      />,
-    )
+      />, {
+          wrapper: wrap( withReactQueryClient()),
+        })
     expect(queryByText(/words/)).not.toBeInTheDocument()
   })
 
@@ -57,8 +61,9 @@ describe('<GoalSection />', () => {
         startDate={''}
         target={0}
         metric={'words'}
-      />,
-    )
+      />, {
+          wrapper: wrap( withReactQueryClient()),
+        })
     expect(getByText('Goal Title'))
     expect(container).toHaveTextContent(/So far\: 300/)
   })
@@ -74,8 +79,9 @@ describe('<GoalSection />', () => {
         startDate={''}
         target={0}
         metric={'words'}
-      />,
-    )
+      />, {
+          wrapper: wrap( withReactQueryClient()),
+        })
     fireEvent.click(getByRole('button', { name: 'make public' }))
     expect(setGoalVisibility).toHaveBeenCalledWith({ id: 'goal-id', visibility: 'public' })
     rerender(
@@ -104,8 +110,9 @@ describe('<GoalSection />', () => {
         startDate={''}
         target={0}
         metric={'words'}
-      />,
-    )
+      />, {
+          wrapper: wrap( withReactQueryClient()),
+        })
     fireEvent.click(getByRole('switch', { name: /Words Per Day.*Cumulative/i }))
   })
 
@@ -120,8 +127,9 @@ describe('<GoalSection />', () => {
         startDate={''}
         target={0}
         metric={'words'}
-      />,
-    )
+      />, {
+          wrapper: wrap( withReactQueryClient()),
+        })
     fireEvent.click(getByRole('button', { name: /delete/i }))
 
     await waitFor(() => {

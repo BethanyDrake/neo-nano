@@ -4,7 +4,6 @@ import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { ProfilePageInner } from './ProfilePage'
 import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
-import { MyGoalContextProvider } from '@/lib/context/MyGoalsContext'
 import { Metadata } from 'next'
 import { MyProjectsContextProvider } from '@/lib/projects/MyProjectContext'
 
@@ -19,11 +18,9 @@ const ProfilePage = async () => {
   return (
       <NewAwardModalProvider>
           <ProfileContextProvider initialProfile={initalProfile} initialAwards={initialAwards}>
-            <MyGoalContextProvider>
               <MyProjectsContextProvider>
               <ProfilePageInner />
               </MyProjectsContextProvider>
-            </MyGoalContextProvider>
           </ProfileContextProvider>
       </NewAwardModalProvider>
   )

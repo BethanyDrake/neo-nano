@@ -1,8 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { updateGoal } from '../serverFunctions/goals/updateGoal'
 import { EditGoalModal } from './EditGoalModal'
-import { ModalContextProvider } from './ModalContext'
 import { vi } from 'vitest'
+import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
+import { wrap } from 'souvlaki'
+import { withModalContext } from '@/tests/utils/withModalContext'
 vi.mock('../serverFunctions/goals/updateGoal')
 
 describe('EditGoalModal', () => {
@@ -19,7 +21,7 @@ describe('EditGoalModal', () => {
             startDate: '2025-11-01',
             metric: 'words'
           }}
-        />, {wrapper: ModalContextProvider}
+        />, {wrapper: wrap(withModalContext(), withReactQueryClient())}
     )
     fireEvent.click(getByRole('button', { name: 'edit goal' }))
     expect(getByRole('heading', { name: 'Update Goal' }))
@@ -54,7 +56,7 @@ describe('EditGoalModal', () => {
             startDate: '2025-11-01',
             metric: 'minutes'
           }}
-        />, {wrapper: ModalContextProvider}
+        />, {wrapper: wrap(withModalContext(), withReactQueryClient())}
     )
     fireEvent.click(getByRole('button', { name: 'edit goal' }))
     expect(getByRole('heading', { name: 'Update Goal' }))
