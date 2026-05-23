@@ -21,7 +21,7 @@ import { track } from '@vercel/analytics'
 
 const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => void; activeGoal: Goal }) => {
   const [isCumulative, setIsCumulative] = useState(false)
-  const { updateActiveGoal, isRefreshing } = useActiveGoal()
+  const { updateActiveGoal, isUpdating } = useActiveGoal()
   const challengeDay = activeGoal ? dateToChallengeDay(activeGoal.startDate, startOfToday()) : -1
   const [localRecords, setLocalRecords] = useState(activeGoal?.records ?? [])
   const onClick = () => updateActiveGoal(localRecords, {onSuccess: () => {
@@ -83,7 +83,7 @@ const QuickUpdateModalForm = ({ closeModal, activeGoal }: { closeModal: () => vo
           )}
         </Row>
 
-        <BasicButton isLoading={isRefreshing} buttonProps={{ type: 'submit' }}>
+        <BasicButton isLoading={isUpdating} buttonProps={{ type: 'submit' }}>
           Save
         </BasicButton>
 

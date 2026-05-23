@@ -17,12 +17,14 @@ const ActiveGoalContext = createContext<{
   addToTodaysTotal:  UseMutateFunction<UpdatedGoalProgressReturn, Error, number, unknown>,
   isRefreshing: boolean
   refresh: () => void
+  isUpdating: boolean
 }>({
   activeGoal: null,
   updateActiveGoal: () => {},
   addToTodaysTotal: () => {},
   isRefreshing: false,
   refresh: () => {},
+  isUpdating: false
 })
 
 const getQueryKey = () => {
@@ -45,7 +47,7 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
   const { displayNewAward } = useNewAwardModalContext()
 
 
-  const { mutate: updateActiveGoal } = useMutation({
+  const { mutate: updateActiveGoal, status: updateActiveGoalStatus } = useMutation({
     mutationFn: async (newRecords: Goal['records']) => {
       if (!activeGoal) throw Error('No active goal to update.')
       return updateGoalProgress({ id: activeGoal?.id, records: newRecords })
@@ -58,7 +60,7 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
     },
   })
 
-  const { mutate: addToTodaysTotal } = useMutation({
+  const { mutate: addToTodaysTotal, status: addToTodaysTotalStatus } = useMutation({
     mutationFn: async (toAdd: number) => {
       if (!activeGoal) throw Error('No active goal to update.')
       const oldRecords = activeGoal?.records
@@ -76,8 +78,9 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
   })
 
   const value = useMemo(() => {
-    return { activeGoal, updateActiveGoal, isRefreshing, refresh: refetch, addToTodaysTotal }
-  }, [activeGoal, isRefreshing, refetch, updateActiveGoal, addToTodaysTotal])
+    return { activeGoal, updateActiveGoal, isRefreshing, refresh: refetch, addToTodaysTotal, 
+      isUpdating:  addToTodaysTotalStatus === 'pending' || updateActiveGoalStatus === 'pending' }
+  }, [activeGoal, updateActiveGoal, isRefreshing, refetch, addToTodaysTotal, addToTodaysTotalStatus, updateActiveGoalStatus])
 
   return <ActiveGoalContext.Provider value={value}>{children}</ActiveGoalContext.Provider>
 }
