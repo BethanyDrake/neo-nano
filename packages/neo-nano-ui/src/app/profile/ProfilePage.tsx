@@ -1,5 +1,4 @@
 'use client'
-import { NewAwardModal } from '@/lib/awards/NewAwardModal'
 import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
@@ -68,8 +67,6 @@ export const ProfilePageInner = () => {
           metric={metric}
         />
       ))}
-
-      <NewAwardModal />
     </FullWidthPage>
   )
 }

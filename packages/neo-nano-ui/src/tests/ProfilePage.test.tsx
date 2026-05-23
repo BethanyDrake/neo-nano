@@ -19,6 +19,7 @@ import { wrap } from 'souvlaki'
 import { withReactQueryClient } from './utils/withReactQueryClient'
 import { vi } from 'vitest'
 import { getMyProjects } from '@/lib/serverFunctions/projects/getMyProjects'
+import { withNewAwardModal } from './utils/withNewAwardModal'
 vi.mock('@/lib/serverFunctions/goals/updateGoalProgress')
 vi.mock('next/navigation', () => ({
   useSearchParams: vi.fn(),
@@ -129,7 +130,7 @@ describe('<ProfilePage />', () => {
     vi
       .mocked(updateGoalProgress)
       .mockResolvedValue({ updatedGoal: buildGoal(), claimedAwards: [buildUserAward({ title: 'Some Award', imageUrl: 'http://example' })] })
-    const { findByText, getByRole } = render(await ProfilePage(), {wrapper: wrap(withReactQueryClient())})
+    const { findByText, getByRole } = render(await ProfilePage(), {wrapper: wrap(withReactQueryClient(), withNewAwardModal())})
 
     expect(await findByText('Goal Title'))
     const input = getByRole('spinbutton', { name: /wordcount for/ })
@@ -162,7 +163,7 @@ describe('<ProfilePage />', () => {
         }
       },
     ])
-    const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
+    const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient(), withNewAwardModal())})
     expect(await findByText('Some Name'))
     expect(await findByText('Project Title'))
   })

@@ -3,7 +3,6 @@ import { ProfileContextProvider } from '@/lib/context/ProfileContext'
 import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { ProfilePageInner } from './ProfilePage'
 import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
-import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { Metadata } from 'next'
 import { MyProjectsContextProvider } from '@/lib/projects/MyProjectContext'
 
@@ -16,13 +15,11 @@ const ProfilePage = async () => {
   if (!initalProfile) throw Error('No profile found for ProfilePage.')
 
   return (
-      <NewAwardModalProvider>
           <ProfileContextProvider initialProfile={initalProfile} initialAwards={initialAwards}>
               <MyProjectsContextProvider>
               <ProfilePageInner />
               </MyProjectsContextProvider>
           </ProfileContextProvider>
-      </NewAwardModalProvider>
   )
 }
 export default auth0.withPageAuthRequired(ProfilePage, { returnTo: '/profile' }) as () => Promise<React.JSX.Element>

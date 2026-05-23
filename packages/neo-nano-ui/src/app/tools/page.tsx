@@ -1,4 +1,3 @@
-import { NewAwardModal, NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import Image from 'next/image'
@@ -41,7 +40,6 @@ const ToolsPage = async () => {
   const liveSprintsFeature = await liveSprintsFlag() as boolean
   console.log(liveSprintsFeature)
   return (
-    <NewAwardModalProvider>
       <GutteredPage>
         <Column>
         <Centered>
@@ -76,8 +74,6 @@ const ToolsPage = async () => {
         </div>
         </Column>
       </GutteredPage>
-      <NewAwardModal />
-    </NewAwardModalProvider>
   )
 }
 
