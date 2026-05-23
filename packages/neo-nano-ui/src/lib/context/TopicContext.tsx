@@ -14,7 +14,7 @@ export const TopicContext = createContext<{
   createThread: (payload: Omit<CreateThreadPayload, 'topic'>) => Promise<void>
 }>({
   threadsData: [],
-  onPageChange: () => Promise.resolve(),
+  onPageChange: () => {},
   createThread: () => Promise.resolve(),
   currentPage: 0,
   totalThreads: 0,
@@ -36,7 +36,7 @@ export const TopicContextProvider = ({
   const {data, isLoading } = useQuery({
     queryKey: ['topic-threads', topicId, currentPage],
     queryFn: () => getThreads(topicId, currentPage),
-    initialData: {
+    placeholderData: {
       threadSummaries: initialThreads,
       totalThreads: initialTotalThreads
     }
@@ -55,10 +55,10 @@ export const TopicContextProvider = ({
   const value = useMemo(() => {
     return {
       topicId,
-       threadsData: data?.threadSummaries, 
+       threadsData: data?.threadSummaries ?? [],
        currentPage, 
        onPageChange: setCurrentPage, 
-       totalThreads: data?.totalThreads, 
+       totalThreads: data?.totalThreads ?? 0,
        isLoading, 
        createThread 
       }

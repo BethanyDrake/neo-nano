@@ -45,6 +45,7 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
       onSubmit()
       setRichText('')
       setPlainText('')
+    }).finally(() => {
       setIsLoading(false)
     })
   }
