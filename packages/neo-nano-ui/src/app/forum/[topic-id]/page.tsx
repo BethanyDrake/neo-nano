@@ -4,7 +4,6 @@ import TopicPage from "./TopicPage"
 import { auth0 } from "@/lib/auth0"
 import { TopicContextProvider } from "@/lib/context/TopicContext"
 
-
 export default async function Page({
   params,
 }: {

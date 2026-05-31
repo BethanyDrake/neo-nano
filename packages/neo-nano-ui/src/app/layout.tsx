@@ -17,6 +17,7 @@ import { auth0 } from '@/lib/auth0'
 import { AuthContextProvider } from '@/lib/hooks/useIsLoggedIn'
 import { ActiveGoalProvider } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
 import { UserContextProvider } from '@/lib/context/UserContext'
+import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
@@ -46,14 +47,16 @@ export default async function RootLayout({
       <body>
         <AuthContextProvider session={session}>
           <ReactQueryProvider>
-                <UserContextProvider>
-              <ActiveGoalProvider>
-                <ModalContextProvider>
-                  <NavBar />
-                  <div className={navBarStyles.belowNav}>{children}</div>
-                </ModalContextProvider>
-              </ActiveGoalProvider>
-         </UserContextProvider>
+            <UserContextProvider>
+              <NewAwardModalProvider>
+                <ActiveGoalProvider>
+                  <ModalContextProvider>
+                    <NavBar />
+                    <div className={navBarStyles.belowNav}>{children}</div>
+                  </ModalContextProvider>
+                </ActiveGoalProvider>
+              </NewAwardModalProvider>
+            </UserContextProvider>
             <ReactQueryDevtools />
           </ReactQueryProvider>
         </AuthContextProvider>

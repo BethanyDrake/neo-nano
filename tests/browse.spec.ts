@@ -19,19 +19,16 @@ test('browse as guest', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Trophies Awarded' })).toBeVisible()
 
   // code of conduct
-  await page.getByRole('button', {name: 'open navigation menu'}).click()
   await page.getByRole('menuitem', { name: 'Code of Conduct' }).click();
   await expect(page.getByRole('heading', { name: 'Code of Conduct' })).toBeVisible()
 
   // about
-  await page.getByRole('button', {name: 'open navigation menu'}).click()
   await page.getByRole('menuitem', { name: 'About' }).click();
   await expect(page.getByRole('heading', { name: 'About' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Team' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Technology' })).toBeVisible()
 
   // toolbox
-  await page.getByRole('button', {name: 'open navigation menu'}).click()
   await page.getByRole('menuitem', { name: 'Tools' }).click();
   await expect(page.getByRole('heading', { name: 'Toolbox' })).toBeVisible()
   await page.getByRole('button', {name: 'open navigation menu'}).click()

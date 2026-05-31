@@ -7,6 +7,8 @@ import { render } from '@testing-library/react'
 import { useModalContext } from '@/lib/modals/ModalContext'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { vi } from 'vitest'
+import { wrap } from 'souvlaki'
+import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
 
 vi.mock('@/lib/challenges')
 vi.mock('@/lib/serverFunctions/goals/joinCurrentChallenge')
@@ -32,7 +34,7 @@ describe('SuggestNextGoal', () => {
 
     vi.mocked(getUpcomingChallenge).mockReturnValue(undefined)
 
-    const { getAllByRole, getByRole } = render(<SuggestNextGoal />)
+    const { getAllByRole, getByRole } = render(<SuggestNextGoal />, {wrapper: wrap(withReactQueryClient())})
     const buttons = getAllByRole('button')
 
     expect(buttons).toHaveLength(1)
@@ -48,7 +50,7 @@ describe('SuggestNextGoal', () => {
       .mocked(getUpcomingChallenge)
       .mockReturnValue(buildChallenge({ title: 'Some Upcoming Challenge', id: 'upcoming-challenge-id' }))
     vi.mocked(joinChallenge).mockResolvedValue([])
-    const { getByRole } = render(<SuggestNextGoal />)
+    const { getByRole } = render(<SuggestNextGoal />, {wrapper: wrap(withReactQueryClient())})
 
     const joinChallengeButton = getByRole('button', { name: 'Join Some Upcoming Challenge' })
 
@@ -62,7 +64,7 @@ describe('SuggestNextGoal', () => {
       .mocked(getCurrentChallenge)
       .mockReturnValue(buildChallenge({ title: 'Current Challenge', id: 'current-challenge-id' }))
     vi.mocked(joinChallenge).mockResolvedValue([])
-    const { getByRole } = render(<SuggestNextGoal />)
+    const { getByRole } = render(<SuggestNextGoal />, {wrapper: wrap(withReactQueryClient())})
 
     const joinChallengeButton = getByRole('button', { name: 'Join Current Challenge' })
 

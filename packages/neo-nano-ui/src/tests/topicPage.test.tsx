@@ -9,6 +9,8 @@ import { fireEvent, render } from '@testing-library/react'
 import axios from 'axios'
 import { buildThreadSummary } from '@/lib/types/forum.builders'
 import { vi } from 'vitest'
+import { withReactQueryClient } from './utils/withReactQueryClient'
+import { wrap } from 'souvlaki'
 
 vi.spyOn(axios, 'post')
 vi.mock('next/navigation', () => ({
@@ -33,7 +35,7 @@ describe('<TopicPage />', () => {
   it('displays existing threads', async () => {
     vi.mocked(getThreads).mockResolvedValue({totalThreads: 1, threadSummaries:[buildThreadSummary({ id: '1', title: 'Existing Topic 1', author: 'some-author', text: 'First comment text', totalComments: 7 , authorDisplayName: 'Author Name'})]})
 
-    const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
+    const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}), {wrapper: wrap(withReactQueryClient())})
     expect(getByText('Existing Topic 1'))
     expect(getByText('Author Name: First comment text'))
         expect(getByText('7'))
@@ -46,7 +48,7 @@ describe('<TopicPage />', () => {
     })
 
 
-    const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
+    const { getByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}), {wrapper: wrap(withReactQueryClient())})
     expect(getByText('Some Category'))
     expect(getByText('Some Topic'))
   })
@@ -59,7 +61,7 @@ describe('<TopicPage />', () => {
     })
      vi.mocked(createThread).mockResolvedValue({totalThreads: 0, threadSummaries:[]})
 
-    const {getByTestId, getByRole, findByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}))
+    const {getByTestId, getByRole, findByLabelText, findByText } = render(await TopicPage({params: Promise.resolve({"topic-id" : "someTopic"})}), {wrapper: wrap(withReactQueryClient())})
 
     const button = getByRole('button', { name: 'Create Thread' })
 

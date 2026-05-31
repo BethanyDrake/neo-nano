@@ -7,7 +7,7 @@ import { UpdatedGoalProgressReturn, updateGoalProgress } from '@/lib/serverFunct
 import { Goal, Record } from '@/lib/types/forum.types'
 import { UseMutateFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { startOfToday } from 'date-fns'
-import { createContext, PropsWithChildren, useCallback, useContext, useMemo } from 'react'
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 import { changeAtIndex } from '../recordUtils'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 
@@ -16,13 +16,15 @@ const ActiveGoalContext = createContext<{
   updateActiveGoal: UseMutateFunction<UpdatedGoalProgressReturn, Error, Record[], unknown>,
   addToTodaysTotal:  UseMutateFunction<UpdatedGoalProgressReturn, Error, number, unknown>,
   isRefreshing: boolean
-  refresh: () => Promise<void>
+  refresh: () => void
+  isUpdating: boolean
 }>({
   activeGoal: null,
   updateActiveGoal: () => {},
   addToTodaysTotal: () => {},
   isRefreshing: false,
-  refresh: () => Promise.resolve(),
+  refresh: () => {},
+  isUpdating: false
 })
 
 const getQueryKey = () => {
@@ -32,7 +34,7 @@ const getQueryKey = () => {
 }
 
 export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
-  const { data: activeGoal, isLoading: isRefreshing } = useQuery({
+  const { data: activeGoal, isLoading: isRefreshing, refetch } = useQuery({
     queryKey: getQueryKey(),
     queryFn: () => {
       const today = getDateAsString(startOfToday())
@@ -44,11 +46,8 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient()
   const { displayNewAward } = useNewAwardModalContext()
 
-  const refresh = useCallback(async () => {
-    queryClient.invalidateQueries({ queryKey: ['active-goal'] })
-  }, [queryClient])
 
-  const { mutate: updateActiveGoal } = useMutation({
+  const { mutate: updateActiveGoal, status: updateActiveGoalStatus } = useMutation({
     mutationFn: async (newRecords: Goal['records']) => {
       if (!activeGoal) throw Error('No active goal to update.')
       return updateGoalProgress({ id: activeGoal?.id, records: newRecords })
@@ -61,7 +60,7 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
     },
   })
 
-  const { mutate: addToTodaysTotal } = useMutation({
+  const { mutate: addToTodaysTotal, status: addToTodaysTotalStatus } = useMutation({
     mutationFn: async (toAdd: number) => {
       if (!activeGoal) throw Error('No active goal to update.')
       const oldRecords = activeGoal?.records
@@ -79,8 +78,9 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
   })
 
   const value = useMemo(() => {
-    return { activeGoal, updateActiveGoal, isRefreshing, refresh, addToTodaysTotal }
-  }, [activeGoal, isRefreshing, refresh, updateActiveGoal, addToTodaysTotal])
+    return { activeGoal, updateActiveGoal, isRefreshing, refresh: refetch, addToTodaysTotal, 
+      isUpdating:  addToTodaysTotalStatus === 'pending' || updateActiveGoalStatus === 'pending' }
+  }, [activeGoal, updateActiveGoal, isRefreshing, refetch, addToTodaysTotal, addToTodaysTotalStatus, updateActiveGoalStatus])
 
   return <ActiveGoalContext.Provider value={value}>{children}</ActiveGoalContext.Provider>
 }

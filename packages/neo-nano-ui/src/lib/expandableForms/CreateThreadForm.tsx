@@ -24,11 +24,13 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
   const [richText, setRichText] = useState('')
   const [plainText, setPlainText] = useState('')
   const [errorText, setErrorText] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const { createThread, isLoading } = useTopicContext()
+  const { createThread } = useTopicContext()
 
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     if (isLoading) return
+    setIsLoading(true)
     if (!plainText.trim()) {
       setErrorText("Can't post an empty comment.")
       return
@@ -43,6 +45,8 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
       onSubmit()
       setRichText('')
       setPlainText('')
+    }).finally(() => {
+      setIsLoading(false)
     })
   }
 

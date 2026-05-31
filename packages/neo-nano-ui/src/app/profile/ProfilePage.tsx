@@ -1,5 +1,4 @@
 'use client'
-import { NewAwardModal } from '@/lib/awards/NewAwardModal'
 import { TrophyCase } from '@/lib/awards/TrophyCase'
 import { ExtendableIconButton } from '@/lib/buttons/ExtendableIconButton'
 import { useMyGoalContext } from '@/lib/context/MyGoalsContext'
@@ -27,7 +26,7 @@ const isActiveOrUpcoming = (goal: Goal): boolean => {
 
 export const ProfilePageInner = () => {
   const { profile, awards } = useProfileContext()
-  const { goals, isLoading: isLoadingGoals } = useMyGoalContext()
+  const { goals } = useMyGoalContext()
   const { projects } = useMyProjectsContext()
   return (
     <FullWidthPage>
@@ -53,9 +52,9 @@ export const ProfilePageInner = () => {
         <AddGoalModal />
       </Row>
 
-      {goals.filter(isActiveOrUpcoming).length === 0 && !isLoadingGoals && <SuggestNextGoal />}
+      {goals && goals.filter(isActiveOrUpcoming).length === 0 && <SuggestNextGoal />}
 
-      {goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
+      {goals && goals.map(({ id, title, records, visibility, target, lengthDays, startDate, metric }) => (
         <GoalSection
           id={id}
           key={id}
@@ -68,8 +67,6 @@ export const ProfilePageInner = () => {
           metric={metric}
         />
       ))}
-
-      <NewAwardModal />
     </FullWidthPage>
   )
 }

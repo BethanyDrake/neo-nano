@@ -54,12 +54,16 @@
   background-color: var(--background-colour-2);
   position: relative;
   z-index: 501;
-  padding: 16px 24px;
+ 
   font-weight: bold;
 
-  
-  color: var(--text-colour);
-  text-decoration: none;
+  a {
+    text-decoration: none;
+    color: var(--text-colour);
+    width: 100%;
+    display: block;
+    padding: 16px 24px;
+  }
   
   &:not(:last-child) {
     border-bottom: 1px solid var(--grey-light);

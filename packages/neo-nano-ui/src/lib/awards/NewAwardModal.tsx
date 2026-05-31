@@ -45,10 +45,10 @@ export const NewAwardModalProvider = ({ children }: PropsWithChildren) => {
     return { award, isOpen, displayNewAward, closeModal }
   }, [award, isOpen, displayNewAward, closeModal])
 
-  return <NewAwardModalContext.Provider value={value}>{children}</NewAwardModalContext.Provider>
+  return <NewAwardModalContext.Provider value={value}>{children}<NewAwardModal/></NewAwardModalContext.Provider>
 }
 
-export const NewAwardModal = () => {
+const NewAwardModal = () => {
   const { award, isOpen, closeModal } = useContext(NewAwardModalContext)
 
   if (!isOpen || !award) {
