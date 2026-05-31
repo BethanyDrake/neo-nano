@@ -13,16 +13,11 @@ const ActionItem = ({ text, icon, action }: { text: string; icon: IconProp; acti
   const { setActiveAction } = useCommentActionContext()
 
   return (
-    <MenuItem>
-      <button
-        onClick={() => {
+    <MenuItem as="button" className={classes['menu-item']} onClick={() => {
           setActiveAction(action)
-        }}
-        className={classes['menu-item']}
-      >
+        }}>
         <span>{text}</span>
         <FontAwesomeIcon icon={icon} />
-      </button>
     </MenuItem>
   )
 }

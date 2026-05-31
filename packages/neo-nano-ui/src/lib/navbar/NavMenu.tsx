@@ -12,55 +12,55 @@ export const NavMenu = () => {
       <MenuButton title={'open navigation menu'} className={styles['nav-bar-button']}>
         <FontAwesomeIcon color="white" icon={faBars} />
       </MenuButton>
-      <MenuItems anchor="bottom" className={styles['menu-items']}>
-        <MenuItem>
-          <Link className={styles['menu-item']} href="/">
+      <MenuItems anchor="bottom" className={styles['menu-items']} >
+        <MenuItem as="div" className={styles['menu-item']}>
+          <Link  href="/">
             Home
           </Link>
         </MenuItem>
-        <MenuItem>
-          <Link className={styles['menu-item']} href="/forum">
+        <MenuItem  as="div" className={styles['menu-item']}>
+          <Link href="/forum">
             <Row justifyContent="space-between">
               <span>Forum</span> <FontAwesomeIcon icon={faComment} />
             </Row>
           </Link>
         </MenuItem>
-        <MenuItem>
-          <Link className={styles['menu-item']} href="/profile">
+        <MenuItem  as="div" className={styles['menu-item']}>
+          <Link  href="/profile">
             <Row justifyContent="space-between">
               <span>My Profile</span> <FontAwesomeIcon icon={faPerson} />
             </Row>
           </Link>
         </MenuItem>
-        <MenuItem>
-          <Link className={styles['menu-item']} href="/analytics">
+        <MenuItem  as="div" className={styles['menu-item']}>
+          <Link  href="/analytics">
             <Row justifyContent="space-between">
               <span>Analytics</span> <FontAwesomeIcon icon={faChartColumn} />
             </Row>
           </Link>
         </MenuItem>
-        <MenuItem>
-          <Link className={styles['menu-item']} href="/moderation/code-of-conduct">
+        <MenuItem as="div" className={styles['menu-item']}>
+          <Link  href="/moderation/code-of-conduct">
             Code of Conduct
           </Link>
         </MenuItem>
-        <MenuItem>
-          <Link className={styles['menu-item']} href="/about">
+        <MenuItem  as="div" className={styles['menu-item']}>
+          <Link href="/about">
         <Row justifyContent="space-between">
               <span>About</span> <FontAwesomeIcon icon={faQuestion} />
             </Row>
           </Link>
         </MenuItem>
-         <MenuItem>
-          <Link className={styles['menu-item']} href="/tools">
+         <MenuItem  as="div" className={styles['menu-item']}>
+          <Link href="/tools">
              <Row justifyContent="space-between">
               <span>Tools</span> <FontAwesomeIcon icon={faHammer} />
             </Row>
           </Link>
         </MenuItem>
         <ModeratorOnly>
-          <MenuItem>
-            <Link className={styles['menu-item']} href="/moderation">
+          <MenuItem  as="div" className={styles['menu-item']}>
+            <Link href="/moderation">
               Moderation
             </Link>
           </MenuItem>
