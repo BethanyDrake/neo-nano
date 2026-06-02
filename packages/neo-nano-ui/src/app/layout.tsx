@@ -18,6 +18,8 @@ import { AuthContextProvider } from '@/lib/hooks/useIsLoggedIn'
 import { ActiveGoalProvider } from '@/lib/goalTracker/quickUpdate/ActiveGoalContext'
 import { UserContextProvider } from '@/lib/context/UserContext'
 import { NewAwardModalProvider } from '@/lib/awards/NewAwardModal'
+import { LiveSprintModal } from '@/lib/tools/liveWritingSprints/LiveSprintModal'
+
 // Prevent fontawesome from adding its CSS since we did it manually above:
 config.autoAddCss = false
 export const metadata: Metadata = {
@@ -53,7 +55,8 @@ export default async function RootLayout({
                   <ModalContextProvider>
                     <NavBar />
                     <div className={navBarStyles.belowNav}>{children}</div>
-                  </ModalContextProvider>
+                    <LiveSprintModal/>
+                  </ModalContextProvider> 
                 </ActiveGoalProvider>
               </NewAwardModalProvider>
             </UserContextProvider>

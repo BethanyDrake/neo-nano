@@ -60,7 +60,7 @@ const Timer_Initial = ({ startTimer }: { startTimer: (durationSeconds: number) =
   )
 }
 
-const getExpiryTimestamp = (seconds: number) => {
+export const getExpiryTimestamp = (seconds: number) => {
   const time = new Date()
   time.setSeconds(time.getSeconds() + seconds)
   return time
@@ -110,7 +110,7 @@ const Timer_InProgress = ({
   )
 }
 
-const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes: number; seconds: number }): string => {
+export const formatTimeString = ({ hours, minutes, seconds }: { hours: number; minutes: number; seconds: number }): string => {
   const hours_s = `${hours}h`
   return `${hours > 0 ? hours_s : ''} ${minutes}m ${seconds}s`
 }

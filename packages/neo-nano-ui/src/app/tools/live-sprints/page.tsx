@@ -10,7 +10,7 @@ import {
 import { PastSprintCard, UpcomingSprintCard } from '@/lib/tools/liveWritingSprints/SprintCard'
 import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { addMinutes, minutesToMilliseconds, minutesToSeconds } from 'date-fns'
+import { addMinutes, minutesToMilliseconds } from 'date-fns'
 
 const LiveSprintPage = () => {
   const { data: upcomingSprints } = useQuery({
@@ -25,8 +25,7 @@ const LiveSprintPage = () => {
   })
   const { mutate: scheduleSprint } = useMutation({
     mutationFn: () => {
-      console.log('scheduleSprint', addMinutes(Date.now(), 5))
-      return createPublicSprint(addMinutes(Date.now(), 5), minutesToSeconds(5))
+      return createPublicSprint(addMinutes(Date.now(), 1), 30)
     },
     mutationKey: ['schedule-sprint'],
     onSuccess(data, _variables, _onMutateResult, context) {
