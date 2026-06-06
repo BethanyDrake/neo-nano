@@ -42,7 +42,8 @@ export const getMyUpcomingSprints = async () => {
     await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds, user_sprints.participation_state  
     from sprints join user_sprints on sprints.id = user_sprints.sprint_id
     where user_sprints.user_id =${userId}
-    and start_time>=now()`
+    and start_time>=now()
+    ORDER BY start_time ASC`
   return rows.map((row) => camelcaseKeys(row) as Sprint)
 }
 
