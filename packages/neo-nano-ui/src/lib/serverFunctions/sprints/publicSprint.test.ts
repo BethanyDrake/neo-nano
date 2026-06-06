@@ -70,4 +70,23 @@ describe('public sprints', () => {
   displayName:"Alice" }])
 
   })
+
+  test('getMyUpcomingSprints', async () => {
+  const userA = await addUser({displayName: "Alice"})
+  vi.mocked(getUserId).mockResolvedValue(userA)
+  const { id } = await createPublicSprint(addMinutes(Date.now(), 5), 100)
+  await registerForPublicSprint(id)
+
+  const userB = await addUser({displayName: "Bob"})
+  vi.mocked(getUserId).mockResolvedValue(userB)
+  await registerForPublicSprint(id)
+
+    expect(await getMyUpcomingSprints()).toEqual([{
+    "durationSeconds": 100,
+    id,
+    "startTime": expect.anything(),
+    "visibility": "public",
+
+  },])
+  })
 })

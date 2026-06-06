@@ -20,7 +20,7 @@ import inProgressSprintImage from './in-progress-sprint.png'
 import finishedSprintImage from './sprint-finished.png'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faPerson, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -40,14 +40,24 @@ const SprintFinishedImage = () => (
   />
 )
 
-const LiveSprint_InProgress = ({ durationSeconds }: { durationSeconds: number }) => {
+const LiveSprint_InProgress = ({ durationSeconds, sprintId }: { durationSeconds: number, sprintId: string }) => {
   const { seconds, minutes, hours } = useTimer({
     expiryTimestamp: getExpiryTimestamp(durationSeconds),
+  })
+
+    const { data: sprintLog, isLoading } = useQuery({
+    queryKey: ['sprint-log', sprintId],
+    queryFn: () => getPublicSprintLog(sprintId),
   })
 
   return (
     <Column style={{ alignItems: 'center' }}>
       <h1>Sprint!</h1>
+      {!isLoading && (
+        <div>
+          <FontAwesomeIcon icon={faPerson} /> {sprintLog?.length || 0}
+        </div>
+      )}
 
       <Image
         alt={'Silhouette of participants sprinting towards their goal.'}
@@ -99,7 +109,7 @@ const LiveSprint_Done = ({ sprintId, onSuccess }: { sprintId: string; onSuccess:
 
 const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
   const { data, status } = useQuery({
-    queryKey: ['sprint-review', sprintId],
+    queryKey: ['sprint-log', sprintId],
     queryFn: () => getPublicSprintLog(sprintId),
     refetchInterval: 5000,
   })
@@ -141,11 +151,13 @@ export const LiveSprintModal = () => {
   const [closedSprints, setClosedSprints] = useState<string[]>([])
 
   const nextSprint = useMemo(
-    () => myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 && myUpcomingLiveSprints[0],
+    () => (myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 ? myUpcomingLiveSprints[0] : undefined),
     [myUpcomingLiveSprints],
   )
+
+
+
   const [state, setState] = useState<'closed' | 'in-progress' | 'finished' | 'review'>('closed')
-  
 
   useEffect(() => {
     if (!nextSprint || closedSprints.some((closedSprint) => closedSprint === nextSprint.id)) {
@@ -154,9 +166,12 @@ export const LiveSprintModal = () => {
     const timeUntilStarts = differenceInMilliseconds(nextSprint.startTime, Date.now())
 
     if (state === 'closed') {
-      const timeout1 = setTimeout(() => {
-        setState('in-progress')
-      }, Math.max(timeUntilStarts, 0))
+      const timeout1 = setTimeout(
+        () => {
+          setState('in-progress')
+        },
+        Math.max(timeUntilStarts, 0),
+      )
 
       return () => clearTimeout(timeout1)
     }
@@ -183,7 +198,7 @@ export const LiveSprintModal = () => {
     <>
       <div className={modalStyles.modal}>
         <Column>
-          {state === 'in-progress' && <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} />}
+          {state === 'in-progress' && <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} sprintId={nextSprint.id}/>}
           {state === 'finished' && <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />}
           {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
         </Column>
