@@ -19,20 +19,33 @@ export type PublicSprintLogEntry = {
   participationState: 'completed' | 'registered',
   wordCount: number | null,
   userId: string
+  displayName: string
 
 }
 
 export const getPublicSprintLog = async (id: string) => {
   const rows = 
     await getQueryFunction()`SELECT 
-    user_sprints.participation_state, user_sprints.word_count, user_sprints.user_id
+    user_sprints.word_count, user_sprints.user_id, users.display_name, user_sprints.participation_state
     FROM user_sprints
+    LEFT JOIN users on user_sprints.user_id=users.id
     WHERE user_sprints.sprint_id=${id}
     `
     return rows.map((row) => camelcaseKeys(row) as PublicSprintLogEntry )
 
 }
 
+export const getMyUpcomingSprints = async () => {
+  const sql = getQueryFunction()
+   const userId = await getUserId()
+  const rows =
+    await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds, user_sprints.participation_state  
+    from sprints join user_sprints on sprints.id = user_sprints.sprint_id
+    where user_sprints.user_id =${userId}
+    and start_time>=now()
+    ORDER BY start_time ASC`
+  return rows.map((row) => camelcaseKeys(row) as Sprint)
+}
 
 export const getUpcomingPublicSprints = async () => {
   const sql = getQueryFunction()
@@ -53,4 +66,17 @@ export const getPastRecentSprints = async (maxAgeHours: number) => {
 export const registerForPublicSprint = async (sprintId: string) => {
     const userId = await getUserId()
     await registerForSprint(userId, sprintId)
+}
+
+export const completePublicSprint = async (
+  sprintId: string,
+  wordCount: number,
+) => {
+  console.log('completePublicSprint')
+  const sql = getQueryFunction()
+  const userId = await getUserId()
+
+  await sql`UPDATE user_sprints set word_count=${wordCount}, participation_state='completed'
+  where user_id=${userId} and sprint_id=${sprintId}`
+
 }

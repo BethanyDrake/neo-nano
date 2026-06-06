@@ -1,5 +1,13 @@
 import { addHours, addMinutes } from 'date-fns'
-import { createPublicSprint, getPastRecentSprints, getPublicSprintLog, getUpcomingPublicSprints, registerForPublicSprint } from './publicSprint'
+import {
+  completePublicSprint,
+  createPublicSprint,
+  getMyUpcomingSprints,
+  getPastRecentSprints,
+  getPublicSprintLog,
+  getUpcomingPublicSprints,
+  registerForPublicSprint,
+} from './publicSprint'
 import { clearDb } from '@/tests/utils/clearDb'
 import { addUser } from '@/tests/utils/fillDb'
 import { getUserId } from '../_utils/getUserIdFromSession'
@@ -20,19 +28,46 @@ describe('public sprints', () => {
     await createPublicSprint(addHours(Date.now(), -1), 111)
     await createPublicSprint(addHours(Date.now(), -36), 3636)
     expect(await getPastRecentSprints(12)).toEqual([
-      { durationSeconds: 111, id: expect.anything(), startTime: expect.anything(), visibility: 'public'},
+      { durationSeconds: 111, id: expect.anything(), startTime: expect.anything(), visibility: 'public' },
     ])
   })
 
   test('create and register for public sprint', async () => {
-    const userId = await addUser()
+    const userId = await addUser({displayName: "Alice"})
     vi.mocked(getUserId).mockResolvedValue(userId)
-    const {id} = await createPublicSprint(addMinutes(Date.now(), 5), 100)
+    const { id } = await createPublicSprint(addMinutes(Date.now(), 5), 100)
     await registerForPublicSprint(id)
-    expect(await getPublicSprintLog(id)).toEqual([{
-      participationState: "registered",
-      userId,
-      wordCount: null
-    }])
+    expect(await getPublicSprintLog(id)).toEqual([
+      {
+        participationState: 'registered',
+        userId,
+        wordCount: null,
+        displayName: "Alice"
+      },
+    ])
+
+    expect(await getMyUpcomingSprints()).toEqual([
+      {
+        durationSeconds: 100,
+        id,
+        participationState: 'registered',
+        startTime: expect.anything(),
+        visibility: 'public',
+      },
+    ])
+  })
+
+  test('complete  public sprint', async () => {
+    const userId = await addUser({displayName: "Alice"})
+    vi.mocked(getUserId).mockResolvedValue(userId)
+    const { id } = await createPublicSprint(addMinutes(Date.now(), 5), 100)
+    await registerForPublicSprint(id)
+    await completePublicSprint(id, 200)
+    const sprintLog = await getPublicSprintLog(id)
+    expect(sprintLog).toEqual([{"userId": userId,
+   "wordCount": 200,
+   participationState: 'completed',
+  displayName:"Alice" }])
+
   })
 })
