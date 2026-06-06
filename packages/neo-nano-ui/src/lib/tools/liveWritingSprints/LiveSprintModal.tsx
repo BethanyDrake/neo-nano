@@ -9,13 +9,18 @@ import {
 } from '@/lib/serverFunctions/sprints/publicSprint'
 import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 import { differenceInMilliseconds, secondsToMilliseconds } from 'date-fns'
-import { Centered, Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
+import { Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
 import { formatTimeString, getExpiryTimestamp } from '../sprintTimerTool/Timer'
 import { useTimer } from 'react-timer-hook'
 import { useForm } from 'react-hook-form'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
+import inProgressSprintImage from './in-progress-sprint.png'
+import finishedSprintImage from './sprint-finished.png'
+import Image from 'next/image'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -26,6 +31,14 @@ export const LiveSprintModalContext = createContext<{
 })
 
 export const myActiveSprintQueryKey = ['my-upcoming-sprints']
+const SprintFinishedImage = () => (
+  <Image
+    alt={'Silhouette of the winner crossing the finish line.'}
+    width={300}
+    height={300}
+    src={finishedSprintImage}
+  />
+)
 
 const LiveSprint_InProgress = ({ durationSeconds }: { durationSeconds: number }) => {
   const { seconds, minutes, hours } = useTimer({
@@ -33,12 +46,20 @@ const LiveSprint_InProgress = ({ durationSeconds }: { durationSeconds: number })
   })
 
   return (
-    <div>
-      <Centered>
-        <h1>Sprint!</h1>
-      </Centered>
-      <div>{formatTimeString({ hours, minutes, seconds })}</div>
-    </div>
+    <Column style={{ alignItems: 'center' }}>
+      <h1>Sprint!</h1>
+
+      <Image
+        alt={'Silhouette of participants sprinting towards their goal.'}
+        width={300}
+        height={300}
+        src={inProgressSprintImage}
+      />
+
+      <div style={{ fontSize: 'xx-large', translate: '0px -50px' }}>
+        {formatTimeString({ hours, minutes, seconds })}
+      </div>
+    </Column>
   )
 }
 
@@ -54,10 +75,10 @@ const LiveSprint_Done = ({ sprintId, onSuccess }: { sprintId: string; onSuccess:
   })
 
   return (
-    <div>
-      <Centered>
-        <h1>Done!</h1>
-      </Centered>
+    <Column style={{ alignItems: 'center' }}>
+      <h1>Done!</h1>
+
+      <SprintFinishedImage />
 
       <form
         className={[formClasses.form].join(' ')}
@@ -72,39 +93,41 @@ const LiveSprint_Done = ({ sprintId, onSuccess }: { sprintId: string; onSuccess:
 
         <BasicButton isLoading={status === 'pending'}>Submit</BasicButton>
       </form>
-    </div>
+    </Column>
   )
 }
 
 const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
-  const { data } = useQuery({
+  const { data, status } = useQuery({
     queryKey: ['sprint-review', sprintId],
     queryFn: () => getPublicSprintLog(sprintId),
     refetchInterval: 5000,
   })
 
   return (
-    <div>
-      <Centered>
-        <h1>Review</h1>
-      </Centered>
-      {data &&
-        data.map(({ wordCount, userId, displayName, participationState }) => {
-          if (participationState === 'completed')
-            return (
-              <div key={userId}>
-                <span style={{ fontWeight: 'bold' }}>{displayName}: </span>
-                <span>{wordCount} words</span>
-              </div>
-            )
-          else
-            return (
-              <div key={userId}>
-                <span style={{ fontWeight: 'bold', color: 'var(--grey-dark)' }}>{displayName}</span>{' '}
-              </div>
-            )
-        })}
-    </div>
+    <Column style={{ alignItems: 'center' }}>
+      <h1>Review</h1>
+      <SprintFinishedImage />
+      <div>
+        {status === 'pending' && <FontAwesomeIcon spin={true} icon={faSpinner} />}
+        {data &&
+          data.map(({ wordCount, userId, displayName, participationState }) => {
+            if (participationState === 'completed')
+              return (
+                <div key={userId}>
+                  <span style={{ fontWeight: 'bold' }}>{displayName}: </span>
+                  <span>{wordCount} words</span>
+                </div>
+              )
+            else
+              return (
+                <div key={userId}>
+                  <span style={{ fontWeight: 'bold', color: 'var(--grey-dark)' }}>{displayName}</span>{' '}
+                </div>
+              )
+          })}
+      </div>
+    </Column>
   )
 }
 export const LiveSprintModal = () => {
@@ -112,7 +135,7 @@ export const LiveSprintModal = () => {
   const { data: myUpcomingLiveSprints } = useQuery({
     queryKey: ['my-upcoming-sprints'],
     queryFn: () => getMyUpcomingSprints(),
-    enabled: isLoggedIn
+    enabled: isLoggedIn,
   })
 
   const nextSprint = useMemo(
@@ -126,6 +149,7 @@ export const LiveSprintModal = () => {
       return
     }
     const timeUntilStarts = differenceInMilliseconds(nextSprint.startTime, Date.now())
+    
     const timeout1 = setTimeout(() => {
       setState('in-progress')
     }, timeUntilStarts)
