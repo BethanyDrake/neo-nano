@@ -138,34 +138,42 @@ export const LiveSprintModal = () => {
     enabled: isLoggedIn,
   })
 
+  const [closedSprints, setClosedSprints] = useState<string[]>([])
+
   const nextSprint = useMemo(
     () => myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 && myUpcomingLiveSprints[0],
     [myUpcomingLiveSprints],
   )
   const [state, setState] = useState<'closed' | 'in-progress' | 'finished' | 'review'>('closed')
+  
 
   useEffect(() => {
-    if (!nextSprint) {
+    if (!nextSprint || closedSprints.some((closedSprint) => closedSprint === nextSprint.id)) {
       return
     }
     const timeUntilStarts = differenceInMilliseconds(nextSprint.startTime, Date.now())
-    
-    const timeout1 = setTimeout(() => {
-      setState('in-progress')
-    }, timeUntilStarts)
 
-    const timeout2 = setTimeout(
-      () => {
-        setState('finished')
-      },
-      timeUntilStarts + secondsToMilliseconds(nextSprint.durationSeconds),
-    )
+    if (state === 'closed') {
+      const timeout1 = setTimeout(() => {
+        setState('in-progress')
+      }, Math.max(timeUntilStarts, 0))
 
-    return () => {
-      clearTimeout(timeout1)
-      clearTimeout(timeout2)
+      return () => clearTimeout(timeout1)
     }
-  }, [nextSprint])
+
+    if (state === 'in-progress') {
+      const timeout2 = setTimeout(
+        () => {
+          setState('finished')
+        },
+        Math.max(timeUntilStarts + secondsToMilliseconds(nextSprint.durationSeconds), 0),
+      )
+
+      return () => {
+        clearTimeout(timeout2)
+      }
+    }
+  }, [closedSprints, nextSprint, state])
 
   if (state === 'closed' || !nextSprint) {
     return null
@@ -182,6 +190,9 @@ export const LiveSprintModal = () => {
       </div>
       <div
         onClick={() => {
+          if (nextSprint) {
+            setClosedSprints([...closedSprints, nextSprint.id])
+          }
           setState('closed')
         }}
         className={modalStyles['modal-overlay']}
