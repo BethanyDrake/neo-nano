@@ -15,6 +15,7 @@ import { useTimer } from 'react-timer-hook'
 import { useForm } from 'react-hook-form'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
+import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -107,9 +108,11 @@ const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
   )
 }
 export const LiveSprintModal = () => {
+  const isLoggedIn = useIsLoggedIn()
   const { data: myUpcomingLiveSprints } = useQuery({
     queryKey: ['my-upcoming-sprints'],
     queryFn: () => getMyUpcomingSprints(),
+    enabled: isLoggedIn
   })
 
   const nextSprint = useMemo(
