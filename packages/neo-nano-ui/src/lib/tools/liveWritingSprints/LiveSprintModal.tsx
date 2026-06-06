@@ -1,13 +1,20 @@
 'use client'
 import modalStyles from '@/lib/modals/Modal.module.css'
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { getMyUpcomingSprints } from '@/lib/serverFunctions/sprints/publicSprint'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+  completePublicSprint,
+  getMyUpcomingSprints,
+  getPublicSprintLog,
+} from '@/lib/serverFunctions/sprints/publicSprint'
 import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 import { differenceInMilliseconds, secondsToMilliseconds } from 'date-fns'
-import { Centered, Column } from '@/lib/layoutElements/flexLayouts'
+import { Centered, Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
 import { formatTimeString, getExpiryTimestamp } from '../sprintTimerTool/Timer'
 import { useTimer } from 'react-timer-hook'
+import { useForm } from 'react-hook-form'
+import { BasicButton } from '@/lib/buttons/BasicButton'
+import formClasses from '@/lib/expandableForms/form.module.css'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -19,7 +26,7 @@ export const LiveSprintModalContext = createContext<{
 
 export const myActiveSprintQueryKey = ['my-upcoming-sprints']
 
-const Timer_InProgress = ({ durationSeconds }: { durationSeconds: number }) => {
+const LiveSprint_InProgress = ({ durationSeconds }: { durationSeconds: number }) => {
   const { seconds, minutes, hours } = useTimer({
     expiryTimestamp: getExpiryTimestamp(durationSeconds),
   })
@@ -34,6 +41,71 @@ const Timer_InProgress = ({ durationSeconds }: { durationSeconds: number }) => {
   )
 }
 
+const LiveSprint_Done = ({ sprintId, onSuccess }: { sprintId: string; onSuccess: () => void }) => {
+  const { handleSubmit, register } = useForm<{
+    wordCount: string
+    updateActiveGoal: boolean
+  }>()
+
+  const { mutate, status } = useMutation({
+    mutationFn: (wordCount: number) => completePublicSprint(sprintId, wordCount),
+    onSuccess,
+  })
+
+  return (
+    <div>
+      <Centered>
+        <h1>Done!</h1>
+      </Centered>
+
+      <form
+        className={[formClasses.form].join(' ')}
+        onSubmit={handleSubmit(({ wordCount }) => {
+          mutate(parseInt(wordCount))
+        })}
+      >
+        <LeftRow alignItems="baseline">
+          <label htmlFor="wordCount">Enter word count:</label>
+          <input type="number" min={0} id="wordCount" {...register('wordCount', { required: true })} />
+        </LeftRow>
+
+        <BasicButton isLoading={status === 'pending'}>Submit</BasicButton>
+      </form>
+    </div>
+  )
+}
+
+const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
+  const { data } = useQuery({
+    queryKey: ['sprint-review', sprintId],
+    queryFn: () => getPublicSprintLog(sprintId),
+    refetchInterval: 5000,
+  })
+
+  return (
+    <div>
+      <Centered>
+        <h1>Review</h1>
+      </Centered>
+      {data &&
+        data.map(({ wordCount, userId, displayName, participationState }) => {
+          if (participationState === 'completed')
+            return (
+              <div key={userId}>
+                <span style={{ fontWeight: 'bold' }}>{displayName}: </span>
+                <span>{wordCount} words</span>
+              </div>
+            )
+          else
+            return (
+              <div key={userId}>
+                <span style={{ fontWeight: 'bold', color: 'var(--grey-dark)' }}>{displayName}</span>{' '}
+              </div>
+            )
+        })}
+    </div>
+  )
+}
 export const LiveSprintModal = () => {
   const { data: myUpcomingLiveSprints } = useQuery({
     queryKey: ['my-upcoming-sprints'],
@@ -44,14 +116,13 @@ export const LiveSprintModal = () => {
     () => myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 && myUpcomingLiveSprints[0],
     [myUpcomingLiveSprints],
   )
-  const [state, setState] = useState<'closed' | 'in-progress' | 'finished'>('closed')
+  const [state, setState] = useState<'closed' | 'in-progress' | 'finished' | 'review'>('closed')
 
   useEffect(() => {
     if (!nextSprint) {
       return
     }
     const timeUntilStarts = differenceInMilliseconds(nextSprint.startTime, Date.now())
-    console.log({ timeUntilStarts })
     const timeout1 = setTimeout(() => {
       setState('in-progress')
     }, timeUntilStarts)
@@ -77,8 +148,9 @@ export const LiveSprintModal = () => {
     <>
       <div className={modalStyles.modal}>
         <Column>
-          {state === 'in-progress' && <Timer_InProgress durationSeconds={nextSprint.durationSeconds} />}
-          {state === 'finished' && <div>Done!</div>}
+          {state === 'in-progress' && <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} />}
+          {state === 'finished' && <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />}
+          {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
         </Column>
       </div>
       <div

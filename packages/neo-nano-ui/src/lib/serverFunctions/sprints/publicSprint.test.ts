@@ -1,5 +1,6 @@
 import { addHours, addMinutes } from 'date-fns'
 import {
+  completePublicSprint,
   createPublicSprint,
   getMyUpcomingSprints,
   getPastRecentSprints,
@@ -32,7 +33,7 @@ describe('public sprints', () => {
   })
 
   test('create and register for public sprint', async () => {
-    const userId = await addUser()
+    const userId = await addUser({displayName: "Alice"})
     vi.mocked(getUserId).mockResolvedValue(userId)
     const { id } = await createPublicSprint(addMinutes(Date.now(), 5), 100)
     await registerForPublicSprint(id)
@@ -41,6 +42,7 @@ describe('public sprints', () => {
         participationState: 'registered',
         userId,
         wordCount: null,
+        displayName: "Alice"
       },
     ])
 
@@ -53,5 +55,19 @@ describe('public sprints', () => {
         visibility: 'public',
       },
     ])
+  })
+
+  test('complete  public sprint', async () => {
+    const userId = await addUser({displayName: "Alice"})
+    vi.mocked(getUserId).mockResolvedValue(userId)
+    const { id } = await createPublicSprint(addMinutes(Date.now(), 5), 100)
+    await registerForPublicSprint(id)
+    await completePublicSprint(id, 200)
+    const sprintLog = await getPublicSprintLog(id)
+    expect(sprintLog).toEqual([{"userId": userId,
+   "wordCount": 200,
+   participationState: 'completed',
+  displayName:"Alice" }])
+
   })
 })
