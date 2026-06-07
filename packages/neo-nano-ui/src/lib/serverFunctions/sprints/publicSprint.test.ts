@@ -41,7 +41,8 @@ describe('public sprints', () => {
       {
         userId,
         wordCount: null,
-        displayName: "Alice"
+        displayName: "Alice",
+        participationState: 'registered',
       },
     ])
 
@@ -49,7 +50,6 @@ describe('public sprints', () => {
       {
         durationSeconds: 100,
         id,
-        participationState: 'registered',
         startTime: expect.anything(),
         visibility: 'public',
       },
@@ -65,6 +65,7 @@ describe('public sprints', () => {
     const sprintLog = await getPublicSprintLog(id)
     expect(sprintLog).toEqual([{"userId": userId,
    "wordCount": 200,
+   
    participationState: 'completed',
   displayName:"Alice" }])
 
