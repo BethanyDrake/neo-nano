@@ -39,7 +39,6 @@ describe('public sprints', () => {
     await registerForPublicSprint(id)
     expect(await getPublicSprintLog(id)).toEqual([
       {
-        participationState: 'registered',
         userId,
         wordCount: null,
         displayName: "Alice"
