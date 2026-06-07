@@ -6,15 +6,14 @@ import {
   getPastRecentSprints,
   getUpcomingPublicSprints,
 } from '@/lib/serverFunctions/sprints/publicSprint'
-import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 import { PastSprintCard, UpcomingSprintCard } from '@/lib/tools/liveWritingSprints/SprintCard'
 import { SprintScheduler } from '@/lib/tools/liveWritingSprints/SprintScheduler'
 import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { minutesToMilliseconds } from 'date-fns'
 
 const LiveSprintPage = () => {
-  const { data: upcomingSprints } = useQuery({
+  const { data: upcomingSprints, refetch } = useQuery({
     queryKey: ['upcoming-sprints'],
     queryFn: getUpcomingPublicSprints,
   })
@@ -24,12 +23,6 @@ const LiveSprintPage = () => {
     queryFn: () => getPastRecentSprints(6),
     staleTime: minutesToMilliseconds(1),
   })
-
-  const client = useQueryClient()
-
-  const onScheduled = (data: Sprint) => {
-    client.setQueryData(['upcoming-sprints'], [data, ...(upcomingSprints || [])])
-  }
 
   return (
     <GutteredPage>
@@ -44,7 +37,7 @@ const LiveSprintPage = () => {
         ]}
       />
       <Column>
-        <SprintScheduler onScheduled={onScheduled} />
+        <SprintScheduler onScheduled={refetch} />
         <h4>Upcoming Sprints:</h4>
         <Row style={{ flexWrap: 'wrap' }}>
           {(upcomingSprints ?? []).map(({ id, startTime, durationSeconds }) => (
