@@ -20,7 +20,7 @@ describe('public sprints', () => {
   test('create public sprint', async () => {
     await createPublicSprint(addMinutes(Date.now(), 5), 100)
     expect(await getUpcomingPublicSprints()).toEqual([
-      { durationSeconds: 100, id: expect.anything(), startTime: expect.anything(), visibility: 'public' },
+      { durationSeconds: 100, id: expect.anything(), startTime: expect.anything(), visibility: 'public' , participants: 0},
     ])
   })
 
@@ -28,7 +28,7 @@ describe('public sprints', () => {
     await createPublicSprint(addHours(Date.now(), -1), 111)
     await createPublicSprint(addHours(Date.now(), -36), 3636)
     expect(await getPastRecentSprints(12)).toEqual([
-      { durationSeconds: 111, id: expect.anything(), startTime: expect.anything(), visibility: 'public' },
+      { durationSeconds: 111, id: expect.anything(), startTime: expect.anything(), visibility: 'public', participants: 0 },
     ])
   })
 
@@ -54,6 +54,8 @@ describe('public sprints', () => {
         visibility: 'public',
       },
     ])
+
+    expect((await getUpcomingPublicSprints())[0].participants).toEqual(1)
   })
 
   test('complete  public sprint', async () => {
