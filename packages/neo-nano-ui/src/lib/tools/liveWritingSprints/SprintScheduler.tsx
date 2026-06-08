@@ -19,9 +19,9 @@ const SchedulerForm = ({ onScheduled }: { onScheduled: () => void }) => {
   const { register, handleSubmit, reset } = useForm<Inputs>({ defaultValues: { duration: '', startTime: '' } })
   const close = useClose()
   const { mutate: scheduleSprint, isPending } = useMutation({
-    mutationFn: ({ startTime, duartionSeconds }: { startTime: Date; duartionSeconds: number }) => {
+    mutationFn: ({ startTime, durationSeconds }: { startTime: Date; durationSeconds: number }) => {
       console.log(startTime)
-      return createPublicSprint(startTime, duartionSeconds)
+      return createPublicSprint(startTime, durationSeconds)
     },
     mutationKey: ['schedule-sprint'],
     onSuccess: () => {
@@ -39,20 +39,20 @@ const SchedulerForm = ({ onScheduled }: { onScheduled: () => void }) => {
         if (isPast(startTime)) {
           startTime = addDays(startTime, 1)
         }
-        const duartionSeconds = minutesToSeconds(parseInt(data.duration))
-        scheduleSprint({ startTime, duartionSeconds })
+        const durationSeconds = minutesToSeconds(parseInt(data.duration))
+        scheduleSprint({ startTime, durationSeconds })
       })}
     >
       <Column>
         <Row alignItems="center" justifyContent="right">
           <label style={{ textAlign: 'right' }} htmlFor="start-time">
-            Select start time:{' '}
+            Select start time:
           </label>
           <input style={{ width: '100px' }} type="time" {...register('startTime', { required: true })} />
         </Row>
         <Row alignItems="center" justifyContent="right">
           <label style={{ textAlign: 'right' }} htmlFor="duration">
-            Select duration (mintues):{' '}
+            Select duration (minutes):
           </label>
           <input
             style={{ width: '100px' }}

@@ -6,7 +6,7 @@ import { getPublicSprintLog, registerForPublicSprint } from '@/lib/serverFunctio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPerson, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { UserContext } from '@/lib/context/UserContext'
 import { myActiveSprintQueryKey } from './LiveSprintModal'
 
@@ -58,9 +58,7 @@ export const UpcomingSprintCard = ({ id, startTime, durationSeconds }: UpcomingL
         {amIRegistered ? (
           <div style={{ padding: '1px', color: 'var(--grey-dark)' }}>registered</div>
         ) : (
-          <TextButton
-            buttonProps={{ onClick: () => doRegister(), disabled: isPending, style: { fontSize: 'medium' } }}
-          >
+          <TextButton buttonProps={{ onClick: () => doRegister(), disabled: isPending, style: { fontSize: 'medium' } }}>
             register
           </TextButton>
         )}
@@ -69,11 +67,43 @@ export const UpcomingSprintCard = ({ id, startTime, durationSeconds }: UpcomingL
   )
 }
 
-export const PastSprintCard = ({ startTime, durationSeconds }: PastLiveSprint) => {
+const PastSprintLog = ({ sprintId }: { sprintId: string }) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['sprint-log', sprintId],
+    queryFn: () => getPublicSprintLog(sprintId),
+    refetchOnMount: true,
+  })
+
   return (
-    <div className={classNames.pastSprintCard}>
+    <>
+      {isLoading && <FontAwesomeIcon spin={true} icon={faSpinner} />}
+      {data &&
+        data.map(({ wordCount, userId, displayName, participationState }) => {
+          if (participationState === 'completed')
+            return (
+              <div key={userId}>
+                <span style={{ fontWeight: 'bold' }}>{displayName}: </span>
+                <span>{wordCount} words</span>
+              </div>
+            )
+          else
+            return (
+              <div key={userId}>
+                <span style={{ fontWeight: 'bold', color: 'var(--grey-dark)' }}>{displayName}</span>{' '}
+              </div>
+            )
+        })}
+    </>
+  )
+}
+
+export const PastSprintCard = ({ startTime, durationSeconds, id }: PastLiveSprint) => {
+  const [isOpen, setIsOpen] = useState(false)
+  return (
+    <div className={classNames.pastSprintCard} onClick={()=>setIsOpen(true)}>
       <div className={classNames.startTime}>{formatStartTime(startTime)}</div>
       <div className={classNames.duration}>{durationSeconds / 60}m</div>
+      {isOpen && <PastSprintLog sprintId={id} />} 
     </div>
   )
 }

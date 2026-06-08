@@ -52,7 +52,8 @@ export const getUpcomingPublicSprints = async () => {
   const sql = getQueryFunction()
   const rows =
     await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds  from sprints 
-    where visibility='public' and start_time>=now()`
+    where visibility='public' and start_time>=now()
+    ORDER BY start_time ASC`
   return rows.map((row) => camelcaseKeys(row) as Sprint)
 }
 
