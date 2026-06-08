@@ -39,10 +39,10 @@ describe('public sprints', () => {
     await registerForPublicSprint(id)
     expect(await getPublicSprintLog(id)).toEqual([
       {
-        participationState: 'registered',
         userId,
         wordCount: null,
-        displayName: "Alice"
+        displayName: "Alice",
+        participationState: 'registered',
       },
     ])
 
@@ -50,7 +50,6 @@ describe('public sprints', () => {
       {
         durationSeconds: 100,
         id,
-        participationState: 'registered',
         startTime: expect.anything(),
         visibility: 'public',
       },
@@ -66,8 +65,28 @@ describe('public sprints', () => {
     const sprintLog = await getPublicSprintLog(id)
     expect(sprintLog).toEqual([{"userId": userId,
    "wordCount": 200,
+   
    participationState: 'completed',
   displayName:"Alice" }])
 
+  })
+
+  test('getMyUpcomingSprints', async () => {
+  const userA = await addUser({displayName: "Alice"})
+  vi.mocked(getUserId).mockResolvedValue(userA)
+  const { id } = await createPublicSprint(addMinutes(Date.now(), 5), 100)
+  await registerForPublicSprint(id)
+
+  const userB = await addUser({displayName: "Bob"})
+  vi.mocked(getUserId).mockResolvedValue(userB)
+  await registerForPublicSprint(id)
+
+    expect(await getMyUpcomingSprints()).toEqual([{
+    "durationSeconds": 100,
+    id,
+    "startTime": expect.anything(),
+    "visibility": "public",
+
+  },])
   })
 })

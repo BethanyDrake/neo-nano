@@ -26,3 +26,12 @@
   animation-duration: 0.4s;
   animation-name: slide-open;
 }
+
+@keyframes slide-open {
+  0% {
+    max-height: 0
+  }
+  100% {
+    max-height: fit-content
+  }
+}
