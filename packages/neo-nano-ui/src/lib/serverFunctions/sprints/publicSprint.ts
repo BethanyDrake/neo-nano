@@ -51,18 +51,27 @@ export const getMyUpcomingSprints = async () => {
 export const getUpcomingPublicSprints = async () => {
   const sql = getQueryFunction()
   const rows =
-    await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds  from sprints 
+    await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds, count(user_sprints.user_id)::int as participants 
+    from sprints left outer join user_sprints on sprints.id = user_sprints.sprint_id
     where visibility='public' and start_time>=now()
-    ORDER BY start_time ASC`
-  return rows.map((row) => camelcaseKeys(row) as Sprint)
+    GROUP BY sprints.id
+    ORDER BY start_time ASC
+    `
+ return rows.map((row) => camelcaseKeys(row) as Sprint & {participants: number})
+  
 }
 
 export const getPastRecentSprints = async (maxAgeHours: number) => {
   const compareTime = addHours(Date.now(), -1 * maxAgeHours)
   const rows =
-    await getQueryFunction()`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds from sprints where start_time between ${compareTime.toUTCString()} and now() and
-    visibility='public'`
-  return rows.map((row) => camelcaseKeys(row) as Sprint)
+    await getQueryFunction()`
+    SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds,  count(user_sprints.user_id)::int as participants
+    from sprints left outer join user_sprints on sprints.id = user_sprints.sprint_id
+    WHERE start_time between ${compareTime.toUTCString()} and now() and visibility='public'
+    GROUP BY sprints.id
+    ORDER BY start_time ASC
+    `
+  return rows.map((row) => camelcaseKeys(row) as Sprint & {participants: number})
 }
 
 export const registerForPublicSprint = async (sprintId: string) => {

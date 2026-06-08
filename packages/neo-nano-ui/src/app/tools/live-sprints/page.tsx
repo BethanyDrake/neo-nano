@@ -10,18 +10,20 @@ import { PastSprintCard, UpcomingSprintCard } from '@/lib/tools/liveWritingSprin
 import { SprintScheduler } from '@/lib/tools/liveWritingSprints/SprintScheduler'
 import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 import { useQuery } from '@tanstack/react-query'
-import { minutesToMilliseconds } from 'date-fns'
+import { minutesToMilliseconds, secondsToMilliseconds } from 'date-fns'
 
 const LiveSprintPage = () => {
   const { data: upcomingSprints, refetch } = useQuery({
     queryKey: ['upcoming-sprints'],
     queryFn: getUpcomingPublicSprints,
+    refetchInterval: secondsToMilliseconds(5)
   })
 
   const { data: pastSprints } = useQuery({
     queryKey: ['past-sprints'],
     queryFn: () => getPastRecentSprints(6),
     staleTime: minutesToMilliseconds(1),
+    refetchInterval: minutesToMilliseconds(1)
   })
 
   return (
@@ -40,15 +42,15 @@ const LiveSprintPage = () => {
         <SprintScheduler onScheduled={refetch} />
         <h4>Upcoming Sprints:</h4>
         <Row style={{ flexWrap: 'wrap' }}>
-          {(upcomingSprints ?? []).map(({ id, startTime, durationSeconds }) => (
-            <UpcomingSprintCard key={id} id={id} startTime={startTime} durationSeconds={durationSeconds} />
+          {(upcomingSprints ?? []).map(({ id, startTime, durationSeconds, participants}) => (
+            <UpcomingSprintCard key={id} id={id} startTime={startTime} durationSeconds={durationSeconds} participants={participants}/>
           ))}
         </Row>
 
         <h4>Past Sprints:</h4>
         <Row style={{ flexWrap: 'wrap' }}>
-          {(pastSprints || []).map(({ id, startTime, durationSeconds }) => (
-            <PastSprintCard key={id} id={id} startTime={startTime} durationSeconds={durationSeconds} />
+          {(pastSprints || []).map(({ id, startTime, durationSeconds, participants}) => (
+            <PastSprintCard key={id} id={id} startTime={startTime} durationSeconds={durationSeconds} participants={participants} />
           ))}
         </Row>
       </Column>

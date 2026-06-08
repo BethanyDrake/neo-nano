@@ -2,11 +2,7 @@
 import modalStyles from '@/lib/modals/Modal.module.css'
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import {
-  completePublicSprint,
-  getMyUpcomingSprints,
-  getPublicSprintLog,
-} from '@/lib/serverFunctions/sprints/publicSprint'
+import { completePublicSprint, getPublicSprintLog } from '@/lib/serverFunctions/sprints/publicSprint'
 import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 import { differenceInMilliseconds, secondsToMilliseconds } from 'date-fns'
 import { Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
@@ -15,12 +11,12 @@ import { useTimer } from 'react-timer-hook'
 import { useForm } from 'react-hook-form'
 import { BasicButton } from '@/lib/buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
-import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import inProgressSprintImage from './in-progress-sprint.png'
 import finishedSprintImage from './sprint-finished.png'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPerson, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { useMyUpcomingLiveSprints } from './useMyUpcomingSprints'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -30,7 +26,6 @@ export const LiveSprintModalContext = createContext<{
   closeModal: () => {},
 })
 
-export const myActiveSprintQueryKey = ['my-upcoming-sprints']
 const SprintFinishedImage = () => (
   <Image
     alt={'Silhouette of the winner crossing the finish line.'}
@@ -40,12 +35,12 @@ const SprintFinishedImage = () => (
   />
 )
 
-const LiveSprint_InProgress = ({ durationSeconds, sprintId }: { durationSeconds: number, sprintId: string }) => {
+const LiveSprint_InProgress = ({ durationSeconds, sprintId }: { durationSeconds: number; sprintId: string }) => {
   const { seconds, minutes, hours } = useTimer({
     expiryTimestamp: getExpiryTimestamp(durationSeconds),
   })
 
-    const { data: sprintLog, isLoading } = useQuery({
+  const { data: sprintLog, isLoading } = useQuery({
     queryKey: ['sprint-log', sprintId],
     queryFn: () => getPublicSprintLog(sprintId),
   })
@@ -141,12 +136,7 @@ const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
   )
 }
 export const LiveSprintModal = () => {
-  const isLoggedIn = useIsLoggedIn()
-  const { data: myUpcomingLiveSprints } = useQuery({
-    queryKey: ['my-upcoming-sprints'],
-    queryFn: () => getMyUpcomingSprints(),
-    enabled: isLoggedIn,
-  })
+  const { data: myUpcomingLiveSprints } = useMyUpcomingLiveSprints()
 
   const [closedSprints, setClosedSprints] = useState<string[]>([])
 
@@ -154,8 +144,6 @@ export const LiveSprintModal = () => {
     () => (myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 ? myUpcomingLiveSprints[0] : undefined),
     [myUpcomingLiveSprints],
   )
-
-
 
   const [state, setState] = useState<'closed' | 'in-progress' | 'finished' | 'review'>('closed')
 
@@ -198,7 +186,9 @@ export const LiveSprintModal = () => {
     <>
       <div className={modalStyles.modal}>
         <Column>
-          {state === 'in-progress' && <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} sprintId={nextSprint.id}/>}
+          {state === 'in-progress' && (
+            <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} sprintId={nextSprint.id} />
+          )}
           {state === 'finished' && <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />}
           {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
         </Column>
