@@ -1,51 +1,57 @@
 .expandableCard {
-    box-shadow: var(--shadow-1);
-    text-align: center;
-    padding: 16px;
-    width: 200px;
-    box-sizing: content-box;
-    flex-grow: 1;
-    border-radius: 16px;
-    background-color: var(--background-colour-2);
-    position: relative;
-    &:hover {
-        box-shadow: var(--shadow-2);
-    }
-    border: 1px solid var(--primary-vibrant);
+  box-shadow: var(--shadow-1);
+  text-align: center;
+  padding: 16px;
+  width: 200px;
+  box-sizing: content-box;
+  flex-grow: 1;
+  border-radius: 16px;
+  background-color: var(--background-colour-2);
+  position: relative;
+  &:hover {
+    box-shadow: var(--shadow-2);
+  }
+  border: 1px solid var(--primary-vibrant);
 
-     .duration {
-        color: var(--primary-dark);
+  .duration {
+    color: var(--primary-dark);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--primary-light);
     }
+  }
 }
 
 .pastSprintCard {
-    cursor: pointer;
-    box-shadow: var(--shadow-1);
-    text-align: center;
-    padding: 16px;
-    width: 200px;
-    box-sizing: content-box;
-    flex-grow: 1;
-    border-radius: 16px;
-    background-color: var(--background-colour-2);
-    position: relative;
-    &:hover {
-        box-shadow: var(--shadow-2);
-    }
-    border: 1px solid var(--secondary-vibrant);
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  text-align: center;
+  padding: 16px;
+  width: 200px;
+  box-sizing: content-box;
+  flex-grow: 1;
+  border-radius: 16px;
+  background-color: var(--background-colour-2);
+  position: relative;
+  &:hover {
+    box-shadow: var(--shadow-2);
+  }
+  border: 1px solid var(--secondary-vibrant);
 
-    .duration {
-        color: var(--secondary-dark);
+  .duration {
+    color: var(--secondary-dark);
+    @media (prefers-color-scheme: dark) {
+      color: var(--secondary-light);
     }
+  }
 }
 
 .startTime {
-    font-size: larger;
-    font-weight: bold;
+  font-size: larger;
+  font-weight: bold;
 }
 
 .duration {
-    font-size: 40px;
-    padding: 16px;
-
+  font-size: 40px;
+  padding: 16px;
 }
