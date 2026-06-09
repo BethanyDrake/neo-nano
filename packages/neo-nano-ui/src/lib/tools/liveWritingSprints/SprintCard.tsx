@@ -9,16 +9,15 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useMyUpcomingLiveSprints } from './useMyUpcomingSprints'
 
-
-export type UpcomingLiveSprint = Omit<Sprint, 'visibility'> & {participants: number}
-export type PastLiveSprint = Omit<Sprint, 'visibility'>& {participants: number}
+export type UpcomingLiveSprint = Omit<Sprint, 'visibility'> & { participants: number }
+export type PastLiveSprint = Omit<Sprint, 'visibility'> & { participants: number }
 
 export const formatStartTime = (startTime: Date) => {
   return startTime.toLocaleTimeString(undefined, { hourCycle: 'h24', timeStyle: 'short' })
 }
 
 export const UpcomingSprintCard = ({ id, startTime, durationSeconds, participants }: UpcomingLiveSprint) => {
-  const {data: myUpcomingLiveSprints, refetch} = useMyUpcomingLiveSprints()
+  const { data: myUpcomingLiveSprints, refetch, isFetching } = useMyUpcomingLiveSprints()
   const { mutate: doRegister, isPending } = useMutation({
     mutationFn: () => registerForPublicSprint(id),
     onSuccess: () => {
@@ -26,21 +25,23 @@ export const UpcomingSprintCard = ({ id, startTime, durationSeconds, participant
     },
   })
 
- const amIRegistered = myUpcomingLiveSprints?.find((sprint) => sprint.id === id)
+  const amIRegistered = myUpcomingLiveSprints?.find((sprint) => sprint.id === id)
+  const isLoading = isPending || isFetching
 
   return (
     <div className={classNames.expandableCard}>
       <div className={classNames.startTime}>{formatStartTime(startTime)}</div>
       <div className={classNames.duration}>{durationSeconds / 60}m</div>
-      
+
       <div>
         <FontAwesomeIcon icon={faPerson} /> {participants}
       </div>
-     
+
       <div style={{ fontWeight: 'bold', fontSize: 'medium', padding: '5px' }}>
-        {amIRegistered ? (
-          <div style={{ padding: '1px', color: 'var(--grey-dark)' }}>registered</div>
-        ) : (
+        {amIRegistered && <div style={{ padding: '1px', color: 'var(--grey-dark)' }}>registered</div>}
+
+        {isLoading && <FontAwesomeIcon spin={true} icon={faSpinner} />}
+        {!isLoading && !amIRegistered && (
           <TextButton buttonProps={{ onClick: () => doRegister(), disabled: isPending, style: { fontSize: 'medium' } }}>
             register
           </TextButton>
@@ -83,13 +84,13 @@ const PastSprintLog = ({ sprintId }: { sprintId: string }) => {
 export const PastSprintCard = ({ startTime, durationSeconds, id, participants }: PastLiveSprint) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
-    <div className={classNames.pastSprintCard} onClick={()=>setIsOpen(true)}>
+    <div className={classNames.pastSprintCard} onClick={() => setIsOpen(true)}>
       <div className={classNames.startTime}>{formatStartTime(startTime)}</div>
       <div className={classNames.duration}>{durationSeconds / 60}m</div>
       <div>
-          <FontAwesomeIcon icon={faPerson} /> {participants}
-        </div>
-      {isOpen && <PastSprintLog sprintId={id} />} 
+        <FontAwesomeIcon icon={faPerson} /> {participants}
+      </div>
+      {isOpen && <PastSprintLog sprintId={id} />}
     </div>
   )
 }
