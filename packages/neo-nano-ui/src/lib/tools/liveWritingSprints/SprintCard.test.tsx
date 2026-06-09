@@ -15,7 +15,7 @@ describe('SprintCards', () => {
     test('register for upcoming sprint', async () => {
       vi.mocked(useIsLoggedIn).mockReturnValue(true)
       vi.mocked(getMyUpcomingSprints).mockResolvedValue([])
-      const { getByText, getByRole } = render(
+      const { getByText , findByRole} = render(
         <UpcomingSprintCard
           id={'sprint-1'}
           startTime={new Date()}
@@ -26,7 +26,8 @@ describe('SprintCards', () => {
       )
       expect(getByText('5m')).toBeInTheDocument()
       expect(getByText('7')).toBeInTheDocument()
-      fireEvent.click(getByRole('button', { name: 'register' }))
+  
+      fireEvent.click(await findByRole('button', { name: 'register' }))
       await waitFor(() => {
         expect(registerForPublicSprint).toHaveBeenCalled()
       })
