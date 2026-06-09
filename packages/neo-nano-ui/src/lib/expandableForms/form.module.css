@@ -1,4 +1,7 @@
 .form {
+  @media (prefers-color-scheme: dark) {
+    filter: sepia()
+  }
   label {
     font-weight: bold;
   }

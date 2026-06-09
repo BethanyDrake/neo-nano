@@ -10,8 +10,4 @@
     color: black;
     background-color: white;
     min-height: 5em;
-
-    @media (prefers-color-scheme: dark) {
-           filter: sepia()
-    }
 }
