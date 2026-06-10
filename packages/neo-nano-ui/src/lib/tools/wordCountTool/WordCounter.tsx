@@ -7,23 +7,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { useState } from 'react'
-import { countWords } from './countWords'
+import { countWords, getWordLengths, WordLengthDatum } from './countWords'
 import { useActiveGoal } from '../focusClockTool/useActiveGoal'
 import { UpdateActiveGoal } from './UpdateActiveGoal'
+import { WordLengthChart } from './WordLengthChart'
 
 type Inputs = {
   text: string
 }
 
+type Analysis = {
+  wordCount: number,
+  wordLengths: WordLengthDatum[]
+}
+
 
 export const WordCounter = () => {
   const { handleSubmit, register, reset } = useForm<Inputs>()
-  const [analysis, setAnalysis] = useState<{ wordCount: number }>()
+  const [analysis, setAnalysis] = useState<Analysis>()
   const { goal:activeGoal } = useActiveGoal('words')
   const [hasUpdatedActiveGoal, setHasUpdatedActiveGoal] = useState(false)
   const _onSubmit = (data: Inputs) => {
     const wordCount = countWords(data.text)
-    setAnalysis({ wordCount })
+    const wordLengths = getWordLengths(data.text)
+    setAnalysis({ wordCount, wordLengths })
     setHasUpdatedActiveGoal(false)
   }
 
@@ -57,6 +64,8 @@ export const WordCounter = () => {
           </LeftRow>
 
           {activeGoal && <UpdateActiveGoal goal={activeGoal} wordCount={analysis.wordCount} hasUpdatedActiveGoal={hasUpdatedActiveGoal} setHasUpdatedActiveGoal={setHasUpdatedActiveGoal}/>}
+        
+          <WordLengthChart wordLengths={analysis.wordLengths}/>
         </div>
       )}
     </>
