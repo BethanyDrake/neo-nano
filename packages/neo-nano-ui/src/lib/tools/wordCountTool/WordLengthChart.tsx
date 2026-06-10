@@ -1,16 +1,34 @@
 'use client'
-
+import classes from './wordCountTool.module.css'
 import {
   Bar,
   BarChart,
   Label,
   ResponsiveContainer,
+  Tooltip,
+  TooltipContentProps,
   XAxis,
   YAxis,
 } from 'recharts'
 
 
 import { WordLengthDatum } from './countWords'
+
+const MyTooltip = ({ active, payload }: TooltipContentProps<string | number, string>) => {
+  const isVisible = active && payload && payload.length
+  const {length, count } = payload[0]?.payload ?? {}
+ 
+  return (
+    <div style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+      {isVisible && (
+        <div className={classes.Tooltip}>
+          <div>{length} letters</div>
+          <div>x{count}</div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export const WordLengthChart = ({ wordLengths}: {wordLengths: WordLengthDatum[]}) => {
 
@@ -36,6 +54,7 @@ export const WordLengthChart = ({ wordLengths}: {wordLengths: WordLengthDatum[]}
             <Label value="word length" position="bottom" />
         </XAxis>
         <Bar dataKey="count" fill="var(--secondary-vibrant)" radius={[20, 20, 0, 0]} />
+         <Tooltip content={(MyTooltip)} />
       </BarChart>
     </ResponsiveContainer>
   )
