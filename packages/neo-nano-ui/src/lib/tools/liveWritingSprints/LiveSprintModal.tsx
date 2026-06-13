@@ -118,12 +118,14 @@ const LiveSprint_Done = ({ sprintId, onSuccess }: { sprintId: string; onSuccess:
           mutate(parseInt(wordCount))
         })}
       >
+        <Column>
         <LeftRow alignItems="baseline">
           <label htmlFor="wordCount">Enter word count:</label>
           <input type="number" min={0} id="wordCount" {...register('wordCount', { required: true })} />
         </LeftRow>
 
-        <BasicButton isLoading={status === 'pending'}>Submit</BasicButton>
+       <BasicButton isLoading={status === 'pending'}>Submit</BasicButton>
+     </Column>
       </form>
     </Column>
   )
@@ -212,7 +214,7 @@ export const LiveSprintModal = () => {
       {<FloatingSprintButton onClick={() => setIsOpen(!isOpen)} />}
       {isOpen && (
         <>
-          <div className={modalStyles.modal}>
+          <div className={[modalStyles.modal, modalStyles.tertiary].join(" ")}>
              <div style={{position: 'absolute', right: '20px'}}>#{nextSprint.id}</div>
             <Column>
               {state === 'not-started' && <LiveSprint_NotStarted />}

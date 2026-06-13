@@ -65,7 +65,7 @@
     border-radius: 100px;
     padding: 20px;
     background-color: var(--background-colour-2);
-    border: 1px solid var(--tertiary-light);
+    border: 2px solid var(--tertiary-vibrant);
  box-shadow: var(--shadow-1);
     &:hover {
  box-shadow: var(--shadow-2);
