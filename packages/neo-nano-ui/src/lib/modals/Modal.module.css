@@ -45,6 +45,10 @@
 
 }
 
+.modal.tertiary {
+  border: 4px solid var(--tertiary-vibrant);
+}
+
 .modal-overlay {
   z-index: 998;
 
