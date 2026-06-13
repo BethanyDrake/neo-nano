@@ -53,7 +53,6 @@ export const getNewState = (state: State, nextSprint?: MyUpcomingSprint): { newS
         delay: 0,
       }
     }
-    console.log('AAA', timeUntilEnds)
     return {
       newState: 'finished',
       delay: timeUntilEnds,

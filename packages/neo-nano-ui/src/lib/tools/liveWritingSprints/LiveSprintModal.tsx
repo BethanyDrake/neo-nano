@@ -213,6 +213,7 @@ export const LiveSprintModal = () => {
       {isOpen && (
         <>
           <div className={modalStyles.modal}>
+             <div style={{position: 'absolute', right: '20px'}}>#{nextSprint.id}</div>
             <Column>
               {state === 'not-started' && <LiveSprint_NotStarted />}
               {state === 'in-progress' && (

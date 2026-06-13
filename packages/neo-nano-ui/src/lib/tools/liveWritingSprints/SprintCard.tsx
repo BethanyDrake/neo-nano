@@ -30,6 +30,7 @@ export const UpcomingSprintCard = ({ id, startTime, durationSeconds, participant
 
   return (
     <div className={classNames.expandableCard}>
+      <div className={classNames.sprintId}>#{id}</div>
       <div className={classNames.startTime}>{formatStartTime(startTime)}</div>
       <div className={classNames.duration}>{durationSeconds / 60}m</div>
 
@@ -85,6 +86,7 @@ export const PastSprintCard = ({ startTime, durationSeconds, id, participants }:
   const [isOpen, setIsOpen] = useState(false)
   return (
     <div className={classNames.pastSprintCard} onClick={() => setIsOpen(true)}>
+      <div className={classNames.sprintId}>#{id}</div>
       <div className={classNames.startTime}>{formatStartTime(startTime)}</div>
       <div className={classNames.duration}>{durationSeconds / 60}m</div>
       <div>
