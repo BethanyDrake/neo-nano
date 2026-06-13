@@ -55,3 +55,21 @@
   font-size: 40px;
   padding: 16px;
 }
+
+
+.FloatingSprintButton {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 500;
+    border-radius: 100px;
+    padding: 20px;
+    background-color: var(--background-colour-2);
+    border: 1px solid var(--tertiary-light);
+ box-shadow: var(--shadow-1);
+    &:hover {
+ box-shadow: var(--shadow-2);
+    }
+   
+    
+}

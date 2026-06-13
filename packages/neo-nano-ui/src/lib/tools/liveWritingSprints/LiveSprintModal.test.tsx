@@ -2,6 +2,7 @@ import {
   completePublicSprint,
   getMyUpcomingSprints,
   getPublicSprintLog,
+  MyUpcomingSprint,
 } from '@/lib/serverFunctions/sprints/publicSprint'
 import { LiveSprintModal } from './LiveSprintModal'
 import { fireEvent, render, waitFor } from '@testing-library/react'
@@ -15,7 +16,7 @@ vi.mock('@/lib/hooks/useIsLoggedIn')
 describe('LiveSprintModal', () => {
   test('Alice and Bob both register, only Alice submits a wordcount', async () => {
     vi.mocked(getMyUpcomingSprints).mockResolvedValue([
-      { id: '123', durationSeconds: 1, startTime: new Date(), visibility: 'public' },
+      { id: '123', durationSeconds: 1, startTime: new Date(), visibility: 'public' } as MyUpcomingSprint,
     ])
     vi.mocked(useIsLoggedIn).mockReturnValue(true)
     vi.mocked(getPublicSprintLog).mockResolvedValue([
