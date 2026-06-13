@@ -4,9 +4,9 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { completePublicSprint, getPublicSprintLog } from '@/lib/serverFunctions/sprints/publicSprint'
 import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
-import { differenceInMilliseconds, secondsToMilliseconds } from 'date-fns'
+import { addSeconds } from 'date-fns'
 import { Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
-import { formatTimeString, getExpiryTimestamp } from '../sprintTimerTool/Timer'
+import { formatTimeString } from '../sprintTimerTool/Timer'
 import { useTimer } from 'react-timer-hook'
 import { useForm } from 'react-hook-form'
 import { BasicButton } from '@/lib/buttons/BasicButton'
@@ -17,6 +17,9 @@ import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPerson, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useMyUpcomingLiveSprints } from './useMyUpcomingSprints'
+import { FloatingSprintButton } from './FloatingSprintButton'
+import notStartedSprintImage from './not-started-sprint.png'
+import { getNewState } from './stateMachine'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -35,9 +38,21 @@ const SprintFinishedImage = () => (
   />
 )
 
-const LiveSprint_InProgress = ({ durationSeconds, sprintId }: { durationSeconds: number; sprintId: string }) => {
+
+const NotStartedSprintImage = () => (
+  <Image
+    alt={'Silhouette of person resting before a sprint'}
+    width={300}
+    height={300}
+    src={notStartedSprintImage}
+  />
+)
+
+const LiveSprint_InProgress = ({ durationSeconds, sprintId, startTime }: { durationSeconds: number; sprintId: string, startTime: Date }) => {
+
+  
   const { seconds, minutes, hours } = useTimer({
-    expiryTimestamp: getExpiryTimestamp(durationSeconds),
+    expiryTimestamp: addSeconds(startTime, durationSeconds),
   })
 
   const { data: sprintLog, isLoading } = useQuery({
@@ -64,6 +79,18 @@ const LiveSprint_InProgress = ({ durationSeconds, sprintId }: { durationSeconds:
       <div style={{ fontSize: 'xx-large', translate: '0px -50px' }}>
         {formatTimeString({ hours, minutes, seconds })}
       </div>
+    </Column>
+  )
+}
+
+const LiveSprint_NotStarted = () => {
+
+  return (
+    <Column style={{ alignItems: 'center' }}>
+      <h1>Starting soon...</h1>
+
+      <NotStartedSprintImage />
+
     </Column>
   )
 }
@@ -136,58 +163,46 @@ const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
   )
 }
 export const LiveSprintModal = () => {
-  const { data: myUpcomingLiveSprints } = useMyUpcomingLiveSprints()
-
-  const [closedSprints, setClosedSprints] = useState<string[]>([])
+  const { data: myUpcomingLiveSprints, refetch } = useMyUpcomingLiveSprints()
 
   const nextSprint = useMemo(
     () => (myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 ? myUpcomingLiveSprints[0] : undefined),
     [myUpcomingLiveSprints],
   )
+  const [isOpen, setIsOpen] = useState(false)
 
-  const [state, setState] = useState<'closed' | 'in-progress' | 'finished' | 'review'>('closed')
-
+  const [state, setState] = useState<'not-started' | 'in-progress' | 'finished' | 'review'>('not-started')
   useEffect(() => {
-    if (!nextSprint || closedSprints.some((closedSprint) => closedSprint === nextSprint.id)) {
-      return
+    const {newState, delay} = getNewState(state, nextSprint)
+
+    if (state !== newState) {
+      console.log(`updating state ${state} -> ${newState}`, delay)
+      const timeoutId = setTimeout(() => {
+        setState(newState)
+        setIsOpen(true)
+      }, delay)
+
+      return () => clearTimeout(timeoutId)
     }
-    const timeUntilStarts = differenceInMilliseconds(nextSprint.startTime, Date.now())
+   
+  }, [nextSprint, state])
 
-    if (state === 'closed') {
-      const timeout1 = setTimeout(
-        () => {
-          setState('in-progress')
-        },
-        Math.max(timeUntilStarts, 0),
-      )
-
-      return () => clearTimeout(timeout1)
-    }
-
-    if (state === 'in-progress') {
-      const timeout2 = setTimeout(
-        () => {
-          setState('finished')
-        },
-        Math.max(timeUntilStarts + secondsToMilliseconds(nextSprint.durationSeconds), 0),
-      )
-
-      return () => {
-        clearTimeout(timeout2)
-      }
-    }
-  }, [closedSprints, nextSprint, state])
-
-  if (state === 'closed' || !nextSprint) {
+  if (!nextSprint) {
     return null
   }
 
   return (
     <>
+    {<FloatingSprintButton onClick={() => setIsOpen(!isOpen)}/>}
+    {isOpen && <>
       <div className={modalStyles.modal}>
+        
         <Column>
+          {state === 'not-started' && (
+            <LiveSprint_NotStarted />
+          )}
           {state === 'in-progress' && (
-            <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} sprintId={nextSprint.id} />
+            <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} sprintId={nextSprint.id} startTime={nextSprint.startTime}/>
           )}
           {state === 'finished' && <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />}
           {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
@@ -195,13 +210,14 @@ export const LiveSprintModal = () => {
       </div>
       <div
         onClick={() => {
-          if (nextSprint) {
-            setClosedSprints([...closedSprints, nextSprint.id])
-          }
-          setState('closed')
+          if (state === 'finished' || state === 'review')
+          refetch().then(() => {
+           setState('not-started')
+          })
+          setIsOpen(false)
         }}
         className={modalStyles['modal-overlay']}
-      />
+      /></>}
     </>
   )
 }

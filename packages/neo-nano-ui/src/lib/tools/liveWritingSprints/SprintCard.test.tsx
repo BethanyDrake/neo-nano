@@ -3,10 +3,9 @@ import { PastSprintCard, UpcomingSprintCard } from './SprintCard'
 import { minutesToSeconds } from 'date-fns'
 import { wrap } from 'souvlaki'
 import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
-import { getPublicSprintLog, registerForPublicSprint } from '@/lib/serverFunctions/sprints/publicSprint'
+import { getPublicSprintLog, MyUpcomingSprint, registerForPublicSprint } from '@/lib/serverFunctions/sprints/publicSprint'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import { getMyUpcomingSprints } from '@/lib/serverFunctions/sprints/publicSprint'
-import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 
 vi.mock('@/lib/serverFunctions/sprints/publicSprint')
 vi.mock('@/lib/hooks/useIsLoggedIn')
@@ -35,7 +34,7 @@ describe('SprintCards', () => {
 
     test('registerd for upcoming sprint', async () => {
       vi.mocked(useIsLoggedIn).mockReturnValue(true)
-      vi.mocked(getMyUpcomingSprints).mockResolvedValue([{ id: 'sprint-1' } as Sprint])
+      vi.mocked(getMyUpcomingSprints).mockResolvedValue([{ id: 'sprint-1' } as MyUpcomingSprint])
       const { findByText } = render(
         <UpcomingSprintCard
           id={'sprint-1'}

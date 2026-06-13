@@ -52,6 +52,8 @@ describe('public sprints', () => {
         id,
         startTime: expect.anything(),
         visibility: 'public',
+        hasStarted: false,
+        endTime: expect.anything(),
       },
     ])
 
@@ -88,6 +90,8 @@ describe('public sprints', () => {
     id,
     "startTime": expect.anything(),
     "visibility": "public",
+    hasStarted: false,
+    endTime: expect.anything(),
 
   },])
   })

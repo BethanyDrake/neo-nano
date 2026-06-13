@@ -35,16 +35,21 @@ export const getPublicSprintLog = async (id: string) => {
 
 }
 
+export type MyUpcomingSprint = Sprint & {endTime: Date, hasStarted: boolean}
+
 export const getMyUpcomingSprints = async () => {
   const sql = getQueryFunction()
    const userId = await getUserId()
-  const rows =
-    await sql`SELECT start_time AT TIME ZONE 'UTC' as start_time, visibility, id, duration_seconds 
+   const rows = await sql`SELECT *, start_time < now() as has_started from (
+  SELECT start_time AT TIME ZONE 'UTC' as start_time, 
+  visibility, id, duration_seconds, start_time + (duration_seconds * interval '1 second') as end_time
     from sprints join user_sprints on sprints.id = user_sprints.sprint_id
     where user_sprints.user_id =${userId}
-    and start_time>=now()
-    ORDER BY start_time ASC`
-  return rows.map((row) => camelcaseKeys(row) as Sprint)
+   )
+where end_time > now()
+ ORDER BY start_time ASC`
+  
+  return rows.map((row) => camelcaseKeys(row) as MyUpcomingSprint)
 }
 
 
