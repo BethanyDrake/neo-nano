@@ -38,7 +38,7 @@ export const CodeOfConduct = () => {
       <h3>3. Be Respectable</h3>
       <p>
         {
-          "Keep things 'safe for work' and appropriate for all ages. Mild profanity is allowed, but keep it light. Mild references to sex, drugs, and violence are okay, but keep it abstract and don't go into details. Do not encourage illegal or unsafe behaviour. No not say things that you wouldn't want a child to overhear and repeat, at full volume, in a crowded supermarket."
+          "Keep things 'safe for work' and appropriate for all ages. Mild profanity is allowed, but keep it light. Mild references to sex, drugs, and violence are okay, but keep it abstract and don't go into details. Do not encourage illegal or unsafe behaviour. Do not say things that you wouldn't want a child to overhear and repeat, at full volume, in a crowded supermarket."
         }
       </p>
 
