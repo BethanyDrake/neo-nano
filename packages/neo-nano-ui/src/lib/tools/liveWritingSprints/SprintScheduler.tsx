@@ -48,16 +48,18 @@ const SchedulerForm = ({ onScheduled }: { onScheduled: () => void }) => {
           <label style={{ textAlign: 'right' }} htmlFor="start-time">
             Select start time:
           </label>
-          <input style={{ width: '100px' }} type="time" {...register('startTime', { required: true })} />
+          <input style={{ width: '125px' }} type="time" {...register('startTime', { required: true })} />
         </Row>
         <Row alignItems="center" justifyContent="right">
           <label style={{ textAlign: 'right' }} htmlFor="duration">
             Select duration (minutes):
           </label>
           <input
-            style={{ width: '100px' }}
+            style={{ width: '125px' }}
             type="number"
             placeholder="15"
+            min={1}
+            max={60}
             {...register('duration', { required: true })}
           />
         </Row>
