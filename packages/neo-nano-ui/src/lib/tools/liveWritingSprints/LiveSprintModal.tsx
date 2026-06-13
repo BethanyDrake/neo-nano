@@ -20,6 +20,8 @@ import { useMyUpcomingLiveSprints } from './useMyUpcomingSprints'
 import { FloatingSprintButton } from './FloatingSprintButton'
 import notStartedSprintImage from './not-started-sprint.png'
 import { getNewState } from './stateMachine'
+import useSound from 'use-sound'
+import confetti from 'canvas-confetti'
 
 export const LiveSprintModalContext = createContext<{
   activeSprint?: Sprint
@@ -38,19 +40,19 @@ const SprintFinishedImage = () => (
   />
 )
 
-
 const NotStartedSprintImage = () => (
-  <Image
-    alt={'Silhouette of person resting before a sprint'}
-    width={300}
-    height={300}
-    src={notStartedSprintImage}
-  />
+  <Image alt={'Silhouette of person resting before a sprint'} width={300} height={300} src={notStartedSprintImage} />
 )
 
-const LiveSprint_InProgress = ({ durationSeconds, sprintId, startTime }: { durationSeconds: number; sprintId: string, startTime: Date }) => {
-
-  
+const LiveSprint_InProgress = ({
+  durationSeconds,
+  sprintId,
+  startTime,
+}: {
+  durationSeconds: number
+  sprintId: string
+  startTime: Date
+}) => {
   const { seconds, minutes, hours } = useTimer({
     expiryTimestamp: addSeconds(startTime, durationSeconds),
   })
@@ -84,13 +86,11 @@ const LiveSprint_InProgress = ({ durationSeconds, sprintId, startTime }: { durat
 }
 
 const LiveSprint_NotStarted = () => {
-
   return (
     <Column style={{ alignItems: 'center' }}>
       <h1>Starting soon...</h1>
 
       <NotStartedSprintImage />
-
     </Column>
   )
 }
@@ -165,6 +165,11 @@ const LiveSprint_Review = ({ sprintId }: { sprintId: string }) => {
 export const LiveSprintModal = () => {
   const { data: myUpcomingLiveSprints, refetch } = useMyUpcomingLiveSprints()
 
+  const [sprintStartSound] = useSound(
+    'https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%201%20%28subtle%29.wav',
+  )
+  const [sprintEndSound] = useSound('https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/sounds/Success%203.wav')
+
   const nextSprint = useMemo(
     () => (myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 ? myUpcomingLiveSprints[0] : undefined),
     [myUpcomingLiveSprints],
@@ -173,19 +178,30 @@ export const LiveSprintModal = () => {
 
   const [state, setState] = useState<'not-started' | 'in-progress' | 'finished' | 'review'>('not-started')
   useEffect(() => {
-    const {newState, delay} = getNewState(state, nextSprint)
+    const { newState, delay } = getNewState(state, nextSprint)
 
     if (state !== newState) {
-      console.log(`updating state ${state} -> ${newState}`, delay)
+      console.log(`sheduled update state ${state} -> ${newState}`, delay)
+
       const timeoutId = setTimeout(() => {
+        if (newState === 'in-progress') {
+          sprintStartSound()
+        }
+        if (newState === 'finished') {
+          sprintEndSound()
+          confetti({
+            disableForReducedMotion: true,
+            spread: 90,
+            colors: ['#f1dc1d', '#fff7a2', '#6e1ab3'],
+          })
+        }
         setState(newState)
         setIsOpen(true)
       }, delay)
 
       return () => clearTimeout(timeoutId)
     }
-   
-  }, [nextSprint, state])
+  }, [nextSprint, sprintEndSound, sprintStartSound, state])
 
   if (!nextSprint) {
     return null
@@ -193,31 +209,37 @@ export const LiveSprintModal = () => {
 
   return (
     <>
-    {<FloatingSprintButton onClick={() => setIsOpen(!isOpen)}/>}
-    {isOpen && <>
-      <div className={modalStyles.modal}>
-        
-        <Column>
-          {state === 'not-started' && (
-            <LiveSprint_NotStarted />
-          )}
-          {state === 'in-progress' && (
-            <LiveSprint_InProgress durationSeconds={nextSprint.durationSeconds} sprintId={nextSprint.id} startTime={nextSprint.startTime}/>
-          )}
-          {state === 'finished' && <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />}
-          {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
-        </Column>
-      </div>
-      <div
-        onClick={() => {
-          if (state === 'finished' || state === 'review')
-          refetch().then(() => {
-           setState('not-started')
-          })
-          setIsOpen(false)
-        }}
-        className={modalStyles['modal-overlay']}
-      /></>}
+      {<FloatingSprintButton onClick={() => setIsOpen(!isOpen)} />}
+      {isOpen && (
+        <>
+          <div className={modalStyles.modal}>
+            <Column>
+              {state === 'not-started' && <LiveSprint_NotStarted />}
+              {state === 'in-progress' && (
+                <LiveSprint_InProgress
+                  durationSeconds={nextSprint.durationSeconds}
+                  sprintId={nextSprint.id}
+                  startTime={nextSprint.startTime}
+                />
+              )}
+              {state === 'finished' && (
+                <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />
+              )}
+              {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
+            </Column>
+          </div>
+          <div
+            onClick={() => {
+              if (state === 'finished' || state === 'review')
+                refetch().then(() => {
+                  setState('not-started')
+                })
+              setIsOpen(false)
+            }}
+            className={modalStyles['modal-overlay']}
+          />
+        </>
+      )}
     </>
   )
 }
