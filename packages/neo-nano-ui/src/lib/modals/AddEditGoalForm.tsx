@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { BasicButton } from '../buttons/BasicButton'
 import formClasses from '@/lib/expandableForms/form.module.css'
 import { Goal, Visibility } from '@/lib/types/forum.types'
@@ -7,6 +6,7 @@ import { Column, Row } from '../layoutElements/flexLayouts'
 import { hoursToMinutes, minutesToHours } from 'date-fns'
 import { Challenge } from '../challenges'
 import { useModalContext } from './ModalContext'
+import { useMutation } from '@tanstack/react-query'
 
 type Inputs = {
   title: string
@@ -44,25 +44,25 @@ export const AddEditGoalForm = ({
   onSave: (goalDetails: GoalDetails) => Promise<void>
 }) => {
   const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
-  const [isLoading, setIsLoading] = useState(false)
   const { closeModal } = useModalContext()
-  const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    setIsLoading(true)
-    const targetInput = parseInt(data.target)
-    const target = data.metric === 'hours' ? hoursToMinutes(targetInput) : targetInput
-    const metric: Goal['metric'] = data.metric === 'hours' ? 'minutes' : data.metric
-    const body = {
-      ...data,
-      lengthDays: parseInt(data.lengthDays),
-      target,
-      metric,
-    }
-    await onSave(body)
-    setIsLoading(false)
-  }
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: Inputs) => {
+      const targetInput = parseInt(data.target)
+      const target = data.metric === 'hours' ? hoursToMinutes(targetInput) : targetInput
+      const metric: Goal['metric'] = data.metric === 'hours' ? 'minutes' : data.metric
+      const body = {
+        ...data,
+        lengthDays: parseInt(data.lengthDays),
+        target,
+        metric,
+      }
+      await onSave(body)
+    },
+  })
 
   return (
-    <form className={formClasses.form} onSubmit={handleSubmit(_onSubmit)}>
+    <form className={formClasses.form} onSubmit={handleSubmit((data) => mutate(data))}>
       <Column>
         <h2>{mode === 'add' ? 'Add Goal' : 'Update Goal'}</h2>
         <Row alignItems="center" justifyContent="start">
@@ -132,7 +132,7 @@ export const AddEditGoalForm = ({
 
         <Row>
           <BasicButton buttonProps={{ type: 'button', onClick: closeModal }}>Cancel</BasicButton>{' '}
-          <BasicButton isLoading={isLoading} buttonProps={{ type: 'submit' }}>
+          <BasicButton isLoading={isPending} buttonProps={{ type: 'submit' }}>
             Save
           </BasicButton>
         </Row>
