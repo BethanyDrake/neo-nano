@@ -7,6 +7,7 @@ import { getUserId } from '../_utils/getUserIdFromSession'
 import { registerForSprint } from './registerForSprint'
 
 export const createPublicSprint = async (startTime: Date, durationSeconds: number): Promise<Sprint> => {
+  await getUserId()
   const sql = getQueryFunction()
   const [createdSprint] = await sql`INSERT into sprints (start_time, duration_seconds, visibility)
   values (${startTime.toUTCString()}, ${durationSeconds}, 'public')
