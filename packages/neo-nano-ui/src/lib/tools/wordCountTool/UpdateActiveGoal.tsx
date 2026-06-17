@@ -6,18 +6,18 @@ import { getTodaysProgress } from '@/lib/goalTracker/recordUtils'
 import { track } from '@vercel/analytics'
 import { plural1 } from '@/lib/misc'
 import { BasicButton } from '@/lib/buttons/BasicButton'
+import { toast, ToastContainer } from 'react-toastify'
 
 export const UpdateActiveGoal = ({
   goal,
   wordCount,
   hasUpdatedActiveGoal,
-  setHasUpdatedActiveGoal
+  setHasUpdatedActiveGoal,
 }: {
   goal: Goal
   wordCount: number
   hasUpdatedActiveGoal: boolean
   setHasUpdatedActiveGoal: (b: boolean) => void
-  
 }) => {
   const { addValue: addWords } = useUpdateActiveGoal(goal)
   const todaysTotal = getTodaysProgress(goal)
@@ -36,30 +36,45 @@ export const UpdateActiveGoal = ({
           <BasicButton
             buttonProps={{
               onClick: () => {
-                addWords(wordCount)
-                track('UpdateActiveGoal',  {wordsAdded: wordCount, location: 'wordCountTool'})
+                addWords(wordCount, {
+                  onSuccess: () =>
+                    toast(`added ${plural1(wordCount, 'word')} to ${goal.title}`, {
+                      position: 'bottom-center',
+                      hideProgressBar: true,
+                    }),
+                })
+                track('UpdateActiveGoal', { wordsAdded: wordCount, location: 'wordCountTool' })
                 setHasUpdatedActiveGoal(true)
               },
-              disabled: wordCount<1 || hasUpdatedActiveGoal
+              disabled: wordCount < 1 || hasUpdatedActiveGoal,
             }}
           >
             +{plural1(wordCount, 'word')}
           </BasicButton>
-          {wordCount > todaysTotal && 
-          <BasicButton
-            buttonProps={{
-              onClick: () => {
-                addWords(wordCount - todaysTotal)
-                track('UpdateActiveGoal',  {wordsAdded: wordCount, location: 'wordCountTool'})
-                setHasUpdatedActiveGoal(true)
-              },
-              disabled: hasUpdatedActiveGoal
-            }}
-          >
-            {"Update today's total"} (+{plural1(wordCount - todaysTotal, 'word')})
-          </BasicButton>}
+          {wordCount > todaysTotal && (
+            <BasicButton
+              buttonProps={{
+                onClick: () => {
+                  const wordsToAdd = wordCount - todaysTotal
+                  addWords(wordCount - todaysTotal, {
+                    onSuccess: () =>
+                      toast(`added ${plural1(wordsToAdd, 'word')} to ${goal.title}`, {
+                        position: 'bottom-center',
+                        hideProgressBar: true,
+                      }),
+                  })
+                  track('UpdateActiveGoal', { wordsAdded: wordCount, location: 'wordCountTool' })
+                  setHasUpdatedActiveGoal(true)
+                },
+                disabled: hasUpdatedActiveGoal,
+              }}
+            >
+              {"Update today's total"} (+{plural1(wordCount - todaysTotal, 'word')})
+            </BasicButton>
+          )}
         </Column>
       </Column>
+       <ToastContainer />
     </div>
   )
 }

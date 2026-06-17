@@ -7,11 +7,12 @@ export const useMyGoalContext = () => {
   const queryClient = useQueryClient()
   const {data: goals, isLoading} = useQuery({
     queryKey: ['my-goals'],
-    queryFn: () => getMyGoals()
+    queryFn: () => getMyGoals(),
   })
 
   const setGoals = (updatedGoals: Goal[]) => {
     queryClient.setQueryData(['my-goals'], updatedGoals)
+    queryClient.invalidateQueries({queryKey: ['active-goal']})
   }
   return {goals, isLoading, setGoals}
 }

@@ -27,7 +27,7 @@ describe('word counter', () => {
     expect(getByText('Update Some Active Goal'))
 
     fireEvent.click(getByRole('button', {name: '+4 words'}))
-    expect(addValue).toHaveBeenCalledWith(4)
+    expect(addValue).toHaveBeenCalledWith(4, expect.anything())
     expect(getByRole('button', {name: '+4 words'})).toBeDisabled()
   })
 })
