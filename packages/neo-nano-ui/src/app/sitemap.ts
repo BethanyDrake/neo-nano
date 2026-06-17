@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const profileEntries = (await getHotProfiles()).map(({profileId}) => ({
-    url: `https://www.novel-november.com/profiles/${profileId}`,
+    url: `https://www.novel-november.com/profile/${profileId}`,
   }))
 
   return [
