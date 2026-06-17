@@ -19,7 +19,7 @@ describe('UpdateActiveGoal', () => {
     expect(getByText('Update Some Active Goal')).toBeInTheDocument()
     expect(getByText('(so far today: 200 words)')).toBeInTheDocument()
     fireEvent.click(getByRole('button', {name: '+4 words'}))
-    expect(addValue).toHaveBeenCalledWith(4)
+    expect(addValue).toHaveBeenCalledWith(4, expect.anything())
   })
 
    test("update today's total", () => {
@@ -34,6 +34,6 @@ describe('UpdateActiveGoal', () => {
     expect(getByText('Update Some Active Goal')).toBeInTheDocument()
     expect(getByText('(so far today: 200 words)')).toBeInTheDocument()
     fireEvent.click(getByRole('button', {name: "Update today's total (+67 words)"}))
-    expect(addValue).toHaveBeenCalledWith(67)
+    expect(addValue).toHaveBeenCalledWith(67, expect.anything())
   })
 })
