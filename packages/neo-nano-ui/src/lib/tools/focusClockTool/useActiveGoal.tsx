@@ -51,12 +51,6 @@ export const useUpdateActiveGoal = (goal: Goal) => {
     mutationFn: (valueToAdd: number) => {
       return updateGoalProgress({ id: goal.id, records: getOptimisticGoal(valueToAdd, goal).records })
     },
-    onMutate: async (valueToAdd, context) => {
-      // update optimistic record
-      context.client.setQueryData(getQueryKey(goal.metric), (old: Goal) => getOptimisticGoal(valueToAdd, old))
-
-      return null
-    },
     onSuccess(data, variables, onMutateResult, context) {
       context.client.setQueryData(getQueryKey(goal.metric), data.updatedGoal)
       if (data.claimedAwards.length > 0) {
