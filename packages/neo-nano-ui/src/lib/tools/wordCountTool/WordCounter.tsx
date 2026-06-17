@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
 import { useState } from 'react'
-import { countWords, getWordLengths, WordLengthDatum } from './countWords'
+import { countWords, countWords2, CountWords2Datum, getWordLengths, WordLengthDatum } from './countWords'
 import { useActiveGoal } from '../focusClockTool/useActiveGoal'
 import { UpdateActiveGoal } from './UpdateActiveGoal'
 import { WordLengthChart } from './WordLengthChart'
@@ -19,6 +19,7 @@ type Inputs = {
 type Analysis = {
   wordCount: number,
   wordLengths: WordLengthDatum[]
+  wordCounts: CountWords2Datum[]
 }
 
 
@@ -30,7 +31,8 @@ export const WordCounter = () => {
   const _onSubmit = (data: Inputs) => {
     const wordCount = countWords(data.text)
     const wordLengths = getWordLengths(data.text)
-    setAnalysis({ wordCount, wordLengths })
+    const wordCounts = countWords2(data.text)
+    setAnalysis({ wordCount, wordLengths, wordCounts })
     setHasUpdatedActiveGoal(false)
   }
 
@@ -65,7 +67,11 @@ export const WordCounter = () => {
 
           {activeGoal && <UpdateActiveGoal goal={activeGoal} wordCount={analysis.wordCount} hasUpdatedActiveGoal={hasUpdatedActiveGoal} setHasUpdatedActiveGoal={setHasUpdatedActiveGoal}/>}
         
-          <WordLengthChart wordLengths={analysis.wordLengths}/>
+          <WordLengthChart wordLengths={analysis.wordLengths} />
+          <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px', rowGap: "20px"}}>
+            {analysis?.wordCounts?.map(({length, wordCounts}) => <div key={length} style={{minWidth: "200px"}}><h4>{length} letters:</h4> <div>{wordCounts.map(({word, count}) => <div key={word}>{word} ({count})</div>)}</div></div>)}
+          </div>
+         
         </div>
       )}
     </>
