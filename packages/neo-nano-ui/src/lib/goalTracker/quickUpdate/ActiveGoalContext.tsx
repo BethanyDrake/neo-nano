@@ -52,11 +52,13 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
       if (!activeGoal) throw Error('No active goal to update.')
       return updateGoalProgress({ id: activeGoal?.id, records: newRecords })
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.setQueryData(getQueryKey(), data.updatedGoal)
       if (data.claimedAwards.length > 0) {
         displayNewAward(data.claimedAwards[0])
       }
+      context.client.resetQueries({queryKey: ['my-goals']})
+      context.client.invalidateQueries({queryKey: ['active-goal']})
     },
   })
 
@@ -69,11 +71,13 @@ export const ActiveGoalProviderInner = ({ children }: PropsWithChildren) => {
       const newRecords = changeAtIndex(oldRecords, challengeDay, oldValue + toAdd)
       return updateGoalProgress({ id: activeGoal?.id, records: newRecords })
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       queryClient.setQueryData(getQueryKey(), data.updatedGoal)
       if (data.claimedAwards.length > 0) {
         displayNewAward(data.claimedAwards[0])
       }
+      context.client.invalidateQueries({queryKey: ['my-goals']})
+      context.client.invalidateQueries({queryKey: ['active-goal']})
     },
   })
 

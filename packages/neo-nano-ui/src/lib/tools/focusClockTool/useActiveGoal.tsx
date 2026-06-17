@@ -56,7 +56,10 @@ export const useUpdateActiveGoal = (goal: Goal) => {
       if (data.claimedAwards.length > 0) {
         displayNewAward(data.claimedAwards[0])
       }
+      context.client.resetQueries({queryKey: ['my-goals']})
+      context.client.invalidateQueries({queryKey: ['active-goal']})
     },
+
   })
 
   return {

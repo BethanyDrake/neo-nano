@@ -72,7 +72,7 @@ describe('useActiveGoal', () => {
 
   test('updates active goal', async () => {
     const returnedGoal = buildGoal({ id: 'goal-id', title: 'Initial Goal', records: [null] })
-    vi.mocked(getActiveGoal).mockResolvedValue(returnedGoal)
+    vi.mocked(getActiveGoal).mockResolvedValueOnce(returnedGoal)
     const displayNewAward = vi.fn()
     vi.mocked(useNewAwardModalContext).mockReturnValue({
       displayNewAward,
@@ -81,7 +81,7 @@ describe('useActiveGoal', () => {
     })
 
     const updatedGoal = buildGoal({ title: 'Updated Goal' })
-
+    vi.mocked(getActiveGoal).mockResolvedValueOnce(updatedGoal)
     vi.mocked(updateGoalProgress).mockResolvedValue({ updatedGoal, claimedAwards: [] })
     const Providers = ({ children }: PropsWithChildren) => (
       <QueryClientProvider client={new QueryClient()}>
