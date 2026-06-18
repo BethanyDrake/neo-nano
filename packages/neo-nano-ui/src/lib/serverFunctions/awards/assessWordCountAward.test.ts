@@ -1,5 +1,5 @@
 import { assessWordCountAward, GoalAssessmentInput } from './assessAwards'
-// @vitest-environment node
+
 describe('assessWordCountAward', () => {
   it('returns false if GOAL is not of type wordCount', () => {
     const goal: GoalAssessmentInput['goal'] = {
@@ -217,5 +217,22 @@ describe('assessWordCountAward', () => {
       }
       expect(assessWordCountAward({ award, goal })).toEqual(false)
     })
+  })
+
+  test('negative challenge end date', () => {
+    const goal: GoalAssessmentInput['goal'] = {
+        startDate: '2026-02-28',
+        lengthDays: 100,
+        records: [1041,191,1165,843,735,741,756,859,1020,1088,345,729,742,250,983,200,606,816,421,28,1178,759,289,1070,0,47,1030,1208,1022,null,814,null,1025,751,null,820,179,149,712,471,928,510,457,null,null,460,670,835,740,882,857,980,813,0,644,882,227,601,758,1055,33,335,759,1275,895,null,394,453,null,null,440,643,null,736,534,841,513,1122,702,336,null,613,102,null,487,null,750,null,716,null,null,null,262,152,265,687,376,501,null,null,890,282,671,282,705,560,658,507,533,402,245],
+        metric: 'words',
+      }
+
+      const award: GoalAssessmentInput['award'] = {
+        startDate: '2025-11-01',
+        endDate: '2025-11-30',
+        requirementUnit: 'words',
+        requirementValue: 10000,
+      }
+     expect(assessWordCountAward({ award, goal })).toEqual(false)
   })
 })
