@@ -6,7 +6,9 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Modal } from './Modal'
 import { AddEditProjectForm, ProjectDetails } from './AddEditProjectForm'
-import { useMyProjectsContext } from '../projects/MyProjectContext'
+import { createProject as _createProject } from '../serverFunctions/projects/createProject'
+import { useMutation } from '@tanstack/react-query'
+import { useMyProjects } from '../projects/useMyProjects'
 
 export const ADD_PROJECT_MODAL = 'ADD_PROJECT_MODAL'
 export const CREATE_PROJECT_ACTION = 'createProject'
@@ -15,10 +17,15 @@ export const AddProjectModal = () => {
   const { setOpenModal, closeModal } = useModalContext()
   const action = useSearchParams().get('action')
 
-  const { isLoading, addProject } = useMyProjectsContext()
-  const onSave = (projectDetails: ProjectDetails) => {
-     addProject(projectDetails, { onSuccess: closeModal })
-  }
+  const { isLoading } = useMyProjects()
+
+    const { mutate: addProject, isPending } = useMutation({
+    mutationFn: (projectDetails: ProjectDetails) => _createProject(projectDetails),
+    onSuccess: (data, variables, onMutateResponse, context) => {
+       context.client.invalidateQueries({ queryKey: ['my-projects'] })
+       closeModal()
+      },
+  })
 
   useEffect(() => {
     if (action === CREATE_PROJECT_ACTION) {
@@ -36,7 +43,7 @@ export const AddProjectModal = () => {
       />
       <Modal modalId={ADD_PROJECT_MODAL}>
         <AddEditProjectForm
-          onSave={onSave}
+          onSave={addProject}
           mode={'add'}
           defaultValues={{
             title: '',
@@ -53,6 +60,7 @@ export const AddProjectModal = () => {
               complexity: 0
             }
           }}
+          isPending={isPending}
         />
       </Modal>
     </>

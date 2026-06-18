@@ -4,7 +4,6 @@ import formClasses from '@/lib/expandableForms/form.module.css'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import { useModalContext } from './ModalContext'
 import { Project, ProjectStatus } from '../projects/Project.type'
-import { useMyProjectsContext } from '../projects/MyProjectContext'
 import {
   AspectInputFormSection,
 } from '../projects/AspectInput'
@@ -18,14 +17,15 @@ export const AddEditProjectForm = ({
   defaultValues,
   mode,
   onSave,
+  isPending
 }: {
   mode: 'add' | 'edit'
   defaultValues: Inputs
-  onSave: (details: ProjectDetails) => void
+  onSave: (details: ProjectDetails) => void,
+  isPending: boolean
 }) => {
   const { register, handleSubmit } = useForm<Inputs>({ defaultValues })
   const { closeModal } = useModalContext()
-  const { isAddProjectPending } = useMyProjectsContext()
   const [aspects, setAspects] = useState<Project['aspects']>(defaultValues.aspects)
   const _onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const wordCount = data.wordCount ? parseInt(data.wordCount) : null
@@ -84,7 +84,7 @@ export const AddEditProjectForm = ({
 
         <Row>
           <BasicButton buttonProps={{ type: 'button', onClick: closeModal }}>Cancel</BasicButton>{' '}
-          <BasicButton isLoading={isAddProjectPending} buttonProps={{ type: 'submit' }}>
+          <BasicButton isLoading={isPending} buttonProps={{ type: 'submit' }}>
             Save
           </BasicButton>
         </Row>

@@ -5,13 +5,20 @@ import { faCaretRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import disclosureStyles from '@/lib/styles/disclosure.module.css'
 import { Column, LeftRow, Row } from '../layoutElements/flexLayouts'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
-import { useMyProjectsContext } from './MyProjectContext'
 import { EditProjectModal } from '../modals/EditProjectModal'
 import { AspectChart } from './AspectChart'
+import { deleteProject as _deleteProject } from '../serverFunctions/projects/deleteProject'
+import { useMutation } from '@tanstack/react-query'
 
 export const ProjectSection = ({ project }: {project: Project}) => {
   const {title, blurb, status, excerpt, wordCount , id, visibility} = project
-  const {deleteProject, isDeleteProjectPending} = useMyProjectsContext()
+
+  const { mutate: deleteProject , isPending: isDeleteProjectPending} = useMutation<void, Error, string>({
+  mutationFn: _deleteProject,
+  onSuccess: (data, variables, onMutateResponse, context) => {
+    return context.client.invalidateQueries({ queryKey: ['my-projects'] })
+  },
+})
   return (
     <Disclosure>
       <DisclosureButton className={disclosureStyles.DisclosureButton}>

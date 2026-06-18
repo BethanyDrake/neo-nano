@@ -5,7 +5,6 @@ import { withModalContext } from '@/tests/utils/withModalContext'
 import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
 import { createProject } from '../serverFunctions/projects/createProject'
 import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
-import { withMyProjectContext } from '@/tests/utils/withMyProjectContext'
 import { getMyProjects } from '../serverFunctions/projects/getMyProjects'
 import { Project } from '../projects/Project.type'
 import { vi } from 'vitest'
@@ -21,7 +20,7 @@ describe('AddProjectModal', () => {
 
   test('add minimal project', async () => {
     const { getByRole, queryByRole } = render(<AddProjectModal />, {
-      wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
+      wrapper: wrap(withModalContext(), withReactQueryClient()),
     })
     await waitFor(() => {
       expect(getByRole('button', { name: 'add project' })).toBeEnabled()
@@ -53,13 +52,12 @@ describe('AddProjectModal', () => {
           complexity: 0,
         },
       },
-      expect.anything(),
     )
   })
 
   test('add project with details', async () => {
     const { getByRole, queryByRole } = render(<AddProjectModal />, {
-      wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
+      wrapper: wrap(withModalContext(), withReactQueryClient()),
     })
     await waitFor(() => {
       expect(getByRole('button', { name: 'add project' })).toBeEnabled()
@@ -97,13 +95,12 @@ describe('AddProjectModal', () => {
           complexity: 0,
         },
       },
-      expect.anything(),
     )
   })
 
   test('add project with aspects', async () => {
     const { getByRole, queryByRole } = render(<AddProjectModal />, {
-      wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
+      wrapper: wrap(withModalContext(), withReactQueryClient()),
     })
     await waitFor(() => {
       expect(getByRole('button', { name: 'add project' })).toBeEnabled()
@@ -134,7 +131,6 @@ describe('AddProjectModal', () => {
           complexity: 40,
         },
       }),
-      expect.anything(),
     )
   })
 })

@@ -3,23 +3,25 @@ import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { Modal } from './Modal'
 import { useModalContext } from './ModalContext'
 import { Project } from '../projects/Project.type'
-import { useMyProjectsContext } from '../projects/MyProjectContext'
 import { AddEditProjectForm, ProjectDetails } from './AddEditProjectForm'
-
-const EDIT_PROJECT_MODAL = 'edit-project-modal'
+import { updateProject as _updateProject }from '../serverFunctions/projects/updateProject'
+import { useMutation } from '@tanstack/react-query'
 
 export const EditProjectModal = ({ initialProject }: { initialProject: Project}) => {
   const { setOpenModal, closeModal } = useModalContext()
 
-  const { updateProject} = useMyProjectsContext()
-  const onSave = async (projectDetails: ProjectDetails) => {
-    updateProject({id: initialProject.id, ...projectDetails}, {onSuccess: closeModal})
-  }
-
+   const { mutate: onSave, isPending } = useMutation({
+      mutationFn: (projectDetails: ProjectDetails) => _updateProject({id: initialProject.id, ...projectDetails}),
+      onSuccess: (data, variables, onMutateResponse, context) => {
+       context.client.invalidateQueries({ queryKey: ['my-projects'] })
+       closeModal()
+      },
+    })
+  const modalId = `edit-project-modal-${initialProject.id}`
   return (
     <>
-      <SmallIconButton onClick={() => setOpenModal(EDIT_PROJECT_MODAL)} id="edit" icon={faEdit} text="edit project" />
-      <Modal modalId={EDIT_PROJECT_MODAL}>
+      <SmallIconButton onClick={() => setOpenModal(modalId)} id="edit" icon={faEdit} text="edit project" />
+      <Modal modalId={modalId}>
         <AddEditProjectForm
           mode="edit"
           defaultValues={{
@@ -27,7 +29,8 @@ export const EditProjectModal = ({ initialProject }: { initialProject: Project})
             wordCount: initialProject.wordCount ? `${initialProject.wordCount}`: ''
             
           }}
-          onSave={onSave}
+          isPending={isPending}
+          onSave={(details) => onSave(details)}
         />
       </Modal>
     </>
