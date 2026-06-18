@@ -14,6 +14,7 @@ export type GoalAssessmentInput = {
 const getRelevantRecords = ({award, goal}: GoalAssessmentInput) => {
     const startChallengeDay = Math.max(dateToChallengeDay(goal.startDate, award.startDate), 0)
     const endChallengeDay = Math.min(dateToChallengeDay(goal.startDate, award.endDate) + 1, goal.lengthDays)
+    if (endChallengeDay < 0) return []
     return goal.records.slice(startChallengeDay, endChallengeDay)
 }
 
