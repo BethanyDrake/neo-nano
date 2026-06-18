@@ -1,7 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { withModalContext } from '@/tests/utils/withModalContext'
 import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
-import { withMyProjectContext } from '@/tests/utils/withMyProjectContext'
 import { wrap } from 'souvlaki'
 import { vi } from 'vitest'
 import { getMyProjects } from '../serverFunctions/projects/getMyProjects'
@@ -20,7 +19,7 @@ describe('EditProjectModal', () => {
     const { getByRole, queryByRole, findByRole } = render(
       <EditProjectModal initialProject={existingProject} />,
       {
-        wrapper: wrap(withModalContext(), withReactQueryClient(), withMyProjectContext()),
+        wrapper: wrap(withModalContext(), withReactQueryClient()),
       },
     )
     fireEvent.click(getByRole('button', { name: 'edit project' }))
@@ -34,7 +33,6 @@ describe('EditProjectModal', () => {
     })
     expect(updateProject).toHaveBeenCalledWith(
       expect.objectContaining({ title: 'New Title', blurb: 'Previous blurb.' }),
-      expect.anything(),
     )
   })
 })

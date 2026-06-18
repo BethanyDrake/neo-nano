@@ -4,7 +4,6 @@ import { getMyProfile } from '@/lib/serverFunctions/profile/getMyProfile'
 import { ProfilePageInner } from './ProfilePage'
 import { getMyAwards } from '@/lib/serverFunctions/profile/getMyAwards'
 import { Metadata } from 'next'
-import { MyProjectsContextProvider } from '@/lib/projects/MyProjectContext'
 
 export const metadata: Metadata = {
   title: 'My Profile',
@@ -16,9 +15,7 @@ const ProfilePage = async () => {
 
   return (
           <ProfileContextProvider initialProfile={initalProfile} initialAwards={initialAwards}>
-              <MyProjectsContextProvider>
               <ProfilePageInner />
-              </MyProjectsContextProvider>
           </ProfileContextProvider>
   )
 }

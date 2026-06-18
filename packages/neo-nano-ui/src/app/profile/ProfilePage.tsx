@@ -11,8 +11,8 @@ import { AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { AddProjectModal } from '@/lib/modals/AddProjectModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
-import { useMyProjectsContext } from '@/lib/projects/MyProjectContext'
 import { ProjectSection } from '@/lib/projects/ProjectSection'
+import { useMyProjects } from '@/lib/projects/useMyProjects'
 import { getChallengeEndDate } from '@/lib/serverFunctions/goals/goalUtils'
 import { Goal } from '@/lib/types/forum.types'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
@@ -27,7 +27,7 @@ const isActiveOrUpcoming = (goal: Goal): boolean => {
 export const ProfilePageInner = () => {
   const { profile, awards } = useProfileContext()
   const { goals } = useMyGoalContext()
-  const { projects } = useMyProjectsContext()
+  const { projects } = useMyProjects()
   return (
     <FullWidthPage>
       <Row alignItems="center">
