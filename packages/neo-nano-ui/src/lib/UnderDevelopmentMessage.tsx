@@ -16,7 +16,7 @@ export const UnderDevelopmentMessage = ({upcomingChanges}: {upcomingChanges: {de
         This page is under development. Please try it out, and let me know what you think! Expect frequent tweaks and improvements.
       </p>
       
-      <h3>Upcoming changes:</h3>
+      {upcomingChanges.length> 0 && <h3>Upcoming changes:</h3>}
       <ul style={{ paddingLeft: '20px' }}>
         {upcomingChanges.map((item) => <li key={item.issueId ?? item.description}>
           {item.issueId 
