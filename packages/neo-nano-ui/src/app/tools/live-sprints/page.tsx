@@ -30,12 +30,7 @@ const LiveSprintPage = () => {
     <GutteredPage>
       <UnderDevelopmentMessage
         upcomingChanges={[
-          { description: 'view upcoming sprints' },
-          { description: 'register for an upcoming sprint' },
-          { description: 'open a countdown model when the sprint starts' },
-          { description: 'enter your wordcount when the sprint ends' },
-          { description: 'view a wordcount leaderboard' },
-          { description: 'view past sprints' },
+          
         ]}
       />
       <Column>
