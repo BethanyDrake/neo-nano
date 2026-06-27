@@ -1,11 +1,12 @@
 'use client'
 import { Dictionary } from 'lodash'
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren,  useContext, useMemo } from 'react'
 import { CommentReactions, getThreadReactions } from '../serverFunctions/forum/getThreadReactions'
+import { useQuery } from '@tanstack/react-query'
 
 export const ReactionContext = createContext<{
-  refresh: () => Promise<void>
-  reactions: Dictionary<CommentReactions>
+  refresh: () => Promise<unknown>
+  reactions?: Dictionary<CommentReactions>
   initialLoad: boolean
 }>({
 
@@ -15,21 +16,11 @@ export const ReactionContext = createContext<{
 })
 
 export const ReactionContextProvider = ({ threadId, children }: PropsWithChildren & { threadId: string }) => {
-  const [reactions, setReactions] = useState({})
-  const [initialLoad, setInitialLoad] = useState(true)
-
-  const refresh = useCallback(async () => {
-    await getThreadReactions(threadId).then(setReactions)
-  }, [threadId])
-
-  useEffect(() => {
-    refresh().then(() => setInitialLoad(false))
-    
-  }, [refresh])
+  const {data: reactions, refetch, isLoading} = useQuery({queryKey: ['thread-reactions', threadId], queryFn: () => getThreadReactions(threadId)},)
 
   const value = useMemo(() => {
-    return { reactions, refresh, initialLoad }
-  }, [initialLoad, reactions, refresh])
+    return { reactions, refresh: refetch, initialLoad: isLoading }
+  }, [isLoading, reactions, refetch])
 
   return <ReactionContext.Provider value={value}>{children}</ReactionContext.Provider>
 }
@@ -39,7 +30,7 @@ export const useCommentLikes = (commentId: string) => {
 
   return {
     initialLoad,
-    likes: reactions[commentId]?.like ?? [],
+    likes: reactions ? reactions[commentId]?.like ?? [] : [],
     refresh,
   }
 }
