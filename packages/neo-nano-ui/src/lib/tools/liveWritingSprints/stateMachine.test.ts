@@ -14,6 +14,7 @@ const buildMyUpcomingSprint = (overrides: Partial<MyUpcomingSprint>): MyUpcoming
     ...overrides
 
 }}
+
 describe('state machine', () => {
     describe("when no sprint has started", () => {
         describe('and no sprint is upcoming', () => {
@@ -28,7 +29,7 @@ describe('state machine', () => {
             it("sets state to in progress once the sprint starts", () => {
                 expect(getNewState('not-started', buildMyUpcomingSprint({startTime: addMilliseconds(new Date(), 1000)}),)).toEqual({
                     newState: 'in-progress',
-                    delay: 1000
+                    delay: expect.toBeNear(1000, 5)
                 })
             })
         })
@@ -76,7 +77,7 @@ describe('state machine', () => {
             it("changes to finished state when the sprint ends", () => {
                 expect(getNewState('in-progress', buildMyUpcomingSprint({startTime: addSeconds(new Date(), -1), durationSeconds: 30}),)).toEqual({
                     newState: 'finished',
-                    delay: secondsToMilliseconds(29)
+                    delay: expect.toBeNear(secondsToMilliseconds(29), 5)
                 })
             })
         })
@@ -105,7 +106,7 @@ describe('state machine', () => {
             it("changes to the in-progress when the new sprint starts", () => {
                 expect(getNewState('finished', buildMyUpcomingSprint({startTime: addMilliseconds(new Date(), 1000)}),)).toEqual({
                     newState: 'in-progress',
-                    delay: 1000
+                    delay: expect.toBeNear(1000, 5)
                 })
             })
         })
@@ -114,7 +115,7 @@ describe('state machine', () => {
             it("changes to finished state when the sprint ends", () => {
                 expect(getNewState('finished', buildMyUpcomingSprint({startTime: addSeconds(new Date(), -1), durationSeconds: 30}),)).toEqual({
                     newState: 'finished',
-                    delay: secondsToMilliseconds(29)
+                    delay: expect.toBeNear(secondsToMilliseconds(29), 5)
                 })
             })
         })
@@ -144,7 +145,7 @@ describe('state machine', () => {
             it("changes to the in-progress when the new sprint starts", () => {
                 expect(getNewState('review', buildMyUpcomingSprint({startTime: addMilliseconds(new Date(), 1000)}),)).toEqual({
                     newState: 'in-progress',
-                    delay: 1000
+                    delay: expect.toBeNear(1000, 5)
                 })
             })
         })
@@ -153,7 +154,7 @@ describe('state machine', () => {
             it("changes to finished state when the sprint ends", () => {
                 expect(getNewState('review', buildMyUpcomingSprint({startTime: addSeconds(new Date(), -1), durationSeconds: 30}),)).toEqual({
                     newState: 'finished',
-                    delay: secondsToMilliseconds(29)
+                    delay: expect.toBeNear(secondsToMilliseconds(29), 5)
                 })
             })
         })

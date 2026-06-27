@@ -3,6 +3,7 @@ import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 import ResizeObserver from 'resize-observer-polyfill';
 import { PropsWithChildren } from 'react'
+import './custom-matchers'
 
 vi.mock('@auth0/nextjs-auth0')
 vi.mock('@auth0/nextjs-auth0/server', () => ({

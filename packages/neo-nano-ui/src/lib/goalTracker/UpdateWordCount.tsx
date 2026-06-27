@@ -81,7 +81,7 @@ export const UpdateWordCount = ({
       if (view === 'month') {
         if (isSelected) {
           return (
-            <input
+            <input ref={(element) => element?.focus()}
               defaultValue={wordCount ?? undefined}
               aria-label={`wordcount for ${date.toLocaleDateString()}${isCumulative ? ' (cumulative)' : ''}`}
               onBlur={onSubmit}
