@@ -6,7 +6,7 @@ import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { TextLinePlaceHolder } from '@/lib/layoutElements/Placeholders'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faBullseye, faChartLine, faComment, faScissors, faTrophy } from '@fortawesome/free-solid-svg-icons'
+import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import logoV4 from '@/lib/media/logo-v4.png'
@@ -64,9 +64,7 @@ export default function Home() {
     <GutteredPage>
       <div style={{ textAlign: 'center', minHeight: '75px' }}>
         <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
-          <FontAwesomeIcon icon={faScissors} />
-          The 80 Hour Edit
-          <FontAwesomeIcon icon={faScissors} flip="horizontal" />
+          The Mid-Year Novelette
         </h1>
 
         <ClientSideOnly fallback={<TextLinePlaceHolder />}>
