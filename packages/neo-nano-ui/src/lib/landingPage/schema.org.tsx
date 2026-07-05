@@ -1,6 +1,7 @@
 const location = {
   '@type': 'VirtualLocation',
   url: 'https://www.novel-november.com/',
+  
 }
 
 const organizer = {
@@ -14,6 +15,7 @@ const organizer = {
 const novelNovemberLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
   name: 'Novel November',
   description: 'Write 50,000 words in November',
   duration: 'P30D',
@@ -34,6 +36,7 @@ export const NovemberEventSchema = () => (
 const midYearNoveletteEventSchema = {
   '@context': 'https://schema.org',
   '@type': 'Event',
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
   name: 'Mid Year Novelette',
   description: 'Write 15,000 words in July',
   duration: 'P31D',
