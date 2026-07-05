@@ -10,6 +10,7 @@ import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import logoV4 from '@/lib/media/logo-v4.png'
+import { NovemberEventSchema, MidYearNoveletteEventSchema } from '@/lib/landingPage/schema.org'
 
 const FeatureCard = ({
   title,
@@ -57,16 +58,13 @@ const FeaturesSection = () => {
       />
     </Row>
   )
-
 }
 
 export default function Home() {
   return (
     <GutteredPage>
       <div style={{ textAlign: 'center', minHeight: '75px' }}>
-        <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
-          The Mid-Year Novelette
-        </h1>
+        <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>The Mid-Year Novelette</h1>
 
         <ClientSideOnly fallback={<TextLinePlaceHolder />}>
           <ChallengeCountDown />
@@ -79,11 +77,12 @@ export default function Home() {
           width={300}
           height={300}
           src={logoV4}
-          placeholder='blur'
+          placeholder="blur"
         />
       </div>
 
       <details>
+        <NovemberEventSchema />
         <summary>
           <h2>{"What's Novel November?"}</h2>
         </summary>
@@ -102,7 +101,7 @@ export default function Home() {
         </ul>
       </details>
 
-      <details style={{display: 'none'}}>
+      <details style={{ display: 'none' }}>
         <summary>
           <h2>{"What's the 80 Hour Edit?"}</h2>
         </summary>
@@ -117,13 +116,18 @@ export default function Home() {
         </ul>
       </details>
 
-        <details>
+      <details>
+        <MidYearNoveletteEventSchema />
         <summary>
           <h2>{"What's the Mid-Year Novelette?"}</h2>
         </summary>
         <h3>Premise:</h3>
         <p>{"November doesn't work for you? 50,000 words isn't the right target? Just want to write more?"}</p>
-        <p>{'The Mid-Year Novelette is a more flexible, less intense alternative to the main writing challenge. The default word target is set at 15K, but choose whatever works for you.'}</p>
+        <p>
+          {
+            'The Mid-Year Novelette is a more flexible, less intense alternative to the main writing challenge. The default word target is set at 15K, but choose whatever works for you.'
+          }
+        </p>
         <h3>The Challenge:</h3>
         <ul>
           <li>15,000 words (or whatever)</li>
