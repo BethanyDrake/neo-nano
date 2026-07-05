@@ -1,5 +1,6 @@
 import { TeamMembers } from '@/lib/about/TeamMembers'
 import { TechnologyItems } from '@/lib/about/TechnologyItems'
+import { BethanySchema } from '@/lib/about/schema.org'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { Section } from '@/lib/layoutElements/Section'
 import { Centered } from '@/lib/layoutElements/flexLayouts'
@@ -10,6 +11,8 @@ export const metadata: Metadata = {
 }
 const AboutPage = () => {
   return (
+    <>
+    <BethanySchema/>
     <GutteredPage>
       <Centered>
         <h1>About</h1>
@@ -23,6 +26,7 @@ const AboutPage = () => {
         <TechnologyItems />
       </Section>
     </GutteredPage>
+    </>
   )
 }
 

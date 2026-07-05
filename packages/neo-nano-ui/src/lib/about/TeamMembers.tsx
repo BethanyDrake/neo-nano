@@ -2,7 +2,7 @@ import { Column } from "../layoutElements/flexLayouts"
 import { TeamMember } from "./SectionItems"
 
 export const TeamMembers = () => {
-    return   <Column>
+    return  <Column>
         <TeamMember
           fullName={'Bethany Drake'}
           role={'Lead Developer'}
