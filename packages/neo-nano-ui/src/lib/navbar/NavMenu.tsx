@@ -17,8 +17,22 @@ const MyMenuItem = ({ close, href, children }: PropsWithChildren & { close: () =
   )
 }
 
+const HiddenNavMenu = () => (
+  <div style={{display: 'none'}}>
+    <Link href="/">Home</Link>
+    <Link href="/forum">Forum</Link>
+    <Link href="/profile">My Profile</Link>
+    <Link href="/analytics">Analytics</Link>
+    <Link href="/moderation/code-of-conduct">Code of Conduct</Link>
+    <Link href="/about">About</Link>
+    <Link href="/tools">Tools</Link>
+  </div>
+)
+
 export const NavMenu = () => {
   return (
+    <>
+    <HiddenNavMenu/>
     <Menu>
       {({ close }) => {
         return (
@@ -72,5 +86,6 @@ export const NavMenu = () => {
         )
       }}
     </Menu>
+    </>
   )
 }
