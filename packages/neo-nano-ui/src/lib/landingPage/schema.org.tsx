@@ -5,7 +5,7 @@ const novelNovemberLd = {
   '@type': 'Event',
   name: 'Novel November',
   description: 'Write 50,000 words in November',
-  duration: 'PT30D',
+  duration: 'P30D',
   eventSchedule: {
     '@type': 'Schedule',
     startDate: '2026-11-01',
@@ -28,7 +28,7 @@ const midYearNoveletteEventSchema = {
   '@type': 'Event',
   name: 'Mid Year Novelette',
   description: 'Write 15,000 words in July',
-  duration: 'PT31D',
+  duration: 'P31D',
   eventSchedule: {
     '@type': 'Schedule',
     startDate: '2026-07-01',
