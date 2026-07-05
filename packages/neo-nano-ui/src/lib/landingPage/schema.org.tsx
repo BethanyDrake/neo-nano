@@ -37,7 +37,7 @@ const midYearNoveletteEventSchema = {
   name: 'Mid Year Novelette',
   description: 'Write 15,000 words in July',
   duration: 'P31D',
-  startDate: '2026-11-01',
+  startDate: '2026-07-01',
   location,
   organizer,
 }
