@@ -1,4 +1,15 @@
+const location = {
+  '@type': 'VirtualLocation',
+  url: 'https://www.novel-november.com/',
+}
 
+const organizer = {
+  '@type': 'Organization',
+  name: 'Neo Nano',
+  url: 'https://www.novel-november.com/',
+  address: "PO BOX 9103, Traralgon VIC 3844",
+  email: "bethany@novel-november.com"
+}
 
 const novelNovemberLd = {
   '@context': 'https://schema.org',
@@ -6,12 +17,9 @@ const novelNovemberLd = {
   name: 'Novel November',
   description: 'Write 50,000 words in November',
   duration: 'P30D',
-  eventSchedule: {
-    '@type': 'Schedule',
-    startDate: '2026-11-01',
-    endDate: '2026-11-30',
-    repeatFrequency: 'P1Y',
-  },
+  startDate: '2026-11-01',
+  location,
+  organizer,
 }
 
 export const NovemberEventSchema = () => (
@@ -29,12 +37,9 @@ const midYearNoveletteEventSchema = {
   name: 'Mid Year Novelette',
   description: 'Write 15,000 words in July',
   duration: 'P31D',
-  eventSchedule: {
-    '@type': 'Schedule',
-    startDate: '2026-07-01',
-    endDate: '2026-07-31',
-    repeatFrequency: 'P1Y',
-  },
+  startDate: '2026-11-01',
+  location,
+  organizer,
 }
 
 export const MidYearNoveletteEventSchema = () => (
