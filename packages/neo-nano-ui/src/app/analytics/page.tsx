@@ -9,6 +9,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Analytics',
+  description: "Challenge outcomes: see how much we wrote and what badges we earned!"
 }
 
 const Page = async () => {
