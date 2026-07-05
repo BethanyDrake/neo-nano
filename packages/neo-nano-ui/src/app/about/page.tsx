@@ -6,6 +6,7 @@ import { Centered } from '@/lib/layoutElements/flexLayouts'
 import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'About',
+  description: "The tools and team behind Novel November"
 }
 const AboutPage = () => {
   return (
