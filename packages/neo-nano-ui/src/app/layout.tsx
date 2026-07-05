@@ -25,9 +25,9 @@ config.autoAddCss = false
 export const metadata: Metadata = {
   title: {
     template: '%s | Novel November',
-    default: 'Novel November',
+    default: 'Novel November | Write a novel this November!',
   },
-  description: 'Write a novel this November!',
+  description: '30 days, 50K words. Can you beat the challenge?',
   openGraph: {
     title: 'Write a novel this November!',
     description: '30 days, 50K words. Can you beat the challenge?',
