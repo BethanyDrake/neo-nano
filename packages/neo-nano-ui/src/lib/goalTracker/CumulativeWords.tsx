@@ -7,9 +7,10 @@ type Props = {
   title: string
   cumulativeWordCount: Record[]
   lengthDays: number
+  target: number
 }
 
-export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays }: Props) => {
+export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays, target }: Props) => {
   const data = cumulativeWordCount.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
@@ -29,7 +30,7 @@ export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays }: Prop
           }}
           syncMethod="index"
         >
-          <YAxis>
+          <YAxis domain={[0, Math.max(target, cumulativeWordCount.at(-1) ?? 0)]}>
             <Label value="word count" position="top" angle={0} offset={24} />
           </YAxis>
           <XAxis dataKey={'day'} domain={[1, lengthDays]}>
@@ -37,7 +38,7 @@ export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays }: Prop
           </XAxis>
 
           <Line dataKey="wordCount" fill="#1ab394" />
-          <ReferenceLine y={50000} stroke="#5e53a5ff" strokeDasharray="3 3" />
+          <ReferenceLine segment={[{x: 1, y:0}, {x: lengthDays, y:target, }]} stroke="#5e53a5ff" strokeDasharray="3 3" />
         </LineChart>
       </ResponsiveContainer>
   )
