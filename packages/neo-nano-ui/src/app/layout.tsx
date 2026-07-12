@@ -27,14 +27,16 @@ export const metadata: Metadata = {
     template: '%s | Novel November',
     default: 'Novel November | Write a novel this November!',
   },
-  description: '30 days, 50K words. Can you beat the challenge?',
+  description: '30 days, 50K words. Write a novel this November!',
   openGraph: {
     title: 'Write a novel this November!',
-    description: '30 days, 50K words. Can you beat the challenge?',
+    description: '30 days, 50K words. Write a novel this November!',
     url: 'https://www.novel-november.com',
     siteName: 'Novel November',
     images: [{ url: 'https://ytw3r4gan2ohteli.public.blob.vercel-storage.com/opengraph-image.png' }],
   },
+  keywords: ["writing month", "writing challenge", "nanowrimo", "novel writing", "write a novel in 30 days", "novelette", "novela", "writer's toolbox", "writing tools", "progress", "track your progress", "productivity", "motivation"
+  ]
 }
 export default async function RootLayout({
   children,

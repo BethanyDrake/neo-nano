@@ -43,3 +43,11 @@
     max-height: fit-content
   }
 }
+
+.Tooltip {
+    background-color: var(--background-colour-2);
+    padding: 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    border: 1px dashed var(--primary-vibrant);
+}

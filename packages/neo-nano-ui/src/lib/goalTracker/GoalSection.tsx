@@ -123,7 +123,7 @@ export const GoalSection = ({
               lengthDays={lengthDays}
             />
             {isCumulative ? (
-              <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords} lengthDays={lengthDays} />
+              <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords} lengthDays={lengthDays} target={target}/>
             ) : (
               <WordsPerDay
                 title={title}
