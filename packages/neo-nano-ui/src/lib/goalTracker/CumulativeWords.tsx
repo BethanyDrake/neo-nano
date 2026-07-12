@@ -1,6 +1,7 @@
 'use client'
+import classes from './goalTracker.module.css'
 
-import { Label, Line, LineChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { Label, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, TooltipContentProps, XAxis, YAxis } from 'recharts'
 
 import {Record} from '@/lib/types/forum.types'
 type Props = {
@@ -8,6 +9,22 @@ type Props = {
   cumulativeWordCount: Record[]
   lengthDays: number
   target: number
+}
+
+const CumulativeWordsTooltip = ({ active, payload }: TooltipContentProps<number, number>) => {
+  const isVisible = active && payload && payload.length
+  const {day, wordCount } = payload[0]?.payload ?? {}
+ 
+  return (
+    <div style={{ visibility: isVisible ? 'visible' : 'hidden' }}>
+      {isVisible && (
+        <div className={classes.Tooltip}>
+          <div>Day {day}</div>
+          <div>{wordCount} words</div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays, target }: Props) => {
@@ -37,8 +54,9 @@ export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays, target
              <Label value="challenge day" position="bottom" />
           </XAxis>
 
-          <Line dataKey="wordCount" fill="#1ab394" />
+          <Line dataKey="wordCount" fill="var(--primary-vibrant)" stroke="var(--primary-vibrant)" />
           <ReferenceLine segment={[{x: 1, y:0}, {x: lengthDays, y:target, }]} stroke="#5e53a5ff" strokeDasharray="3 3" />
+             <Tooltip content={(CumulativeWordsTooltip)} />
         </LineChart>
       </ResponsiveContainer>
   )
