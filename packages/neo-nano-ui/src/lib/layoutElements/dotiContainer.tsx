@@ -4,3 +4,7 @@ import styles from './layoutElements.module.css'
 export const DotiContainer =({children}: PropsWithChildren) => {
     return <div className={styles.doti}>{children}</div>
 }
+
+export const DotiDivider = () => {
+    return <hr className={styles.dotiDivider}/>
+}

@@ -7,7 +7,6 @@ import { aspectDefinitions } from './aspects'
 
 const MyTooltip = ({ label, payload }: TooltipContentProps<number, string>) => {
   const aspect: Aspect = payload[0]?.payload?.key ?? 'fantasy'
-  console.log(payload)
   return (
     <div className={classNames.Tooltip} style={{borderColor: aspectDefinitions[aspect].colour}}>
       <div>{label}:</div>

@@ -8,8 +8,7 @@ export const getDateAsString = (date: Date) => {
     return format(date, 'yyyy-MM-dd')
 }
 
-export const truncateText = (text: string) => {
-  const targetLength = 100
+export const truncateText = (text: string, targetLength: number) => {
     if(text.length <= targetLength) {
         return text
     }
