@@ -28,7 +28,7 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
         <Column>
           <h3 className={styles['forum-item-title']}>{title}</h3>
           <p style={{ paddingBottom: '12px' }}>
-            {thread.authorDisplayName}: {truncateText(text)}
+            {thread.authorDisplayName}: {truncateText(text, 100)}
           </p>
         </Column>
         <div style={{ color: 'var(--primary-vibrant)', minWidth: '50px' }}>

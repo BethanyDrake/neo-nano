@@ -11,6 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import logoV4 from '@/lib/media/logo-v4.png'
 import { NovemberEventSchema, MidYearNoveletteEventSchema } from '@/lib/landingPage/schema.org'
+import { ProjectHighlight } from '@/lib/landingPage/ProjectHighlight'
+import { getFeaturedProject } from '@/lib/serverFunctions/projects/getFeaturedProject'
+import { DotiDivider } from '@/lib/layoutElements/dotiContainer'
 
 const FeatureCard = ({
   title,
@@ -60,7 +63,8 @@ const FeaturesSection = () => {
   )
 }
 
-export default function Home() {
+export default async function Home() {
+  const featuredProject = await getFeaturedProject()
   return (
     <GutteredPage>
       <div style={{ textAlign: 'center', minHeight: '75px' }}>
@@ -138,6 +142,8 @@ export default function Home() {
       <Column>
         <FeaturesSection />
       </Column>
+      <DotiDivider />
+      {featuredProject && <ProjectHighlight project={featuredProject.project} user={featuredProject.user} />}
     </GutteredPage>
   )
 }

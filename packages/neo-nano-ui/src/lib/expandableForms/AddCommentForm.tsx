@@ -75,8 +75,8 @@ export const ReplyToCommentForm = () => {
 
   return (
     <AddCommentForm
-      initialPlainText={`Replying to ${author.displayName}:\n${truncateText(comment.text)}\n↩️`}
-      initialRichText={`<p><em>Replying to ${author.displayName}:</em></p><blockquote>${truncateText(comment.text)}</blockquote><p>↩️</p>`}
+      initialPlainText={`Replying to ${author.displayName}:\n${truncateText(comment.text, 100)}\n↩️`}
+      initialRichText={`<p><em>Replying to ${author.displayName}:</em></p><blockquote>${truncateText(comment.text, 100)}</blockquote><p>↩️</p>`}
       afterSubmit={cancelAction}
     />
   )
