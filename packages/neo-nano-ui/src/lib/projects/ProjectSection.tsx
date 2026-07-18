@@ -10,15 +10,15 @@ import { AspectChart } from './AspectChart'
 import { deleteProject as _deleteProject } from '../serverFunctions/projects/deleteProject'
 import { useMutation } from '@tanstack/react-query'
 
-export const ProjectSection = ({ project }: {project: Project}) => {
-  const {title, blurb, status, excerpt, wordCount , id, visibility} = project
+export const ProjectSection = ({ project }: { project: Project }) => {
+  const { title, blurb, status, excerpt, wordCount, id, visibility } = project
 
-  const { mutate: deleteProject , isPending: isDeleteProjectPending} = useMutation<void, Error, string>({
-  mutationFn: _deleteProject,
-  onSuccess: (data, variables, onMutateResponse, context) => {
-    return context.client.invalidateQueries({ queryKey: ['my-projects'] })
-  },
-})
+  const { mutate: deleteProject, isPending: isDeleteProjectPending } = useMutation<void, Error, string>({
+    mutationFn: _deleteProject,
+    onSuccess: (data, variables, onMutateResponse, context) => {
+      return context.client.invalidateQueries({ queryKey: ['my-projects'] })
+    },
+  })
   return (
     <Disclosure>
       <DisclosureButton className={disclosureStyles.DisclosureButton}>
@@ -29,7 +29,7 @@ export const ProjectSection = ({ project }: {project: Project}) => {
         <Row style={{ paddingTop: '1em' }} justifyContent="right" alignItems="center">
           <h4>Edit / Remove:</h4>
           <Row alignItems="center">
-            <EditProjectModal initialProject={project}/>
+            <EditProjectModal initialProject={project} />
             <SmallIconButton
               id="delete"
               onClick={() => deleteProject(id)}
@@ -41,42 +41,41 @@ export const ProjectSection = ({ project }: {project: Project}) => {
           </Row>
         </Row>
 
-        
-<div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent: 'left', gap: '32px' }}>
-      <div style={{ maxWidth: '500px' }}>
-        <Column>
-          <h3 style={{ fontSize: '2em' }}>{title}</h3>
-          {blurb && (
-            <>
-              <h4>Blurb:</h4>
-              <p style={{ whiteSpaceCollapse: 'preserve' }}>{blurb}</p>
-            </>
-          )}
-          {excerpt && (
-            <>
-              <h4>Excerpt:</h4>
-              <p style={{ whiteSpaceCollapse: 'preserve' }}>{excerpt}</p>
-            </>
-          )}
-        </Column>
-      </div>
-      <Column>
-        <AspectChart aspects={project.aspects} />
-        {wordCount && (
-          <>
-            <LeftRow>
-              <h4>Word count:</h4> <span>{wordCount / 1000}K</span>
-            </LeftRow>
-            <LeftRow>
-              <h4>Status:</h4> <span>{status}</span>
-            </LeftRow>
-              <LeftRow>
-              <h4>Visibility:</h4> <span>{visibility}</span>
-            </LeftRow>
-          </>
-        )}
-      </Column>
-    </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'start', justifyContent: 'left', gap: '32px' }}>
+          <div style={{ maxWidth: '500px' }}>
+            <Column>
+              <h3 style={{ fontSize: '2em' }}>{title}</h3>
+              {blurb && (
+                <>
+                  <h4>Blurb:</h4>
+                  <p style={{ whiteSpaceCollapse: 'preserve' }}>{blurb}</p>
+                </>
+              )}
+              {excerpt && (
+                <>
+                  <h4>Excerpt:</h4>
+                  <p style={{ whiteSpaceCollapse: 'preserve' }}>{excerpt}</p>
+                </>
+              )}
+            </Column>
+          </div>
+          <Column>
+            <AspectChart aspects={project.aspects} />
+            {wordCount && (
+              <>
+                <LeftRow>
+                  <h4>Word count:</h4> <span>{wordCount / 1000}K</span>
+                </LeftRow>
+                <LeftRow>
+                  <h4>Status:</h4> <span>{status}</span>
+                </LeftRow>
+                <LeftRow>
+                  <h4>Visibility:</h4> <span>{visibility}</span>
+                </LeftRow>
+              </>
+            )}
+          </Column>
+        </div>
       </DisclosurePanel>
     </Disclosure>
   )

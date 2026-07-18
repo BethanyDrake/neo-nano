@@ -7,7 +7,7 @@ export const AspectInput = ({
   color,
   value,
   setValue,
-  aspect
+  aspect,
 }: {
   color: string
   value: number
@@ -112,7 +112,10 @@ export const TitledAspectInput = ({
   const title = aspectDefinitions[aspect].name
   return (
     <div>
-      <label htmlFor={`${aspect}-slider`} style={{ textTransform: 'capitalize' }}>{title}:</label> <p>{description}</p>
+      <label htmlFor={`${aspect}-slider`} style={{ textTransform: 'capitalize' }}>
+        {title}:
+      </label>{' '}
+      <p>{description}</p>
       <AspectInput aspect={aspect} value={value} setValue={setValue} color={colour}></AspectInput>
     </div>
   )
