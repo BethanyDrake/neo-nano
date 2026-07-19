@@ -8,7 +8,6 @@ export type PyramidEntry =
 }
 
 export const pyramidOfProgressData = (userRecords: Record[][], milestones: number[]): PyramidEntry[] => {
-
     const totals = userRecords.map((records) => sum(records))
 
     return milestones.map((milestone) => ({
