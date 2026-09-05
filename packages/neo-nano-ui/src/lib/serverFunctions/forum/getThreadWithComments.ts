@@ -5,7 +5,7 @@ import { CommentCardDataEntry } from '@/lib/commentCards/CommentCard'
 import { getQueryFunction } from '@/lib/serverFunctions/_utils/getQueryFunction'
 import { COMMENTS_PER_PAGE } from '@/lib/misc'
 import { redirect } from 'next/navigation'
-import { mapFlag, mapSnapshot, RawFlag } from './rowMappers'
+import { mapSnapshot } from './rowMappers'
 import { getRemovalStatus } from '../moderation/getRemovalStatus'
 
 export type ReturnType = {
@@ -19,8 +19,7 @@ export type ReturnType = {
 export const getThreadWithComments = async (threadId: string, currentPage: number = 1) => {
   console.log('getThreadWithComments')
   const _commentsPromise = getQueryFunction()`
-  SELECT comments.comment_text, comments.rich_text, author, comments.created_at, comments.id,  comments.is_deleted, thread, display_name, 
-  jsonb_agg_strict(flags.*) as flags, 
+  SELECT comments.comment_text, comments.rich_text, author, comments.created_at, comments.id,  comments.is_deleted, comments.review_status, thread, display_name, 
   jsonb_agg_strict(comment_snapshots.*) as snapshots
     FROM comments JOIN users on comments.author=users.id
     LEFT OUTER JOIN  flags on flags.comment = comments.id
@@ -36,7 +35,7 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   WHERE thread=${threadId}`
 
   const initialCommentPromise = getQueryFunction()`
-      SELECT comments.id, comments.is_deleted, jsonb_agg(jsonb_build_object('review_outcome', flags.review_outcome, 'id', flags.id)) as review_outcomes 
+      SELECT comments.id, comments.is_deleted, comments.review_status
         FROM comments LEFT OUTER JOIN flags on comments.id = flags.comment
       WHERE comments.thread=${threadId}
       GROUP BY comments.id
@@ -61,8 +60,6 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
     initialCommentPromise
   ])
 
-  console.log("initialComment", JSON.stringify(initialComment))
-
   if (totalCommentsData.length === 0 || breadcrumbData.length === 0) {
       console.warn(`Comments or breadcumbs not found for thread: ${threadId}`)
       redirect('/forum')
@@ -72,29 +69,29 @@ export const getThreadWithComments = async (threadId: string, currentPage: numbe
   const { thread, topic, category } = breadcrumbData[0]
 
   const commentCardDataEntries: CommentCardDataEntry[] = _comments.map(
-    ({ created_at, comment_text, rich_text, author, id, display_name, flags, snapshots , is_deleted}) => ({
-      comment: {
-        text: comment_text,
-        richText: rich_text,
-        createdAt: created_at,
-        id,
-        removalStatus: getRemovalStatus((flags as RawFlag[]).map(({review_outcome}) => review_outcome), is_deleted)
-      },
-      author: {
-        id: author,
-        displayName: display_name,
-      },
-      flags: flags.map(mapFlag),
-      snapshots: snapshots.map(mapSnapshot),
-    }),
+    ({ created_at, comment_text, rich_text, author, id, display_name, snapshots , is_deleted, review_status}) => {
+      return ({
+        comment: {
+          text: comment_text,
+          richText: rich_text,
+          createdAt: created_at,
+          id,
+          removalStatus: getRemovalStatus(review_status, is_deleted)
+        },
+        author: {
+          id: author,
+          displayName: display_name,
+        },
+        snapshots: snapshots.map(mapSnapshot),
+      })
+    },
   )
-
   return {
     totalComments,
     commentCardDataEntries,
     thread: thread[0] as Thread,
     category: category[0] as Category,
     topic: topic[0] as Topic,
-    removalStatus: getRemovalStatus((initialComment[0].review_outcomes as Partial<RawFlag>[]).filter(({id}) => !!id).map(({review_outcome}) => review_outcome), initialComment[0].is_deleted)
+    removalStatus: getRemovalStatus(initialComment[0].review_status, initialComment[0].is_deleted)
   }
 }

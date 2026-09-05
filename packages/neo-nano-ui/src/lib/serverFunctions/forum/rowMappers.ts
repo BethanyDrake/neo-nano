@@ -34,13 +34,14 @@ export const mapFlag = ({ id, comment, reported_by, created_at, reason, details,
 })
 
 export type RawComment = {
-  id: string,
-  comment_text: string,
-  rich_text: string,
-  author: string,
-  thread: string,
-  created_at: Date,
-  is_deleted: boolean,
+  id: string
+  version: number
+  comment_text: string
+  rich_text: string
+  updated_at: Date
+  created_at: Date
+  is_deleted: boolean
+  author: string
   review_status: null | 'pending_review' | 'confirmed_inappropriate'
 }
 
@@ -51,6 +52,7 @@ export const mapComment = (rawComment: RawComment): Comment  => {
   richText: rawComment.rich_text,
   author: rawComment.author,
   createdAt: rawComment.created_at,
+  updatedAt: rawComment.updated_at,
   isDeleted: rawComment.is_deleted,
   reviewStatus: rawComment.review_status
 }

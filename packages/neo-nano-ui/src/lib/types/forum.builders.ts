@@ -19,7 +19,9 @@ export const buildComment = (comment: Partial<Comment> = {}) => ({
   richText: '',
   author: '',
   createdAt: new Date(),
+  updatedAt: new Date(),
   isDeleted: false,
+  reviewStatus: null,
   ...comment,
 })
 

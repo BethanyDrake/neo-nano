@@ -25,7 +25,6 @@ describe('<ThreadPage />', () => {
             id: '1',
             displayName: 'Some Name',
           },
-          flags: [],
           snapshots: []
         },
       ],

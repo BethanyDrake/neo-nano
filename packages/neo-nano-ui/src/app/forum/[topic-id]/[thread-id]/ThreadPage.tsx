@@ -43,8 +43,8 @@ export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic:
         </Row>
         <div>
           {commentsData &&
-            commentsData.map(({ comment, author, flags, snapshots }) => (
-              <CommentCard key={comment.id} comment={comment} author={author} flags={flags} snapshots={snapshots} />
+            commentsData.map(({ comment, author, snapshots }) => (
+              <CommentCard key={comment.id} comment={comment} author={author} snapshots={snapshots} />
             ))}
         </div>
         <Row justifyContent="right">

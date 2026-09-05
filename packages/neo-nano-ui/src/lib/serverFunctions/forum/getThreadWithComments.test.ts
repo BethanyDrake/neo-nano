@@ -1,7 +1,6 @@
 import {
   addCategory,
   addComment,
-  addFlag,
   addThread,
   addTopic,
   addUser,
@@ -14,6 +13,7 @@ import { createThread } from './createThread'
 import { getThreads } from './getThreads'
 import { deleteComment } from './addThreadComment'
 import { getUserId } from '../_utils/getUserIdFromSession'
+import { flagComment } from '../moderation/flagComment'
 
 // @vitest-environment node
 vi.mock('../_utils/getUserIdFromSession')
@@ -44,7 +44,6 @@ describe('getThreadWithComments', () => {
               id: author,
               displayName: 'Author Name',
             },
-            flags: [],
             snapshots: [],
           },
         ],
@@ -71,7 +70,7 @@ describe('getThreadWithComments', () => {
     )
   })
 
-  test('comment with multiple flags', async () => {
+  test('initial comment is flagged', async () => {
     const authorId = await addUser({ displayName: 'Author Name' })
     await addCategory({ title: 'Category Title' })
     await addTopic({ title: 'Topic Title', description: 'Topic description.', icon: 'faBoltLightning' })
@@ -81,10 +80,9 @@ describe('getThreadWithComments', () => {
       text: 'comment text',
       richText: '<p>comment text</p>',
     })
-    await addFlag(commentId, { reason: 'harrassment' })
-    await addFlag(commentId, { reason: 'sexual-content' })
+    await flagComment( { reason: 'harrassment', comment: commentId , details: '' })
 
-    const { comment, author, flags, snapshots } = (await getThreadWithComments(threadId)).commentCardDataEntries[0]
+    const { comment, author, snapshots } = (await getThreadWithComments(threadId)).commentCardDataEntries[0]
     expect(comment).toEqual(
       expect.objectContaining({
         text: 'comment text',
@@ -99,10 +97,6 @@ describe('getThreadWithComments', () => {
       }),
     )
     expect(comment.removalStatus).toEqual('PENDING_REVIEW')
-
-    expect(flags).toHaveLength(2)
-    expect(flags.map(({ reason }) => reason)).toContain('harrassment')
-    expect(flags.map(({ reason }) => reason)).toContain('sexual-content')
     expect(snapshots).toEqual([])
   })
 

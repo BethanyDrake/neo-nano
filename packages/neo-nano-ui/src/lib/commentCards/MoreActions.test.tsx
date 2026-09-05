@@ -10,7 +10,6 @@ describe("<MoreActions />", () => {
         const {getByRole} = render(<MoreActions />, { wrapper: wrap(withUserContext({id: 'my-id', role: 'user'}), withCommentCartContext({
             comment: buildCommentDataEntry(),
             author: {id: 'my-id', displayName: ""},
-            flags: [],
             snapshots: []
         })) })
 
@@ -22,7 +21,6 @@ describe("<MoreActions />", () => {
         const {queryByRole, getByRole} = render(<MoreActions />, { wrapper: wrap(withUserContext({id: 'my-id', role: 'user'}), withCommentCartContext({
             comment: buildCommentDataEntry(),
             author: {id: 'other-id', displayName: ""},
-            flags: [],
             snapshots: []
         })) })
 

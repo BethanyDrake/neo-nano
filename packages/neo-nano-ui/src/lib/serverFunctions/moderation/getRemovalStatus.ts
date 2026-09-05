@@ -1,10 +1,11 @@
-import { Flag, RemovalSatus } from "@/lib/types/forum.types"
+import { RemovalSatus } from "@/lib/types/forum.types"
+import { RawComment } from "../forum/rowMappers"
 
-export const getRemovalStatus = (reviewOutcomes: Flag['reviewOutcome'][], isDeleted: boolean): RemovalSatus => {
-  if (reviewOutcomes.some((value) => value === 'confirmed')) {
+export const getRemovalStatus = (reviewStatus: RawComment['review_status'], isDeleted: boolean): RemovalSatus => {
+  if (reviewStatus === 'confirmed_inappropriate') {
     return "REMOVED_INAPPROPRIATE"
   }
-  if (reviewOutcomes.some((value) => value === null)) {
+   if (reviewStatus === 'pending_review') {
     return "PENDING_REVIEW"
   }
    
