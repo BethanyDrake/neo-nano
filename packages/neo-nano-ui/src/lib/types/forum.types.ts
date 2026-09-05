@@ -14,6 +14,7 @@ export type Comment = {
     author: string
     createdAt: Date
     isDeleted: boolean
+    reviewStatus: null | 'pending_review' | 'confirmed_inappropriate'
 }
 
 export type Thread = {
