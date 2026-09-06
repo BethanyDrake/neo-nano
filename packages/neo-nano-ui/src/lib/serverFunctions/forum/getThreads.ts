@@ -4,7 +4,6 @@ import { Comment, RemovalSatus, Thread } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { THREADS_PER_PAGE } from '@/lib/misc'
 import { getRemovalStatus } from '../moderation/getRemovalStatus'
-import { RawFlag } from './rowMappers'
 
 export type ThreadSummary = Thread & Pick<Comment, 'text'> & {totalComments: number, authorDisplayName: string, removalStatus: RemovalSatus}
 
@@ -12,12 +11,10 @@ const getThreadSummaries = async (topicId: string, currentPage: number) => {
   const sql = getQueryFunction()
 
   const _threads = await sql`
-    SELECT * FROM threads, 
+    SELECT * FROM threads,
       LATERAL (
-        SELECT comments.comment_text, comments.is_deleted, users.display_name,
-          jsonb_agg(jsonb_build_object('review_outcome', flags.review_outcome, 'id', flags.id)) as review_outcomes
-        FROM comments JOIN users on comments.author=users.id 
-          LEFT OUTER JOIN flags on comments.id=flags.comment
+        SELECT comments.comment_text, comments.is_deleted, comments.review_status, users.display_name
+        FROM comments JOIN users on comments.author=users.id
         WHERE comments.thread=threads.id
         GROUP BY comments.id, users.id
         ORDER BY comments.created_at asc 
@@ -33,13 +30,12 @@ const getThreadSummaries = async (topicId: string, currentPage: number) => {
    
   const threadSummaries = _threads.map((_thread) => {
    
-    const reviewOutcomes = (_thread.review_outcomes as Partial<RawFlag>[]).filter(({id}) => !!id).map(({review_outcome}) => review_outcome)
     const { id, latest, title, topic, author} = _thread
     return{ id, latest, title, topic, author,
     authorDisplayName: _thread.display_name,
     text: _thread.comment_text,
     totalComments: parseInt(_thread.count),
-    removalStatus: getRemovalStatus(reviewOutcomes, _thread.is_deleted)
+    removalStatus: getRemovalStatus(_thread.review_status, _thread.is_deleted)
   }}) as ThreadSummary[]
 
   return threadSummaries

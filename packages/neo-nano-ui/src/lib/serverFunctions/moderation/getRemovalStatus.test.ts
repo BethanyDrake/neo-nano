@@ -1,20 +1,20 @@
 import { getRemovalStatus } from "./getRemovalStatus"
 
 describe('getRemovalStatus', () => {
-    test.each([
-        [[], null],
-        [[null], 'PENDING_REVIEW'],
-        [['overruled' as const], null],
-        [['confirmed' as const], 'REMOVED_INAPPROPRIATE'],
-        [[null, 'overruled' as const, 'confirmed' as const] , 'REMOVED_INAPPROPRIATE']
-    ],
-        
+   
+    test('removed inappropriate', () => {
+        expect(getRemovalStatus('confirmed_inappropriate', false)).toEqual('REMOVED_INAPPROPRIATE')
+    })
 
-    )('removal status $1', (input, removalStatus) => {
-        expect(getRemovalStatus(input, false)).toEqual(removalStatus)
+     test('pending review inappropriate', () => {
+        expect(getRemovalStatus('pending_review', false)).toEqual('PENDING_REVIEW')
     })
 
     test('deleted by user', () => {
-        expect(getRemovalStatus([], true)).toEqual('DELETED')
+        expect(getRemovalStatus(null, true)).toEqual('DELETED')
+    })
+
+    test('not removed', () => {
+        expect(getRemovalStatus(null, false)).toEqual(null)
     })
 })

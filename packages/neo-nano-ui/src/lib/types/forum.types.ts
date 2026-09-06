@@ -13,7 +13,9 @@ export type Comment = {
     richText: string
     author: string
     createdAt: Date
+    updatedAt: Date
     isDeleted: boolean
+    reviewStatus: null | 'pending_review' | 'confirmed_inappropriate'
 }
 
 export type Thread = {

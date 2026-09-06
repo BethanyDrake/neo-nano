@@ -1,11 +1,11 @@
 'use server'
 
-import camelcaseKeys from 'camelcase-keys'
 import { getDbConnection } from '../_utils/getDbConnection'
 import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getSingle } from '../_utils/getSingle'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { Comment } from '@/lib/types/forum.types'
+import { mapComment, RawComment } from './rowMappers'
 
 export async function addThreadComment(threadId: string, commentText: string, richText: string) {
   console.log('addThreadComment')
@@ -16,26 +16,9 @@ export async function addThreadComment(threadId: string, commentText: string, ri
       VALUES (${commentText}, ${author}, ${threadId}, ${richText})
       returning comments.*`
 
-  return transformRawComment(rows[0] as RawComment)
+  return mapComment(rows[0] as RawComment)
 }
 
-type RawComment = {
-  id: string
-  version: number
-  comment_text: string
-  rich_text: string
-  updated_at: Date
-  created_at: Date
-  is_deleted: boolean
-  author: string
-}
-
-const transformRawComment = (rawComment: RawComment): Comment => {
-  return {
-    ...camelcaseKeys(rawComment),
-    text: rawComment.comment_text
-  }
-}
 
 const getAuthorComment = (commentId: string, author: string): Promise<RawComment> =>
   getSingle(
@@ -81,7 +64,7 @@ export async function updateComment(commentId: string, commentText: string, rich
   await createSnapshot(comment)
   const updatedComment = await _updateComment(comment.id, comment.version + 1, commentText, richText)
 
-  return transformRawComment(updatedComment)
+  return mapComment(updatedComment)
 }
 
 export async function deleteComment(commentId: string): Promise<Comment> {
@@ -91,5 +74,5 @@ export async function deleteComment(commentId: string): Promise<Comment> {
   await createSnapshot(comment)
   const updatedComment = await _updateComment(comment.id, comment.version + 1, '', '', true)
 
-  return transformRawComment(updatedComment)
+  return mapComment(updatedComment)
 }

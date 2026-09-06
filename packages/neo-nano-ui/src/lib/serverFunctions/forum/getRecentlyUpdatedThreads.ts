@@ -3,12 +3,16 @@ import { getQueryFunction } from "../_utils/getQueryFunction"
 import { ThreadSummary } from "./getThreads"
 
 export const getRecentlyUpdatedThreads = async () => {
+  console.log("getRecentlyUpdatedThreads")
   const sql = getQueryFunction()
   const _threads = await sql`
     SELECT * FROM threads, 
       LATERAL (SELECT comments.comment_text, users.display_name 
         FROM comments join users on comments.author=users.id
-  WHERE comments.thread=threads.id order by comments.created_at desc LIMIT 1),
+  WHERE comments.thread=threads.id 
+  AND NOT comments.is_deleted
+  AND comments.review_status is NULL
+  ORDER BY comments.created_at desc LIMIT 1),
       LATERAL (SELECT COUNT(comments.id), MAX(comments.created_at) as latest FROM comments
         WHERE comments.thread = threads.id
         GROUP BY threads.id)

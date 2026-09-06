@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { ClientSideOnly } from '../ClientSideOnly'
-import { Comment, CommentSnapshot, Flag, Profile, RemovalSatus } from '@/lib/types/forum.types'
+import { Comment, CommentSnapshot, Profile, RemovalSatus } from '@/lib/types/forum.types'
 import { Column, Row } from '../layoutElements/flexLayouts'
 import { ReportCommentWrapper } from '../modals/ReportCommentModal'
 import classNames from './CommentCard.module.css'
@@ -24,7 +24,6 @@ const RichTextDisplay = dynamic(() => import('../richText/RichTextDisplay'), {
 export type CommentCardDataEntry = {
   comment: Pick<Comment, 'id' | 'text' | 'richText' | 'createdAt'> & {removalStatus: RemovalSatus}
   author: Pick<Profile, 'id' | 'displayName'>
-  flags: Flag[]
   snapshots: CommentSnapshot[]
 }
 
@@ -48,7 +47,6 @@ export const CommentCardContext = createContext<CommentCardDataEntry>({
     id: '',
     displayName: '',
   },
-  flags: [],
   snapshots: [],
 })
 
@@ -73,13 +71,13 @@ export const WithAction = ({ action, children }: { action: CommentAction } & Pro
   return activeAction === action ? children : null
 }
 
-export const CommentCard = ({ comment, author, flags, snapshots }: CommentCardDataEntry) => {
-  const hasUnreviewedFlag = flags.some(({ reviewOutcome }) => !reviewOutcome)
-  const hasConfirmedFlag = flags.some(({ reviewOutcome }) => reviewOutcome === 'confirmed')
+export const CommentCard = ({ comment, author, snapshots }: CommentCardDataEntry) => {
+  const hasUnreviewedFlag = comment.removalStatus === 'PENDING_REVIEW'
+  const hasConfirmedFlag =comment.removalStatus === 'REMOVED_INAPPROPRIATE'
   const isLoggedIn = useIsLoggedIn()
   const { isLocked } = useThreadContext()
 
-  const commentCardContext = useMemo(() => ({ comment, author, flags, snapshots }), [comment, author, flags, snapshots])
+  const commentCardContext = useMemo(() => ({ comment, author, snapshots }), [comment, author, snapshots])
   const [minHeight, setMinHeight] = useState<number>()
   const cardContainerRef = useRef<HTMLDivElement>(null)
   const [activeAction, setActiveAction] = useState<CommentAction>()
