@@ -5,6 +5,7 @@ import { createThread } from './createThread'
 import { getThreadWithComments } from './getThreadWithComments'
 import { deleteComment } from './addThreadComment'
 import { getUserId } from '../_utils/getUserIdFromSession'
+import { flagComment } from '../moderation/flagComment'
 
 // @vitest-environment node
 
@@ -46,5 +47,20 @@ describe('getThreads', () => {
     await deleteComment(initialCommentId)
 
     expect((await getThreads(GENERAL_TOPIC)).threadSummaries[0].removalStatus).toEqual("DELETED")
+  })
+
+  test('first comment is flagged', async () => {
+    const userId = await addUser()
+    vi.mocked(getUserId).mockResolvedValue(userId)
+    await createThread({title: 'thread title', commentText: '', commentRichText: '', topic: GENERAL_TOPIC})
+    const createdThreadId = (await getThreads(GENERAL_TOPIC)).threadSummaries[0].id
+    const initialCommentId = (await getThreadWithComments(createdThreadId)).commentCardDataEntries[0].comment.id
+    await flagComment({
+      comment: initialCommentId,
+      reason: 'harrassment',
+      details: ''
+    })
+
+    expect((await getThreads(GENERAL_TOPIC)).threadSummaries[0].removalStatus).toEqual("PENDING_REVIEW")
   })
 })
