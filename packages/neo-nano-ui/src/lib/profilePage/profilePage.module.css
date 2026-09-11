@@ -1,0 +1,10 @@
+.Icon {
+    margin: 2px; 
+    margin-right: 4px;
+    transform: translateY(6px);
+}
+
+.List {
+    list-style: none;
+    padding: 0;
+}

@@ -56,6 +56,8 @@ describe('<ProfilePage />', () => {
       displayName: 'Some Name',
       id: '1',
       role: 'user',
+      links: {
+      }
     })
     vi.mocked(getMyGoals).mockResolvedValue([
       {
@@ -84,6 +86,7 @@ describe('<ProfilePage />', () => {
       displayName: 'Some Name',
       id: '1',
       role: 'user',
+      links: {}
     })
     vi.mocked(getMyGoals).mockResolvedValue([])
     vi.mocked(joinChallenge).mockResolvedValue([])
@@ -103,6 +106,7 @@ describe('<ProfilePage />', () => {
       displayName: 'Some Name',
       id: '1',
       role: 'moderator',
+      links: {}
     })
     vi.mocked(getMyGoals).mockResolvedValue([])
     const { findByText } = render(await ProfilePage(),{wrapper: wrap(withReactQueryClient())})
@@ -115,6 +119,7 @@ describe('<ProfilePage />', () => {
       displayName: 'Some Name',
       id: '1',
       role: 'moderator',
+      links: {}
     })
     vi
       .mocked(getMyGoals)
@@ -145,6 +150,7 @@ describe('<ProfilePage />', () => {
       displayName: 'Some Name',
       id: '1',
       role: 'user',
+      links: {}
     })
     vi.mocked(getMyGoals).mockResolvedValue([])
     vi.mocked(getMyProjects).mockResolvedValue([
