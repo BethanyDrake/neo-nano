@@ -9,7 +9,7 @@ import { useUser } from '@auth0/nextjs-auth0'
 import { getMyProfile } from '../serverFunctions/profile/getMyProfile'
 
 const ProfileContext = createContext<{
-  updateProfile: UseMutateFunction<Profile, Error, Pick<Profile, "displayName" | "aboutMe">>
+  updateProfile: UseMutateFunction<Profile, Error, Pick<Profile, "displayName" | "aboutMe" | 'links'>>
   profile: Profile
   isLoading: boolean
 
@@ -17,7 +17,7 @@ const ProfileContext = createContext<{
   refreshAwards: (options?: RefetchOptions | undefined) => Promise<unknown>
 }>({
   updateProfile: () => Promise.resolve(),
-  profile: { id: '', displayName: '', role: 'user' },
+  profile: { id: '', displayName: '', role: 'user', links: {} },
   isLoading: false,
   awards: [],
   refreshAwards: () => Promise.resolve(),
@@ -52,7 +52,7 @@ export const ProfileContextProvider = ({
   })
 
   const { mutate: updateProfile } = useMutation({
-    mutationFn: async (newProfile: Pick<Profile, 'aboutMe' | 'displayName'>) => {
+    mutationFn: async (newProfile: Pick<Profile, 'aboutMe' | 'displayName' | 'links'>) => {
       const _profile = await updateProfileServerSide(newProfile)
       if (!_profile) throw Error("Missing profile.")
       return _profile

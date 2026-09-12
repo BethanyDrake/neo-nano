@@ -33,6 +33,12 @@ describe('<EditProfileModal />', () => {
       expect(updateProfile).toHaveBeenCalledWith({
         aboutMe: 'Some details about myself.',
         displayName: 'New Name',
+        links: {
+          ao3: '',
+          bluesky: '',
+          substack: '',
+          wattpad: ''
+        }
       })
     })
   })

@@ -50,6 +50,7 @@ export const buildProfile = (profile: Partial<Profile> = {}): Profile => ({
   displayName: '',
   aboutMe: undefined,
   role: 'user',
+  links: {},
   ...profile,
 })
 

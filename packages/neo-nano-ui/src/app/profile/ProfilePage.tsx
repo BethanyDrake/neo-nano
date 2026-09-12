@@ -11,6 +11,7 @@ import { AddGoalModal } from '@/lib/modals/AddGoalModal'
 import { AddProjectModal } from '@/lib/modals/AddProjectModal'
 import { EditProfileModal } from '@/lib/modals/EditProfileModal'
 import { SettingsModal } from '@/lib/modals/SettingsModal'
+import { ProfileLinks } from '@/lib/profilePage/ProfileLinksSection'
 import { ProjectSection } from '@/lib/projects/ProjectSection'
 import { useMyProjects } from '@/lib/projects/useMyProjects'
 import { getChallengeEndDate } from '@/lib/serverFunctions/goals/goalUtils'
@@ -40,6 +41,7 @@ export const ProfilePageInner = () => {
       {profile.role === 'moderator' && <p>Moderator</p>}
       <p style={{ whiteSpaceCollapse: 'preserve' }}>{profile.aboutMe}</p>
 
+     <ProfileLinks links={profile.links} />
       <TrophyCase awards={awards} />
 
       <Row alignItems="center">
