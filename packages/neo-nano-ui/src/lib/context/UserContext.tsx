@@ -12,7 +12,7 @@ export const UserContextProvider = ({children}: PropsWithChildren) => {
    const { user } = useUser()
     const { data: profile } = useQuery({
     queryKey: ['user', user?.sub],
-    queryFn: () => getMyProfile(),
+    queryFn: () => user?.sub ? getMyProfile(): null,
   })
 
     return <UserContext.Provider value={profile}>{children}</UserContext.Provider>

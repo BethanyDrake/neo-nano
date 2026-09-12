@@ -6,6 +6,7 @@ import { getQueryFunction } from '../_utils/getQueryFunction'
 import { getExternalId } from '../_utils/getUserIdFromSession'
 
 export const getMyProfile = async (): Promise<Profile | null> => {
+  console.log("getMyProfile")
   const external_id = await getExternalId()
 
   const myProfile = await getSingle(
