@@ -51,7 +51,7 @@ export const ProfileContextProvider = ({
     enabled: !!user?.sub
   })
 
-  const { mutate: updateProfile } = useMutation({
+  const { mutate: updateProfile, isPending } = useMutation({
     mutationFn: async (newProfile: Pick<Profile, 'aboutMe' | 'displayName' | 'links'>) => {
       const _profile = await updateProfileServerSide(newProfile)
       if (!_profile) throw Error("Missing profile.")
@@ -64,8 +64,8 @@ export const ProfileContextProvider = ({
 
 
   const value = useMemo(() => {
-    return { isLoading, profile, updateProfile, awards, refreshAwards }
-  }, [isLoading, profile, updateProfile, awards, refreshAwards])
+    return { isLoading: isLoading || isPending, profile, updateProfile, awards, refreshAwards }
+  }, [isLoading, isPending, profile, updateProfile, awards, refreshAwards])
 
   return <ProfileContext value={value}>{children}</ProfileContext>
 }
