@@ -5,20 +5,25 @@ import { Column, Row } from './layoutElements/flexLayouts'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faLock } from '@fortawesome/free-solid-svg-icons'
 import { truncateText } from './misc'
+import {  usePreviouslySeenThreadComments } from '@/lib/forum/previouslySeenComments'
 
 export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId: string }) => {
   const { id, title, text, totalComments, removalStatus } = thread
-
+  const previouslySeenComments = usePreviouslySeenThreadComments(thread.id)
+  const hasNewComments = totalComments > previouslySeenComments
+  console.log({previouslySeenComments, hasNewComments})
   if (removalStatus) {
     return (
       <div style={{ fontStyle: 'italic', color: 'var(--text-colour-2)' }}>
         <FontAwesomeIcon icon={faLock} />
-        {removalStatus === 'DELETED' && 'This thread has been deleted by the author' }
-        {removalStatus === 'PENDING_REVIEW' && 'This thread is pending manual review.' }
-        {removalStatus === 'REMOVED_INAPPROPRIATE' && 'This thread has been removed.' }
-        {removalStatus === 'DELETED' && <Link style={{ paddingLeft: '10px' }} href={`/forum/${topicId}/${id}`}>
-          (view history)
-        </Link>}
+        {removalStatus === 'DELETED' && 'This thread has been deleted by the author'}
+        {removalStatus === 'PENDING_REVIEW' && 'This thread is pending manual review.'}
+        {removalStatus === 'REMOVED_INAPPROPRIATE' && 'This thread has been removed.'}
+        {removalStatus === 'DELETED' && (
+          <Link style={{ paddingLeft: '10px' }} href={`/forum/${topicId}/${id}`}>
+            (view history)
+          </Link>
+        )}
       </div>
     )
   }
@@ -31,7 +36,7 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
             {thread.authorDisplayName}: {truncateText(text, 100)}
           </p>
         </Column>
-        <div style={{ color: 'var(--primary-vibrant)', minWidth: '50px' }}>
+        <div style={{ color: hasNewComments ? 'var(--primary-vibrant)' : 'var(--off-black)', minWidth: '50px' }}>
           {totalComments} <FontAwesomeIcon icon={faComment} />
         </div>
       </Row>

@@ -14,6 +14,8 @@ import Pagination from 'rc-pagination'
 import 'rc-pagination/assets/index.css'
 import enUS from 'rc-pagination/lib/locale/en_US'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
+import { useEffect } from 'react'
+import { setPreviouslySeenTopicThreads } from '@/lib/forum/previouslySeenComments'
 
 type Topic = {
   id: string
@@ -23,6 +25,12 @@ type Topic = {
 
 const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Category; isLoggedIn: boolean }) => {
   const { threadsData: threads, onPageChange, currentPage, totalThreads, isLoading } = useTopicContext()
+
+  useEffect(() => {
+      if (!isLoading) {
+        setPreviouslySeenTopicThreads(topic.id, totalThreads)
+      }
+    }, [isLoading, topic.id, totalThreads])
 
   const breadcrumbItems = [{ href: '/forum', text: category.title }, { text: topic.title }]
   return (

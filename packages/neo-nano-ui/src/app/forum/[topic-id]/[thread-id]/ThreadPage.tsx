@@ -15,6 +15,8 @@ import enUS from 'rc-pagination/lib/locale/en_US'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useEffect } from 'react'
+import { setPreviouslySeenComments } from '@/lib/forum/previouslySeenComments'
 
 export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic: Topic; category: Category }) => {
 
@@ -27,6 +29,12 @@ export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic:
     { href: `/forum/${topic.id}`, text: topic.title },
     { text: <span>{thread.title} {isLocked &&<FontAwesomeIcon icon={faLock}/>}</span> },
   ]
+
+  useEffect(() => {
+    if (!isLoading) {
+      setPreviouslySeenComments(thread.id, totalComments)
+    }
+  }, [totalComments, thread.id, isLoading])
   return (
     <FullWidthPage>
       <Column>
