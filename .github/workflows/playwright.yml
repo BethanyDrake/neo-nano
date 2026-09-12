@@ -19,9 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-    - uses: actions/setup-node@v5
+    - name: Setup Node
+      uses: actions/setup-node@v5
       with:
-        node-version: lts/*
+        node-version: "24"
+        cache: yarn
     - name: Install dependencies
       run: npm install -g yarn && yarn
     - name: Install Playwright Browsers
