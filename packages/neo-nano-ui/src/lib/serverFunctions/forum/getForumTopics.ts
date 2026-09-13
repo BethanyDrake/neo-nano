@@ -1,15 +1,14 @@
 'use server'
 import { Category, Topic } from '@/lib/types/forum.types'
 import { getQueryFunction } from '../_utils/getQueryFunction'
-
-
 export type CategorySummary = Category & {
-  topics: (Topic & {total_threads: number, total_comments: number})[]
+  topics: (Topic & { total_threads: number; total_comments: number })[]
 }
 
-export const getForumTopics = async ():Promise<CategorySummary[]> => {
+export const getForumTopics = async (): Promise<CategorySummary[]> => {
   console.log('getForumTopics')
   const sql = getQueryFunction()
+
   const categories = await sql`
 SELECT categories.*,
   (SELECT jsonb_agg(TEMP.*) AS topics  from (SELECT 

@@ -1,7 +1,7 @@
 'use client'
 import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { createThread as _createThread, CreateThreadPayload } from '../serverFunctions/forum/createThread'
-import { getThreads, ThreadSummary } from '../serverFunctions/forum/getThreads'
+import { getThreadSummaries, ThreadSummary } from '../serverFunctions/forum/getThreads'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const TopicContext = createContext<{
@@ -9,6 +9,7 @@ export const TopicContext = createContext<{
   onPageChange: (n: number) => void
   currentPage: number
   totalThreads: number
+  totalComments: number
   isLoading: boolean
   topicId: string
   createThread: (payload: Omit<CreateThreadPayload, 'topic'>) => Promise<void>
@@ -18,6 +19,7 @@ export const TopicContext = createContext<{
   createThread: () => Promise.resolve(),
   currentPage: 0,
   totalThreads: 0,
+  totalComments: 0,
   isLoading: false,
   topicId: ''
 })
@@ -25,22 +27,19 @@ export const TopicContext = createContext<{
 export const useTopicContext = () => useContext(TopicContext)
 
 export const TopicContextProvider = ({
-  initialThreads,
   children,
-  initialTotalThreads,
-  topicId
-}: PropsWithChildren & { topicId: string, initialTotalThreads: number; initialThreads: ThreadSummary[]}) => {
+  totalThreads, totalComments,
+  topicId, initialThreads
+}: PropsWithChildren & { topicId: string, totalThreads: number; totalComments: number, initialThreads: ThreadSummary[], }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const queryClient = useQueryClient()
 
   const {data, isLoading } = useQuery({
     queryKey: ['topic-threads', topicId, currentPage],
-    queryFn: () => getThreads(topicId, currentPage),
-    placeholderData: {
-      threadSummaries: initialThreads,
-      totalThreads: initialTotalThreads
-    }
+    queryFn: () => getThreadSummaries(topicId, currentPage),
+    placeholderData: initialThreads
   })
+
 
   const createThread = useCallback(async (payload: Omit<CreateThreadPayload, 'topic'>) => {
     await _createThread({
@@ -55,14 +54,15 @@ export const TopicContextProvider = ({
   const value = useMemo(() => {
     return {
       topicId,
-       threadsData: data?.threadSummaries ?? [],
+       threadsData: data ?? [],
        currentPage, 
        onPageChange: setCurrentPage, 
-       totalThreads: data?.totalThreads ?? 0,
+       totalThreads,
+       totalComments,
        isLoading, 
        createThread 
       }
-  }, [createThread, currentPage, isLoading, data, topicId])
+  }, [topicId, data, currentPage, totalThreads, totalComments, isLoading, createThread])
 
   return <TopicContext value={value}>{children}</TopicContext>
 }

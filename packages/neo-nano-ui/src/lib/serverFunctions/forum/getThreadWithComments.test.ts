@@ -10,7 +10,6 @@ import {
 import { getThreadWithComments } from './getThreadWithComments'
 import { clearDb } from '@/tests/utils/clearDb'
 import { createThread } from './createThread'
-import { getThreads } from './getThreads'
 import { deleteComment } from './addThreadComment'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { flagComment } from '../moderation/flagComment'
@@ -105,9 +104,7 @@ describe('getThreadWithComments', () => {
     vi.mocked(getUserId).mockResolvedValue(author)
     await addCategory()
     await addTopic()
-    await createThread({title: '', commentRichText: '', commentText: '', topic: GENERAL_TOPIC})
-
-    const createdThreadId = (await getThreads(GENERAL_TOPIC)).threadSummaries[0].id
+    const createdThreadId = await createThread({title: '', commentRichText: '', commentText: '', topic: GENERAL_TOPIC})
     const initialCommentId = (await getThreadWithComments(createdThreadId)).commentCardDataEntries[0].comment.id
     await deleteComment(initialCommentId)
 

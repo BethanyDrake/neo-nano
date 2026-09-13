@@ -1,4 +1,4 @@
-import { Column, LeftRow, Row } from '@/lib/layoutElements/flexLayouts'
+import { Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
 import styles from '@/lib/styles/forum.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
@@ -7,6 +7,7 @@ import { getForumTopics } from '@/lib/serverFunctions/forum/getForumTopics'
 import { connection } from 'next/server'
 import Link from 'next/link'
 import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
+import { TopicCard } from '@/lib/forum/TopicCard'
 
 const QuickLink = ({title, icon, href}: {title: string, icon: IconProp, href:string}) => {
   return (
@@ -30,46 +31,7 @@ const QuickLink = ({title, icon, href}: {title: string, icon: IconProp, href:str
   )
 }
 
-const TopicCard = ({
-  topicId,
-  title,
-  icon,
-  description,
-  totalComments,
-  totalThreads
-}: {
-  topicId: string
-  title: string
-  icon: IconProp
-  description: string
-  totalThreads: number
-  totalComments: number
-}) => {
-  return (
 
-    <div className={styles['forum-item']}>
-      <Row justifyContent="space-between">
-        <Row>
-        <Column>
-          <div className={styles['forum-icon']}>
-            <FontAwesomeIcon icon={icon} />
-          </div>
-        </Column>
-        <Column>
-          <a href={`forum/${topicId}`} className={styles['forum-item-title']}>
-            {title}
-          </a>
-          <div className={styles['forum-sub-title']}>{description}</div>
-        </Column>
-        </Row>
-        <div style={{display:'flex', minWidth:'50px', flexDirection:'column', gap:'1em'}}>
-        <div style={{color:'var(--primary-vibrant)'}}>{totalThreads} <FontAwesomeIcon icon={Icons.faWorm}/></div>
-        <div className={styles['forum-sub-title']}>{totalComments} <FontAwesomeIcon icon={Icons.faComment}/></div>
-        </div>
-      </Row>
-    </div>
-  )
-}
 
 const Forum = async () => {
   await connection()
@@ -85,7 +47,7 @@ const Forum = async () => {
           <div key={id}>
             <h2>{title}</h2>
             {topics?.map(({ id, title, description, icon, total_threads, total_comments }) => {
-              return <TopicCard 
+              return <TopicCard
                 key={id} 
                 topicId={id} 
                 title={title} 
