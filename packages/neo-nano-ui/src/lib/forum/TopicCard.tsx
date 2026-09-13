@@ -43,10 +43,10 @@ export const TopicCard = ({
           </Column>
         </Row>
         <div style={{ display: 'flex', minWidth: '50px', flexDirection: 'column', gap: '1em' }}>
-          <div style={{ color: hasNewThreads ? 'var(--primary-vibrant)' : 'var(--grey-dark)' }}>
+          <div style={{ color: hasNewThreads ? 'var(--primary-vibrant)' : 'var(--text-colour-2)' }}>
             {totalThreads} <FontAwesomeIcon icon={Icons.faWorm} />
           </div>
-          <div className={styles['forum-sub-title']} style={{ color: hasNewComments ? 'var(--primary-vibrant)' : 'var(--grey-dark)' }}>
+          <div className={styles['forum-sub-title']} style={{ color: hasNewComments ? 'var(--primary-vibrant)' : 'var(--text-colour-2)' }}>
             {totalComments} <FontAwesomeIcon icon={Icons.faComment} />
           </div>
         </div>

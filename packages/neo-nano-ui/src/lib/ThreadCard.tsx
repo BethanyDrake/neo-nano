@@ -36,7 +36,7 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
             {thread.authorDisplayName}: {truncateText(text, 100)}
           </p>
         </Column>
-        <div style={{ color: hasNewComments ? 'var(--primary-vibrant)' : 'var(--off-black)', minWidth: '50px' }}>
+        <div style={{ color: hasNewComments ? 'var(--primary-vibrant)' : 'var(--text-colour-2)', minWidth: '50px' }}>
           {totalComments} <FontAwesomeIcon icon={faComment} />
         </div>
       </Row>
