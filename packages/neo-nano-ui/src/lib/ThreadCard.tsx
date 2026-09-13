@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import { ThreadSummary } from './serverFunctions/forum/getThreads'
 import styles from '@/lib/styles/forum.module.css'
@@ -11,7 +12,6 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
   const { id, title, text, totalComments, removalStatus } = thread
   const previouslySeenComments = usePreviouslySeenThreadComments(thread.id)
   const hasNewComments = totalComments > previouslySeenComments
-  console.log({previouslySeenComments, hasNewComments})
   if (removalStatus) {
     return (
       <div style={{ fontStyle: 'italic', color: 'var(--text-colour-2)' }}>

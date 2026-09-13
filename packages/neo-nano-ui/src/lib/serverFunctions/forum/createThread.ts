@@ -2,7 +2,6 @@
 
 import { Thread } from "@/lib/types/forum.types"
 import { getQueryFunction } from "../_utils/getQueryFunction"
-import { getThreads } from "./getThreads"
 import { getUserId } from "../_utils/getUserIdFromSession"
 
 export type CreateThreadPayload = Pick<Thread, 'title'> & {topic: string, commentText: string, commentRichText: string }
@@ -22,7 +21,6 @@ export const createThread = async ({title, topic, commentText, commentRichText}:
         VALUES (${commentText}, ${userId}, ${createdThreadId}, ${commentRichText})
         RETURNING id`
 
-    const result = await getThreads(topic)
-    return result
+    return createdThreadId
 
 }

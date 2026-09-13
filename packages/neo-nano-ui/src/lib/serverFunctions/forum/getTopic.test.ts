@@ -24,6 +24,8 @@ describe('getTopic', () => {
       icon: 'faShield',
       id: 'topic-id',
       title: 'Topic Title',
+      totalComments: 0,
+      totalThreads: 0
     })
   })
 })

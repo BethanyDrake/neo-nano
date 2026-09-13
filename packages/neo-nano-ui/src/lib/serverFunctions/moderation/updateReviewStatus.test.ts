@@ -23,11 +23,10 @@ describe('updateReviewStatus', () => {
     await addTopic()
     const authorId = await addUser({ displayName: 'Author Name' })
     vi.mocked(getUserId).mockResolvedValue(authorId)
-    createdThread = (await createThread(buildCreateThreadPayload())).threadSummaries[0]
+    createdThread = (await createThread(buildCreateThreadPayload()))
   })
   test('a comment with no flags has null removal status', async () => {
     const comment = await addThreadComment(createdThread.id, 'Some text', 'Some rich text')
-    // await updateReviewStatus(comment.id)
     const updatedComment = await getComment(comment.id)
     expect(updatedComment.reviewStatus).toEqual(null)
    

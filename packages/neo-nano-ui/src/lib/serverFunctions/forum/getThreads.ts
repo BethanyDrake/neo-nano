@@ -7,7 +7,7 @@ import { getRemovalStatus } from '../moderation/getRemovalStatus'
 
 export type ThreadSummary = Thread & Pick<Comment, 'text'> & {totalComments: number, authorDisplayName: string, removalStatus: RemovalSatus}
 
-const getThreadSummaries = async (topicId: string, currentPage: number) => {
+export const getThreadSummaries = async (topicId: string, currentPage: number) => {
   const sql = getQueryFunction()
 
   const _threads = await sql`
@@ -39,21 +39,4 @@ const getThreadSummaries = async (topicId: string, currentPage: number) => {
   }}) as ThreadSummary[]
 
   return threadSummaries
-}
-
-const getTotalThreads = async (topicId: string) => {
-  const sql = getQueryFunction()
-  return (await sql` SELECT count(*) FROM threads
-    WHERE threads.topic=${topicId}`)[0].count
-}
-
-export async function getThreads(topicId: string, currentPage: number = 1){
-  console.log('getThreads', topicId )
-  
-  const [threadSummaries, totalThreads] = await Promise.all([getThreadSummaries(topicId, currentPage), getTotalThreads( topicId)])
-
-
-  return {
-    threadSummaries, totalThreads
-  }
 }

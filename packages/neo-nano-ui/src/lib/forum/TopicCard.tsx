@@ -22,10 +22,10 @@ export const TopicCard = ({
   totalComments: number
 }) => {
 
-  const previouslySeenThreads = usePreviouslySeenTopicThreads(topicId)
-  const hasNewThreads = totalThreads > previouslySeenThreads
+  const previouslySeen = usePreviouslySeenTopicThreads(topicId)
+  const hasNewThreads = totalThreads > previouslySeen.threads
+  const hasNewComments = totalComments > previouslySeen.comments
 
-  console.log({previouslySeenThreads, hasNewThreads})
   return (
     <div className={styles['forum-item']}>
       <Row justifyContent="space-between">
@@ -46,7 +46,7 @@ export const TopicCard = ({
           <div style={{ color: hasNewThreads ? 'var(--primary-vibrant)' : 'var(--grey-dark)' }}>
             {totalThreads} <FontAwesomeIcon icon={Icons.faWorm} />
           </div>
-          <div className={styles['forum-sub-title']}>
+          <div className={styles['forum-sub-title']} style={{ color: hasNewComments ? 'var(--primary-vibrant)' : 'var(--grey-dark)' }}>
             {totalComments} <FontAwesomeIcon icon={Icons.faComment} />
           </div>
         </div>

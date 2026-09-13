@@ -44,14 +44,14 @@ describe('previouslySeenComments', () => {
     test('initial state', async () => {
       const { result } = renderHook(() => usePreviouslySeenTopicThreads('topic-1'))
       await waitFor(() => {
-        expect(result.current).toEqual(0)
+        expect(result.current).toEqual({threads: 0, comments: 0})
       })
     })
     test('seen some before', async () => {
-      setPreviouslySeenTopicThreads('topic-1', 7)
+      setPreviouslySeenTopicThreads('topic-1', 7, 40)
       const { result } = renderHook(() => usePreviouslySeenTopicThreads('topic-1'))
       await waitFor(() => {
-        expect(result.current).toEqual(7)
+        expect(result.current).toEqual({threads: 7, comments: 40})
       })
     })
   })

@@ -24,13 +24,13 @@ type Topic = {
 }
 
 const TopicPage = ({ topic, category, isLoggedIn }: { topic: Topic; category: Category; isLoggedIn: boolean }) => {
-  const { threadsData: threads, onPageChange, currentPage, totalThreads, isLoading } = useTopicContext()
+  const { threadsData: threads, onPageChange, currentPage, totalThreads, totalComments, isLoading } = useTopicContext()
 
   useEffect(() => {
       if (!isLoading) {
-        setPreviouslySeenTopicThreads(topic.id, totalThreads)
+        setPreviouslySeenTopicThreads(topic.id, totalThreads, totalComments)
       }
-    }, [isLoading, topic.id, totalThreads])
+    }, [isLoading, topic.id, totalComments, totalThreads])
 
   const breadcrumbItems = [{ href: '/forum', text: category.title }, { text: topic.title }]
   return (

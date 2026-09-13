@@ -32,17 +32,17 @@ export const usePreviouslySeenThreadComments = (threadId: string) => {
   return value
 }
 
-export const setPreviouslySeenTopicThreads = (topicId: string, numberOfThreads: number) => {
+export const setPreviouslySeenTopicThreads = (topicId: string, threads: number, comments: number) => {
   setLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS, {
     ...getLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS),
-    [topicId]: numberOfThreads,
+    [topicId]: {threads, comments},
   })
 }
 
-export const usePreviouslySeenTopicThreads = (topicId: string) => {
-  const [value, setValue] = useState(0)
+export const usePreviouslySeenTopicThreads = (topicId: string): {threads: number, comments: number} => {
+  const [value, setValue] = useState({threads: 0, comments: 0})
   useEffect(() => {
-    const n = getLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS)[topicId] ?? 0
+    const n = getLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS)[topicId] ?? {threads: 0, comments: 0}
     Promise.resolve().then(() => setValue(n))
   }, [topicId])
 
