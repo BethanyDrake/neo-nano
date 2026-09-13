@@ -1,53 +1,50 @@
-
-
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
+const PREVIOUSLY_SEEN_THREAD_COMMENTS = `previously-seen-thread-comments`
+const PREVIOUSLY_SEEN_TOPIC_THREADS = 'previously-seen-topic-threads'
 
-export const setPreviouslySeenComments = (threadId: string, numberOfComments: number) => {
-    window.localStorage.setItem(`thread.${threadId}.comments`, numberOfComments.toString())
-  }
+const getLocalStorageObject = (key: string) => {
+  const s = window.localStorage.getItem(key)
+  const o = s ? JSON.parse(s) : {}
+  return o
+}
 
+const setLocalStorageObject = (key: string, object: Record<string, unknown>) => {
+  window.localStorage.setItem(key, JSON.stringify(object))
+}
+
+export const setPreviouslySeenThreadComments = (threadId: string, numberOfComments: number) => {
+  setLocalStorageObject(PREVIOUSLY_SEEN_THREAD_COMMENTS, {
+    ...getLocalStorageObject(PREVIOUSLY_SEEN_THREAD_COMMENTS),
+    [threadId]: numberOfComments,
+  })
+}
 
 export const usePreviouslySeenThreadComments = (threadId: string) => {
   const [value, setValue] = useState(0)
   useEffect(() => {
-   const  s = window.localStorage.getItem(`thread.${threadId}.comments`)
-    if (s) {
-      Promise.resolve().then(() => setValue(parseInt(s)))
-    }
+    const n = getLocalStorageObject(PREVIOUSLY_SEEN_THREAD_COMMENTS)[threadId] ?? 0
+    Promise.resolve().then(() => setValue(n))
   }, [threadId])
 
   return value
-
-}
-export const setPreviouslySeenTopicComments = (topicId: string, numberOfComments: number) => {
-    window.localStorage.setItem(`topic.${topicId}.comments`, numberOfComments.toString())
-  }
-
-
-export const getPreviouslySeenTopicComments = (topicId: string) => {
-const s = window.localStorage.getItem(`topic.${topicId}.comments`)
-return s ? parseInt(s) : 0
 }
 
-export const setPreviouslySeenTopicThreads = (topicId: string, numberOfThreadss: number) => {
-    window.localStorage.setItem(`topic.${topicId}.threads`, numberOfThreadss.toString())
-  }
-
+export const setPreviouslySeenTopicThreads = (topicId: string, numberOfThreads: number) => {
+  setLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS, {
+    ...getLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS),
+    [topicId]: numberOfThreads,
+  })
+}
 
 export const usePreviouslySeenTopicThreads = (topicId: string) => {
   const [value, setValue] = useState(0)
   useEffect(() => {
-   const  s = window.localStorage.getItem(`topic.${topicId}.threads`)
-    if (s) {
-      Promise.resolve().then(() => setValue(parseInt(s)))
-    }
+    const n = getLocalStorageObject(PREVIOUSLY_SEEN_TOPIC_THREADS)[topicId] ?? 0
+    Promise.resolve().then(() => setValue(n))
   }, [topicId])
 
   return value
-
 }
-
-

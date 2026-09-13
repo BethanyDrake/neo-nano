@@ -16,7 +16,7 @@ import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { useIsLoggedIn } from '@/lib/hooks/useIsLoggedIn'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react'
-import { setPreviouslySeenComments } from '@/lib/forum/previouslySeenComments'
+import { setPreviouslySeenThreadComments } from '@/lib/forum/previouslySeenComments'
 
 export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic: Topic; category: Category }) => {
 
@@ -32,7 +32,7 @@ export const ThreadPage = ({ thread, topic, category }: { thread: Thread; topic:
 
   useEffect(() => {
     if (!isLoading) {
-      setPreviouslySeenComments(thread.id, totalComments)
+      setPreviouslySeenThreadComments(thread.id, totalComments)
     }
   }, [totalComments, thread.id, isLoading])
   return (
