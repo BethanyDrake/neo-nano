@@ -7,6 +7,7 @@ import focusClock from '@/lib/tools/focusClockTool/focus-clock.png'
 import sprintTimer from '@/lib/tools/sprintTimerTool/sprint-timer.png'
 import abacus from '@/lib/tools/wordCountTool/abacus.png'
 import liveSprints from '@/lib/tools/liveWritingSprints/live-sprint.png'
+import prompts from '@/lib/tools/promptTool/prompts.svg'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import { liveSprintsFlag } from '@/lib/flags'
 
@@ -64,13 +65,20 @@ const ToolsPage = async () => {
             toolName="Word Counter"
             imageSrc={abacus}
           />
-          {liveSprintsFeature && 
+          
            <ToolCard
             description={'Write with others; compete for the highest word count!'}
             id={'live-sprints'}
             toolName="Live Sprints"
             imageSrc={liveSprints}
-          />}
+          />
+
+          <ToolCard
+            description={'Brainstorming prompts every day in Octomer'}
+            id={'prompts'}
+            toolName="Brainstorming Prompts"
+            imageSrc={prompts}
+          />
         </div>
         </Column>
       </GutteredPage>

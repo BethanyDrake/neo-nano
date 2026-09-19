@@ -1,67 +1,18 @@
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { ChallengeCountDown } from '@/lib/landingPage/ChallengeCountDown'
 import { GetStartedSection } from '@/lib/landingPage/GetStartedSection'
-import styles from '@/lib/landingPage/page.module.css'
-import { Column, Row } from '@/lib/layoutElements/flexLayouts'
+import { Column } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { TextLinePlaceHolder } from '@/lib/layoutElements/Placeholders'
-import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { faBullseye, faChartLine, faComment, faTrophy } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import logoV4 from '@/lib/media/logo-v4.png'
 import { NovemberEventSchema, MidYearNoveletteEventSchema } from '@/lib/landingPage/schema.org'
 import { ProjectHighlight } from '@/lib/landingPage/ProjectHighlight'
 import { getFeaturedProject } from '@/lib/serverFunctions/projects/getFeaturedProject'
 import { DotiDivider } from '@/lib/layoutElements/dotiContainer'
+import { FeaturesSection } from '../lib/landingPage/FeaturesSection'
+import { BrainstormingPromptSection } from '@/lib/landingPage/BrainstormingPromptSection'
 
-const FeatureCard = ({
-  title,
-  caption,
-  icon,
-  color,
-}: {
-  title: string
-  caption: string
-  icon: IconProp
-  color: string
-}) => {
-  return (
-    <div className={styles['feature-card']}>
-      <h3>{title}</h3>
-      <FontAwesomeIcon color={color} size="8x" icon={icon} />
-      <p>{caption}</p>
-    </div>
-  )
-}
-
-const FeaturesSection = () => {
-  return (
-    <Row style={{ padding: '16px', overflow: 'scroll' }} justifyContent="left">
-      <FeatureCard title="Track" caption={'Track your progress each day.'} icon={faChartLine} color={'#d1b1ec'} />
-      <FeatureCard
-        title="Set Goals"
-        // caption={'Aim for 50,000 words in November, or create a custom goal.'}
-        // caption={'Aim for 80 hours in the new year, or create a custom goal.'}
-        caption={'Aim for 15,000 words in the July, or create a custom goal.'}
-        icon={faBullseye}
-        color={'#1ab394'}
-      />
-      <FeatureCard
-        title="Earn Awards"
-        caption={'Celebrate the little wins with trophies along the way.'}
-        icon={faTrophy}
-        color={'#6e1ab3'}
-      />
-      <FeatureCard
-        title="Socialise"
-        caption={"When you're done writing for the day, come hang out in the forums 🤗"}
-        icon={faComment}
-        color={'#C0E5C8'}
-      />
-    </Row>
-  )
-}
 
 export default async function Home() {
   const featuredProject = await getFeaturedProject()
@@ -74,6 +25,8 @@ export default async function Home() {
           <ChallengeCountDown />
         </ClientSideOnly>
 
+        <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', alignItems:"center"}}>
+      
         <Image
           fetchPriority="high"
           loading="eager"
@@ -83,6 +36,9 @@ export default async function Home() {
           src={logoV4}
           placeholder="blur"
         />
+        <BrainstormingPromptSection/>
+        </div>
+
       </div>
 
       <details>
