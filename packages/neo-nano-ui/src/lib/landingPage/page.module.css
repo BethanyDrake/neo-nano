@@ -63,3 +63,17 @@
     border-radius: 16px;
     background-color: var(--background-colour-2);
 }
+
+.brainstormingPromptSection {
+  max-width: 300px;
+  padding: 20px;
+  border: 2px dashed var(--primary-vibrant);
+  background-color: var(--primary-light);
+  border-radius: 10px;
+  h2 {
+    color: var(--primary-dark);;
+  }
+  p {
+    font-weight: bold;
+  }
+}

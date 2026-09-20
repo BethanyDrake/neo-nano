@@ -16,7 +16,6 @@ export const getMyProfile = async (): Promise<Profile | null> => {
     LIMIT 1`,
   )
 
-  console.log(myProfile)
   const _links = await getQueryFunction()`SELECT * FROM profile_links
     WHERE user_id=${myProfile.id}
     LIMIT 1`
