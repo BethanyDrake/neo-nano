@@ -1,7 +1,7 @@
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { ChallengeCountDown } from '@/lib/landingPage/ChallengeCountDown'
 import { GetStartedSection } from '@/lib/landingPage/GetStartedSection'
-import { Column } from '@/lib/layoutElements/flexLayouts'
+import { Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import { TextLinePlaceHolder } from '@/lib/layoutElements/Placeholders'
 import Image from 'next/image'
@@ -12,31 +12,48 @@ import { getFeaturedProject } from '@/lib/serverFunctions/projects/getFeaturedPr
 import { DotiDivider } from '@/lib/layoutElements/dotiContainer'
 import { FeaturesSection } from '../lib/landingPage/FeaturesSection'
 import { BrainstormingPromptSection } from '@/lib/landingPage/BrainstormingPromptSection'
+import { InfoBubble } from '@/lib/landingPage/InfoBubble'
 
 export default async function Home() {
   const featuredProject = await getFeaturedProject()
   return (
     <GutteredPage>
-      <div style={{ textAlign: 'center', minHeight: '75px' }}>
+      <div style={{ textAlign: 'center' }}>
         <ClientSideOnly fallback={<TextLinePlaceHolder />}>
           <ChallengeCountDown />
         </ClientSideOnly>
         <h1>Novel November</h1>
         <div style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>Write 50,000 words in 30 days</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', alignItems: 'center' }}>
-          <Image
-            fetchPriority="high"
-            loading="eager"
-            alt="Novel November"
-            width={300}
-            height={300}
-            src={logoV4}
-            placeholder="blur"
-          />
-          <BrainstormingPromptSection />
-        </div>
       </div>
+      <Row style={{ flexWrap: 'wrap', alignItems: 'center' }}>
+        <Image
+          fetchPriority="high"
+          loading="eager"
+          alt="Novel November"
+          width={300}
+          height={300}
+          src={logoV4}
+          placeholder="blur"
+        />
 
+        <InfoBubble title="The Goal:" style={{ backgroundColor: 'var(--secondary-vibrant)', color: 'white' }}>
+          <p>
+            Write a full, completed draft of a 50,000 word novel during the month of November. No editing, no second
+            guessing, no hesitation. Just write!
+          </p>
+        </InfoBubble>
+
+        <InfoBubble title="Why?" style={{ border: '4px solid var(--primary-vibrant)' }}>
+          <ul>
+            <Column>
+              <li>build good writing habits</li>
+              <li>practise writing all parts of a novel</li>
+              <li>finally get your story down on paper</li>
+            </Column>
+          </ul>
+        </InfoBubble>
+        <BrainstormingPromptSection />
+      </Row>
       <details style={{ display: 'none' }}>
         <NovemberEventSchema />
         <summary>
