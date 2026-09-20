@@ -1,4 +1,12 @@
+.stretchedLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 .card {
+    position: relative;
     box-shadow: var(--shadow-1);
     text-align: center;
     padding: 16px;
@@ -11,7 +19,6 @@
     position: relative;
     &:hover {
         box-shadow: var(--shadow-2);
-        /* background-color: var(--primary-light); */
     }
 
     .description {
