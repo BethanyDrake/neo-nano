@@ -13,35 +13,31 @@ import { DotiDivider } from '@/lib/layoutElements/dotiContainer'
 import { FeaturesSection } from '../lib/landingPage/FeaturesSection'
 import { BrainstormingPromptSection } from '@/lib/landingPage/BrainstormingPromptSection'
 
-
 export default async function Home() {
   const featuredProject = await getFeaturedProject()
   return (
     <GutteredPage>
       <div style={{ textAlign: 'center', minHeight: '75px' }}>
-        <h1 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>The Mid-Year Novelette</h1>
-
         <ClientSideOnly fallback={<TextLinePlaceHolder />}>
           <ChallengeCountDown />
         </ClientSideOnly>
-
-        <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', alignItems:"center"}}>
-      
-        <Image
-          fetchPriority="high"
-          loading="eager"
-          alt="Novel November"
-          width={300}
-          height={300}
-          src={logoV4}
-          placeholder="blur"
-        />
-        <BrainstormingPromptSection/>
+        <h1>Novel November</h1>
+        <div style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>Write 50,000 words in 30 days</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', alignItems: 'center' }}>
+          <Image
+            fetchPriority="high"
+            loading="eager"
+            alt="Novel November"
+            width={300}
+            height={300}
+            src={logoV4}
+            placeholder="blur"
+          />
+          <BrainstormingPromptSection />
         </div>
-
       </div>
 
-      <details>
+      <details style={{ display: 'none' }}>
         <NovemberEventSchema />
         <summary>
           <h2>{"What's Novel November?"}</h2>
