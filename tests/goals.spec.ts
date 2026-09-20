@@ -6,10 +6,10 @@ test('sign up, create a goal, earn an award', async ({ page }) => {
   await doSignup(page)
 
   await page.getByRole('button', { name: 'My Profile' }).click();
-  await addAGoal(page)
+  await addAGoal(page, {title: "Some Goal Title"})
 
   // Update wordcount
-  await page.getByRole('button', { name: 'Novel November' }).click();
+  await page.getByRole('button', { name: 'Some Goal Title' }).click();
   await page.getByRole('button', { name: 'November 1,' }).click();
   await page.getByRole('spinbutton', { name: 'wordcount for 11/1/' }).fill('2000');
   await page.getByRole('button', { name: 'Save' }).press('Enter');
