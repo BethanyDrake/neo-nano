@@ -6,6 +6,7 @@ import { getSingle } from '../_utils/getSingle'
 import { getUserId } from '../_utils/getUserIdFromSession'
 import { Comment } from '@/lib/types/forum.types'
 import { mapComment, RawComment } from './rowMappers'
+import { autoReviewComment } from '../moderation/autoReviewComment'
 
 export async function addThreadComment(threadId: string, commentText: string, richText: string) {
   console.log('addThreadComment')
@@ -16,7 +17,11 @@ export async function addThreadComment(threadId: string, commentText: string, ri
       VALUES (${commentText}, ${author}, ${threadId}, ${richText})
       returning comments.*`
 
-  return mapComment(rows[0] as RawComment)
+
+  const createdComment = mapComment(rows[0] as RawComment)
+  await autoReviewComment(createdComment.id, commentText)
+  
+  return createdComment
 }
 
 

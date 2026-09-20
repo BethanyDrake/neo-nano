@@ -7,6 +7,8 @@ vi.mock('@auth0/nextjs-auth0/server', () => ({
     Auth0Client: class { public getSession = vi.fn()}
 }))
 
+vi.mock('./lib/serverFunctions/moderation/autoReviewComment')
+
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
   usePathname: vi.fn(),
