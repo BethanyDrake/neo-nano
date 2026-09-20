@@ -76,7 +76,7 @@ export default async function Home() {
         </ul>
       </details>
 
-      <details>
+      <details style={{ display: 'none' }}>
         <MidYearNoveletteEventSchema />
         <summary>
           <h2>{"What's the Mid-Year Novelette?"}</h2>
