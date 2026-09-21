@@ -33,14 +33,6 @@ const challenges: Challenge[] = [
     id: 'mid-year-2026'
   },
   {
-    title: 'Preptober',
-    startDate: '2026-10-01',
-    lengthDays: 31,
-    target: 30*31,
-    metric: 'minutes',
-    id: 'preptober-2026'
-  },
-  {
     title: 'Novel November',
     startDate: '2026-11-01',
     lengthDays: 30,

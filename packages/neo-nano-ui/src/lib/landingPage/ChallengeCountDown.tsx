@@ -1,5 +1,5 @@
 'use client'
-import { Duration, formatDuration, intervalToDuration, parseISO, startOfDay } from 'date-fns'
+import { addDays, Duration, formatDuration, intervalToDuration, isPast, parseISO, startOfDay } from 'date-fns'
 import { useState } from 'react'
 import { Challenge, getCurrentChallenge, getPreviousChallenge, getUpcomingChallenge } from '../challenges'
 import { Column } from '../layoutElements/flexLayouts'
@@ -8,10 +8,13 @@ import { getChallengeEndDate } from '../serverFunctions/goals/goalUtils'
 const formatTimeLeft = (timeLeft: Duration) =>
   formatDuration(timeLeft, { format: ['months', 'days', 'hours'], delimiter: ', ' })
 
-const PreviousChallengeWrapup = ({ title }: Pick<Challenge, 'title'>) => {
+const PreviousChallengeWrapup = ({ challenge}: {challenge: Challenge}) => {
+  const endDate = getChallengeEndDate(challenge.startDate,challenge.lengthDays)
+  const isOldNews = isPast(addDays(endDate, 10))
+  if (isOldNews) return null
   return (
     <p style={{ fontStyle: 'italic' }}>
-      {title} is over, the challenge is complete! Time to bask in your success and take a breather.
+      {challenge.title} is over, the challenge is complete! Time to bask in your success and take a breather.
     </p>
   )
 }
@@ -39,9 +42,9 @@ export const NextChallengeAnnouncement = ({ challenge }: { challenge: Challenge 
   })
   return (
     <>
-        <p style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
+        {title !== "Novel November" &&<p style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: 'x-large' }}>
           {title}
-        </p>
+        </p>}
       <div style={{ fontStyle: 'italic' }}>{formatTimeLeft(timeLeft)} until the challenge begins.</div>
     </>
   )
@@ -57,7 +60,7 @@ export const ChallengeCountDown = () => {
 
   return (
     <Column>
-      {previousChallenge && <PreviousChallengeWrapup title={previousChallenge.title} />}
+      {previousChallenge && <PreviousChallengeWrapup challenge={previousChallenge}/>}
 
       {nextChallenge && <NextChallengeAnnouncement challenge={nextChallenge} />}
     </Column>

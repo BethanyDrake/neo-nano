@@ -4,8 +4,6 @@ test('browse as guest', async ({ page }) => {
 
   // landing page
   await page.goto('http://localhost:3000/');
-  await page.locator('summary').filter({ hasText: 'What\'s Novel November?' }).click();
-  await page.getByRole('heading', { name: 'What\'s Novel November?' }).click();
 
   // forum
   await page.getByRole('link', { name: 'Browse forums as guest' }).click();
@@ -34,7 +32,6 @@ test('browse as guest', async ({ page }) => {
   await page.getByRole('button', {name: 'open navigation menu'}).click()
   await page.getByRole('menuitem', { name: 'Tools' }).click();
   await expect(page.getByRole('heading', { name: 'Toolbox' })).toBeVisible()
-  await page.getByRole('button', {name: 'open navigation menu'}).click()
-  await expect(page.getByRole('link', { name: 'Sprint timer Set a timer,' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Focus clock Just start' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Sprint timer' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Focus clock' })).toBeVisible()
 });

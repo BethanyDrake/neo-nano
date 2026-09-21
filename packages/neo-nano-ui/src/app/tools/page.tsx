@@ -24,15 +24,14 @@ const ToolCard = ({
 }) => {
   return (
     <div className={classNames.card}>
-      <Link style={{ width: '100%' }} href={`/tools/${id}`}>
-        <summary>
+      <Link href={`/tools/${id}`} className={classNames.stretchedLink}>
           <h2>{toolName}</h2>
-        </summary>{' '}
+         </Link>
         <Image alt={description} width={100} height={100} src={imageSrc} />
         <div style={{width: '100%'}} id={description} className={classNames.description}>
           {description}
         </div>
-      </Link>
+   
     </div>
   )
 }
