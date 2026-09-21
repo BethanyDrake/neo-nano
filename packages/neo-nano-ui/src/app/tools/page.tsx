@@ -73,7 +73,7 @@ const ToolsPage = async () => {
           />
 
           <ToolCard
-            description={'Brainstorming prompts every day in Octomer'}
+            description={'Brainstorming prompts every day in October'}
             id={'prompts'}
             toolName="Brainstorming Prompts"
             imageSrc={prompts}
