@@ -1,6 +1,6 @@
 import _ from "lodash"
 
-const getWords = (text: string) => {
+export const getWords = (text: string) => {
     return text.split(/\W+/).filter((word) => word.length > 0).map((word) => word.toLowerCase())
 }
 export const countWords = (text: string) => {

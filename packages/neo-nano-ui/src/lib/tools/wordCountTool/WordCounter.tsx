@@ -11,6 +11,7 @@ import { countWords, countWords2, CountWords2Datum, getWordLengths, WordLengthDa
 import { useActiveGoal } from '../focusClockTool/useActiveGoal'
 import { UpdateActiveGoal } from './UpdateActiveGoal'
 import { WordLengthChart } from './WordLengthChart'
+import { RelativeFrequency } from './RelativeFrequency'
 
 type Inputs = {
   text: string
@@ -18,8 +19,9 @@ type Inputs = {
 
 type Analysis = {
   wordCount: number,
-  wordLengths: WordLengthDatum[]
-  wordCounts: CountWords2Datum[]
+  wordLengths: WordLengthDatum[],
+  wordCounts: CountWords2Datum[],
+  text: string
 }
 
 
@@ -32,7 +34,7 @@ export const WordCounter = () => {
     const wordCount = countWords(data.text)
     const wordLengths = getWordLengths(data.text)
     const wordCounts = countWords2(data.text)
-    setAnalysis({ wordCount, wordLengths, wordCounts })
+    setAnalysis({ wordCount, wordLengths, wordCounts, text: data.text })
     setHasUpdatedActiveGoal(false)
   }
 
@@ -65,12 +67,14 @@ export const WordCounter = () => {
             <h3>Word Count:</h3> <p>{analysis.wordCount}</p>
           </LeftRow>
 
+           <RelativeFrequency text={analysis.text}/>
           {activeGoal && <UpdateActiveGoal goal={activeGoal} wordCount={analysis.wordCount} hasUpdatedActiveGoal={hasUpdatedActiveGoal} setHasUpdatedActiveGoal={setHasUpdatedActiveGoal}/>}
         
-          <WordLengthChart wordLengths={analysis.wordLengths} />
+          {/* <WordLengthChart wordLengths={analysis.wordLengths} /> */}
           <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px', rowGap: "20px"}}>
             {analysis?.wordCounts?.map(({length, wordCounts}) => <div key={length} style={{minWidth: "200px"}}><h4>{length} letters:</h4> <div>{wordCounts.map(({word, count}) => <div key={word}>{word} ({count})</div>)}</div></div>)}
           </div>
+      
          
         </div>
       )}
