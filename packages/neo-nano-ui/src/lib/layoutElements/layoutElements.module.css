@@ -18,3 +18,10 @@
   border-top: 2px dashed var(--primary-light);
   border-bottom: none;
 }
+
+.stretchedLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}

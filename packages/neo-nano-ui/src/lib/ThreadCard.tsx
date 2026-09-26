@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faLock } from '@fortawesome/free-solid-svg-icons'
 import { truncateText } from './misc'
 import {  usePreviouslySeenThreadComments } from '@/lib/forum/previouslySeenComments'
+import layoutElements from '@/lib/layoutElements/layoutElements.module.css'
 
 export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId: string }) => {
   const { id, title, text, totalComments, removalStatus } = thread
@@ -28,10 +29,12 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
     )
   }
   return (
-    <Link href={`/forum/${topicId}/${id}`} className={styles['thread']}>
+  
+    <div className={styles['thread']}>
       <Row justifyContent="space-between">
         <Column>
-          <h3 className={styles['forum-item-title']}>{title}</h3>
+          <Link href={`/forum/${topicId}/${id}`} className={[layoutElements.stretchedLink , styles.topicLink].join(' ')}>
+          <h3 className={styles['forum-item-title']}>{title}</h3></Link>
           <p style={{ paddingBottom: '12px' }}>
             {thread.authorDisplayName}: {truncateText(text, 100)}
           </p>
@@ -40,6 +43,7 @@ export const ThreadCard = ({ thread, topicId }: { thread: ThreadSummary; topicId
           {totalComments} <FontAwesomeIcon icon={faComment} />
         </div>
       </Row>
-    </Link>
+      </div>
+   
   )
 }
