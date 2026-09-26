@@ -3,6 +3,7 @@
   padding: 10px 0 20px;
   border-bottom: 1px solid var(--grey-light);
   color: inherit;
+  position: relative;
 
   &:hover {
     color: var(--primary-vibrant)
@@ -47,7 +48,7 @@ a.forum-item-title:hover {
 
 .thread {
   border-bottom: 1px solid var(--grey-light);
-    position: relative;
+  position: relative;
 }
 
 .topicLink {

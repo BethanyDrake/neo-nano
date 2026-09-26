@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from '@/lib/styles/forum.module.css'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import * as Icons from '@fortawesome/free-solid-svg-icons'
+import Link from 'next/link'
+import layoutElements from '@/lib/layoutElements/layoutElements.module.css'
 
 export const TopicCard = ({
   topicId,
@@ -36,9 +38,9 @@ export const TopicCard = ({
             </div>
           </Column>
           <Column>
-            <a href={`forum/${topicId}`} className={styles['forum-item-title']}>
+            <Link href={`forum/${topicId}`} className={[styles['forum-item-title'], layoutElements.stretchedLink].join(' ')}>
               {title}
-            </a>
+            </Link>
             <div className={styles['forum-sub-title']}>{description}</div>
           </Column>
         </Row>

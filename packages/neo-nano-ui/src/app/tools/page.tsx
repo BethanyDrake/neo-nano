@@ -48,7 +48,7 @@ const ToolsPage = async () => {
         </Centered>
         <div className={classNames.container}>
             <ToolCard
-            description={'Just start editing, and log the time after.'}
+            description={'Just start writing, and log the time after.'}
             id={'focus-clock'}
             toolName="Focus Clock"
             imageSrc={focusClock}
