@@ -3,6 +3,7 @@ import { GutteredPage } from '@/lib/layoutElements/GutteredPage'
 import Image from 'next/image'
 import Link from 'next/link'
 import classNames from './tools.module.css'
+import layoutElements from '@/lib/layoutElements/layoutElements.module.css'
 import focusClock from '@/lib/tools/focusClockTool/focus-clock.png'
 import sprintTimer from '@/lib/tools/sprintTimerTool/sprint-timer.png'
 import abacus from '@/lib/tools/wordCountTool/abacus.png'
@@ -24,7 +25,7 @@ const ToolCard = ({
 }) => {
   return (
     <div className={classNames.card}>
-      <Link href={`/tools/${id}`} className={classNames.stretchedLink}>
+      <Link href={`/tools/${id}`} className={layoutElements.stretchedLink}>
           <h2>{toolName}</h2>
          </Link>
         <Image alt={description} width={100} height={100} src={imageSrc} />
