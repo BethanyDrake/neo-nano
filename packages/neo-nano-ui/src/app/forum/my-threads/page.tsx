@@ -20,11 +20,11 @@ export default async function Page() {
             <p style={{ textAlign: 'center' }}>
               {"(There's nothing here because you haven't started any threads so far)."}
             </p>
+            <Centered>
             <Link href="/forum/introductions">
-              <Centered>
                 <BasicButton>Introduce Myself</BasicButton>
-              </Centered>
             </Link>
+            </Centered>
           </>
         )}
         {myThreads.map((thread) => (
