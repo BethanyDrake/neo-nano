@@ -1,10 +1,8 @@
-import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 import { prompts } from './promptList'
 
 export const BrainstormingPrompts = () => {
   return (
     <div>
-      <UnderDevelopmentMessage upcomingChanges={[{description:"revise/improve list of prompts"}]}/>
       <h1>Brainstorming Prompts</h1>
       {prompts.map(({ id, Component, category }, index) => (
         <div key={id}>
