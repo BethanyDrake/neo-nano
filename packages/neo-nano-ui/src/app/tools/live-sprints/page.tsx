@@ -8,7 +8,6 @@ import {
 } from '@/lib/serverFunctions/sprints/publicSprint'
 import { PastSprintCard, UpcomingSprintCard } from '@/lib/tools/liveWritingSprints/SprintCard'
 import { SprintScheduler } from '@/lib/tools/liveWritingSprints/SprintScheduler'
-import { UnderDevelopmentMessage } from '@/lib/UnderDevelopmentMessage'
 import { useQuery } from '@tanstack/react-query'
 import { minutesToMilliseconds, secondsToMilliseconds } from 'date-fns'
 
@@ -28,11 +27,6 @@ const LiveSprintPage = () => {
 
   return (
     <GutteredPage>
-      <UnderDevelopmentMessage
-        upcomingChanges={[
-          
-        ]}
-      />
       <Column>
         <SprintScheduler onScheduled={refetch} />
         <h4>Upcoming Sprints:</h4>
