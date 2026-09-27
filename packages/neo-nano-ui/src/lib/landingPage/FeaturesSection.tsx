@@ -30,9 +30,9 @@ export const FeaturesSection = () => {
       <FeatureCard title="Track" caption={'Track your progress each day.'} icon={faChartLine} color={'#d1b1ec'} />
       <FeatureCard
         title="Set Goals"
-        // caption={'Aim for 50,000 words in November, or create a custom goal.'}
+        caption={'Aim for 50,000 words in November, or create a custom goal.'}
         // caption={'Aim for 80 hours in the new year, or create a custom goal.'}
-        caption={'Aim for 15,000 words in the July, or create a custom goal.'}
+        // caption={'Aim for 15,000 words in July, or create a custom goal.'}
         icon={faBullseye}
         color={'#1ab394'}
       />
