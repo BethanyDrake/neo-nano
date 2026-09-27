@@ -25,7 +25,7 @@ export const BrainstormingPromptSection = () => {
         title="Not sure what to write?"
         style={{ border: '4px dashed var(--tertiary-vibrant)', maxWidth: '250px' }}
       >
-        <p>Join us in October for daily branstorming prompts!</p>
+        <p>Join us in October for daily brainstorming prompts!</p>
       </InfoBubble>
     )
   }
