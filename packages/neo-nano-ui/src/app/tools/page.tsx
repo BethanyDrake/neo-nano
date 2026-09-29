@@ -11,7 +11,7 @@ import liveSprints from '@/lib/tools/liveWritingSprints/live-sprint.png'
 import prompts from '@/lib/tools/promptTool/prompts.svg'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import { liveSprintsFlag } from '@/lib/flags'
-
+import generator from '@/lib/tools/generatorTool/generator.png'
 const ToolCard = ({
   toolName,
   imageSrc,
@@ -26,28 +26,27 @@ const ToolCard = ({
   return (
     <div className={classNames.card}>
       <Link href={`/tools/${id}`} className={layoutElements.stretchedLink}>
-          <h2>{toolName}</h2>
-         </Link>
-        <Image alt={description} width={100} height={100} src={imageSrc} />
-        <div style={{width: '100%'}} id={description} className={classNames.description}>
-          {description}
-        </div>
-   
+        <h2>{toolName}</h2>
+      </Link>
+      <Image alt={description} width={100} height={100} src={imageSrc} />
+      <div style={{ width: '100%' }} id={description} className={classNames.description}>
+        {description}
+      </div>
     </div>
   )
 }
 
 const ToolsPage = async () => {
-  const liveSprintsFeature = await liveSprintsFlag() as boolean
+  const liveSprintsFeature = (await liveSprintsFlag()) as boolean
   console.log(liveSprintsFeature)
   return (
-      <GutteredPage>
-        <Column>
+    <GutteredPage>
+      <Column>
         <Centered>
           <h1>Toolbox</h1>
         </Centered>
         <div className={classNames.container}>
-            <ToolCard
+          <ToolCard
             description={'Just start writing, and log the time after.'}
             id={'focus-clock'}
             toolName="Focus Clock"
@@ -65,8 +64,8 @@ const ToolsPage = async () => {
             toolName="Word Counter"
             imageSrc={abacus}
           />
-          
-           <ToolCard
+
+          <ToolCard
             description={'Write with others; compete for the highest word count!'}
             id={'live-sprints'}
             toolName="Live Sprints"
@@ -79,9 +78,16 @@ const ToolsPage = async () => {
             toolName="Brainstorming Prompts"
             imageSrc={prompts}
           />
+
+          <ToolCard
+            description={'Combine sounds and syllables to generate unique, fantastical names'}
+            id={'generator'}
+            toolName="Fantasy Name Generator"
+            imageSrc={generator}
+          />
         </div>
-        </Column>
-      </GutteredPage>
+      </Column>
+    </GutteredPage>
   )
 }
 
