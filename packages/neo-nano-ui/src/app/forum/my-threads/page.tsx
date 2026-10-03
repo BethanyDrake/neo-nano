@@ -13,7 +13,6 @@ export default async function Page() {
   return (
     <FullWidthPage>
       <Column>
-        {' '}
         <Breadcrumbs breadcrumbItems={breadcrumbItems} />
         {myThreads.length === 0 && (
           <>

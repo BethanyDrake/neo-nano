@@ -47,6 +47,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 50;
 
   &:active {
     background-color: var(--primary-light);

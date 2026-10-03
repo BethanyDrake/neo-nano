@@ -10,10 +10,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const threadEntries: MetadataRoute.Sitemap = (await getHotThreads()).map(({ threadId, topicId }) => ({
     url: `https://www.novel-november.com/forum/${topicId}/${threadId}`,
+    priority: 0.2,
   }))
 
   const profileEntries = (await getHotProfiles()).map(({profileId}) => ({
     url: `https://www.novel-november.com/profile/${profileId}`,
+    priority: 0.1,
   }))
 
   return [
