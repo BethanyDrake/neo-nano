@@ -18,7 +18,7 @@ const MyMenuItem = ({ close, href, children }: PropsWithChildren & { close: () =
 }
 
 const HiddenNavMenu = () => (
-  <div style={{display: 'none'}}>
+  <div style={{ display: 'none' }}>
     <Link href="/">Home</Link>
     <Link href="/forum">Forum</Link>
     <Link href="/profile">My Profile</Link>
@@ -26,66 +26,73 @@ const HiddenNavMenu = () => (
     <Link href="/moderation/code-of-conduct">Code of Conduct</Link>
     <Link href="/about">About</Link>
     <Link href="/tools">Tools</Link>
+    <Link href="/faq">FAQ</Link>
   </div>
 )
 
 export const NavMenu = () => {
   return (
     <>
-    <HiddenNavMenu/>
-    <Menu>
-      {({ close }) => {
-        return (
-          <>
-            <MenuButton title={'open navigation menu'} className={styles['nav-bar-button']}>
-              <FontAwesomeIcon color="white" icon={faBars} />
-            </MenuButton>
-            <MenuItems anchor="bottom" className={styles['menu-items']}>
-              <MyMenuItem href="/" close={close}>
-                Home
-              </MyMenuItem>
-              <MyMenuItem href="/forum" close={close}>
-                <Row justifyContent="space-between">
-                  <span>Forum</span> <FontAwesomeIcon icon={faComment} />
-                </Row>
-              </MyMenuItem>
-              <MyMenuItem href="/profile" close={close}>
-                <Row justifyContent="space-between">
-                  <span>My Profile</span> <FontAwesomeIcon icon={faPerson} />
-                </Row>
-              </MyMenuItem>
-              <MyMenuItem href="/analytics" close={close}>
-                <Row justifyContent="space-between">
-                  <span>Analytics</span> <FontAwesomeIcon icon={faChartColumn} />
-                </Row>
-              </MyMenuItem>
-
-              <MyMenuItem href="/moderation/code-of-conduct" close={close}>
-                Code of Conduct
-              </MyMenuItem>
-
-              <MyMenuItem href="/about" close={close}>
-                <Row justifyContent="space-between">
-                  <span>About</span> <FontAwesomeIcon icon={faQuestion} />
-                </Row>
-              </MyMenuItem>
-
-              <MyMenuItem href="/tools" close={close}>
-                <Row justifyContent="space-between">
-                  <span>Tools</span> <FontAwesomeIcon icon={faHammer} />
-                </Row>
-              </MyMenuItem>
-
-              <ModeratorOnly>
-                <MyMenuItem href="/moderation" close={close}>
-                  Moderation
+      <HiddenNavMenu />
+      <Menu>
+        {({ close }) => {
+          return (
+            <>
+              <MenuButton title={'open navigation menu'} className={styles['nav-bar-button']}>
+                <FontAwesomeIcon color="white" icon={faBars} />
+              </MenuButton>
+              <MenuItems anchor="bottom" className={styles['menu-items']}>
+                <MyMenuItem href="/" close={close}>
+                  Home
                 </MyMenuItem>
-              </ModeratorOnly>
-            </MenuItems>
-          </>
-        )
-      }}
-    </Menu>
+                <MyMenuItem href="/forum" close={close}>
+                  <Row justifyContent="space-between">
+                    <span>Forum</span> <FontAwesomeIcon icon={faComment} />
+                  </Row>
+                </MyMenuItem>
+                <MyMenuItem href="/profile" close={close}>
+                  <Row justifyContent="space-between">
+                    <span>My Profile</span> <FontAwesomeIcon icon={faPerson} />
+                  </Row>
+                </MyMenuItem>
+                <MyMenuItem href="/analytics" close={close}>
+                  <Row justifyContent="space-between">
+                    <span>Analytics</span> <FontAwesomeIcon icon={faChartColumn} />
+                  </Row>
+                </MyMenuItem>
+
+                <MyMenuItem href="/moderation/code-of-conduct" close={close}>
+                  Code of Conduct
+                </MyMenuItem>
+
+                <MyMenuItem href="/faq" close={close}>
+                  <Row justifyContent="space-between">
+                    <span>FAQ</span> <FontAwesomeIcon icon={faQuestion} />
+                  </Row>
+                </MyMenuItem>
+
+                <MyMenuItem href="/tools" close={close}>
+                  <Row justifyContent="space-between">
+                    <span>Tools</span> <FontAwesomeIcon icon={faHammer} />
+                  </Row>
+                </MyMenuItem>
+
+                <MyMenuItem href="/about" close={close}>
+                  <Row justifyContent="space-between">
+                    <span>About</span>
+                  </Row>
+                </MyMenuItem>
+
+                <ModeratorOnly>
+                  <MyMenuItem href="/moderation" close={close}>
+                    Moderation
+                  </MyMenuItem>
+                </ModeratorOnly>
+              </MenuItems>
+            </>
+          )
+        }}
+      </Menu>
     </>
   )
 }
