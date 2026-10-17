@@ -13,6 +13,7 @@ import { DotiDivider } from '@/lib/layoutElements/dotiContainer'
 import { FeaturesSection } from '../lib/landingPage/FeaturesSection'
 import { BrainstormingPromptSection } from '@/lib/landingPage/BrainstormingPromptSection'
 import { InfoBubble } from '@/lib/landingPage/InfoBubble'
+import { Sitemap } from '@/lib/landingPage/Sitemap'
 
 export default async function Home() {
   const featuredProject = await getFeaturedProject()
@@ -113,6 +114,9 @@ export default async function Home() {
       </Column>
       <DotiDivider />
       {featuredProject && <ProjectHighlight project={featuredProject.project} user={featuredProject.user} />}
+
+       <DotiDivider />
+       <Sitemap />
     </GutteredPage>
   )
 }

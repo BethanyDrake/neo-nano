@@ -11,6 +11,7 @@ import { useLoadableOnClick } from '../buttons/usLoadableOnClick'
 import { useRouter } from 'next/navigation'
 import { DotiContainer } from '../layoutElements/dotiContainer'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
+import { useQueryClient } from '@tanstack/react-query'
 
 const getChallengeToJoin = () => {
   const currentChallenge = getCurrentChallenge()
@@ -20,10 +21,12 @@ const getChallengeToJoin = () => {
 const JoinChallengeButton = () => {
   const router = useRouter()
   const challengeToJoin = getChallengeToJoin()
+  const queryClient = useQueryClient()
 
   const { onClick, isLoading } = useLoadableOnClick(() => {
     if (!challengeToJoin) throw Error()
     return joinChallenge(challengeToJoin.id).then(() => {
+      queryClient.invalidateQueries({queryKey: ['my-goals']})
       router.push('/profile')
     })
   })

@@ -5,6 +5,8 @@ import { getCurrentChallenge } from '../challenges'
 import { buildChallenge } from '../types/challenge.builders'
 import { useIsLoggedIn } from '../hooks/useIsLoggedIn'
 import { vi } from 'vitest'
+import { wrap } from 'souvlaki'
+import { withReactQueryClient } from '@/tests/utils/withReactQueryClient'
 vi.mock('@auth0/nextjs-auth0')
 vi.mock('@/lib/challenges')
 vi.mock('@/lib/hooks/useHasActiveOrUpcomingGoal')
@@ -12,7 +14,9 @@ vi.mock('@/lib/hooks/useIsLoggedIn')
 describe('<GetStartedSection />', () => {
   test('loading state', async () => {
     vi.mocked(useHasActiveOrUpcomingGoal).mockReturnValue({ isLoading: true, hasActiveOrUpcomingGoal: undefined })
-    const { getByText } = await act(async () => render(<GetStartedSection />))
+    const { getByText } = await act(async () =>
+      render(<GetStartedSection />, { wrapper: wrap(withReactQueryClient()) }),
+    )
     expect(getByText('Get Started'))
   })
 
@@ -20,7 +24,9 @@ describe('<GetStartedSection />', () => {
     vi.mocked(getCurrentChallenge).mockReturnValue(buildChallenge({ title: 'Current Challenge' }))
     vi.mocked(useIsLoggedIn).mockReturnValue(true)
     vi.mocked(useHasActiveOrUpcomingGoal).mockReturnValue({ isLoading: false, hasActiveOrUpcomingGoal: false })
-    const { getByText, getByRole } = await act(async () => render(<GetStartedSection />))
+    const { getByText, getByRole } = await act(async () =>
+      render(<GetStartedSection />, { wrapper: wrap(withReactQueryClient()) }),
+    )
     expect(getByText('Get Started'))
     expect(getByRole('button', { name: 'Browse Forum' }))
     expect(getByRole('button', { name: 'Join Current Challenge' }))
@@ -29,7 +35,9 @@ describe('<GetStartedSection />', () => {
   test('logged in - already joined challenge', async () => {
     vi.mocked(useIsLoggedIn).mockReturnValue(true)
     vi.mocked(useHasActiveOrUpcomingGoal).mockReturnValue({ isLoading: false, hasActiveOrUpcomingGoal: true })
-    const { getByText, getByRole } = await act(async () => render(<GetStartedSection />))
+    const { getByText, getByRole } = await act(async () =>
+      render(<GetStartedSection />, { wrapper: wrap(withReactQueryClient()) }),
+    )
     expect(getByText(/Welcome back/i))
     expect(getByRole('button', { name: 'Browse Forum' }))
     expect(getByRole('button', { name: 'Update Progress' }))
@@ -38,7 +46,9 @@ describe('<GetStartedSection />', () => {
   test('logged out', async () => {
     vi.mocked(useIsLoggedIn).mockReturnValue(false)
     vi.mocked(useHasActiveOrUpcomingGoal).mockReturnValue({ isLoading: false, hasActiveOrUpcomingGoal: undefined })
-    const { getByText, getByRole } = await act(async () => render(<GetStartedSection />))
+    const { getByText, getByRole } = await act(async () =>
+      render(<GetStartedSection />, { wrapper: wrap(withReactQueryClient()) }),
+    )
     expect(getByText('Get Started'))
     expect(getByRole('button', { name: 'Sign up' }))
     expect(getByRole('button', { name: 'Log in' }))
