@@ -33,6 +33,7 @@ const CreateThreadForm = ({ onSubmit }: { onSubmit: () => void }) => {
     setIsLoading(true)
     if (!plainText.trim()) {
       setErrorText("Can't post an empty comment.")
+      setIsLoading(false)
       return
     }
     const body = {
