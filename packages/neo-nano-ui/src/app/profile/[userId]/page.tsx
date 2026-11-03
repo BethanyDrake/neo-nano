@@ -8,6 +8,7 @@ import { FullWidthPage } from '@/lib/layoutElements/FullWidthPage'
 import { getPublicProjects } from '@/lib/serverFunctions/projects/getPublicProjects'
 import { PublicProjectSection } from '@/lib/projects/PublicProjectSection'
 import { PropsWithChildren } from 'react'
+import NotFoundPage from '@/app/not-found'
 
 const Header = ({children}: PropsWithChildren) => {
   return (<Centered><h2 style={{fontSize: '2em'}}>{children}</h2></Centered>)
@@ -16,6 +17,7 @@ const Header = ({children}: PropsWithChildren) => {
 const PublicProfilePage = async ({ params }: { params: Promise<{ userId: string }> }) => {
   const userId = (await params).userId
   const [profile, goals, awards, projects] = await Promise.all([getPublicProfile(userId), getPublicGoals(userId),getPublicAwards(userId), getPublicProjects(userId)])
+  if (!profile)  return <NotFoundPage/>
   return (
     <FullWidthPage>
       <Column>
