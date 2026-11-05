@@ -75,8 +75,8 @@ export const getNewState = (state: State, nextSprint?: MyUpcomingSprint): { newS
       }
     }
     return {
-        newState: state,
-        delay: 0
+      newState: state,
+      delay: 0
     }
   }
 

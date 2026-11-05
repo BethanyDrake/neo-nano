@@ -2,7 +2,7 @@
 import modalStyles from '@/lib/modals/Modal.module.css'
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { completePublicSprint, getPublicSprintLog } from '@/lib/serverFunctions/sprints/publicSprint'
+import { completePublicSprint, getPublicSprintLog, MyUpcomingSprint } from '@/lib/serverFunctions/sprints/publicSprint'
 import { Sprint } from '@/lib/serverFunctions/sprints/recordPrivateSprint'
 import { addSeconds } from 'date-fns'
 import { Column, LeftRow } from '@/lib/layoutElements/flexLayouts'
@@ -119,13 +119,13 @@ const LiveSprint_Done = ({ sprintId, onSuccess }: { sprintId: string; onSuccess:
         })}
       >
         <Column>
-        <LeftRow alignItems="baseline">
-          <label htmlFor="wordCount">Enter word count:</label>
-          <input type="number" min={0} id="wordCount" {...register('wordCount', { required: true })} />
-        </LeftRow>
+          <LeftRow alignItems="baseline">
+            <label htmlFor="wordCount">Enter word count:</label>
+            <input type="number" min={0} id="wordCount" {...register('wordCount', { required: true })} />
+          </LeftRow>
 
-       <BasicButton isLoading={status === 'pending'}>Submit</BasicButton>
-     </Column>
+          <BasicButton isLoading={status === 'pending'}>Submit</BasicButton>
+        </Column>
       </form>
     </Column>
   )
@@ -176,9 +176,18 @@ export const LiveSprintModal = () => {
     () => (myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 ? myUpcomingLiveSprints[0] : undefined),
     [myUpcomingLiveSprints],
   )
+
+  const [currentSprint, setCurrentSprint] = useState<MyUpcomingSprint>()
+
   const [isOpen, setIsOpen] = useState(false)
 
   const [state, setState] = useState<'not-started' | 'in-progress' | 'finished' | 'review'>('not-started')
+  useEffect(() => {
+    const nextSprint = myUpcomingLiveSprints && myUpcomingLiveSprints.length > 0 ? myUpcomingLiveSprints[0] : undefined
+    if (state === 'not-started' && nextSprint) {
+      Promise.resolve().then(() => setCurrentSprint(nextSprint))
+    }
+  }, [state, myUpcomingLiveSprints])
   useEffect(() => {
     const { newState, delay } = getNewState(state, nextSprint)
 
@@ -205,7 +214,7 @@ export const LiveSprintModal = () => {
     }
   }, [nextSprint, sprintEndSound, sprintStartSound, state])
 
-  if (!nextSprint) {
+  if (!currentSprint) {
     return null
   }
 
@@ -214,27 +223,28 @@ export const LiveSprintModal = () => {
       {<FloatingSprintButton onClick={() => setIsOpen(!isOpen)} />}
       {isOpen && (
         <>
-          <div className={[modalStyles.modal, modalStyles.tertiary].join(" ")}>
-             <div style={{position: 'absolute', right: '20px'}}>#{nextSprint.id}</div>
+          <div className={[modalStyles.modal, modalStyles.tertiary].join(' ')}>
+            <div style={{ position: 'absolute', right: '20px' }}>#{currentSprint.id}</div>
             <Column>
               {state === 'not-started' && <LiveSprint_NotStarted />}
               {state === 'in-progress' && (
                 <LiveSprint_InProgress
-                  durationSeconds={nextSprint.durationSeconds}
-                  sprintId={nextSprint.id}
-                  startTime={nextSprint.startTime}
+                  durationSeconds={currentSprint.durationSeconds}
+                  sprintId={currentSprint.id}
+                  startTime={currentSprint.startTime}
                 />
               )}
               {state === 'finished' && (
-                <LiveSprint_Done onSuccess={() => setState('review')} sprintId={nextSprint.id} />
+                <LiveSprint_Done onSuccess={() => setState('review')} sprintId={currentSprint.id} />
               )}
-              {state === 'review' && <LiveSprint_Review sprintId={nextSprint.id} />}
+              {state === 'review' && <LiveSprint_Review sprintId={currentSprint.id} />}
             </Column>
           </div>
           <div
             onClick={() => {
               if (state === 'finished' || state === 'review')
                 refetch().then(() => {
+                  setCurrentSprint(undefined)
                   setState('not-started')
                 })
               setIsOpen(false)
