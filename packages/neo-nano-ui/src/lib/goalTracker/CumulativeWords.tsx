@@ -55,7 +55,7 @@ export const CumulativeWords = ({ title, cumulativeWordCount, lengthDays, target
           </XAxis>
 
           <Line dataKey="wordCount" fill="var(--primary-vibrant)" stroke="var(--primary-vibrant)" />
-          <ReferenceLine segment={[{x: 1, y:0}, {x: lengthDays, y:target, }]} stroke="#5e53a5ff" strokeDasharray="3 3" />
+          <ReferenceLine segment={[{x: 1, y:1667}, {x: lengthDays, y:target, }]} stroke="#5e53a5ff" strokeDasharray="3 3" />
              <Tooltip content={(CumulativeWordsTooltip)} />
         </LineChart>
       </ResponsiveContainer>
