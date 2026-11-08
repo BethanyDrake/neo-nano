@@ -46,8 +46,14 @@
 
 .Tooltip {
     background-color: var(--background-colour-2);
-    padding: 16px;
+    padding: 16px 24px;
     border-radius: 4px;
-    font-weight: bold;
+    
     border: 1px dashed var(--primary-vibrant);
+    line-height: 1.5;
+
+    .day {
+      font-weight: bold;
+    }
+
 }
