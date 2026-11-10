@@ -2,7 +2,7 @@
 
 import { UpdateVisibilityButton } from '@/lib/buttons/UpdateVisibilityBotton'
 import { Goal, Record, Visibility } from '@/lib/types/forum.types'
-import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
+import { ProgressPerDayChart } from '@/lib/goalTracker/ProgressPerDayChart'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { faCaretRight, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -125,7 +125,7 @@ export const GoalSection = ({
             {isCumulative ? (
               <CumulativeProgressChart title={title} cumulativeRecords={cumulativeRecords} lengthDays={lengthDays} target={target} metric={metric}/>
             ) : (
-              <WordsPerDay
+              <ProgressPerDayChart
                 title={title}
                 wordCountPerDay={records}
                 lengthDays={lengthDays}

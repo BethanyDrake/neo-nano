@@ -13,7 +13,7 @@ type Props = {
 }
 
 // eslint-disable-next-line react/display-name
-const WordsPerDayTooltip = ({metric}: {metric: Metric}) => ({ active, payload }: TooltipContentProps<number, number>) => {
+const ProgressPerDayTooltip = ({metric}: {metric: Metric}) => ({ active, payload }: TooltipContentProps<number, number>) => {
   const isVisible = active && payload && payload.length
   const {day, wordCount } = payload[0]?.payload ?? {}
  
@@ -29,7 +29,7 @@ const WordsPerDayTooltip = ({metric}: {metric: Metric}) => ({ active, payload }:
   )
 }
 
-export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target, metric }: Props) => {
+export const ProgressPerDayChart = ({ title, wordCountPerDay, lengthDays, target, metric }: Props) => {
   const data = wordCountPerDay.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
@@ -60,7 +60,7 @@ export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target, metric
 
           <Bar dataKey="wordCount" fill="#1ab394" />
           <ReferenceLine y={dailyTarget} stroke="#5e53a5ff" strokeDasharray="3 3" />
-              <Tooltip content={(WordsPerDayTooltip({metric}))} />
+              <Tooltip content={(ProgressPerDayTooltip({metric}))} />
         </BarChart>
       </ResponsiveContainer>
   )
