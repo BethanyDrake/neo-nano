@@ -1,7 +1,7 @@
 'use client'
 
 import { Bar, BarChart, Label, ReferenceLine, ResponsiveContainer, Tooltip, TooltipContentProps, XAxis, YAxis } from 'recharts'
-import { Goal, Record } from '@/lib/types/forum.types'
+import { Goal, Metric, Record } from '@/lib/types/forum.types'
 import classes from './goalTracker.module.css'
 
 type Props = {
@@ -12,7 +12,8 @@ type Props = {
   metric: Goal['metric']
 }
 
-const WordsPerDayTooltip = ({ active, payload }: TooltipContentProps<number, number>) => {
+// eslint-disable-next-line react/display-name
+const ProgressPerDayTooltip = ({metric}: {metric: Metric}) => ({ active, payload }: TooltipContentProps<number, number>) => {
   const isVisible = active && payload && payload.length
   const {day, wordCount } = payload[0]?.payload ?? {}
  
@@ -21,14 +22,14 @@ const WordsPerDayTooltip = ({ active, payload }: TooltipContentProps<number, num
       {isVisible && (
         <div className={classes.Tooltip}>
           <div>Day {day}</div>
-          <div>{wordCount} words</div>
+          <div>{wordCount} {metric}</div>
         </div>
       )}
     </div>
   )
 }
 
-export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target, metric }: Props) => {
+export const ProgressPerDayChart = ({ title, wordCountPerDay, lengthDays, target, metric }: Props) => {
   const data = wordCountPerDay.map((wordCount, i) => ({
     wordCount,
     day: i + 1,
@@ -59,7 +60,7 @@ export const WordsPerDay = ({ title, wordCountPerDay, lengthDays, target, metric
 
           <Bar dataKey="wordCount" fill="#1ab394" />
           <ReferenceLine y={dailyTarget} stroke="#5e53a5ff" strokeDasharray="3 3" />
-              <Tooltip content={(WordsPerDayTooltip)} />
+              <Tooltip content={(ProgressPerDayTooltip({metric}))} />
         </BarChart>
       </ResponsiveContainer>
   )

@@ -2,7 +2,7 @@
 
 import { UpdateVisibilityButton } from '@/lib/buttons/UpdateVisibilityBotton'
 import { Goal, Record, Visibility } from '@/lib/types/forum.types'
-import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
+import { ProgressPerDayChart } from '@/lib/goalTracker/ProgressPerDayChart'
 import { Centered, Column, Row } from '@/lib/layoutElements/flexLayouts'
 import { setGoalVisibility } from '@/lib/serverFunctions/goals/setGoalVisibility'
 import { faCaretRight, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -11,7 +11,7 @@ import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { EditGoalModal } from '../modals/EditGoalModal'
 import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
-import { CumulativeWords } from './CumulativeWords'
+import { CumulativeProgressChart } from './CumulativeProgressChart'
 import classNames from './goalTracker.module.css'
 import disclosureStyles from '@/lib/styles/disclosure.module.css'
 import { toCumulative } from './recordUtils'
@@ -123,9 +123,9 @@ export const GoalSection = ({
               lengthDays={lengthDays}
             />
             {isCumulative ? (
-              <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords} lengthDays={lengthDays} target={target}/>
+              <CumulativeProgressChart title={title} cumulativeRecords={cumulativeRecords} lengthDays={lengthDays} target={target} metric={metric}/>
             ) : (
-              <WordsPerDay
+              <ProgressPerDayChart
                 title={title}
                 wordCountPerDay={records}
                 lengthDays={lengthDays}

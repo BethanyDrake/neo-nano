@@ -1,6 +1,6 @@
 import { ClientSideOnly } from '@/lib/ClientSideOnly'
 import { Goal } from '@/lib/types/forum.types'
-import { WordsPerDay } from '@/lib/goalTracker/WordsPerDay'
+import { ProgressPerDayChart } from '@/lib/goalTracker/ProgressPerDayChart'
 import { Centered } from '@/lib/layoutElements/flexLayouts'
 import classNames from './goalTracker.module.css'
 
@@ -13,7 +13,7 @@ export const PublicGoalSection = ({ goal }: { goal: Pick<Goal, 'title' | 'record
       </Centered>
       <ClientSideOnly>
         <div className={classNames['goal-row']}>
-          <WordsPerDay title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} metric={metric}/>
+          <ProgressPerDayChart title={title} wordCountPerDay={records} lengthDays={lengthDays} target={target} metric={metric}/>
         </div>
       </ClientSideOnly>
     </div>

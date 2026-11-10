@@ -11,17 +11,17 @@ export const Sitemap = () => {
           <p>A place to chat, share your progress, or ask for help from other writers.</p>
         </li>
         <li>
-          <Link href="/forum">Code of conduct</Link>
+          <Link href="/moderation/code-of-conduct">Code of conduct</Link>
           <p>Know the rules, follow the rules!</p>
         </li>
 
         <li>
-          <Link href="/forum">About</Link>
+          <Link href="/about">About</Link>
           <p>The team and technology behind novel-november.com</p>
         </li>
 
         <li>
-          <Link href="/forum">FAQ</Link>
+          <Link href="/faq">FAQ</Link>
           <p>Still have questions? Check here first.</p>
         </li>
 
@@ -31,7 +31,7 @@ export const Sitemap = () => {
         </li>
 
         <li>
-          <Link href="/tools">Analytics</Link>
+          <Link href="/analytics">Analytics</Link>
           <p>Challenge outcomes: see how much we wrote and what badges we earned!</p>
         </li>
       </ul>
