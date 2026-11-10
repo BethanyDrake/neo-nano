@@ -11,7 +11,7 @@ import { useState } from 'react'
 import { SmallIconButton } from '../buttons/ExtendableIconButton'
 import { EditGoalModal } from '../modals/EditGoalModal'
 import { deleteGoal } from '../serverFunctions/goals/deleteGoal'
-import { CumulativeWords } from './CumulativeWords'
+import { CumulativeProgressChart } from './CumulativeProgressChart'
 import classNames from './goalTracker.module.css'
 import disclosureStyles from '@/lib/styles/disclosure.module.css'
 import { toCumulative } from './recordUtils'
@@ -123,7 +123,7 @@ export const GoalSection = ({
               lengthDays={lengthDays}
             />
             {isCumulative ? (
-              <CumulativeWords title={title} cumulativeWordCount={cumulativeRecords} lengthDays={lengthDays} target={target}/>
+              <CumulativeProgressChart title={title} cumulativeRecords={cumulativeRecords} lengthDays={lengthDays} target={target} metric={metric}/>
             ) : (
               <WordsPerDay
                 title={title}
