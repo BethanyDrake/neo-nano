@@ -93,7 +93,7 @@ body {
 }
 button {
   cursor: pointer;
-  color: var(--text-colour);
+  color: black;
 }
 
 * {
