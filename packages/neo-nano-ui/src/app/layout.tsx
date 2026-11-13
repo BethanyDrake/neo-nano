@@ -1,5 +1,6 @@
 import { NavBar } from '@/lib/navbar/NavBar'
 import '@/lib/styles/globals.css'
+import "@/lib/styles/pagination.css"
 import type { Metadata } from 'next'
 
 import { ModalContextProvider } from '@/lib/modals/ModalContext'
