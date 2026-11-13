@@ -1,0 +1,50 @@
+.rc-pagination {
+  button.rc-pagination-item-link, li.rc-pagination-item {
+    background-color: var( --background-colour-2);
+    color: var(--text-colour);
+
+    a {
+        color: var(--text-colour)
+    }
+  }  
+  li.rc-pagination-item-active {
+    border-color: var(--primary-vibrant);
+    a {
+      color: var(--primary-vibrant);
+      font-weight: bold;
+    }
+    &:hover {
+      border-color: var(--primary-vibrant);
+      a {
+        color: var(--primary-vibrant);
+        font-weight: bold;
+      }
+    }
+  }
+  .rc-pagination-item {
+    &:hover {
+      border-color: var(--primary-vibrant);
+      a {
+        color: var(--primary-vibrant);
+        font-weight: bold;
+      }
+    }
+  }
+  .rc-pagination-prev .rc-pagination-item-link, .rc-pagination-next .rc-pagination-item-link {
+    &:hover {
+        border-color: var(--primary-vibrant);
+    }
+    
+  }
+
+  .rc-pagination-disabled:hover {
+    
+    .rc-pagination-item-link {
+   border-color: var(--grey-light);
+    }
+  
+    
+
+  }
+  
+}
